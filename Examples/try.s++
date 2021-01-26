@@ -1,0 +1,42 @@
+import types
+/*def division(a, b){
+	if !b throw -1
+	return a / b
+}
+a = 1
+b = 1
+do{
+	a = int(input())
+	b = int(input())
+	try{
+		println division(a, b)
+	}catch ex{
+		println ex
+		println "error"
+	}
+}while a*/
+import std
+mas = [3, 2, 1]
+println sort(mas)
+println mas
+println true
+println false
+println null
+println "      tr      ".trim()
+println mas + mas
+println mas
+println mas[0]++
+println mas
+map = {"zero" : 0, "one" : 1}
+map2 = {"two" : 2}
+println map
+println map2
+println map + map2
+println map
+println map2
+println map["zero"]++
+println map
+println ++map["zero"]
+println map
+println map["zero"] -= 2
+println map

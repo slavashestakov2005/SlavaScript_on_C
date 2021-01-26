@@ -1,0 +1,59 @@
+add = def (a, b) = a + b
+sub = def (a, b) = a - b
+mul = def (a, b) = a * b
+div = def (a, b) = a / b
+/*cube = def (x) return x * mul(x, x)
+print mul(8, 5) + "\n"
+print cube(2) + "\n"
+functions = [add, sub, mul, div]
+def function(f, a, b) return f(a, b)
+for i = 0, i < 4, ++i{
+	print "\n"
+	print functions[i]
+	print "\n"
+	print function(functions[i], 6, 3)
+}
+print "\n"*/
+/*
+map = { "+" : add, "-" : sub, "*" : mul, "/" : div}
+print map + "\n"
+map = { "1" : 1, "2" : "text", 3 : [0, 1, 2, 3], 4 : "text4"}
+map2 = { 4 : "text4", "2" : "text", 3 : [0, 1, 2, 3], "1" : 1, true : 1}
+map3 = { 1 : "1", 2 : "2", 3 : "3", 4 : "4", 4 : "second value"}
+print map + "\n" + map2 + "\n" + map3 + "\n"
+//print function(map["+"], 4, 5)
+first = [0, 1]
+second = [2, 3]
+print first + "\n" + second + "\n"
+result = first + second
+print result + "\n"
+print add + sub + "\n"*/
+/*def func(x){
+	print x
+	print "\n"
+}
+func(10)
+for i = 0, i < 10, ++i{
+	print i + "\n"
+}
+print x
+print "\nEnd\n"
+*/
+import std
+import math
+f = def(x){
+	print x + "\t"
+}
+a = [0, 1, 2, 3, 6, 8]
+print a + "\n"
+foreach(a, f)
+print "\n"
+a = {"one" : 1, "two" : 2}
+fi = def(key, value){
+	print key + "\t" + value + "\n"
+}
+foreach(a, fi)
+
+_a = "_a"
+$a = "$a"
+print _a + "\t" + $a + "\n"

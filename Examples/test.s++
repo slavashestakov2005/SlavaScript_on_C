@@ -1,0 +1,3 @@
+println "We in test file"
+def f(x) = "We in f function!"
+println input()

@@ -1,0 +1,9 @@
+map = { "zero" : 0, "one" : 1, "two" : 2}
+println map
+map["zero"] = 1
+map["zero"] *= map["two"]
+println map
+map["five"] += map["two"]
+println map
+println map["five--"]
+println map

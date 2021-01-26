@@ -1,0 +1,161 @@
+/*def name(a, b){
+	echo("a = ", a, "b = ", b)
+}
+def sum(a, b){
+	a = -60
+	return a + b
+}
+word = 2 + 2
+word2 = Pi + word
+str = "a" * 5 + "ba" * 7 + "\n"
+print str
+print "word = " + word + "\n" + "word2 = " + word2
+print "\n"
+print 4 < 5
+print "\n"
+if 1 <= 2 print "true"
+else print "false"
+if (40 < 50 || 50 > 60){
+	print "true1\n"
+	print "true2\n"
+	i = 0
+	do{
+		print "i = " + i + "\n"
+		i = i + 1
+	}while(i < 10)
+	i = 0
+	while(i < 10){
+		print "i = " + i + "\n"	
+		i = i + 1
+	}
+	for i = 0, i < 10, i = i + 1 {
+		print "i = " + i + "\n"
+	}
+}
+else print "false"
+
+if (1 < 2) print "true"
+else print "false"
+
+
+//print cos(0) + " " + sin(0) + " " + tan(0) + "\n"
+//print cos(90) + " " + sin(90) + " " + tan(90)
+
+a = "print"
+print a + "\n"
+i = "i"
+echo(1, 2, 3, "text", "+7", "-7", i)
+print "\n" + sin(Pi / 2) + "\n"
+name(1, "text")
+print "sum = " + sum(10, 15) + "\n"
+print "a = " + a + "\n"
+
+
+arr = [1, "text", sum(10, 15), [], ["text", [90, [7 + 6, [50]]]]]
+//arr = new_array(1, "text", sum(10, 15))
+print arr + "\n"
+//arr[0] = arr[0] + Pi
+arr[0] = Pi
+print arr + "\n"
+arr[0] = arr[0] + 1000
+print arr + "\n"
+arr4 = arr[4]
+print arr4 + "\n"
+arr1 = arr4[1]
+print arr1 + "\n"
+print arr[4][1] + "\n"
+arr[4][1] = "text"
+print arr[4][1] + "\n" + arr
+print "\n\n\n\n\n"
+arr = new_array(2, 2, 2, 2)
+print arr + "\n"
+for i = 0, i < 2, i = i + 1{
+	for j = 0, j < 2, j = j + 1{
+		arr[i][j] = i * 10 + j
+	}
+}
+print arr + "\n"
+a = 0
+func()
+def func() print "finction\n"
+a = 2 + 3 * 4
+print a + "\t" + Pi*/
+//echo(abs(-10.0))
+/*in canvas:
+	window
+	prompt
+	keypressed
+	mousehover
+	line
+	oval
+	foval
+	rest
+	frect
+	clip
+	drawstring
+	color
+	repaint
+
+	VK_UP
+	VK_DOWN
+	VK_LEFT
+	VK_RIGHT
+	VK_FIRE
+	VK_ESCAPE
+in math:
+	rand(X)
+	sleep(X)
+	*/
+import math
+import std
+print 2.02 % 1.03 + "\n"
+print 2.02 % -1.03 + "\n"
+print -2.02 % 1.03 + "\n"
+print -2.02 % -1.03 + "\n"
+
+for a = 0, a <= 1, a = a + 1{
+	for b = 0, b <= 1, b = b + 1{
+		echo(a, " | ", b, " ", a | b)
+		echo(a, " & ", b, " ", a & b)
+		echo(a, " ^ ", b, " ", a ^ b)
+	}
+	echo(" ~", a, " ", ~a)
+	echo(" ~", b, " ", ~b)
+	echo(" !", a, " ", !a)
+	echo(" !", b, " ", !b)
+} 
+a = 0
+b = 1
+print (a ? "text1" : "text2") + "\n"
+print (b ? "text3" : "text4") + "\n"
+
+alpha = (#AAAAAA)
+print alpha + "\n"
+for i = -5, i < 5, i = i + 0.5{
+	echo(abs(i))
+}
+echo(sin(0), " " , cos(0))
+echo(Pi)
+for i = 0, i < 10, i = i + 1 {
+	step = rand(-20, -10)
+	print step + "\n"
+}
+print "Start sleep\n"
+//sleep(10000)
+print "End sleep\n"
+print factorial(5)
+/*run = 10
+print "\n\n\n\n\n\n"
+if (run == 0) echo(0)
+elif (run == 1) echo(1)
+elif (run == 2) echo(2)
+elif (run == 3) echo(3)
+elif (run == 4) echo(4)
+elif (run == 5) echo(5)
+elif (run == 6) echo(6)
+elif (run == 7) echo(7)
+elif (run == 8) echo(8)
+elif (run == 9) echo(9)
+elif (run == 10) echo(10)
+elif (run == 11) echo(11)
+else echo("no")*/

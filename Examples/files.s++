@@ -1,0 +1,29 @@
+/*import files
+println "Ok"
+a = fopen("1.txt")
+println a
+for i = 0, i < 2, ++i{
+	str = readline()
+	println str
+}
+a = writeline("Hello world")
+println a
+fclose()*/
+
+import std
+import functional
+keys = ["zero", "one", "two", "three"]
+values = [0, 1, 2, 3]
+map = arraycombine(keys, values)
+println map
+println mapkeys(map)
+println mapvalues(map)
+println mapkeyexist(map, "five")
+a = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+a = chain(a,
+	::filter, def(x) = x <= 4,
+	::sortby, def(x) = -x,
+	::map, def(x) = x * 2
+)
+println a
+println ARGS

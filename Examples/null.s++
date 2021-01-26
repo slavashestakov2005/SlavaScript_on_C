@@ -1,0 +1,18 @@
+a -= 4
+println "Ok"
+println a
+println a - 2
+map = { "zero" : 0, "one" : 1, "two" : 2 }
+println map
+map["three"] = 3
+println map
+map["nullptr"] = null
+println map
+map[null] = "minus one"
+println map
+map[null] = "one"
+println map
+map[false] = "false 1"
+println map
+map[false] = "false 2"
+println map

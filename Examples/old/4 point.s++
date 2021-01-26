@@ -1,0 +1,27 @@
+import draw
+import std
+
+w = 640 h = 480
+window("Разрешить русский язык в строках!", w, h)
+
+x = rand(w)
+y = rand(h)
+
+run = 1
+while run{
+	key = keypressed()
+	if (key == KB_LEFT && x > 0) x = x - 2
+	elif (key == KB_RIGHT && x < w) x = x + 2
+	elif (key == KB_UP && y > 0) y = y - 2
+	elif (key == KB_DOWN && y < h) y = y + 2
+	elif (key == KB_ESCAPE) run = 0
+	color(255, 255, 255)
+	frect(0, 0, w, h)
+	color(0)
+	line(0, h, x, y)
+	line(w, h, x, y)
+	line(0, 0, x, y)
+	line(w, 0, x, y)
+	repaint()
+}
+close()

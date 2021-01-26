@@ -1,0 +1,174 @@
+/*import std
+a = [0, 1, 2, 3, 4, 5]
+x = def(a) print a + "\n"
+y = def(a) echo(a)
+foreach(a, x)
+print "Second\n"
+foreach(a, y)
+print "Therd\n"
+//foreach(a, ::echo)
+print a + "str"
+print "\n"
+echo(a)
+//print a
+//print a
+first = [3, 2, 1]
+second = [4, 5, 6]
+print "\n"
+print first + second
+print "\n"*/
+
+/*
+import std
+_a = [0, 1]
+_b = [2, 3, 4]
+a = 12
+b = 65
+$a = "stra"
+$b = "strb"
+__a = true
+__b = false
+echo("Arrays ", _a + _b)
+echo("Doubles ", a + b)
+echo("Strings ", $a + $b)
+echo("Booleans ", __a + __b)
+echo("Arr + doub ", _a + b)
+echo("Arr + str ", _a + $b)
+echo("Arr + bool ", _a + __b)
+
+//echo("Doub + arr ", a + _b)
+echo("Doub + str ", a + $b)
+echo("Doub + bool ", a + __b)
+
+echo("Str + arr ", $a + _b)
+echo("Str + doub ", $a + b)
+echo("Str + bool ", $a + __b)
+
+//echo("Bool + arr ", __a + _b)
+echo("Bool + doub ", __a + b)
+echo("Bool + str ", __a + $b)
+
+map1 = { 1 : "one", 2 : "two", "else" : "inf" }
+map2 = { "one" : 1, "two" : 2, 0 : "zero"}
+print map1 + "\t" + map2 + "\n"
+print map1 + map2
+print "\n"
+*/
+
+/*
+import std
+map = {2 : "two", 3 : "three"}
+echo(map)
+map[2] = "five"
+a = map[2]
+echo(map)
+echo(a)
+echo("Start of foreach of array")
+arr = [2, 3, 5, 7, 11, 13]
+for var : arr{
+	print "Step : "
+	print var
+	print "\n"
+}
+print var + "\n"
+echo("Start of foreach of array")
+map = {2 : "two", 3 : "three", 5 : "five", 7 : "seven"}
+for key, value : map{
+	print "Step : "
+	print key
+	print "\t"
+	print value
+	print "\n"
+}
+print key + "\t" + value + "\n"
+*/
+/*
+import types
+print typeToString(1)
+print "\n"
+print typeToString("1")
+print "\n"
+print typeToString([1])
+print "\n"
+print typeToString({})
+print "\n"
+print typeToString(double("1"))
+print "\n"
+print typeToString(string(1))
+print "\n"
+*/
+/*
+import std
+str = "0123"
+print len(str) + "\n"
+str = [0, 1, 3, [4, 5, 6]]
+print len(str) + "\n"
+str = {0 : "zero", 1 : "one", 2 : "two" }
+print len(str) + "\n"
+str = def (x, y, z, x1, y1, a1) = x + y + z
+print len(str) + "\n"
+*/
+
+import std/*
+arr = [0, 1, [2, 3, 4], 5]
+echo(arr)
+echo(arr[2])
+echo(arr[2][1])*/
+print "!" * 45 + "\n"
+/*map = {	
+		1 : "one",
+		0 : "zero", 
+		//"3" : [6, 8, 7, 3, 5],
+		//1 : {11 : "first", 12 : "second"}, 
+		2 : "two",
+	}*/
+map = {
+		"0" : "zero",
+		1 : 1,
+		"2" : ["array2", "secondvalue"],
+		3 : "three"
+		"four" : 4,
+		10: ["zero", 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+		[0, 1] : ["first", 1, 0],
+		[2, 1] : 1,
+		[2, 2] : "str",
+		true: 10,
+		false: "\"false\"",
+		true: ["one", 2],
+		100: true,
+		"101": false,
+		[100, 101]: true,
+		false : false,
+		[500, 500] : {1 : "one", 2 : "two"}
+		//["arr", 1] : true,
+	}
+echo(map)
+echo(map)
+for i = 0, i < 10, ++i print "*" * 45 + "\n"
+for key, value : map{
+	print "From " + key + " set " + value + "\n"
+}
+println "OK1"
+echo(map["0"], " ", map["2"], " ", map[3], " ",
+	 map["four"], " ", map[10])
+echo(map[[0, 1]], " ", map[1])
+echo(map[[2, 1]])
+echo(map[[2, 2]])
+echo(map[true], " ", map[false], " ", map[100], " ", map["101"])
+echo(map[[100, 101]], " ", map[false])
+echo(map[[500, 500]])
+echo(map[[500, 500]][1])
+echo(map[[500, 500]][2])
+println "Ok2"
+sleep(2000)
+println "Ok3"
+map[100000] = "sleep"
+println "Ok4"
+echo(map)
+sleep(2000)
+echo(map[100000])
+println(500)
+println("15000")
+/*
+mas = [0, 1, 2, 3]
+a = {1 : 0} / 1*/

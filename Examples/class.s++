@@ -1,0 +1,26 @@
+class Point{
+    //this.x = "x"
+    //this.y = "y"
+    def Point(map, arr, func){
+        println input()
+		//println this
+		this.map = map
+        this.arr = arr
+        this.func = func
+		println this
+		println "End constr"
+    }
+}
+println "!!\n"  * 10
+input()
+a = new Point({"two" : 2}, [0, 1, [2, 3]], def(x) = -x)
+//b = new Point({2 : "two"}, [[3, 2], 1, 0], def(x) = x)
+println "!!\n"  * 10
+input()
+println "Here : " + a.map
+/*println b
+b.map = a.map
+println b.map*/
+println "End"
+input()
+import std

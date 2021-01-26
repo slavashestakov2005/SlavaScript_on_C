@@ -1,0 +1,27 @@
+import draw
+w = 800 h = 600
+window("Fractal", w, h)
+clear()
+fractal(w/2, w/2, w/2)
+repaint()
+run = 1
+while run{
+	if keypressed() == KB_ESCAPE run = 0
+}
+def recta(x, y, w, h){
+	line(x, y, x + w, y)
+	line(x + w, y, x + w, y + h)
+	line(x, y + h, x + w, y + h)
+	line(x, y, x, y + h)
+}
+def fractal(cx, cy, size){
+	if size >= 2 {
+		color(0, 0, 255 - size * 255 / w / 2)
+		recta(cx - size / 2, cy - size / 2, size, size)
+		fractal(cx - size / 2, cy - size / 2, size / 2)
+		fractal(cx + size / 2, cy - size / 2, size / 2)
+		fractal(cx - size / 2, cy + size / 2, size / 2)
+		fractal(cx + size / 2, cy + size / 2, size / 2)
+	}
+}
+close()

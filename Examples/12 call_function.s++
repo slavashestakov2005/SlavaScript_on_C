@@ -1,0 +1,54 @@
+import std
+/*
+println "OK\n" * 5
+sleep(2000)
+def f(a = -1) = a
+println "defined\n" * 5
+sleep(2000)
+s = f(9)
+println "started\n" * 5
+sleep(2000)
+println s
+println "out\n" * 5
+sleep(2000)
+println f()
+println "end\n" * 5
+sleep(2000)*/
+/*
+v4 = 5
+v3 = v4
+println v3
+println v4
+a1 = a2 = a3 = a4 = 0
+echo(a1, "\t", a2, "\t", a3, "\t", a4)
+a1 = a2 = a3 = a4 = 97
+echo(a1, "\t", a2, "\t", a3, "\t", a4)
+a1 = a2 = a3 = a4 = "string"
+echo(a1, "\t", a2, "\t", a3, "\t", a4)
+*/
+/*
+import std
+import types
+import functional
+a = [-1]
+println a
+println a
+a += -2
+println a
+println a
+for i = 10000, i > -1, --i { a += i if i % 1000 == 0 input() }
+println "Type : " + typeToString(a) + "\tlen : " + len(a)
+println a
+*/
+/* BigNumber : */
+import types
+a = 1
+for i = 1, i < 172, ++i {
+	println i
+	a*= i
+}
+println a + " " + i
+'this is good name for variable' = input()
+println 'this is good name for variable'
+def '^'(a, b) = string(a) + string(b)
+println 4 ^ 2

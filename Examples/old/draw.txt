@@ -1,0 +1,276 @@
+#include "draw.h"
+#include <SFML/Graphics.hpp>
+#include "../Lib/functions.h"
+#include "../Lib/variables.h"
+#include "../Lib/bignumber.h"
+#include "../Lib/array.h"
+#include "../Lib/string.h"
+#include "../Exception/argumentsmismatchexception.h"
+#include <iostream>
+namespace{
+    enum class ShapeType{
+        LINE,
+        RECT,
+        FRECT,
+        CIRCLE,
+        FCIRCLE
+    };
+    class Shape{
+    public:
+        std::vector<Value*> values;
+        ShapeType type;
+        sf::Color colorShape;
+        Shape(std::vector<Value*> val, ShapeType type) : values(val), type(type), colorShape(colorShape) {}
+        Shape(std::vector<Value*> val, ShapeType type, sf::Color colorShape) : values(val), type(type), colorShape(colorShape){}
+        ~Shape(){
+            //for(int i = 0; i < values.size(); ++i) { delete values[i]; values[i] = nullptr; }
+        }
+    };
+    enum class Keys{
+        ESCAPE,
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT,
+        SPACE
+    };
+    const sf::Color defaultColor = sf::Color(255, 255, 255);
+    const int RGB = 255;
+    const int defaultHeight = 480;
+    const int defaultWidth = 640;
+    const int defaultLimit = 100;
+    const std::string defaultTitle = "SlavaScript in window";
+    std::vector<Shape> shapes;
+    sf::RenderWindow* window;
+    sf::Color color = defaultColor;
+    int correctColor(double alpha){
+        if (alpha <  0) return 0;
+        if (alpha > 255) return 255;
+        return int(alpha);
+    }
+    void draw(sf::RenderWindow& window){
+        for(int i = 0; i < shapes.size(); ++i){
+            switch (shapes[i].type){
+                case (ShapeType::LINE): {
+                    sf::VertexArray line(sf::Lines, 2);
+                    line[0].position = sf::Vector2f(shapes[i].values[0] -> getDouble(), shapes[i].values[1] -> getDouble());
+                    line[0].color = shapes[i].colorShape;
+                    line[1].position = sf::Vector2f(shapes[i].values[2] -> getDouble(), shapes[i].values[3] -> getDouble());
+                    line[1].color = shapes[i].colorShape;
+                    window.draw(line);
+                    break;
+                }
+                case (ShapeType::RECT): {
+                    sf::RectangleShape rect;
+                    rect.setSize(sf::Vector2f(shapes[i].values[2] -> getDouble(), shapes[i].values[3] -> getDouble()));
+                    rect.setPosition(shapes[i].values[0] -> getDouble(), shapes[i].values[1] -> getDouble());
+                    rect.setOutlineThickness(5);
+                    rect.setOutlineColor(sf::Color::Black);
+                    window.draw(rect);
+                    break;
+                }
+                case (ShapeType::FRECT): {
+                    sf::RectangleShape rect;
+                    rect.setSize(sf::Vector2f(shapes[i].values[2] -> getDouble(), shapes[i].values[3] -> getDouble()));
+                    rect.setPosition(shapes[i].values[0] -> getDouble(), shapes[i].values[1] -> getDouble());
+                    rect.setFillColor((shapes[i].colorShape));
+                    window.draw(rect);
+                    break;
+                }
+                case (ShapeType::CIRCLE): {
+                    sf::CircleShape cricle(shapes[i].values[2] -> getDouble());
+                    cricle.setPosition(shapes[i].values[0] -> getDouble(), shapes[i].values[1] -> getDouble());
+                    window.draw(cricle);
+                    break;
+                }
+                case (ShapeType::FCIRCLE): {
+                    sf::CircleShape cricle(shapes[i].values[2] -> getDouble());
+                    cricle.setPosition(shapes[i].values[0] -> getDouble(), shapes[i].values[1] -> getDouble());
+                    cricle.setFillColor(shapes[i].colorShape);
+                    window.draw(cricle);
+                    break;
+                }
+            }
+        }
+    }
+    class Window : public Function{
+    public:
+        Value* execute(std::vector<Value*> values){
+            int siz = values.size();
+            if (siz < 1 || siz > 3) throw new ArgumentsMismatchException("One or two or three arguments expected");
+            switch(siz){
+                case (1) : {
+                    window = new sf::RenderWindow(sf::VideoMode(defaultWidth, defaultHeight), values[0] -> getString());
+                    break;
+                }
+                case (2): {
+                    window = new sf::RenderWindow(sf::VideoMode(values[0] -> getDouble(), values[1] -> getDouble()), defaultTitle);
+                    break;
+                }
+                case (3): {
+                    window = new sf::RenderWindow(sf::VideoMode(values[1] -> getDouble(), values[2] -> getDouble()), values[0] -> getString());
+                    break;
+                }
+            }
+            window -> setFramerateLimit(defaultLimit);
+            return new BigNumber(0);
+        }
+    };
+    class Color : public Function{
+    public:
+        Value* execute(std::vector<Value*> values){
+            int siz = values.size();
+            if (siz > 3) throw new ArgumentsMismatchException("One or two or three arguments expected");
+            if (!siz) color = defaultColor;
+            else{
+                if (siz == 1){
+                    int colo = values[0] -> getDouble();
+                    color = sf::Color(colo / (RGB + 1) / (RGB + 1), colo / (RGB + 1) % (RGB + 1), colo % (RGB + 1));
+                }
+                else{
+                    int red = correctColor(values[0] -> getDouble());
+                    int green = correctColor(values[1] -> getDouble());
+                    if (siz == 2) color = sf::Color(red, green, RGB);
+                    else{
+                        int blue = correctColor(values[2] -> getDouble());
+                        color = sf::Color(red, green, blue);
+                    }
+                }
+            }
+            return new BigNumber(0);
+        }
+    };
+    class Line : public Function{
+    public:
+        Value* execute(std::vector<Value*> values){
+            if (values.size() != 4) throw new ArgumentsMismatchException("Four arguments expected");
+            shapes.push_back(Shape(values, ShapeType::LINE, color));
+            return new BigNumber(0);
+        }
+    };
+    class Rect : public Function{
+    public:
+        Value* execute(std::vector<Value*> values){
+            if (values.size() != 4) throw new ArgumentsMismatchException("Four arguments expected");
+            shapes.push_back(Shape(values, ShapeType::RECT));
+            return new BigNumber(0);
+        }
+    };
+    class Frect : public Function{
+    public:
+        Value* execute(std::vector<Value*> values){
+            if (values.size() != 4) throw new ArgumentsMismatchException("Four arguments expected");
+            shapes.push_back(Shape(values, ShapeType::FRECT, color));
+            return new BigNumber(0);
+        }
+    };
+    class Circle : public Function{
+        Value* execute(std::vector<Value*> values){
+            if (values.size() != 3) throw new ArgumentsMismatchException("Three arguments expected");
+            shapes.push_back(Shape(values, ShapeType::CIRCLE));
+            return new BigNumber(0);
+        }
+    };
+    class Fcircle : public Function{
+        Value* execute(std::vector<Value*> values){
+            if (values.size() != 3) throw new ArgumentsMismatchException("Three arguments expected");
+            shapes.push_back(Shape(values, ShapeType::FCIRCLE, color));
+            return new BigNumber(0);
+        }
+    };
+    class Repaint : public Function{
+    public:
+        Value* execute(std::vector<Value*> values){
+            if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+            sf::Event event;
+            while (window -> pollEvent(event)) if (event.type == sf::Event::Closed) window -> close();
+            draw(*window);
+            window -> display();
+        }
+    };
+    class Clear : public Function{
+    public:
+        Value* execute(std::vector<Value*> values){
+ //           std::cout << "In clear size of vector : " << shapes.size() << "\tand : " << sizeof(*window) << std::endl;
+            if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+            sf::Event event;
+            while (window -> pollEvent(event)) if (event.type == sf::Event::Closed) window -> close();
+            window -> clear(defaultColor);
+//            for (int i = 0; i < shapes.size(); ++i) delete shapes[i];
+            shapes.clear();
+        }
+    };
+    class FrameLimit : public Function{
+    public:
+        Value* execute(std::vector<Value*> values){
+            if (values.size() > 1) throw new ArgumentsMismatchException("Zero or one arguments expected");
+            if (values.size()) window -> setFramerateLimit(values[0] -> getDouble());
+            else window -> setFramerateLimit(defaultLimit);
+        }
+    };
+    class KeyPressed : public Function{
+    public:
+        Value* execute(std::vector<Value*> values){
+            if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+            sf::Event event;
+            while (window -> pollEvent(event)){
+                if (event.type == sf::Event::Closed) window -> close();
+                if (event.type == sf::Event::KeyPressed){
+                    if (event.key.code == sf::Keyboard::Escape) return new BigNumber(int(Keys::ESCAPE));
+                    if (event.key.code == sf::Keyboard::Up) return new BigNumber(int(Keys::UP));
+                    if (event.key.code == sf::Keyboard::Down) return new BigNumber(int(Keys::DOWN));
+                    if (event.key.code == sf::Keyboard::Left) return new BigNumber(int(Keys::LEFT));
+                    if (event.key.code == sf::Keyboard::Right) return new BigNumber(int(Keys::RIGHT));
+                    if (event.key.code == sf::Keyboard::Space) return new BigNumber(int(Keys::SPACE));
+                }
+            }
+            return new BigNumber(-1);
+        }
+    };
+    class MouseHover : public Function{
+    public:
+        Value* execute(std::vector<Value*> values){
+            if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+            Array* arr = new Array(2);
+            sf::Vector2i pixesPos = sf::Mouse::getPosition(*window);
+            sf::Vector2f pos = window -> mapPixelToCoords(pixesPos);
+            arr -> set(0, new BigNumber(pos.x));
+            arr -> set(1, new BigNumber(pos.y));
+            sf::Event event;
+            while (window -> pollEvent(event)) if (event.type == sf::Event::Closed) window -> close();
+            return arr;
+        }
+    };
+    class Close : public Function{
+    public:
+        Value* execute(std::vector<Value*> values){
+             if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+             window -> close();
+             delete window;
+             window = 0;
+             shapes.clear();
+        }
+    };
+}
+void Draw::init(){
+    std::cout << "In draw::init()\n";
+    Functions::set("window", new Window());
+    Functions::set("color", new Color());
+    Functions::set("line", new Line());
+    Functions::set("rect", new Rect());
+    Functions::set("frect", new Frect());
+    Functions::set("circle", new Circle());
+    Functions::set("fcircle", new Fcircle);
+    Functions::set("repaint", new Repaint());
+    Functions::set("clear", new Clear());
+    Functions::set("framelimit", new FrameLimit());
+    Functions::set("keypressed", new KeyPressed());
+    Functions::set("mousehover", new MouseHover());
+    Functions::set("close", new Close());
+    Variables::set("KB_ESCAPE", new BigNumber(int(Keys::ESCAPE)));
+    Variables::set("KB_UP", new BigNumber(int(Keys::UP)));
+    Variables::set("KB_DOWN", new BigNumber(int(Keys::DOWN)));
+    Variables::set("KB_LEFT", new BigNumber(int(Keys::LEFT)));
+    Variables::set("KB_RIGHT", new BigNumber(int(Keys::RIGHT)));
+    Variables::set("KB_SPACE", new BigNumber(int(Keys::SPACE)));
+}

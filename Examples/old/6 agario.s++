@@ -1,0 +1,66 @@
+import math
+import draw
+import std
+w = 800		h = 600
+w2 = w / 2 	h2 = h / 2
+window("agar.io clone", w, h)
+framelimit(50)
+fieldWidth = 10000
+fieldHeight = 6000
+fieldX = rand(-w2, fieldWidth - w2)
+fieldY = rand(-h2, fieldHeight - h2)
+NUM_FOOD = 200
+food = new_array(4, NUM_FOOD)
+for i = 0, i < NUM_FOOD, i = i + 1{
+	food[0][i] = rand(fieldWidth)
+	food[1][i] = rand(fieldHeight)
+	food[2][i] = rand(8, 10)
+	food[3][i] = rand(#ffffff)
+}
+run = 1
+playerSize = 16
+playerColor = rand(#ffffff)
+mouse = new_array(2)
+mouse[0] = 0
+mouse[1] = 0
+println "Ok"
+while run{
+	mouse = mousehover()
+	angle = 45
+	//angle = atan2(mouse[1] - h2, mouse[0] - w2)
+	fieldX = fieldX + cos(angle) * 200 / playerSize
+	fieldY = fieldY + sin(angle) * 200 / playerSize
+	if fieldX < -w2 fieldX = -w2
+	elif fieldX > fieldWidth - w2 - 1 fieldX = fieldWidth - w2 - 1
+	if fieldY < -h2 fieldY = -h2
+	elif fieldY > fieldHeight - h2 - 1 fieldY = fieldHeight - h2 - 1
+	
+	color(#333333)
+	rect(-fieldX, -fieldY, fieldWidth, fieldHeight)
+	
+	for i = 0, i < NUM_FOOD, i = i + 1{
+		dx = food[0][i] - fieldX - w2
+		dy = food[1][i] - fieldY - h2
+		rad = food[2][i] + playerSize
+		dx = 0 dy = 0 rad = 0
+		if dx * dx + dy * dy < rad * rad{
+			playerSize = playerSize + 0.5
+			food[0][i] = rand(fieldWidth)
+			food[1][i] = rand(fieldHeight)
+			food[2][i] = rand(8, 10)
+			food[3][i] = rand(#ffffff)
+		}
+		color(food[3][i])
+		//mcircle(food[0][i] - fieldX, food[1][i] - fieldY, food[2][i])
+	}
+	color(playerColor)
+	//mcircle(w2, h2, playerSize)
+	/* + 6Мб */repaint()/* becose there is window -> display(), I don't know why */
+	/* + 1.5 Мб */clear()
+	/* + 1.5 Мб */if (keypressed() == KB_ESCAPE) { print "+++++\n" break}
+}
+
+def mcircle(cx, cy, rad) fcircle(cx - rad, cy - rad, rad)
+close()
+/* We had one problem in code : arr[i][j] is not optimize */
+/* Now that code use ~6 Мб/сек */

@@ -1,0 +1,125 @@
+//import '13 imported.s++'
+/*import '13 imported'
+println "Return to impoter file"*/
+/*
+elements = {
+	"add" : def(a, b) = a + b,
+	"sub" : def(a, b) = a - b,
+	"mul" : def(a, b) = a * b,
+	"div" : def(a, b) = a / b,
+	"rem" : def(a, b) = a % b
+}
+println elements
+for key, value : elements {
+	println "\t" + key + " " + value(2, 3)
+}
+println elements["add"](2, 3)
+println elements["sub"](2, 3)
+println elements["mul"](2, 3)
+println elements["div"](2, 3)
+println elements["rem"](2, 3)
+println elements.add(2, 3)
+println elements.sub(2, 3)
+println elements.mul(2, 3)
+println elements.div(2, 3)
+println elements.rem(2, 3)
+println "\n\n\nEnd of operation"
+a = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+println a
+println a[0] + " " + a[1] + " " + a[2]
+a[0] = a[1] * a[2]
+println a
+println a[9] + " " + a[3] + " " + a[4]
+a[9] = a[9] * a[7]
+println a
+
+mas = {1 : {2 : "two" }, 0 : "zero", "zero" : 100}
+println "\n\n\n" + mas[1][2]
+a = 1
+b = 2
+println a + " "  + b
+while(input() != "0"){
+	a = a + b
+	println a + b
+}
+println mas.zero
+arr = [11, 2, 4, 55, 97]
+arr[0] %= 10
+println arr
+arr = {"0" : 2, "1" : 3, "2" : 5}
+arr["0"] %= 10
+println arr
+
+println "*" * 10 + " Mapping " + "*" * 10	
+array1 = [[1, 2], [3], [4, 5], [6]]
+println array1[0][1]
+object1 = {"arr": array1}
+println object1
+println object1.arr
+println object1["arr"][0][1]
+object1.arr[0][1] = "str"
+println object1["arr"][0][1]
+println object1
+object1.arr[1] = "str"
+println object1
+
+
+
+println "\n\n\n" + "*" * 10 + " EQ " + "*" * 10
+x = 5
+println x
+x += 10
+println x
+x *= 2
+println x
+xarr = [0, 5, 2]
+println xarr
+xarr[0] += xarr[1]
+println xarr
+xarr[0] *= xarr[2]
+println xarr
+xarr[0] += xarr[1] * xarr[2]
+println xarr
+println elements.add(2, elements.mul(2, 2))
+*/
+xarr = [0, 5, 2]
+xarr[0] += xarr[1]
+xarr[0] *= xarr[2]
+println "*" * 25
+println xarr
+println xarr[0]++
+println xarr
+println --xarr[0]
+println "*" * 25
+i = 10
+println i
+println i++
+println i
+println ++i
+println "*" * 25
+map = {"zero" : 0, "one" : 1, "two" : 2}
+/* Where out of range ? */
+println map
+println map["two"]++
+println map
+/* This is problem map[new] = new element */
+/*
+map["new"] = "new"
+println map
+//import std
+//sleep(1000)*/
+/*
+def factorial(n){
+	def f(n){
+		if n > 1 return n * f(n - 1)
+		else return n
+	}
+	return f(n)
+}
+
+println factorial(10) + " equals " + f(10)
+*/
+
+import math
+/* Biggest factorial is very bad for sinus */
+println sin(factorial(15))

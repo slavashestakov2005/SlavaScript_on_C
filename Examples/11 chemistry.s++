@@ -1,0 +1,63 @@
+import chemistry
+'start time' = time();
+println "2H2O :\t\t\t" + mr("2H2O")
+str0 = "C6H12O6"
+println str0 + " :\t\t" + mr(str0)
+println "\t\t\t" + omega("C", str0)
+println "\t\t\t" + omega("H", str0)
+println "\t\t\t" + omega("O", str0)
+str = "CaCO3"
+println str + " :\t\t\t" + mr(str)
+println "Omega Ca, " + str + " :\t" + omega("Ca", str)
+println "Omega O, " + str + " :\t" + omega("O", str)
+println "Omega C, " + str + " :\t" + omega("C", str)
+println "\t\t\t" + mr("O") * 3 / mr(str)
+str2 = "Fe2(SO4)3"
+println str2 + " :\t\t" + mr(str2)
+println "\t\t\t" + omega("Fe", str2)
+println "\t\t\t" + omega("S", str2)
+println "\t\t\t" + omega("O", str2)
+println "Ca3(PO4)2 :\t\t" + mr("Ca3(PO4)2")
+println "\t\t\t" + omega("Ca", "Ca3(PO4)2")
+println "5H2O :\t\t\t" + mr("5H2O")
+
+
+println "Proton : " + proton("Li")
+println "Neutron : " + neutron("Li")
+println russian_read("C") + "\t\t" + latin_read("C") 
+
+
+import functional
+//a  = [11, 7, 6, 9, 0, -2, 4, "string", false]
+a  = [11, 7, 6, 9, 0, -2, 4]
+println a
+println sortby(a, def(x) = -x)
+println sortby(a, def(x) = x)
+
+import std
+str = "1/ 2/ 5456465/ hvfjv/ rgbg,5"
+println str
+mas = split(str, "/", 3)
+println mas
+println join("/", mas[0], mas[1], mas[2])
+println join("/", mas)
+println find("Hello world", "world", 8)
+println rfind("12345678910", "1", 10)
+println rfind("12345678910", "1", 8)
+println charat("0123456789", 5)
+println tochar(48)
+println tochar(66)
+println tochar(193)
+println substring("Hello world!", 0, 5)
+println substring("Hello world!", 6)
+name = "SlavaScript2020"
+println tolower(name)
+println toupper(name)
+println trim("            dbhkjfdbn        ") + " :end"
+println replacefirst("a2222aaa", "aa", "Shi")
+import types
+inputstr = input()
+println (inputstr)
+'finish time' = time()
+println 'finish time' - 'start time'
+println time() / 3600 / 24 / 365
