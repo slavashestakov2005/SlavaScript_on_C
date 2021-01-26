@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include "Run/start.h"
 #include "Run/repl.h"
 #include "Run/path.h"
@@ -63,7 +64,7 @@ int main(int argc, char* arg[]){
             else{
                 cout << endl << endl;
                 cout << "Вы вошли в режим истории языка SlavaScript" << endl;
-                cout << "    В период с 30 декабря по 11 января SlavaScript динамично развивался" << endl;
+                cout << "    В период с 30 декабря 2019 по 11 января 2020 SlavaScript динамично развивался" << endl;
                 cout << "    Начиналось всё с обратно польской нотации..." << endl;
                 cout << "    Появился SlavaScript синтаксис для Notepad++" << endl;
                 cout << "    5 января:" << endl;
@@ -155,6 +156,8 @@ int main(int argc, char* arg[]){
                 cout << "\t1. Добавлены try, catch, throw" << endl;
                 cout << "    2 марта:" << endl;
                 cout << "\t1. Добавлены vars, funcs, source, help в REPL" << endl;
+                cout << "    26 января 2021:" << endl;
+                cout << "\t1. Создан новый репозиторий на GitHub";
                 cout << "   Нужно добавить :" << endl;
                 cout << "\t1.   +\tВызов функции из элемента массива" << endl;
                 cout << "\t2.   +\tОбращение ко вложенным контейнерам" << endl;

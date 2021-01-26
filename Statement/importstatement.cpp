@@ -1,6 +1,6 @@
 #include "importstatement.h"
-#include "../path.h"
-#include "../start.h"
+#include "../Run/path.h"
+#include "../Run/start.h"
 #include "../Exception/unknownmoduleexception.h"
 #include "../Lib/functions.h"
 #include "../Lib/variables.h"
