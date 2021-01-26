@@ -6,7 +6,7 @@
 #include "valueexpression.h"
 #include "../Exception/variabledoesnotexistsexception.h"
 #include "../Exception/unknownfunctionexception.h"
-#include "../callstack.h"
+#include "../Run/callstack.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::VariableDoesNotExistsException;

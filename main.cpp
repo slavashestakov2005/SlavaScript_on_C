@@ -1,7 +1,7 @@
 #include <iostream>
-#include "start.h"
-#include "repl.h"
-#include "path.h"
+#include "Run/start.h"
+#include "Run/repl.h"
+#include "Run/path.h"
 #include "Compiler/compiler.h"
 
 using namespace std;
@@ -25,8 +25,7 @@ namespace{
     };
 }
 
-int main(int argc, char* arg[])
-{
+int main(int argc, char* arg[]){
     setlocale(LC_CTYPE, "rus");
     vector<string> argv;
     for(int i = 0; i < argc; ++i) argv.push_back(arg[i]);

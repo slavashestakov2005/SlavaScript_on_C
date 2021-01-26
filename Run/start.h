@@ -3,8 +3,8 @@
 
 #include <string>
 #include <vector>
-#include "Parser/lexer.h"
-#include "Statement/statement.h"
+#include "../Parser/lexer.h"
+#include "../Statement/statement.h"
 
 namespace SlavaScript{ namespace lang{
     class Start{

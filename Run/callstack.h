@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#include "Lib/function.h"
+#include "../Lib/function.h"
 
 namespace SlavaScript{ namespace lang{
     class CallInfo{

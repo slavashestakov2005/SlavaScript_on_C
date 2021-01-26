@@ -1,11 +1,11 @@
 #include "repl.h"
 #include <iostream>
-#include "Parser/lexer.h"
-#include "Parser/parser.h"
-#include "Statement/statement.h"
+#include "../Parser/lexer.h"
+#include "../Parser/parser.h"
+#include "../Statement/statement.h"
 #include "path.h"
-#include "Lib/variables.h"
-#include "Lib/functions.h"
+#include "../Lib/variables.h"
+#include "../Lib/functions.h"
 
 using namespace SlavaScript::lang;
 

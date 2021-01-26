@@ -1,15 +1,15 @@
 #include "start.h"
 #include <iostream>
 #include <fstream>
-#include "Parser/parser.h"
-#include "Visitor/assignvalidator.h"
-#include "Visitor/functionadder.h"
-#include "Visitor/importadder.h"
-#include "Lib/variables.h"
-#include "Lib/functions.h"
+#include "../Parser/parser.h"
+#include "../Visitor/assignvalidator.h"
+#include "../Visitor/functionadder.h"
+#include "../Visitor/importadder.h"
+#include "../Lib/variables.h"
+#include "../Lib/functions.h"
 #include <ctime>
 #include "path.h"
-#include "Parser/token.h"
+#include "../Parser/token.h"
 
 using namespace SlavaScript::lang;
 

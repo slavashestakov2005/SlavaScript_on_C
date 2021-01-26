@@ -1,5 +1,5 @@
 #include "path.h"
-#include "Value/stringvalue.h"
+#include "../Value/stringvalue.h"
 
 using namespace SlavaScript::lang;
 

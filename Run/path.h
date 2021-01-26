@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "Value/arrayvalue.h"
+#include "../Value/arrayvalue.h"
 
 namespace SlavaScript{ namespace lang{
     class Path{
