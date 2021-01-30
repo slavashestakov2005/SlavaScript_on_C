@@ -207,8 +207,7 @@ Statement* Parser::tryStatement(){
     else throw new ParseException("Catch block not found after try block");
 }
 
-FunctionDefineStatement* Parser::functionDefine(){
-    std::string name = consume(TokenType::WORD) -> getText();
+Arguments Parser::functionArguments(){
     consume(TokenType::LPAREN);
     Arguments args = Arguments();
     bool startOption = false, arrayArguments = false;
@@ -227,20 +226,28 @@ FunctionDefineStatement* Parser::functionDefine(){
         }
         else if (!startOption) args.addRequired(s);
         else throw new ParseException("Required argument cannot be after optional");
-        match(TokenType::COMMA);
+        if (match(TokenType::RPAREN)) break;
+        else consume(TokenType::COMMA);
     }
-    Statement* body;
-    if (match(TokenType::EQ)){
-        body = new ReturnStatement(expression());
-    }
-    else body = statementOrBlock();
+    return args;
+}
+
+Statement* Parser::functionBody(){
+    if (match(TokenType::EQ)) return new ReturnStatement(expression());
+    return statementOrBlock();
+}
+
+FunctionDefineStatement* Parser::functionDefine(){
+    std::string name = consume(TokenType::WORD) -> getText();
+    Arguments args = functionArguments();
+    Statement* body = functionBody();
     return new FunctionDefineStatement(name, args, body);
 }
 
-Expression* Parser::functionChain(Expression* nameExpression){
-    Expression* expr = function(nameExpression);
-    if (lookMatch(0, TokenType::LPAREN)) return functionChain(expr);
-    if (lookMatch(0, TokenType::DOT)){
+Expression* Parser::functionChain(Expression* nameExpression){              /// rec: function()
+    Expression* expr = function(nameExpression);                        // name()
+    if (lookMatch(0, TokenType::LPAREN)) return functionChain(expr);    // 'name()'() = ''()
+    if (lookMatch(0, TokenType::DOT)){                                  // name(). ...
         std::vector<ContainerAccessElement> indices = variableSuffix();
         if (!indices.size()) return expr;
         if (lookMatch(0, TokenType::LPAREN)) return functionChain(new ContainerAccessExpression(expr, indices));
@@ -249,12 +256,13 @@ Expression* Parser::functionChain(Expression* nameExpression){
     return expr;
 }
 
-FunctionalExpression* Parser::function(Expression* nameExpression){
+FunctionalExpression* Parser::function(Expression* nameExpression){         /// name(args)
     consume(TokenType::LPAREN);
     FunctionalExpression* function = new FunctionalExpression(nameExpression);
     while(!match(TokenType::RPAREN)){
         function -> addArguments(expression());
-        match(TokenType::COMMA);
+        if (match(TokenType::RPAREN)) break;
+        consume(TokenType::COMMA);
     }
     return function;
 }
@@ -556,48 +564,25 @@ Expression* Parser::exponential(){
     return left;
 }
 
-Expression* Parser::primary(){
+Expression* Parser::primary(){          /// () | :: | lambda
     if (match(TokenType::LPAREN)){
         Expression* result = expression();
-        match(TokenType::RPAREN);
+        consume(TokenType::RPAREN);
         return result;
     }
-    if (match(TokenType::COLONCOLON)){
+    if (match(TokenType::COLONCOLON)){      /// [[maybe_unused]]
         std::string name = consume(TokenType::WORD) -> getText();
         return new FunctionReferenceExpression(name);
     }
     if (match(TokenType::DEF)){
-        consume(TokenType::LPAREN);
-        Arguments args = Arguments();
-        bool startOption = false, arrayArguments = false;
-        while(!match(TokenType::RPAREN)){
-            bool star = match(TokenType::STAR);
-            std::string name = consume(TokenType::WORD) -> getText();
-            if (star){
-                if (arrayArguments) throw new ParseException("Two or more array argument");
-                arrayArguments = true;
-                args.addArrayArgument(name);
-            }
-            else if (arrayArguments) throw new ParseException("Argument cannot be after array argument");
-            else if (match(TokenType::EQ)){
-                startOption = true;
-                args.addOptional(name, expression());
-            }
-            else if (!startOption) args.addRequired(name);
-            else throw new ParseException("Required argument cannot be after optional");
-            match(TokenType::COMMA);
-        }
-        Statement* body;
-        if (match(TokenType::EQ)){
-            body = new ReturnStatement(expression());
-        }
-        else body = statementOrBlock();
+        Arguments args = functionArguments();
+        Statement* body = functionBody();
         return new ValueExpression(new UserDefinedFunction(args, body));
     }
     return variable();
 }
 
-Expression* Parser::variable(){
+Expression* Parser::variable(){         /// name() | 'q.name'() | 'q.name' ++ / -- | [...] | {...}
     if (lookMatch(0, TokenType::WORD) && lookMatch(1, TokenType::LPAREN)){
         return functionChain(new ValueExpression(consume(TokenType::WORD) -> getText()));
     }
@@ -616,20 +601,16 @@ Expression* Parser::variable(){
     }
     if (lookMatch(0, TokenType::LBRACKET)){
         Expression* _array = array();
-        std::vector<ContainerAccessElement> indices = variableSuffix();
-        if (indices.empty()) return _array;
-        return new ContainerAccessExpression(_array, indices);
+        return primarySuffix(_array);
     }
     if (lookMatch(0, TokenType::LBRACE)){
         Expression* _map = map();
-        std::vector<ContainerAccessElement> indices = variableSuffix();
-        if (indices.empty()) return _map;
-        return new ContainerAccessExpression(_map, indices);
+        return primarySuffix(_map);
     }
     return value();
 }
 
-Expression* Parser::value(){
+Expression* Parser::value(){            /// 123 | #2F3C53 | "..."
     Token* current = get(0);
     if (match(TokenType::NUMBER)) return new ValueExpression(new NumberValue(current -> getText()));
     if (match(TokenType::HEX_NUMBER)){
@@ -645,30 +626,12 @@ Expression* Parser::value(){
     }
     if (match(TokenType::TEXT)){
         ValueExpression* stringExpr = new ValueExpression(current -> getText());
-        if (lookMatch(0, TokenType::DOT)){
-            if (lookMatch(1, TokenType::WORD) && lookMatch(2, TokenType::LPAREN)){
-                match(TokenType::DOT);
-                return functionChain(new ContainerAccessExpression(stringExpr, std::vector<ContainerAccessElement>{
-                    ContainerAccessElement(new ValueExpression(consume(TokenType::WORD) -> getText()), true)
-                    }));
-            }
-            std::vector<ContainerAccessElement> indices = variableSuffix();
-            if (!indices.size()){
-                return stringExpr;
-            }
-            return new ContainerAccessExpression(stringExpr, indices);
-        }
-        if (lookMatch(0, TokenType::LBRACKET)){
-            std::vector<ContainerAccessElement> indices = variableSuffix();
-            if (indices.empty()) return stringExpr;
-            return new ContainerAccessExpression(stringExpr, indices);
-        }
-        return stringExpr;
+        return primarySuffix(stringExpr);
     }
     throw new ParseException("Unknown expression: " + current -> getText());
 }
 
-Expression* Parser::qualifiedName(){
+Expression* Parser::qualifiedName(){        /// word 'var.Suffix'
     Token* current = get(0);
     if (!match(TokenType::WORD)) return nullptr;
     std::vector<ContainerAccessElement> indices = variableSuffix();
@@ -676,7 +639,7 @@ Expression* Parser::qualifiedName(){
     return new ContainerAccessExpression(current -> getText(), indices);
 }
 
-std::vector<ContainerAccessElement> Parser::variableSuffix(){
+std::vector<ContainerAccessElement> Parser::variableSuffix(){   /// .---[---]
     std::vector<ContainerAccessElement> indices;
     while(lookMatch(0, TokenType::DOT) || lookMatch(0, TokenType::LBRACKET)){
         if (match(TokenType::DOT)){
@@ -688,6 +651,18 @@ std::vector<ContainerAccessElement> Parser::variableSuffix(){
         }
     }
     return indices;
+}
+
+Expression* Parser::primarySuffix(Expression* root){            /// primary 'var.Suffix' | primary.name() | primary
+     if (lookMatch(0, TokenType::DOT) && lookMatch(1, TokenType::WORD) && lookMatch(2, TokenType::LPAREN)){
+        match(TokenType::DOT);
+        return functionChain(new ContainerAccessExpression(root, std::vector<ContainerAccessElement>{
+            ContainerAccessElement(new ValueExpression(consume(TokenType::WORD) -> getText()), true)
+            }));
+    }
+    std::vector<ContainerAccessElement> indices = variableSuffix();
+    if (!indices.size()) return root;
+    return new ContainerAccessExpression(root, indices);
 }
 
 Token* Parser::get(int position){

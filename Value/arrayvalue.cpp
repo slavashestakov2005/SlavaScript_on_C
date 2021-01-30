@@ -2,26 +2,36 @@
 #include "boolvalue.h"
 #include "classvalue.h"
 #include "stringvalue.h"
+#include "../Exception/argumentsmismatchexception.h"
 #include "../Exception/typeexception.h"
 #include "../Exception/unknownpropertyexception.h"
 #include "../Expression/valueexpression.h"
 
 using namespace SlavaScript::lang;
+using SlavaScript::exceptions::ArgumentsMismatchException;
 using SlavaScript::exceptions::UnknownPropertyException;
 using SlavaScript::exceptions::TypeException;
 
 namespace {
     class IsEmpty : public Function{
-        public:
+    private:
+        std::vector<Value*> elements;
+    public:
+        IsEmpty(std::vector<Value*>* elements) : elements(*elements) {}
         Value* execute(std::vector<Value*> values){
-             return new BoolValue(((ArrayValue*)values[0]) -> size() == 0);
+            if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+            return new BoolValue(elements.empty());
         }
     };
 
     class Length : public Function{
-        public:
+    private:
+        std::vector<Value*> elements;
+    public:
+        Length(std::vector<Value*>* elements) : elements(*elements) {}
         Value* execute(std::vector<Value*> values){
-             return new NumberValue(((ArrayValue*)values[0]) -> size());
+            if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+            return new NumberValue(elements.size());
         }
     };
 }
@@ -87,8 +97,8 @@ std::vector<Value*>::iterator ArrayValue::end(){
 
 Value* ArrayValue::accessDot(Value* property){
     std::string prop = property -> asString();
-    if (prop == "length") return new FunctionValue(new Length());
-    if (prop == "is_empty") return new FunctionValue(new IsEmpty());
+    if (prop == "length") return new FunctionValue(new Length(elements));
+    if (prop == "is_empty") return new FunctionValue(new IsEmpty(elements));
     throw new UnknownPropertyException(prop);
 }
 

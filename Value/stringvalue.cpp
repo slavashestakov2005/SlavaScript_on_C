@@ -86,7 +86,9 @@ Value* StringValue::accessDot(Value* property){
 }
 
 Value* StringValue::accessBracket(Value* property){
-    return new StringValue("" + value[(int) property -> asDouble()]);
+    std::string s;
+    s += value[(int) property -> asDouble()];
+    return new StringValue(s);
 }
 
 double StringValue::asDouble(){

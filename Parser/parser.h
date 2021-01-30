@@ -34,6 +34,8 @@ namespace SlavaScript{ namespace lang{
         Statement* switchStatement();
         Statement* importStatement();
         Statement* tryStatement();
+        Arguments functionArguments();
+        Statement* functionBody();
         FunctionDefineStatement* functionDefine();
         Expression* functionChain(Expression* nameExpression);
         FunctionalExpression* function(Expression* nameExpression);
@@ -63,6 +65,7 @@ namespace SlavaScript{ namespace lang{
 
         Expression* qualifiedName();
         std::vector<ContainerAccessElement> variableSuffix();
+        Expression* primarySuffix(Expression* root);
         Token* get(int position);
         bool lookMatch(int position, TokenType type);
         bool match(TokenType type);
