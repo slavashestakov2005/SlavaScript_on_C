@@ -328,34 +328,6 @@ namespace SlavaScript{ namespace modules{ namespace std_f{
         reverse(ans.begin(), ans.end());
         return new StringValue(ans);
     });
-
-    Function* to_lower = new FunctionModule([](std::vector<Value*> values) -> Value*{
-        if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
-        std::string str = values[0] -> asString();
-        for(auto& x : str) x = tolower(x);
-        return new StringValue(str);
-    });
-
-    Function* to_upper = new FunctionModule([](std::vector<Value*> values) -> Value*{
-        if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
-        std::string str = values[0] -> asString();
-        for(auto& x : str) x = toupper(x);
-        return new StringValue(str);
-    });
-
-    Function* trim = new FunctionModule([](std::vector<Value*> values) -> Value*{
-        if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
-        std::string ans, str = values[0] -> asString();
-        for(int i = 0; i < str.size(); ++i){
-            if (str[i] != ' ' && str[i] != '\t' && str[i] != '\n' || ans.size()) ans += str[i];
-        }
-        str = "";
-        for(int i = ans.size() - 1; i > -1; --i){
-            if (ans[i] != ' ' && ans[i] != '\t' && ans[i] != '\n' || str.size()) str += ans[i];
-        }
-        reverse(str.begin(), str.end());
-        return new StringValue(str);
-    });
 }}}
 
 void Std::initConstants(){
@@ -386,7 +358,4 @@ void Std::initFunctions(){
     Functions::set("time", std_f::time);
     Functions::set("to_char", to_char);
     Functions::set("to_hex_string", to_hex_string);
-    Functions::set("to_lower", to_lower);
-    Functions::set("to_upper", to_upper);
-    Functions::set("trim", trim);
 }

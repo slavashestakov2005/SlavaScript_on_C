@@ -12,6 +12,7 @@
 #include "../Value/stringvalue.h"
 #include "../Exception/argumentsmismatchexception.h"
 #include <iostream>
+#include <windows.h>
 
 using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::global_f;
@@ -32,6 +33,8 @@ namespace SlavaScript{ namespace modules{ namespace global_out{
             case Values::CLASS : return *(ClassValue*)(&a) < *(ClassValue*)(&b);
         }
     }
+
+    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 }}}
 
 namespace SlavaScript{ namespace modules{ namespace global_f{
@@ -55,6 +58,15 @@ namespace SlavaScript{ namespace modules{ namespace global_f{
         for(int i = 1; i < values.size(); ++i) ans = global_out::operator_lt(*ans, *values[i]) ? ans : values[i];
         return ans;
     });
+
+    Function* set_color = new FunctionModule([](std::vector<Value*> values) -> Value*{
+        int color = 0;
+        if (values.size() > 1) throw new ArgumentsMismatchException("Zero or one argument expected");
+        if (values.size() > 0 && values[0] -> type() != Values::NUMBER) throw new TypeException("Number expected in first argument");
+        if (values.size() == 1) color = values[0] -> asDouble();
+        SetConsoleTextAttribute(global_out::handle, color);
+        return NullValue::NULL_;
+    });
 }}}
 
 void Global::initConstants(){
@@ -67,4 +79,5 @@ void Global::initFunctions(){
     Functions::set("input", input);
     Functions::set("max", max);
     Functions::set("min", min);
+    Functions::set("set_color", set_color);
 }

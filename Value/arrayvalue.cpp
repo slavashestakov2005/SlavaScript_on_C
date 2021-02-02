@@ -6,7 +6,6 @@
 #include "../Exception/typeexception.h"
 #include "../Exception/unknownpropertyexception.h"
 #include "../Expression/valueexpression.h"
-#include "../Lib/functionmodule.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::ArgumentsMismatchException;

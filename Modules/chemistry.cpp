@@ -308,6 +308,8 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_f{
         if (finded == -1) throw std::logic_error("First argument not element");
         return new StringValue(chemistry_out::elements[finded].name);
     });
+
+    Function* proton = electron;
 }}}
 
 void Chemistry::initFunctions(){
@@ -316,7 +318,7 @@ void Chemistry::initFunctions(){
     Functions::set("mr", mr);
     Functions::set("neutron", neutron);
     Functions::set("omega", omega);
-    Functions::set("proton", electron);
+    Functions::set("proton", proton);
     Functions::set("russian_read", russian_read);
     Functions::set("write", write);
 }

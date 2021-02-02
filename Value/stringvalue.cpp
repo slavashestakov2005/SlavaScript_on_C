@@ -7,6 +7,7 @@
 #include "../Lib/function.h"
 #include "../Value/numbervalue.h"
 #include "../Value/functionvalue.h"
+#include <algorithm>
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::ArgumentsMismatchException;
@@ -21,7 +22,16 @@ namespace{
         Trim(std::string str) : str(str) {}
         Value* execute(std::vector<Value*> values){
             if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-            return new StringValue("This is trimmed for : " + str + " : end");
+            std::string ans;
+            for(int i = 0; i < str.size(); ++i){
+                if (str[i] != ' ' && str[i] != '\t' && str[i] != '\n' || ans.size()) ans += str[i];
+            }
+            str = "";
+            for(int i = ans.size() - 1; i > -1; --i){
+                if (ans[i] != ' ' && ans[i] != '\t' && ans[i] != '\n' || str.size()) str += ans[i];
+            }
+            reverse(str.begin(), str.end());
+            return new StringValue(str);
         }
     };
 

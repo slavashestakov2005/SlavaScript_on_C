@@ -7,6 +7,7 @@
 #include "../Value/mapvalue.h"
 #include "../Value/nullvalue.h"
 #include "../Value/numbervalue.h"
+#include <algorithm>
 
 using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::functional_f;
@@ -15,26 +16,8 @@ using SlavaScript::exceptions::ArgumentsMismatchException;
 using SlavaScript::exceptions::TypeException;
 
 namespace SlavaScript{ namespace modules{ namespace functional_out{
-    std::vector<Value*> mas;
-    Function* func;
-
     bool comparator(Value* a, Value* b){
         return (*a) < (*b);
-    }
-
-    void qweek_sort(int l, int r){
-        int i = l, j = r;
-        std::vector<Value*> vec = { mas[(l + r) / 2] };
-        Value* m = func -> execute(vec);
-        while(i < j){
-            vec = { mas[i] };
-            while(comparator(func -> execute(vec), m)) { ++i; vec = { mas[i] }; }
-            vec = { mas[j] };
-            while(comparator(m, func -> execute(vec))) { --j; vec = { mas[j] }; }
-            if (i <= j) std::swap(mas[i], mas[j]), ++i, --j;
-        }
-        if (i < r) qweek_sort(i, r);
-        if (l < j) qweek_sort(l, j);
     }
 
     Value* filterArray(ArrayValue* arr, Function* consumer){
@@ -123,8 +106,12 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
             }
             Function* current = result;
             Function* next = ((FunctionValue*) arg) -> getFunction();
+            result = new FunctionModule([current, next](std::vector<Value*> values) -> Value*{
+                if (current == nullptr) return next -> execute(values);
+                return next -> execute({current -> execute(values)});
+            });
         }
-        throw new std::logic_error("Combine not defined :(");
+        return new FunctionValue(result);
     });
 
     Function* drop_while = new FunctionModule([](std::vector<Value*> values) -> Value*{
@@ -237,16 +224,13 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
     });
 
     Function* sortby = new FunctionModule([](std::vector<Value*> values) -> Value*{
-        functional_out::mas.clear();
         if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments excepted");
         if (values[0] -> type() != Values::ARRAY) throw new TypeException("Array expected in first argument");
         if (values[1] -> type() != Values::FUNCTION) throw new TypeException("Function expected in second argument");
         ArrayValue* arr = (ArrayValue*)values[0];
-        for(int i = 0; i < arr -> size(); ++i) functional_out::mas.push_back(arr -> get(i));
-        functional_out::func = ((FunctionValue*)values[1]) -> getFunction();
-        if (!functional_out::mas.size()) return new ArrayValue(functional_out::mas);
-        functional_out::qweek_sort(0, functional_out::mas.size() - 1);
-        return new ArrayValue(functional_out::mas);
+        Function* func = ((FunctionValue*)values[1]) -> getFunction();
+        std::sort(arr -> begin(), arr -> end(), [func](Value* l, Value* r) -> bool { return functional_out::comparator(func -> execute({l}), func -> execute({r})); });
+        return arr;
     });
 
     Function* take_while = new FunctionModule([](std::vector<Value*> values) -> Value*{
