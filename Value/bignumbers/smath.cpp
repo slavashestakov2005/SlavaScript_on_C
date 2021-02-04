@@ -36,12 +36,12 @@ namespace SlavaScript{ namespace modules{ namespace math_out{
     }
 
     Bignum asin(const Bignum& x){
-        if (x < -1 || x > 1) throw MathException("For asin expected value in [-1; 1]");
+        if (x < -1 || x > 1) throw new MathException("For asin expected value in [-1; 1]");
         return asin(double(x));
     }
 
     Bignum acos(const Bignum& x){
-        if (x < -1 || x > 1) throw MathException("For acos expected value in [-1; 1]");
+        if (x < -1 || x > 1) throw new MathException("For acos expected value in [-1; 1]");
         return acos(double(x));
     }
 

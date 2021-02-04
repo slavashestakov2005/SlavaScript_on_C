@@ -124,6 +124,13 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_out{
         Element(86, "Rn", "радон", "радон", "6s26p6", 222, 6, 8, false, true),
     };
 
+    int get_element(std::string name){
+        for(int i = 0; i < SizeOfTabel; ++i){
+            if (elements[i].name == name) return i;
+        }
+        return -1;
+    }
+
     std::map<std::string, int> correct(std::string str){
         int pos = 0, index = 0, koeff = 0;
         std::string element;
@@ -145,10 +152,7 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_out{
                 index += str[pos] - '0';
             }else if (str[pos] >= 'A' && str[pos] <= 'Z'){
                 if (element != ""){
-                    int finded = -1;
-                    for(int i = 0; i < SizeOfTabel && finded == -1; ++i){
-                        if (elements[i].name == element) finded = i;
-                    }
+                    int finded = get_element(element);
                     if (finded == -1) throw std::logic_error("Bad element");
                     if (index == 0) index = 1;
                     el[element] += index;
@@ -164,10 +168,7 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_out{
                 if (openParen) throw std::logic_error("Two open paren");
                 openParen = true;
                 if (element != ""){
-                    int finded = -1;
-                    for(int i = 0; i < SizeOfTabel && finded == -1; ++i){
-                        if (elements[i].name == element) finded = i;
-                    }
+                    int finded = get_element(element);
                     if (finded == -1) throw std::logic_error("Bad element");
                     if (index == 0) index = 1;
                     el[element] += index;
@@ -176,10 +177,7 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_out{
                 }
             }else if (str[pos] == ')'){
                 if (!openParen) throw std::logic_error("Missing open paren");
-                int finded = -1;
-                for(int i = 0; i < SizeOfTabel && finded == -1; ++i){
-                    if (elements[i].name == element) finded = i;
-                }
+                int finded = get_element(element);
                 if (finded == -1) throw std::logic_error("Bad element");
                 if (index == 0) index = 1;
                 el[element] += index;
@@ -199,10 +197,7 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_out{
             ++pos;
         }
         if (element != ""){
-            int finded = -1;
-            for(int i = 0; i < SizeOfTabel && finded == -1; ++i){
-                if (elements[i].name == element) finded = i;
-            }
+            int finded = get_element(element);
             if (finded == -1) throw std::logic_error("Bad element");
             if (index == 0) index = 1;
             el[element] += index;
@@ -214,16 +209,14 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_out{
         std::map<std::string, int> element = correct(str);
         double m = 0;
         for(auto x : element){
-            int finded = -1;
-            for(int i = 0; i < SizeOfTabel && finded == -1; ++i) if (elements[i].name == x.first) finded = i;
+            int finded = get_element(x.first);
             m += elements[finded].massa * x.second;
         }
         return m * element["_"];
     }
 
-    double omega(std::string str, std::string findedString){
-        std::map<std::string, int> element = correct(str);
-        std::string el = findedString;
+    double omega(std::string substance, std::string el){
+        std::map<std::string, int> element = correct(substance);
         int index = 0;
         for(auto x : element){
             if (x.first == el){
@@ -231,9 +224,9 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_out{
                 break;
             }
         }
-        if (!index) throw std::logic_error(str + " not contain a " + el);
+        if (!index) throw std::logic_error(substance + " not contain a " + el);
         for(int i = 0; i < SizeOfTabel; ++i){
-            if (elements[i].name == el) return index * elements[i].massa / mr(str);
+            if (elements[i].name == el) return index * elements[i].massa / mr(substance);
         }
         return -1;
     }
@@ -244,8 +237,7 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_f{
         if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
         if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
         std::string str1 = ((StringValue*)values[0]) -> asString();
-        int finded = -1;
-        for(int i = 0; i < chemistry_out::SizeOfTabel && finded == -1; ++i) if (chemistry_out::elements[i].name == str1) finded = i;
+        int finded = chemistry_out::get_element(str1);
         if (finded == -1) throw std::logic_error("First argument not element");
         return new NumberValue(chemistry_out::elements[finded].number);
     });
@@ -254,15 +246,14 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_f{
         if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
         if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
         std::string str1 = ((StringValue*)values[0]) -> asString();
-        int finded = -1;
-        for(int i = 0; i < chemistry_out::SizeOfTabel && finded == -1; ++i) if (chemistry_out::elements[i].name == str1) finded = i;
+        int finded = chemistry_out::get_element(str1);
         if (finded == -1) throw std::logic_error("First argument not element");
         return new StringValue(chemistry_out::elements[finded].latinRead);
     });
 
     Function* mr = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
-        if (values[0] -> type() != Values::STRING) throw TypeException("String excepted");
+        if (values[0] -> type() != Values::STRING) throw TypeException("String expected in first argument");
         std::string str = ((StringValue*)values[0]) -> asString();
         return new NumberValue(chemistry_out::mr(str));
     });
@@ -271,8 +262,7 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_f{
         if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
         if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
         std::string str1 = ((StringValue*)values[0]) -> asString();
-        int finded = -1;
-        for(int i = 0; i < chemistry_out::SizeOfTabel && finded == -1; ++i) if (chemistry_out::elements[i].name == str1) finded = i;
+        int finded = chemistry_out::get_element(str1);
         if (finded == -1) throw std::logic_error("First argument not element");
         return new NumberValue(round(chemistry_out::elements[finded].massa) - chemistry_out::elements[finded].number);
     });
@@ -282,8 +272,7 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_f{
         if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
         if (values[1] -> type() != Values::STRING) throw TypeException("String excepted in second argument");
         std::string str1 = ((StringValue*)values[0]) -> asString(), str2 = ((StringValue*)values[1]) -> asString();
-        int finded = -1;
-        for(int i = 0; i < chemistry_out::SizeOfTabel && finded == -1; ++i) if (chemistry_out::elements[i].name == str1) finded = i;
+        int finded = chemistry_out::get_element(str1);
         if (finded == -1) throw std::logic_error("First argument not element");
         if (chemistry_out::mr(str2) == 0) throw std::logic_error("Bad second argument");
         return new NumberValue(chemistry_out::omega(str2, str1));
@@ -293,8 +282,7 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_f{
         if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
         if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
         std::string str1 = ((StringValue*)values[0]) -> asString();
-        int finded = -1;
-        for(int i = 0; i < chemistry_out::SizeOfTabel && finded == -1; ++i) if (chemistry_out::elements[i].name == str1) finded = i;
+        int finded = chemistry_out::get_element(str1);
         if (finded == -1) throw std::logic_error("First argument not element");
         return new StringValue(chemistry_out::elements[finded].russionRead);
     });
@@ -304,7 +292,9 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_f{
         if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
         std::string str = ((StringValue*)values[0]) -> asString();
         int finded = -1;
-        for(int i = 0; i < chemistry_out::SizeOfTabel; ++i) if (chemistry_out::elements[i].russionRead == str) finded = i;
+        for(int i = 0; i < chemistry_out::SizeOfTabel; ++i){
+            if (chemistry_out::elements[i].russionRead == str) finded = i;
+        }
         if (finded == -1) throw std::logic_error("First argument not element");
         return new StringValue(chemistry_out::elements[finded].name);
     });

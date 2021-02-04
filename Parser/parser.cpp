@@ -126,7 +126,7 @@ Statement* Parser::forStatement(){
     Expression* termination = expression();
     consume(TokenType::COMMA);
     Statement* increment = assignmentStatement();
-    if (openParen) match(TokenType::RPAREN);
+    if (openParen) consume(TokenType::RPAREN);
     Statement* statement = statementOrBlock();
     return new ForStatement(initialization, termination, increment, statement);
 }

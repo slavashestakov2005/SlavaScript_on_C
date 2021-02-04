@@ -3,6 +3,7 @@
 
 #include "value.h"
 #include "bignumbers/bignum.h"
+#include <ctime>
 
 namespace SlavaScript{ namespace lang{
     class NumberValue : public Value{
@@ -13,6 +14,10 @@ namespace SlavaScript{ namespace lang{
         NumberValue(Bignum value) : value(value) {}
         NumberValue(std::string value) : value(Bignum(value)) {}
         NumberValue(int value) : value(Bignum(value)) {}
+        NumberValue(long long value) : value(Bignum(value)) {}
+        NumberValue(size_t value) : value(Bignum((long long) value)) {}
+        NumberValue(clock_t value) : value(Bignum((long long) value)) {}
+        NumberValue(double value) : value(Bignum(value)) {}
         /** @return  throw: std::logic_error. */
         double asDouble();
         std::string asString();

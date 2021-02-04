@@ -22,38 +22,34 @@ namespace SlavaScript{ namespace modules{ namespace functional_out{
 
     Value* filterArray(ArrayValue* arr, Function* consumer){
         int size = arr -> size();
-        std::vector<Value*> value;
-        for(int i = 0; i < size; ++i){
-            std::vector<Value*> temp;
-            temp.push_back(arr -> get(i));
-            if (consumer -> execute(temp) -> asBool()) value.push_back(arr -> get(i));
+        std::vector<Value*> result;
+        for(Value* value : *arr){
+            if (consumer -> execute({value}) -> asBool()) result.push_back(value);
         }
-        return new ArrayValue(value);
+        return new ArrayValue(result);
     }
 
     Value* filterMap(MapValue* map, Function* consumer){
         int i = 0;
-        MapValue* value;
+        MapValue* result;
         auto iter = map -> begin();
         while (i < map -> size()){
             std::vector<Value*> args = { iter -> first, iter -> second };
-            if (consumer -> execute(args)) value -> set(iter -> first, iter -> second);
+            if (consumer -> execute(args)) result -> set(iter -> first, iter -> second);
             ++iter;
             ++i;
         }
-        return value;
+        return result;
     }
 
-    Value* FlatmapArray(ArrayValue* arr, Function* mapper){
-        int siz = arr -> size();
+    Value* flatMapArray(ArrayValue* arr, Function* mapper){
         std::vector<Value*> values;
-        for(int i = 0; i < siz; ++i){
-            std::vector<Value*> temp = { arr -> get(i) };
-            Value* inner = mapper -> execute(temp);
+        for(Value* value : *arr){
+            Value* inner = mapper -> execute({value});
             if (inner -> type() != Values::ARRAY) throw new TypeException("Array expected " + std::string(*inner));
             ArrayValue* valArr = (ArrayValue*) inner;
-            for(int i = 0; i < valArr -> size(); ++i){
-                values.push_back(valArr -> get(i));
+            for(Value* value2 : *valArr){
+                values.push_back(value2);
             }
         }
         return new ArrayValue(values);
@@ -61,13 +57,11 @@ namespace SlavaScript{ namespace modules{ namespace functional_out{
 
     Value* mapArray(ArrayValue* arr, Function* consumer){
         int size = arr -> size();
-        std::vector<Value*> value;
-        for(int i = 0; i < size; ++i){
-            std::vector<Value*> temp;
-            temp.push_back(arr -> get(i));
-            value.push_back(consumer -> execute(temp));
+        std::vector<Value*> result;
+        for(Value* value : *arr){
+            result.push_back(consumer -> execute({value}));
         }
-        return new ArrayValue(value);
+        return new ArrayValue(result);
     }
 
     Value* mapMap(MapValue* map, Function* consumer, Function* consumer2){
@@ -121,8 +115,7 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
         Function* function = ((FunctionValue*) values[1]) -> getFunction();
         ArrayValue* array = (ArrayValue*) values[0];
         int skipCount = 0;
-        for(int i = 0; i < array -> size(); ++i){
-            Value* value = array -> get(i);
+        for(Value* value : *array){
             std::vector<Value*> vec = { value };
             if (function -> execute(vec) -> asBool()) ++skipCount;
             else break;
@@ -148,7 +141,7 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
         if (values.size() < 2) throw new ArgumentsMismatchException("At least arguments excepted");
         if (values[0] -> type() != Values::ARRAY) throw new TypeException("Array expected at first argument");
         if (values[1] -> type() != Values::FUNCTION) throw new TypeException("Function expected at second arguments");
-        return functional_out::FlatmapArray((ArrayValue*)values[0], ((FunctionValue*)values[1]) -> getFunction());
+        return functional_out::flatMapArray((ArrayValue*)values[0], ((FunctionValue*)values[1]) -> getFunction());
     });
 
     Function* foreach = new FunctionModule([](std::vector<Value*> values) -> Value*{
@@ -158,9 +151,8 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
         Value* container = values[0];
         if (container -> type() == Values::ARRAY){
             ArrayValue* arr = (ArrayValue*)container;
-            for(int i = 0; i < arr -> size(); ++i){
-                std::vector<Value*> args = {arr -> get(i)};
-                function -> execute(args);
+            for(Value* element : *arr){
+                function -> execute({element});
             }
         }
         else if (container -> type() == Values::MAP){
@@ -179,13 +171,16 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
     });
 
     Function* map = new FunctionModule([](std::vector<Value*> values) -> Value*{
-        if (values.size() < 2 || values.size() > 3) throw new ArgumentsMismatchException("At least two arguments excepted");
+        if (values.size() < 2 || values.size() > 3) throw new ArgumentsMismatchException("Two or three arguments excepted");
         if (values[1] -> type() != Values::FUNCTION) throw new TypeException("Function expected in second argument");
         Value* container = values[0];
         Function* consumer = ((FunctionValue*) values[1]) -> getFunction();
-        if (container -> type() == Values::ARRAY) return functional_out::mapArray((ArrayValue*) container, consumer);
+        if (container -> type() == Values::ARRAY){
+            if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments excepted");
+            return functional_out::mapArray((ArrayValue*) container, consumer);
+        }
         if (container -> type() == Values::MAP){
-            if (values.size() < 3) throw new ArgumentsMismatchException("Three arguments excepted for map function for map type");
+            if (values.size() != 3) throw new ArgumentsMismatchException("Three arguments excepted");
             if (values[2] -> type() != Values::FUNCTION) throw new TypeException("Function expected in third argument");
             Function* consumer2 = ((FunctionValue*) values[1]) -> getFunction();
             return functional_out::mapMap((MapValue*) container, consumer, consumer2);
@@ -201,9 +196,8 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
         if (container -> type() == Values::ARRAY){
             Value* result = identy;
             ArrayValue* arr = (ArrayValue*) container;
-            for(int i = 0; i < arr -> size(); ++i){
-                std::vector<Value*> args = {result, arr -> get(i)};
-                result = accumulator -> execute(args);
+            for(Value* element : *arr){
+                result = accumulator -> execute({result, element});
             }
             return result;
         }
@@ -240,23 +234,20 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
         Function* function = ((FunctionValue*) values[1]) -> getFunction();
         if (container -> type() == Values::ARRAY) {
             ArrayValue* array = (ArrayValue*) container;
-            int size = array -> size();
-            std::vector<Value*> vals;
-            for(int i = 0; i < size; ++i) {
-                Value* value = array -> get(i);
-                std::vector<Value*> vec = {value};
-                if (function -> execute(vec) -> asBool()) {
-                    vals.push_back(value);
+            std::vector<Value*> result;
+            for(Value* element : *array) {
+                if (function -> execute({element}) -> asBool()) {
+                    result.push_back(element);
                 } else break;
             }
-            return new ArrayValue(vals);
+            return new ArrayValue(result);
         }
         if (container -> type() == Values::MAP) {
             MapValue* map = (MapValue*) container;
             MapValue* result = new MapValue(map -> size());
             for (auto x = map -> begin(); x != map -> end(); ++x) {
                 std::vector<Value*> vals = {x -> first, x -> second};
-                if (function -> execute(vals) != new NumberValue(0)){
+                if (function -> execute(vals) -> asBool()){
                     result -> set(x -> first, x -> second);
                 } else break;
             }

@@ -12,7 +12,7 @@ namespace SlavaScript{ namespace lang{
         Statement* increment;
         Statement* body;
     public:
-        ForStatement(Statement* initialization, Expression* termination, Statement* increment, Statement* statement)
+        ForStatement(Statement* initialization, Expression* termination, Statement* increment, Statement* body)
         : initialization(initialization), termination(termination), increment(increment), body(body) {}
         Statements type(){ return Statements::ForStatement; }
         void execute();

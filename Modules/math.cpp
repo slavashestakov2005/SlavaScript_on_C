@@ -17,62 +17,62 @@ using SlavaScript::exceptions::MathException;
 namespace SlavaScript{ namespace modules{ namespace math_f{
     Function* abs = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::abs(values[0] -> asBignum()));
+        return new NumberValue(math_out::abs(values[0] -> asBignum()));
     });
 
     Function* acos = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::acos(values[0] -> asBignum()));
+        return new NumberValue(math_out::acos(values[0] -> asBignum()));
     });
 
     Function* asin = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::sin(values[0] -> asBignum()));
+        return new NumberValue(math_out::sin(values[0] -> asBignum()));
     });
 
     Function* atan = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::atan(values[0] -> asBignum()));
+        return new NumberValue(math_out::atan(values[0] -> asBignum()));
     });
 
     Function* atan2 = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 2) throw new ArgumentsMismatchException("Two argument expected");
-        else return new NumberValue(math_out::atan2(values[0] -> asBignum(), values[1] -> asBignum()));
+        return new NumberValue(math_out::atan2(values[0] -> asBignum(), values[1] -> asBignum()));
     });
 
     Function* cbrt = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::cbrt(values[0] -> asBignum()));
+        return new NumberValue(math_out::cbrt(values[0] -> asBignum()));
     });
 
     Function* ceil = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::ceil(values[0] -> asBignum()));
+        return new NumberValue(math_out::ceil(values[0] -> asBignum()));
     });
 
     Function* copy_sign = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 2) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::copy_sign(values[0] -> asBignum(), values[1] -> asBignum()));
+        return new NumberValue(math_out::copy_sign(values[0] -> asBignum(), values[1] -> asBignum()));
     });
 
     Function* cos = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::cos(values[0] -> asBignum()));
+        return new NumberValue(math_out::cos(values[0] -> asBignum()));
     });
 
     Function* cosh = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::cosh(values[0] -> asBignum()));
+        return new NumberValue(math_out::cosh(values[0] -> asBignum()));
     });
 
     Function* exp = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::exp(values[0] -> asBignum()));
+        return new NumberValue(math_out::exp(values[0] -> asBignum()));
     });
 
     Function* expm1 = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::expm1(values[0] -> asBignum()));
+        return new NumberValue(math_out::expm1(values[0] -> asBignum()));
     });
 
     Function* factorial = new FunctionModule([](std::vector<Value*> values) -> Value*{
@@ -86,83 +86,81 @@ namespace SlavaScript{ namespace modules{ namespace math_f{
 
     Function* floor = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::floor(values[0] -> asBignum()));
+        return new NumberValue(math_out::floor(values[0] -> asBignum()));
     });
 
     Function* hypot = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 2) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::hypot(values[0] -> asBignum(), values[1] -> asBignum()));
+        return new NumberValue(math_out::hypot(values[0] -> asBignum(), values[1] -> asBignum()));
     });
 
     Function* log = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::log(values[0] -> asBignum()));
+        return new NumberValue(math_out::log(values[0] -> asBignum()));
     });
 
     Function* log10 = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::log10(values[0] -> asBignum()));
+        return new NumberValue(math_out::log10(values[0] -> asBignum()));
     });
 
     Function* log1p = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::log1p(values[0] -> asBignum()));
+        return new NumberValue(math_out::log1p(values[0] -> asBignum()));
     });
 
     Function* pow = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 2) throw new ArgumentsMismatchException("Two argument expected");
-        else return new NumberValue(math_out::pow(values[0] -> asBignum(), values[1] -> asBignum()));
+        return new NumberValue(math_out::pow(values[0] -> asBignum(), values[1] -> asBignum()));
     });
 
     Function* round = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::round(values[0] -> asBignum()));
+        return new NumberValue(math_out::round(values[0] -> asBignum()));
     });
 
     Function* signum = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
         Bignum x = values[0] -> asBignum();
-        if (x < 0) return new NumberValue(-1);
-        else if (x > 0) return new NumberValue(1);
-        else return new NumberValue(0);
+        if (x < 0) return NumberValue::M_ONE;
+        else if (x > 0) return NumberValue::ONE;
+        else return NumberValue::ZERO;
     });
 
     Function* sin = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::sin(values[0] -> asBignum()));
+        return new NumberValue(math_out::sin(values[0] -> asBignum()));
     });
 
     Function* sinh = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::sinh(values[0] -> asBignum()));
+        return new NumberValue(math_out::sinh(values[0] -> asBignum()));
     });
 
     Function* sqrt = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else{
-            if (values[0] -> asDouble() < 0) throw new MathException("Sqrt from negative argument");
-            else return new NumberValue(math_out::sqrt(values[0] -> asBignum()));
-        }
+        if (values[0] -> asDouble() < 0) throw new MathException("Sqrt from negative argument");
+        return new NumberValue(math_out::sqrt(values[0] -> asBignum()));
     });
 
     Function* tan = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::tan(values[0] -> asBignum()));
+        return new NumberValue(math_out::tan(values[0] -> asBignum()));
     });
 
     Function* tanh = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::tanh(values[0] -> asBignum()));
+        return new NumberValue(math_out::tanh(values[0] -> asBignum()));
     });
 
     Function* to_degrees = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::to_degrees(values[0] -> asBignum()));
+        return new NumberValue(math_out::to_degrees(values[0] -> asBignum()));
     });
 
     Function* to_radians = new FunctionModule([](std::vector<Value*> values) -> Value*{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        else return new NumberValue(math_out::to_radians(values[0] -> asBignum()));
+        return new NumberValue(math_out::to_radians(values[0] -> asBignum()));
     });
 }}}
 
