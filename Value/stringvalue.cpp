@@ -291,7 +291,7 @@ Values StringValue::type() const{
 }
 
 StringValue::operator std::string(){
-    return asString();
+    return "\"" + asString() + "\"";
 };
 
 bool SlavaScript::lang::operator==(StringValue const& a, StringValue const& b){

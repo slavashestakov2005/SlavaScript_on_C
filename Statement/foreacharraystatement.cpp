@@ -31,7 +31,7 @@ void ForeachArrayStatement::execute(){
 }
 
 ForeachArrayStatement::operator std::string(){
-    return "for " + variable + " : " + std::string(*container) + " " + std::string(*body);
+    return "for '" + variable + "' : " + std::string(*container) + " " + std::string(*body);
 }
 
 ForeachArrayStatement::~ForeachArrayStatement(){

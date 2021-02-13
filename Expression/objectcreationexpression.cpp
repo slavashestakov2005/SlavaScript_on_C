@@ -1,5 +1,5 @@
 #include "objectcreationexpression.h"
-#include "../Lib/classdeclaration.h"
+#include "../Lib/classdeclarations.h"
 #include "../Value/classvalue.h"
 #include "assignmentexpression.h"
 #include "../Statement/functiondefinestatement.h"
@@ -7,7 +7,7 @@
 using namespace SlavaScript::lang;
 
 Value* ObjectCreationExpression::eval(){
-    ClassDeclarationsStatement* ds = ClassDeclaration::get(name);
+    ClassDeclarationsStatement* ds = ClassDeclarations::get(name);
     ClassValue* instance = new ClassValue(name);
     for(AssignmentExpression* now : ds -> fields){
         std::string fieldName = now -> variable;

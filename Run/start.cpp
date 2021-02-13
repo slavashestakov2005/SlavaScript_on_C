@@ -34,8 +34,6 @@ void Start::start(){
     double startTime = clock();
     std::string code = read();
     /** Очищение данных **/
-    Variables::start();
-    Functions::start();
     try{
         lexer = Lexer(code);
         tokens = lexer.tokenize();
@@ -82,7 +80,7 @@ void Start::printTokens(){
         std::cout << temp.size() << std::endl;
         int i = 0;
         for(auto x : temp){
-            std::cout << x << std::endl;
+            std::cout << std::string(*x) << std::endl;
             ++i;
         }
     }

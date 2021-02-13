@@ -17,6 +17,7 @@ namespace SlavaScript{ namespace lang{
         static void popPath();
         static bool getImpoted();
         static void setImpoted(bool imp);
+        static void initContainers();
         static void setCommandArguments(std::vector<std::string> argv);
         static ArrayValue* getCommandArguments();
     };

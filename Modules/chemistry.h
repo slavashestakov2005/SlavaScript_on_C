@@ -10,7 +10,6 @@ namespace SlavaScript{ namespace modules{
 
     class Chemistry : public Module<Chemistry> {
     public:
-        static void initConstants(){}
         static void initFunctions();
     };
 }}

@@ -10,7 +10,6 @@ namespace SlavaScript{ namespace modules{
 
     class Files : public Module<Files> {
     public:
-        static void initConstants(){}
         static void initFunctions();
     };
 }}

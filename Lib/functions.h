@@ -6,23 +6,39 @@
 #include "function.h"
 
 namespace SlavaScript{ namespace lang{
+    class FunctionsScope{
+    private:
+        std::map<std::string, Function*> functions;
+    public:
+        void start();
+        std::map<std::string, Function*> getScope();
+        bool isExists(std::string key);
+        /** @return  throw: UnknownFunctionException*. */
+        Function* get(std::string key);
+        Function* get(std::string key, int count);
+        void set(std::string key, Function* function);
+        bool add(std::string key, Function* function, int start, int finish);
+        bool find(std::string key, int count);
+        void print();
+    };
+
     class Functions{
     private:
-        static std::map<std::string, Function*> functions, now;
-        static bool insert;
+        static std::vector<FunctionsScope> scope;
     public:
+        static void init();
         static void start();
-        static void setInsert(bool v);
-        static std::map<std::string, Function*> getNow();
-        static void clear();
+        static std::map<std::string, Function*> getScope();
         static bool isExists(std::string key);
-        /** @return  throw: UnknownFunctionException*. */
         static Function* get(std::string key);
+        static Function* get(std::string key, int count);
         static void set(std::string key, Function* function);
         static bool add(std::string key, Function* function, int start, int finish);
         static bool find(std::string key, int count);
-        static Function* get(std::string key, int count);
         static void print();
+        static void pushScope();
+        static void popScope();
+        static void copyScope();
     };
 }}
 

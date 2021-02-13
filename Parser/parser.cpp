@@ -570,10 +570,6 @@ Expression* Parser::primary(){          /// () | :: | lambda
         consume(TokenType::RPAREN);
         return result;
     }
-    if (match(TokenType::COLONCOLON)){      /// [[maybe_unused]]
-        std::string name = consume(TokenType::WORD) -> getText();
-        return new FunctionReferenceExpression(name);
-    }
     if (match(TokenType::DEF)){
         Arguments args = functionArguments();
         Statement* body = functionBody();
@@ -628,7 +624,7 @@ Expression* Parser::value(){            /// 123 | #2F3C53 | "..."
         ValueExpression* stringExpr = new ValueExpression(current -> getText());
         return primarySuffix(stringExpr);
     }
-    throw new ParseException("Unknown expression: " + current -> getText());
+    throw new ParseException("Unknown expression: " + std::string(*current));
 }
 
 Expression* Parser::qualifiedName(){        /// word 'var.Suffix'
@@ -685,7 +681,7 @@ bool Parser::match(TokenType type){
 Token* Parser::consume(TokenType type){
     Token* current = get(0);
     if (type != current -> getType()){
-        std::string str = "Token " + std::string(*current) + " does not match ";
+        std::string str = "Token " + std::string(*current) + " does not match " + std::string(Token(type, ""));
         throw new ParseException(str);
     }
     ++pos;

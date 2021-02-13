@@ -76,7 +76,6 @@ namespace SlavaScript{ namespace lang{
 
         QUESTION,   /// ?
         COLON,      /// :
-        COLONCOLON, /// ::
         COMMA,      /// ,
         DOT,        /// .
 

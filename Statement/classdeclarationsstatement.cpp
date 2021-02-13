@@ -1,7 +1,7 @@
 #include "classdeclarationsstatement.h"
 #include "functiondefinestatement.h"
 #include "../Expression/assignmentexpression.h"
-#include "../Lib/classdeclaration.h"
+#include "../Lib/classdeclarations.h"
 
 using namespace SlavaScript::lang;
 
@@ -14,11 +14,11 @@ void ClassDeclarationsStatement::addMethod(FunctionDefineStatement* statement){
 }
 
 void ClassDeclarationsStatement::execute(){
-    ClassDeclaration::set(name, this);
+    ClassDeclarations::set(name, this);
 }
 
 ClassDeclarationsStatement::operator std::string(){
-    std::string result = "class " + name + "{\n ";
+    std::string result = "class '" + name + "'{\n ";
     int i = 0;
     for(AssignmentExpression* expr : fields){
         result += std::string(*expr);

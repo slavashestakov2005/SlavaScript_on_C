@@ -8,7 +8,7 @@ Value* TernaryExpression::eval(){
 }
 
 TernaryExpression::operator std::string(){
-    return std::string(*condition) + " ? " + std::string(*trueExpr) + " : " + std::string(*falseExpr);
+    return "[" + std::string(*condition) + " ? " + std::string(*trueExpr) + " : " + std::string(*falseExpr) + "]";
 }
 
 TernaryExpression::~TernaryExpression(){

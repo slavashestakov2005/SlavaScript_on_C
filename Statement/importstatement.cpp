@@ -4,6 +4,7 @@
 #include "../Exception/unknownmoduleexception.h"
 #include "../Lib/functions.h"
 #include "../Lib/variables.h"
+#include "../Lib/classdeclarations.h"
 #include "../Modules/all.h"
 #include "../Value/mapvalue.h"
 #include "../Value/stringvalue.h"
@@ -16,13 +17,9 @@ using SlavaScript::exceptions::UnknownModuleException;
 void ImportStatement::execute(){
     if (!Path::getImpoted()) return;
     bool named = moduleName != "";
-    if (named){
-        Variables::setInsert(false);
-        Functions::setInsert(false);
-    } else{
-        Variables::setInsert(true);
-        Functions::setInsert(true);
-    }
+    Variables::pushScope();
+    Functions::pushScope();
+    ClassDeclarations::pushScope();
     for(std::string name : names){
         if (!try_import_module(name)){
             try{
@@ -30,36 +27,41 @@ void ImportStatement::execute(){
                 Start start(name);
                 start.start();
             }catch(...){
-                if (named){
-                    Variables::setInsert(true);
-                    Functions::setInsert(true);
-                }
+                Variables::popScope();
+                Functions::popScope();
+                ClassDeclarations::popScope();
                 throw new UnknownModuleException(name);
             }
         }
     }
     if (named){
-        std::map<std::string, Value*> variables = Variables::getNow();
-        std::map<std::string, Function*> functions = Functions::getNow();
+        std::map<std::string, Value*> variables = Variables::getScope();
+        std::map<std::string, Function*> functions = Functions::getScope();
+        // ClassDeclarations::getScope();
         MapValue* map = new MapValue(1);
         for(auto x : variables) map -> set(new StringValue(x.first), x.second);
         for(auto x : functions) map -> set(new StringValue(x.first), x.second);
+        // for each
         map -> setThisMap(true);
-        Variables::setInsert(true);
-        Functions::setInsert(true);
+        Variables::popScope();
+        Functions::popScope();
+        ClassDeclarations::popScope();
         Variables::set(moduleName, map);
     }
-    Variables::setInsert(true);
-    Functions::setInsert(true);
+    else{
+        Variables::copyScope();
+        Functions::copyScope();
+        ClassDeclarations::copyScope();
+    }
 }
 
 ImportStatement::operator std::string(){
     std::string result = "import [";
     for(int i = 0; i < names.size(); ++i){
-        result += names[i];
+        result += "'" + names[i] + "'";
         if (i < names.size() - 1) result += ", ";
     }
-    result += "]" + (moduleName == "" ? "" : " as " + moduleName);
+    result += "]" + (moduleName == "" ? "" : " as '" + moduleName + "'");
     return result;
 }
 

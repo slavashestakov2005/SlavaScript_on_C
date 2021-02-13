@@ -1,5 +1,8 @@
 #include "path.h"
 #include "../Value/stringvalue.h"
+#include "../Lib/variables.h"
+#include "../Lib/functions.h"
+#include "../Lib/classdeclarations.h"
 
 using namespace SlavaScript::lang;
 
@@ -25,6 +28,12 @@ bool Path::getImpoted(){
 
 void Path::setImpoted(bool imp){
     import = imp;
+}
+
+void Path::initContainers(){
+    Variables::init();
+    Functions::init();
+    ClassDeclarations::init();
 }
 
 void Path::setCommandArguments(std::vector<std::string> argv){

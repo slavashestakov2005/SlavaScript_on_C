@@ -11,7 +11,6 @@ namespace SlavaScript{ namespace modules{
 
     class Functional : public Module<Functional> {
     public:
-        static void initConstants(){}
         static void initFunctions();
     };
 }}

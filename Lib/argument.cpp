@@ -21,5 +21,5 @@ bool Argument::isArrayArgument(){
 }
 
 Argument::operator std::string(){
-    return (arrayArgument ? "*" : "") + name + (expression == nullptr ? "" : " = " + std::string(*expression));
+    return (arrayArgument ? "*'" : "'") + name + "'" + (expression == nullptr ? "" : " = " + std::string(*expression));
 }

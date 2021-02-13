@@ -16,7 +16,6 @@
 #include "../Run/path.h"
 #include <ctime>
 #include <algorithm>
-#include <regex>
 #include <iostream>
 
 using namespace SlavaScript::lang;

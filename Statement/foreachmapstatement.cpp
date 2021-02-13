@@ -31,7 +31,7 @@ void ForeachMapStatement::execute(){
 }
 
 ForeachMapStatement::operator std::string(){
-    return "for " + key + ", " + value + " : " + std::string(*container) + " " + std::string(*body);
+    return "for '" + key + "', '" + value + "' : " + std::string(*container) + " " + std::string(*body);
 }
 
 ForeachMapStatement::~ForeachMapStatement(){

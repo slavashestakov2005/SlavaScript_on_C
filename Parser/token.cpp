@@ -16,7 +16,7 @@ namespace{
         "EQ", "EQEQ", "EXCL", "EXCLEQ", "LT", "LTEQ", "GT", "GTEQ",
         "BAR", "BARBAR", "AMP", "AMPAMP", "CARET", "TILDE",
         "BAREQ", "AMPEQ", "CARETEQ",
-        "QUESTION", "COLON", "COLONCOLON", "COMMA", "DOT",
+        "QUESTION", "COLON", "COMMA", "DOT",
         "LPAREN", "RPAREN", "LBRACE", "RBRACE", "LBRACKET", "RBRACKET",
         "EOF"
     };
@@ -54,7 +54,8 @@ std::string Token::getText(){
 }
 
 Token::operator std::string(){
-    return mas[int(getType())] + " " + getText();
+    std::string temp = getText();
+    return mas[int(getType())] + (temp.empty() ? "" : " '" + temp + "'");
 }
 
 std::ostream& operator<<(std::ostream& os, Token& tok){

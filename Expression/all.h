@@ -8,7 +8,6 @@
 #include "containeraccessexpression.h"
 #include "containerassignmentexpression.h"
 #include "functionalexpression.h"
-#include "functionreferenceexpression.h"
 #include "mapexpression.h"
 #include "objectcreationexpression.h"
 #include "ternaryexpression.h"

@@ -9,47 +9,31 @@ using namespace SlavaScript::lang;
 using SlavaScript::modules::Global;
 using SlavaScript::exceptions::UnknownFunctionException;
 
-std::map<std::string, Function*> Functions::functions = {};
+std::vector<FunctionsScope> Functions::scope = {};
 
-std::map<std::string, Function*> Functions::now = {};
-
-bool Functions::insert = true;
-
-void Functions::start(){
+void FunctionsScope::start(){
     functions.clear();
-    now.clear();
-    insert = true;
     Global::initFunctions();
 }
 
-void Functions::setInsert(bool v){
-    insert = v;
-    now.clear();
+std::map<std::string, Function*> FunctionsScope::getScope(){
+    return functions;
 }
 
-std::map<std::string, Function*> Functions::getNow(){
-    return now;
-}
-
-void Functions::clear(){
-    functions.clear();
-}
-
-bool Functions::isExists(std::string key){
+bool FunctionsScope::isExists(std::string key){
     return functions.find(key) != functions.cend();
 }
 
-Function* Functions::get(std::string key){
+Function* FunctionsScope::get(std::string key){
     if (!isExists(key)) throw new UnknownFunctionException(key);
     else return functions[key];
 }
 
-void Functions::set(std::string key, Function* function){
-    if (insert) functions[key] = function;
-    else now[key] = function;
+void FunctionsScope::set(std::string key, Function* function){
+    functions[key] = function;
 }
 
-bool Functions::add(std::string key, Function* function, int start, int finish){
+bool FunctionsScope::add(std::string key, Function* function, int start, int finish){
     int i = start;
     bool result = true;
     key = "'" + key + "'";
@@ -64,18 +48,52 @@ bool Functions::add(std::string key, Function* function, int start, int finish){
     return result;
 }
 
-bool Functions::find(std::string key, int count){
+bool FunctionsScope::find(std::string key, int count){
     std::stringstream ss;
     ss << count;
     return isExists("'" + key + "'" + ss.str());
 }
 
-Function* Functions::get(std::string key, int count){
+Function* FunctionsScope::get(std::string key, int count){
     std::stringstream ss;
     ss << count;
     return get("'" + key + "'" + ss.str());
 }
 
-void Functions::print(){
+void FunctionsScope::print(){
     for (auto now : functions) std::cout << now.first << "\t\t" << now.second -> type << std::endl;
+}
+
+
+
+void Functions::init(){
+    pushScope();
+}
+
+void Functions::start() { scope.back().start(); }
+std::map<std::string, Function*> Functions::getScope(){ return scope.back().getScope(); }
+bool Functions::isExists(std::string key) { return scope.back().isExists(key); }
+Function* Functions::get(std::string key) { return scope.back().get(key); }
+Function* Functions::get(std::string key, int count) { return scope.back().get(key, count); }
+void Functions::set(std::string key, Function* function) { scope.back().set(key, function); }
+bool Functions::add(std::string key, Function* function, int start, int finish) { return scope.back().add(key, function, start, finish); }
+bool Functions::find(std::string key, int count){ return scope.back().find(key, count); }
+void Functions::print() { scope.back().print(); }
+
+void Functions::pushScope(){
+    scope.push_back(FunctionsScope());
+    start();
+}
+
+void Functions::popScope(){
+    scope.pop_back();
+}
+
+void Functions::copyScope(){
+    std::map<std::string, Function*> top = scope.back().getScope();
+    scope.pop_back();
+    for(auto x : top){
+        // if (!scope.back().isExists(x.first)) scope.back().set(x.first, x.second);
+        scope.back().set(x.first, x.second);
+    }
 }

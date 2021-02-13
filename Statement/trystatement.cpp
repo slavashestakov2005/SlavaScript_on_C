@@ -16,7 +16,7 @@ void TryStatement::execute(){
 }
 
 TryStatement::operator std::string(){
-    std::string result = "try " + std::string(*body) + " catch " + name + " " + std::string(*catchBlock);
+    std::string result = "try " + std::string(*body) + " catch '" + name + "' " + std::string(*catchBlock);
     return result;
 }
 

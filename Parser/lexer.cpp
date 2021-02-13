@@ -58,7 +58,6 @@ std::map<std::string, TokenType> Lexer::OPERATORS = {
 
     std::make_pair("?", TokenType::QUESTION),
     std::make_pair(":", TokenType::COLON),
-    std::make_pair("::", TokenType::COLONCOLON),
 };
 
 std::map<std::string, TokenType> Lexer::KEYWORDS = {
@@ -92,8 +91,7 @@ Lexer::Lexer(std::string input){
     this -> input = input;
     length = input.size();
     pos = 0;
-    col = 1;
-    row = 1;
+    last_row = last_col = col = row = 1;
 }
 
 std::vector<Token*> Lexer::tokenize(){
@@ -118,7 +116,7 @@ void Lexer::tokenizeNumber(){
     char current = peek(0);
     while(true){
         if (current == '.'){
-            if (str.find(current) != std::string::npos) error("Invalid float number");
+            if (str.find(current) != std::string::npos) throw error("Invalid float number");
         } else if(!isdigit(current)) break;
         str += current;
         current = next();
@@ -228,7 +226,7 @@ void Lexer::tokenizeComment(){
 void Lexer::tokenizeMultilineComment(){
     char current = peek(0);
     while(true){
-        if (current == '\0') error("Reached end of file while parsing multiline comment");
+        if (current == '\0') throw error("Reached end of file while parsing multiline comment");
         if (current == '*' && peek(1) == '/') break;
         current = next();
     }
@@ -237,19 +235,20 @@ void Lexer::tokenizeMultilineComment(){
 }
 
 void Lexer::addToken(TokenType type){
-    tokens.push_back(new Token(type, "", row, col));
+    tokens.push_back(new Token(type, "", last_row, last_col));
 }
 
 void Lexer::addToken(TokenType type, std::string text){
-    tokens.push_back(new Token(type, text, row, col));
+    tokens.push_back(new Token(type, text, last_row, last_col));
 }
 
 char Lexer::next(){
+    last_row = row, last_col = col;
     ++pos;
     char result = peek(0);
     if (result == '\n'){
         ++row;
-        col = 1;
+        col = 0;
     }
     else ++col;
     return result;
@@ -262,5 +261,5 @@ char Lexer::peek(int position){
 }
 
 LexerException* Lexer::error(std::string text){
-    return new LexerException(text, row, col);
+    return new LexerException(text, last_row, last_col);
 }

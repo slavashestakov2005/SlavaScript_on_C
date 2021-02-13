@@ -8,7 +8,7 @@ using namespace SlavaScript::lang;
 using SlavaScript::exceptions::VariableDoesNotExistsException;
 
 VariableExpression::operator std::string(){
-    return name;
+    return "'" + name + "'";
 }
 
 Value* VariableExpression::eval(){

@@ -14,7 +14,7 @@ namespace SlavaScript{ namespace lang{
     private:
         static std::map<std::string, TokenType> OPERATORS, KEYWORDS;
         static std::string OPERATOR_CHARS;
-        int pos, length, row, col;
+        int pos, length, row, col, last_row, last_col;
         std::string input;
         std::vector<Token*> tokens;
         void tokenizeNumber();

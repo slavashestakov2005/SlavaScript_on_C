@@ -232,6 +232,7 @@ int main(int argc, char* arg[]){
                 }
             }
             try{
+                Path::initContainers();
                 Start start(path);
                 start.start();
                 if (a) start.printAST();

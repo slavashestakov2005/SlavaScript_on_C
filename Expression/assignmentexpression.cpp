@@ -48,9 +48,9 @@ Value* AssignmentExpression::eval(){
 
 AssignmentExpression::operator std::string(){
     if (operation == AssignmentOperator::MINUSMINUS_ || operation == AssignmentOperator::PLUSPLUS_){
-        return mas[int(operation)] + " " + variable;
+        return mas[int(operation)] + " '" + variable + "'";
     }
-    return variable + " " + mas[int(operation)] + " " + std::string(*expression);
+    return "'" + variable + "' " + mas[int(operation)] + " " + std::string(*expression);
 }
 
 AssignmentExpression::~AssignmentExpression(){

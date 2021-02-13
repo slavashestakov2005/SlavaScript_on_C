@@ -25,8 +25,9 @@ std::string FunctionDefineStatement::getName(){
 }
 
 FunctionDefineStatement::operator std::string(){
-    std::string result = name;
-    result += " def (";
+    std::string result = "def '";
+    result += name;
+    result += "' (";
     for(int i = 0; i < arguments.size(); ++i){
         result += std::string(arguments.get(i));
         if (i < arguments.size() - 1) result += ", ";

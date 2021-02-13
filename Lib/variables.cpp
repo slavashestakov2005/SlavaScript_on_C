@@ -8,56 +8,75 @@
 using namespace SlavaScript::lang;
 using SlavaScript::modules::Global;
 
-std::map<std::string, Value*> Variables::variables = {};
+std::vector<VariablesScope> Variables::scope = {};
 
-std::vector<std::map<std::string, Value*>*> Variables::vec = {};
-
-bool Variables::insert = true;
-
-std::map<std::string, Value*> Variables::now = {};
-
-void Variables::start(){
+void VariablesScope::start(){
     variables.clear();
     vec.clear();
-    now.clear();
-    insert = true;
     Global::initConstants();
 }
 
-void Variables::setInsert(bool v){
-    insert = v;
-    now.clear();
-}
-
-std::map<std::string, Value*> Variables::getNow(){
-    return now;
-}
-
-void Variables::push(){
+void VariablesScope::push(){
     std::map<std::string, Value*>* cop = new std::map<std::string, Value*>();
     for(auto x : variables) (*cop)[x.first] = x.second;
     vec.push_back(cop);
 }
 
-void Variables::pop(){
+void VariablesScope::pop(){
     variables = *(vec.back());
     vec.pop_back();
 }
 
-bool Variables::isExists(std::string key){
+std::map<std::string, Value*> VariablesScope::getScope(){
+    return variables;
+}
+
+bool VariablesScope::isExists(std::string key){
     return variables.find(key) != variables.cend();
 }
 
-Value* Variables::get(std::string key){
+Value* VariablesScope::get(std::string key){
     if (!isExists(key)) return NullValue::NULL_;
     else return variables[key];
 }
 
-void Variables::set(std::string key, Value* value){
-    if (insert) variables[key] = value;
-    else now[key] = value;
+void VariablesScope::set(std::string key, Value* value){
+    variables[key] = value;
 }
 
-void Variables::print(){
+void VariablesScope::print(){
     for (auto now : variables) std::cout << now.first << "\t\t" << std::string(*now.second) << std::endl;
+}
+
+
+
+void Variables::init(){
+    pushScope();
+}
+
+void Variables::start() { scope.back().start(); }
+void Variables::push() { scope.back().push(); }
+void Variables::pop() { scope.back().pop(); }
+std::map<std::string, Value*> Variables::getScope(){ return scope.back().getScope(); }
+bool Variables::isExists(std::string key) { return scope.back().isExists(key); }
+Value* Variables::get(std::string key) { return scope.back().get(key); }
+void Variables::set(std::string key, Value* value) { scope.back().set(key, value); }
+void Variables::print() { scope.back().print(); }
+
+void Variables::pushScope(){
+    scope.push_back(VariablesScope());
+    start();
+}
+
+void Variables::popScope(){
+    scope.pop_back();
+}
+
+void Variables::copyScope(){
+    std::map<std::string, Value*> top = scope.back().getScope();
+    scope.pop_back();
+    for(auto x : top){
+        // if (!scope.back().isExists(x.first)) scope.back().set(x.first, x.second);
+        scope.back().set(x.first, x.second);
+    }
 }
