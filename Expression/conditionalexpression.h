@@ -3,7 +3,6 @@
 
 #include "conditionaloperator.h"
 #include "expression.h"
-#include <memory>
 
 namespace SlavaScript{ namespace lang{
     class ConditionalExpression : public Expression{

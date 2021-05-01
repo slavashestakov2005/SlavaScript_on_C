@@ -13,7 +13,7 @@ void ForeachArrayStatement::execute(){
     std::shared_ptr<Value> start = Variables::isExists(variable) ? Variables::get(variable) : nullptr;
     std::shared_ptr<Value> containerValue = container -> eval();
     if (containerValue -> type() != Values::ARRAY) throw new TypeException("Array expected in foreach");
-    for (auto now : *(std::static_pointer_cast<ArrayValue>(containerValue))){
+    for (auto now : *CAST(ArrayValue, containerValue)){
         Variables::set(variable, now);
         try{
             body -> execute();

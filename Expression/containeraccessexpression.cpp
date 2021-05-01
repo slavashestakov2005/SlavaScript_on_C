@@ -26,20 +26,20 @@ std::shared_ptr<Value> ContainerAccessExpression::get(){
     bool lastdot = lastDot();
     switch(container -> type()){
         case Values::ARRAY:
-            if (lastdot) return (std::static_pointer_cast<ArrayValue>(container)) -> accessDot(lastindex);
-            else return (std::static_pointer_cast<ArrayValue>(container)) -> accessBracket(lastindex);
+            if (lastdot) return CAST(ArrayValue, container) -> accessDot(lastindex);
+            else return CAST(ArrayValue, container) -> accessBracket(lastindex);
         case Values::MAP:
-            if (lastdot && !(std::static_pointer_cast<MapValue>(container)) -> isThisMap()) throw new std::logic_error("Cannot used DOT for map");
-            return (std::static_pointer_cast<MapValue>(container)) -> get(lastindex);
+            if (lastdot && !CAST(MapValue, container) -> isThisMap()) throw new std::logic_error("Cannot used DOT for map");
+            return CAST(MapValue, container) -> get(lastindex);
         case Values::STRING:
-            if (lastdot) return (std::static_pointer_cast<StringValue>(container)) -> accessDot(lastindex);
-            else return (std::static_pointer_cast<StringValue>(container)) -> accessBracket(lastindex);
+            if (lastdot) return CAST(StringValue, container) -> accessDot(lastindex);
+            else return CAST(StringValue, container) -> accessBracket(lastindex);
         case Values::CLASS:
             if (!lastdot) throw new std::logic_error("Cannot used [] for class");
-            return (std::static_pointer_cast<ClassValue>(container)) -> access(lastindex);
+            return CAST(ClassValue, container) -> access(lastindex);
         case Values::INTEGRATION:
             if (!lastdot) throw new std::logic_error("Cannot used [] for integration");
-            return (std::static_pointer_cast<IntegrationValue>(container)) -> accessDot(lastindex);
+            return CAST(IntegrationValue, container) -> accessDot(lastindex);
         default:
             throw new TypeException("Array, map, string, class or integration expected");
     }
@@ -53,23 +53,23 @@ std::shared_ptr<Value> ContainerAccessExpression::set(std::shared_ptr<Value> val
         case Values::ARRAY : {
             if (lastdot) throw new std::logic_error("Cannot used DOT for array");
             int arrayIndex = (int) lastindex -> asDouble();
-            (std::static_pointer_cast<ArrayValue>(container))-> set(arrayIndex, value);
+            CAST(ArrayValue, container)-> set(arrayIndex, value);
             break;
         }
         case Values::MAP : {
-            if (lastdot && !(std::static_pointer_cast<MapValue>(container)) -> isThisMap()) throw new std::logic_error("Cannot used DOT for map");
-            (std::static_pointer_cast<MapValue>(container)) -> set(lastindex, value);
+            if (lastdot && !CAST(MapValue, container) -> isThisMap()) throw new std::logic_error("Cannot used DOT for map");
+            CAST(MapValue, container) -> set(lastindex, value);
             break;
         }
         case Values::STRING : {
             if (lastdot) throw new std::logic_error("Cannot used DOT for string");
             int stringIndex = (int) lastindex -> asDouble();
-            (std::static_pointer_cast<StringValue>(container)) -> set(stringIndex, value);
+            CAST(StringValue, container) -> set(stringIndex, value);
             break;
         }
         case Values::CLASS : {
             if (!lastdot) throw new std::logic_error("Cannot used [] for class");
-            (std::static_pointer_cast<ClassValue>(container)) -> set(lastindex, value);
+            CAST(ClassValue, container) -> set(lastindex, value);
             break;
         }
         default: throw new TypeException("Array, map, string or class expected");
@@ -80,8 +80,8 @@ std::shared_ptr<Value> ContainerAccessExpression::set(std::shared_ptr<Value> val
 std::shared_ptr<Value> ContainerAccessExpression::getCopyElement(){
     std::shared_ptr<Value> container = getContainer();
     switch(container -> type()){
-        case Values::ARRAY : return std::make_shared<ArrayValue>((std::static_pointer_cast<ArrayValue>(container)) -> getCopyElement());
-        case Values::MAP : return (std::static_pointer_cast<MapValue>(container)) -> getCopyElement();
+        case Values::ARRAY : return SHARE(ArrayValue, CAST(ArrayValue, container) -> getCopyElement());
+        case Values::MAP : return CAST(MapValue, container) -> getCopyElement();
         default: return container;
     }
 }
@@ -94,23 +94,23 @@ std::shared_ptr<Value> ContainerAccessExpression::getContainer(){
         bool isdot = isDot(i);
         switch(container -> type()){
             case Values::ARRAY : {
-                if (isdot) container = (std::static_pointer_cast<ArrayValue>(container)) -> accessDot(ind);
-                else container = (std::static_pointer_cast<ArrayValue>(container)) -> accessBracket(ind);
+                if (isdot) container = CAST(ArrayValue, container) -> accessDot(ind);
+                else container = CAST(ArrayValue, container) -> accessBracket(ind);
                 break;
             }
             case Values::MAP : {
-                if (isdot && !(std::static_pointer_cast<MapValue>(container)) -> isThisMap()) throw new std::logic_error("Cannot used DOT for map");
-                container = (std::static_pointer_cast<MapValue>(container)) -> get(ind);
+                if (isdot && !CAST(MapValue, container) -> isThisMap()) throw new std::logic_error("Cannot used DOT for map");
+                container = CAST(MapValue, container) -> get(ind);
                 break;
             }
             case Values::STRING : {
-                if (isdot) container = (std::static_pointer_cast<StringValue>(container)) -> accessDot(ind);
-                else container = (std::static_pointer_cast<StringValue>(container)) -> accessBracket(ind);
+                if (isdot) container = CAST(StringValue, container) -> accessDot(ind);
+                else container = CAST(StringValue, container) -> accessBracket(ind);
                 break;
             }
             case Values::CLASS : {
                 if (!isdot) throw new std::logic_error("Cannot used [] for class");
-                container = (std::static_pointer_cast<ClassValue>(container)) -> get(ind);
+                container = CAST(ClassValue, container) -> get(ind);
                 break;
             }
             default: throw new TypeException("Array, map, string or class expected");

@@ -13,7 +13,7 @@ void ForeachMapStatement::execute(){
     std::shared_ptr<Value> startValue = Variables::isExists(value) ? Variables::get(value) : nullptr;
     std::shared_ptr<Value> containerValue = container -> eval();
     if (containerValue -> type() != Values::MAP) throw new TypeException("Map expected in foreach");
-    for(auto now : *(std::static_pointer_cast<MapValue>(containerValue))){
+    for(auto now : *CAST(MapValue, containerValue)){
         Variables::set(key, now.first);
         Variables::set(value, now.second);
         try{

@@ -32,10 +32,6 @@ FunctionValue::operator std::string(){
     return asString();
 };
 
-FunctionValue::~FunctionValue(){
-    //delete value;
-}
-
 bool SlavaScript::lang::operator==(FunctionValue const& a, FunctionValue const& b){
     throw new TypeException("Operator '==' cannot used for two functions");
 }

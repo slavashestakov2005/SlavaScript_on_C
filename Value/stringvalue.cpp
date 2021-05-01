@@ -14,13 +14,13 @@ using SlavaScript::exceptions::ArgumentsMismatchException;
 using SlavaScript::exceptions::UnknownPropertyException;
 using SlavaScript::exceptions::TypeException;
 
-namespace{/*
+namespace{
     class Trim : public Function {
     private:
         std::string str;
     public:
         Trim(std::string str) : str(str) {}
-        Value* execute(std::vector<Value*> values){
+        CREATE_MEMBER_FUNCTION
             if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
             std::string ans;
             for(int i = 0; i < str.size(); ++i){
@@ -31,7 +31,7 @@ namespace{/*
                 if (ans[i] != ' ' && ans[i] != '\t' && ans[i] != '\n' || str.size()) str += ans[i];
             }
             reverse(str.begin(), str.end());
-            return new StringValue(str);
+            SH_RET(StringValue, str);
         }
     };
 
@@ -40,10 +40,10 @@ namespace{/*
         std::string str;
     public:
         To_upper(std::string str) : str(str) {}
-        Value* execute(std::vector<Value*> values){
+        CREATE_MEMBER_FUNCTION
             if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
             for(char& x : str) x = toupper(x);
-            return new StringValue(str);
+            SH_RET(StringValue, str);
         }
     };
 
@@ -52,10 +52,10 @@ namespace{/*
         std::string str;
     public:
         To_lower(std::string str) : str(str) {}
-        Value* execute(std::vector<Value*> values){
+        CREATE_MEMBER_FUNCTION
             if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
             for(char& x : str) x = tolower(x);
-            return new StringValue(str);
+            SH_RET(StringValue, str);
         }
     };
 
@@ -64,15 +64,15 @@ namespace{/*
         std::string str;
     public:
         Chars(std::string str) : str(str) {}
-        Value* execute(std::vector<Value*> values){
+        CREATE_MEMBER_FUNCTION
             if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-            std::vector<Value*> vec;
+            std::vector<std::shared_ptr<Value>> vec;
             for(auto x : str){
                 std::string s;
                 s += x;
-                vec.push_back(new StringValue(s));
+                vec.push_back(SHARE(StringValue, s));
             }
-            return new ArrayValue(vec);
+            SH_RET(ArrayValue, vec);
         }
     };
 
@@ -81,7 +81,7 @@ namespace{/*
          std::string str;
     public:
         Find(std::string str) : str(str) {}
-        Value* execute(std::vector<Value*> values){
+        CREATE_MEMBER_FUNCTION
             if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
             if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
             if (values.size() == 2 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
@@ -89,7 +89,7 @@ namespace{/*
             int position = ((values.size() == 2) ? (int)values[1] -> asDouble() : 0);
             size_t x = str.find(str2, position);
             if (x == std::string::npos) return NumberValue::M_ONE;
-            else return new NumberValue(x);
+            SH_RET(NumberValue, x);
         }
     };
 
@@ -98,11 +98,11 @@ namespace{/*
          std::string delimiter;
     public:
         Join(std::string delimiter) : delimiter(delimiter) {}
-        Value* execute(std::vector<Value*> values){
+        CREATE_MEMBER_FUNCTION
             if (values.size() < 1) throw new ArgumentsMismatchException("At least one argument expected");
             std::string ans;
             if (values.size() == 1 && values[0] -> type() == Values::ARRAY){
-                ArrayValue* arr = (ArrayValue*) values[0];
+                std::shared_ptr<ArrayValue> arr = CAST(ArrayValue, values[0]);
                 for(int i = 0; i < arr -> size(); ++i){
                     ans += arr -> get(i) -> asString();
                     if (i < arr -> size() - 1) ans += delimiter;
@@ -114,7 +114,7 @@ namespace{/*
                     if (i < values.size() - 1) ans += delimiter;
                 }
             }
-            return new StringValue(ans);
+            SH_RET(StringValue, ans);
         }
     };
 
@@ -123,7 +123,7 @@ namespace{/*
          std::string str;
     public:
         Replace(std::string str) : str(str) {}
-        Value* execute(std::vector<Value*> values){
+        CREATE_MEMBER_FUNCTION
             if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
             if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
             if (values[1] -> type() != Values::STRING) throw new TypeException("String expected in second argument");
@@ -140,7 +140,7 @@ namespace{/*
                 pos = str.find(start, last);
             }
             result += str.substr(last);
-            return new StringValue(result);
+            SH_RET(StringValue, result);
         }
     };
 
@@ -149,7 +149,7 @@ namespace{/*
          std::string str;
     public:
         ReplaceFirst(std::string str) : str(str) {}
-        Value* execute(std::vector<Value*> values){
+        CREATE_MEMBER_FUNCTION
             if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
             if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
             if (values[1] -> type() != Values::STRING) throw new TypeException("String expected in second argument");
@@ -157,7 +157,7 @@ namespace{/*
             size_t pos = str.find(start);
             if (pos != std::string::npos) result = str.substr(0, pos) + finish + str.substr(pos + start.size());
             else result = str;
-            return new StringValue(result);
+            SH_RET(StringValue, result);
         }
     };
 
@@ -166,7 +166,7 @@ namespace{/*
          std::string str;
     public:
         Rfind(std::string str) : str(str) {}
-        Value* execute(std::vector<Value*> values){
+        CREATE_MEMBER_FUNCTION
             if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
             if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
             if (values.size() == 2 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
@@ -174,7 +174,7 @@ namespace{/*
             int position = ((values.size() == 2) ? (int)values[1] -> asDouble() : 0);
             size_t x = str.rfind(str2, position);
             if (x == std::string::npos) return NumberValue::M_ONE;
-            else return new NumberValue(x);
+            SH_RET(NumberValue, x);
         }
     };
 
@@ -183,27 +183,27 @@ namespace{/*
          std::string str;
     public:
         Split(std::string str) : str(str) {}
-        Value* execute(std::vector<Value*> values){
+        CREATE_MEMBER_FUNCTION
             if (values.size() > 2) throw new ArgumentsMismatchException("Two and less arguments expected");
             if (values.size() > 0 && values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
             if (values.size() > 1 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
             std::string reg = values.size() ? values[0] -> asString() : " ";
             int limit = (values.size() > 1) ? (int)values[1] -> asDouble() - 1 : -1;
             if (limit <= 0) limit = -1;
-            std::vector<Value*> val;
+            std::vector<std::shared_ptr<Value>> val;
             int pos = str.find(reg), last = 0;
             std::string t;
             while(pos != std::string::npos){
                 std::string temp;
                 for(int i = last; i < pos; ++i) temp += str[i];
-                if (limit == -1 || val.size() < limit) val.push_back(new StringValue(temp));
+                if (limit == -1 || val.size() < limit) val.push_back(SHARE(StringValue, temp));
                 else break;
                 last = pos + 1;
                 pos = str.find(reg, last);
             }
             for(int i = last; i < str.size(); ++i) t += str[i];
-            if (t != "") val.push_back(new StringValue(t));
-            return new ArrayValue(val);
+            if (t != "") val.push_back(SHARE(StringValue, t));
+            SH_RET(ArrayValue, val);
         }
     };
 
@@ -212,7 +212,7 @@ namespace{/*
          std::string str;
     public:
         Substring(std::string str) : str(str) {}
-        Value* execute(std::vector<Value*> values){
+        CREATE_MEMBER_FUNCTION
             if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
             if (values[0] -> type() != Values::NUMBER) throw new TypeException("Number expected in first argument");
             if (values.size() == 2 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
@@ -223,9 +223,9 @@ namespace{/*
                 int finish = values[1] -> asDouble();
                 ans = str.substr(start, finish - start);
             }
-            return new StringValue(ans);
+            SH_RET(StringValue, ans);
         }
-    };*/
+    };
 }
 
 int StringValue::size() const{
@@ -238,25 +238,25 @@ void StringValue::set(int index, std::shared_ptr<Value> val){
 
 std::shared_ptr<Value> StringValue::accessDot(std::shared_ptr<Value> property){
     std::string prop = property -> asString();
-    /*if (prop == "length") return new NumberValue(size());
-    if (prop == "trim") return new FunctionValue(new Trim(value));
-    if (prop == "to_upper") return new FunctionValue(new To_upper(value));
-    if (prop == "to_lower") return new FunctionValue(new To_lower(value));
-    if (prop == "chars") return new FunctionValue(new Chars(value));
-    if (prop == "find") return new FunctionValue(new Find(value));
-    if (prop == "join") return new FunctionValue(new Join(value));
-    if (prop == "replace") return new FunctionValue(new Replace(value));
-    if (prop == "replace_first") return new FunctionValue(new ReplaceFirst(value));
-    if (prop == "rfind") return new FunctionValue(new Rfind(value));
-    if (prop == "split") return new FunctionValue(new Split(value));
-    if (prop == "substring") return new FunctionValue(new Substring(value));
-    */throw new UnknownPropertyException(prop);
+    if (prop == "length") SH_RET(NumberValue, size());
+    if (prop == "trim") SH_RET(FunctionValue, new Trim(value));
+    if (prop == "to_upper") SH_RET(FunctionValue, new To_upper(value));
+    if (prop == "to_lower") SH_RET(FunctionValue, new To_lower(value));
+    if (prop == "chars") SH_RET(FunctionValue, new Chars(value));
+    if (prop == "find") SH_RET(FunctionValue, new Find(value));
+    if (prop == "join") SH_RET(FunctionValue, new Join(value));
+    if (prop == "replace") SH_RET(FunctionValue, new Replace(value));
+    if (prop == "replace_first") SH_RET(FunctionValue, new ReplaceFirst(value));
+    if (prop == "rfind") SH_RET(FunctionValue, new Rfind(value));
+    if (prop == "split") SH_RET(FunctionValue, new Split(value));
+    if (prop == "substring") SH_RET(FunctionValue, new Substring(value));
+    throw new UnknownPropertyException(prop);
 }
 
 std::shared_ptr<Value> StringValue::accessBracket(std::shared_ptr<Value> property){
     std::string s;
     s += value[(int) property -> asDouble()];
-    return std::make_shared<StringValue>(s);
+    return SHARE(StringValue, s);
 }
 
 double StringValue::asDouble(){

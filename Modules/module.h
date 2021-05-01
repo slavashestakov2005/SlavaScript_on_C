@@ -13,18 +13,6 @@ namespace SlavaScript{ namespace modules{
         template<class T> struct Init##name<T, true>{ static void init(){ T::init##name(); } }; \
         template<class T> struct Init##name<T, false>{ static void init(){} };
 
-    #define CREATE_FUNCTION(name) \
-        std::shared_ptr<Function> name = std::make_shared<FunctionModule>([](std::vector<std::shared_ptr<Value>> values) -> std::shared_ptr<Value>{
-
-    #define CAST(type, value) \
-        (std::static_pointer_cast<type>(value))
-
-    #define SHARE(type, value) \
-        std::make_shared<type>(value)
-
-    #define SH_RET(type, value) \
-        return std::make_shared<type>(value)
-
     CREATE_TEMPLATE(Constants)
     CREATE_TEMPLATE(Functions)
     CREATE_TEMPLATE(Classes)

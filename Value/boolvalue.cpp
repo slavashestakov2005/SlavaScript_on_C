@@ -2,8 +2,8 @@
 
 using namespace SlavaScript::lang;
 
-std::shared_ptr<BoolValue> BoolValue::TRUE_ = std::make_shared<BoolValue>(true);
-std::shared_ptr<BoolValue> BoolValue::FALSE_ = std::make_shared<BoolValue>(false);
+std::shared_ptr<BoolValue> BoolValue::TRUE_ = SHARE(BoolValue, true);
+std::shared_ptr<BoolValue> BoolValue::FALSE_ = SHARE(BoolValue, false);
 
 double BoolValue::asDouble(){
     return (value ? 1 : 0);

@@ -2,7 +2,6 @@
 #define BOOLVALUE_H_INCLUDED
 
 #include "value.h"
-#include <iostream>
 #include <memory>
 
 namespace SlavaScript{ namespace lang{
@@ -18,9 +17,9 @@ namespace SlavaScript{ namespace lang{
         std::string asString();
         bool asBool();
         Bignum asBignum();
-        virtual Values type() const;
+        Values type() const;
         operator std::string();
-        ~BoolValue(){ std::cout << "BOOL VALUE destr\n"; }
+        ~BoolValue(){}
 
         friend bool operator==(BoolValue const& a, BoolValue const& b);
         friend bool operator!=(BoolValue const& a, BoolValue const& b);

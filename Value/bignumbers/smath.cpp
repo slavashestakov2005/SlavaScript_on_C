@@ -1,7 +1,6 @@
 #include "bignum.h"
 #include <cmath>
 #include "../../Exception/mathexception.h"
-#include <iostream>
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::MathException;

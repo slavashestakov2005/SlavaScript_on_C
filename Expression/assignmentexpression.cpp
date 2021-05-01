@@ -30,23 +30,19 @@ std::shared_ptr<Value> AssignmentExpression::calculate(AssignmentOperator operat
         case AssignmentOperator::RSHIFT : result = BinaryExpression::calculate(BinaryOperator::RSHIFT, left, right); break;
         case AssignmentOperator::_PLUSPLUS : result = BinaryExpression::calculate(BinaryOperator::ADD, left, NumberValue::ONE); break;
         case AssignmentOperator::PLUSPLUS_ : result = BinaryExpression::calculate(BinaryOperator::ADD, left, NumberValue::ONE); break;
-        case AssignmentOperator::_MINUSMINUS : result = BinaryExpression::calculate(BinaryOperator::SUBSTRACT, left, NumberValue::M_ONE); break;
-        case AssignmentOperator::MINUSMINUS_ : result = BinaryExpression::calculate(BinaryOperator::SUBSTRACT, left, NumberValue::M_ONE); break;
+        case AssignmentOperator::_MINUSMINUS : result = BinaryExpression::calculate(BinaryOperator::SUBSTRACT, left, NumberValue::ONE); break;
+        case AssignmentOperator::MINUSMINUS_ : result = BinaryExpression::calculate(BinaryOperator::SUBSTRACT, left, NumberValue::ONE); break;
         default: throw new OperationIsNotSupportedException(mas[(int)operation]);
     }
     return result;
 }
 
-
-#include <iostream>
 std::shared_ptr<Value> AssignmentExpression::eval(){
-    //std::cout << "+= " << variable << "\n";
     std::shared_ptr<Value> left = Variables::get(variable);
     std::shared_ptr<Value> right = expression == nullptr ? nullptr : expression -> eval();
     std::shared_ptr<Value> result = calculate(operation, left, right);
     Variables::set(variable, result);
     if (operation == AssignmentOperator::_PLUSPLUS || operation == AssignmentOperator::_MINUSMINUS) result = left;
-    //std::cout << "All\n";
     return result;
 }
 

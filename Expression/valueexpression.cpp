@@ -3,12 +3,12 @@
 using namespace SlavaScript::lang;
 
 ValueExpression::ValueExpression(Value* val){
-    if (val -> type() == Values::ARRAY) value = std::make_shared<ArrayValue>(*(ArrayValue*)val);
-    else if (val -> type() == Values::STRING) value = std::make_shared<StringValue>(*(StringValue*)val);
-    else if (val -> type() == Values::BOOL) value = std::make_shared<BoolValue>((BoolValue*)val);
-    else if (val -> type() == Values::FUNCTION) value = std::make_shared<FunctionValue>(*(FunctionValue*)val);
-    else if (val -> type() == Values::MAP) value = std::make_shared<MapValue>(*(MapValue*)val);
-    else if (val -> type() == Values::NUMBER) value = std::make_shared<NumberValue>(*(NumberValue*)val);
+    if (val -> type() == Values::ARRAY) value = SHARE(ArrayValue, *(ArrayValue*)val);
+    else if (val -> type() == Values::STRING) value = SHARE(StringValue, *(StringValue*)val);
+    else if (val -> type() == Values::BOOL) value = SHARE(BoolValue, *(BoolValue*)val);
+    else if (val -> type() == Values::FUNCTION) value = SHARE(FunctionValue, *(FunctionValue*)val);
+    else if (val -> type() == Values::MAP) value = SHARE(MapValue, *(MapValue*)val);
+    else if (val -> type() == Values::NUMBER) value = SHARE(NumberValue, *(NumberValue*)val);
     else if (val -> type() == Values::NULL_) value = NullValue::NULL_;
 }
 
@@ -18,11 +18,6 @@ std::shared_ptr<Value> ValueExpression::eval(){
 
 ValueExpression::operator std::string(){
     return std::string(*value);
-}
-
-ValueExpression::~ValueExpression(){
-    //delete value;
-    //value = nullptr;
 }
 
 void ValueExpression::accept(Visitor* visitor){

@@ -13,7 +13,7 @@ VariableExpression::operator std::string(){
 
 std::shared_ptr<Value> VariableExpression::eval(){
     if (Variables::isExists(name)) return Variables::get(name);
-    if (Functions::isExists(name)) return std::make_shared<FunctionValue>(Functions::get(name));
+    if (Functions::isExists(name)) return SHARE(FunctionValue, Functions::get(name));
     throw new VariableDoesNotExistsException(name);
 
 }

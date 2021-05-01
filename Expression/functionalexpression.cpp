@@ -29,7 +29,7 @@ std::shared_ptr<Value> FunctionalExpression::eval(){
 std::shared_ptr<Function> FunctionalExpression::consumeFunction(Expression* expr){
     try{
         std::shared_ptr<Value> value = expr -> eval();
-        if (value -> type() == Values::FUNCTION) return (std::static_pointer_cast<FunctionValue>(value)) -> getFunction();
+        if (value -> type() == Values::FUNCTION) return CAST(FunctionValue, value) -> getFunction();
         return getFunction(value -> asString());
     }catch(VariableDoesNotExistsException* ex){
         return getFunction(ex -> getVariable());
@@ -40,7 +40,7 @@ std::shared_ptr<Function> FunctionalExpression::getFunction(std::string name){
     if (Functions::find(name, arguments.size())) return Functions::get(name, arguments.size());
     else if (Functions::isExists(name)) return Functions::get(name);
     else if (Variables::isExists(name)){
-        if (Variables::get(name) -> type() == Values::FUNCTION) return (std::static_pointer_cast<FunctionValue>(Variables::get(name))) -> getFunction();
+        if (Variables::get(name) -> type() == Values::FUNCTION) return CAST(FunctionValue, Variables::get(name)) -> getFunction();
     }
     throw new UnknownFunctionException(name);
 }

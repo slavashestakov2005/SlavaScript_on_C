@@ -31,15 +31,15 @@ std::shared_ptr<Value> BinaryExpression::calculate(BinaryOperator operation, std
     if (right -> type() == Values::MAP && left -> type() != Values::MAP && left -> type() != Values::STRING) throw new TypeException("Cannot used binary operation for not map and not string and array");
     if (left -> type() == Values::ARRAY && right -> type() == Values::ARRAY){
         if (operation != BinaryOperator::ADD) throw new TypeException("Cannot used array and array for not plus operation");
-        return ArrayValue::add(std::static_pointer_cast<ArrayValue>(left), std::static_pointer_cast<ArrayValue>(right));
+        return ArrayValue::add(CAST(ArrayValue, left), CAST(ArrayValue, right));
     }
     if (left -> type() == Values::MAP && right -> type() == Values::MAP){
         if (operation != BinaryOperator::ADD) throw new TypeException("Cannot used map and map for not plus operation");
-        return MapValue::add(std::static_pointer_cast<MapValue>(left), std::static_pointer_cast<MapValue>(left));
+        return MapValue::add(CAST(MapValue, left), CAST(MapValue, left));
     }
     if (left -> type() == Values::ARRAY){
         if (operation != BinaryOperator::ADD) throw new TypeException("Cannot used not plus binary operation for array");
-        return ArrayValue::add(std::static_pointer_cast<ArrayValue>(left), right);
+        return ArrayValue::add(CAST(ArrayValue, left), right);
     }
     if (right -> type() == Values::ARRAY && left -> type() != Values::STRING){
         throw new TypeException("Cannot used binary plus for not string, not array and array");
@@ -48,13 +48,13 @@ std::shared_ptr<Value> BinaryExpression::calculate(BinaryOperator operation, std
         std::string string1 = left -> asString();
         std::string string2 = right -> asString();
         switch(operation){
-            case BinaryOperator::ADD : return std::make_shared<StringValue>(string1 + string2);
+            case BinaryOperator::ADD : return SHARE(StringValue, string1 + string2);
             case BinaryOperator::MULTIPLY : {
                 if (right -> type() != Values::NUMBER) throw new TypeException("Unknown multiply for not number and not number");
                 int iterations = right -> asDouble();
                 std::string result;
                 for(int i = 0; i < iterations; ++i) result += string1;
-                return std::make_shared<StringValue>(result);
+                return SHARE(StringValue, result);
             }
             default: throw new OperationIsNotSupportedException(mas[(int)operation]);
         }
@@ -77,16 +77,12 @@ std::shared_ptr<Value> BinaryExpression::calculate(BinaryOperator operation, std
 ///        case BinaryOperator::RSHIFT: return new NumberValue(lon1 >> lon2);
         default: throw new OperationIsNotSupportedException(mas[(int)operation]);
     }
-    return std::make_shared<NumberValue>(result);
+    return SHARE(NumberValue, result);
 }
-
-#include <iostream>
 
 std::shared_ptr<Value> BinaryExpression::eval(){
     std::shared_ptr<Value> value1 = expr1 -> eval();
     std::shared_ptr<Value> value2 = expr2 -> eval();
-    //std::cout << "Binary\n";
-    //std::cout << mas[int(operation)] << " " << std::string(*value1) << " " << std::string(*value2) << "\n";
     if (Functions::find(mas[int(operation)], 2)){
         std::vector<std::shared_ptr<Value>> vec = {value1, value2};
         return Functions::get(mas[int(operation)], 2) -> execute(vec);

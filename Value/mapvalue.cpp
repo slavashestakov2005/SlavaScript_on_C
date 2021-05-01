@@ -15,7 +15,7 @@ void MapValue::set(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
 }
 
 void MapValue::set(std::shared_ptr<Value> key, std::shared_ptr<Function> value){
-    map[key] = std::make_shared<FunctionValue>(value);
+    map[key] = SHARE(FunctionValue, value);
 }
 
 bool MapValue::isThisMap(){
@@ -35,7 +35,7 @@ bool MapValue::containsKey(std::shared_ptr<Value> key){
 }
 
 std::shared_ptr<MapValue> MapValue::getCopyElement(){
-    std::shared_ptr<MapValue> newMap = std::make_shared<MapValue>();
+    std::shared_ptr<MapValue> newMap = SHARE(MapValue, );
     for(auto now : map){
         newMap -> set(now.first, now.second);
     }
@@ -43,7 +43,7 @@ std::shared_ptr<MapValue> MapValue::getCopyElement(){
 }
 
 std::shared_ptr<MapValue> MapValue::add(std::shared_ptr<MapValue> map1, std::shared_ptr<MapValue> map2){
-    std::shared_ptr<MapValue> result = std::make_shared<MapValue>();
+    std::shared_ptr<MapValue> result = SHARE(MapValue, );
     for(auto now : map1 -> map) result -> set(now.first, now.second);
     for(auto now : map2 -> map) result -> set(now.first, now.second);
     return result;

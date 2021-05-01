@@ -4,10 +4,6 @@
 #include "Run/repl.h"
 #include "Run/path.h"
 #include "Compiler/compiler.h"
-#include "Modules/draw.h"
-#include "Modules/std.h"
-#include "Value/stringvalue.h"
-#include "Value/numbervalue.h"
 
 using namespace std;
 using namespace SlavaScript::lang;
@@ -50,11 +46,6 @@ int main(int argc, char* arg[]){
         cout << "    -h, --history          Show SlavaScript's history" << endl;
         cout << "    -m, --showtime         Show elapsed time of parsing and execution" << endl;
         cout << "    -c, --compile [input]  Compile program file. Required." << endl;
-//        SlavaScript::modules::draw_f::window -> execute({new StringValue("agar.io clone"), new NumberValue(800), new NumberValue(600)});
-
-
-
-//        SlavaScript::modules::draw_f::close -> execute({});
     }
     else if (argc == 3 && (argv[1] == "-c" || argv[1] == "--compile")) SlavaScript::compiler::Compiler::create_compiler(argv[2]);
     else{

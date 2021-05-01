@@ -18,9 +18,9 @@ namespace {
         std::vector<std::shared_ptr<Value>> elements;
     public:
         IsEmpty(std::vector<std::shared_ptr<Value>>* elements) : elements(*elements) {}
-        std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values){
+        CREATE_MEMBER_FUNCTION
             if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-            return std::make_shared<BoolValue>(elements.empty());
+            SH_RET(BoolValue, elements.empty());
         }
     };
 
@@ -29,9 +29,9 @@ namespace {
         std::vector<std::shared_ptr<Value>> elements;
     public:
         Length(std::vector<std::shared_ptr<Value>>* elements) : elements(*elements) {}
-        std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values){
+        CREATE_MEMBER_FUNCTION
             if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-            return std::make_shared<NumberValue>(elements.size());
+            SH_RET(NumberValue, elements.size());
         }
     };
 }
@@ -71,7 +71,7 @@ std::shared_ptr<ArrayValue> ArrayValue::add(std::shared_ptr<ArrayValue> array, s
     int size = array -> elements -> size() + 1;
     for(int i = 0; i < size - 1; ++i) vec.push_back(array -> get(i));
     vec.push_back(value);
-    return std::make_shared<ArrayValue>(vec);
+    SH_RET(ArrayValue, vec);
 }
 
 std::shared_ptr<ArrayValue> ArrayValue::add(std::shared_ptr<ArrayValue> array1, std::shared_ptr<ArrayValue> array2){
@@ -80,7 +80,7 @@ std::shared_ptr<ArrayValue> ArrayValue::add(std::shared_ptr<ArrayValue> array1, 
     for(int i = 0; i < size; ++i) vec.push_back(array1 -> get(i));
     size = array2 -> elements -> size();
     for(int i = 0; i < size; ++i) vec.push_back(array2 -> get(i));
-    return std::make_shared<ArrayValue>(vec);
+    SH_RET(ArrayValue, vec);
 }
 
 int ArrayValue::size() const{
@@ -97,8 +97,8 @@ std::vector<std::shared_ptr<Value>>::iterator ArrayValue::end(){
 
 std::shared_ptr<Value> ArrayValue::accessDot(std::shared_ptr<Value> property){
     std::string prop = property -> asString();
-    if (prop == "length") return std::make_shared<FunctionValue>(new Length(elements));
-    if (prop == "is_empty") return std::make_shared<FunctionValue>(new IsEmpty(elements));
+    if (prop == "length") SH_RET(FunctionValue, new Length(elements));
+    if (prop == "is_empty") SH_RET(FunctionValue, new IsEmpty(elements));
     throw new UnknownPropertyException(prop);
 }
 
@@ -137,10 +137,6 @@ ArrayValue::operator std::string(){
 }
 
 ArrayValue::~ArrayValue(){
-    /*for(int i = 0; i < elements -> size(); ++i){
-        delete (*elements)[i];
-        (*elements)[i] = nullptr;
-    }*/
     delete elements;
     elements = nullptr;
 }

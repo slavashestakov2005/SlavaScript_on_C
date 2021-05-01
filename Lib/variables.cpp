@@ -41,14 +41,7 @@ std::shared_ptr<Value> VariablesScope::get(std::string key){
 }
 
 void VariablesScope::set(std::string key, std::shared_ptr<Value> value){
-    //std::cout << "set " << key;
-    if (isExists(key)){
-        //std::cout << " update\n";
-        //delete variables[key];
-        variables[key] = nullptr;
-    }
     variables[key] = value;
-    //std::cout << " all\n";
 }
 
 void VariablesScope::print(){

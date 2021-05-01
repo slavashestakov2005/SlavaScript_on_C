@@ -48,9 +48,6 @@ namespace{
     }
 }
 
-
-#include <iostream>
-
 std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
     bool result;
     switch(operation){
@@ -64,30 +61,17 @@ std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator oper
         case ConditionalOperator::OR : result = left -> asBool() || right -> asBool(); break;
         default: throw new OperationIsNotSupportedException(mas[(int)operation]);
     }
-    //std::cout << "Return: " << result << "\n";
-    //std::cout << (BoolValue::TRUE_ == nullptr) << "\n";
     return (result ? BoolValue::TRUE_ : BoolValue::FALSE_);
 }
 
 std::shared_ptr<Value> ConditionalExpression::eval(){
-    //std::cout << "Eval ";
     std::shared_ptr<Value> value1 = expr1 -> eval();
     std::shared_ptr<Value> value2 = expr2 -> eval();
-    //std::cout << " Evaled ";
     if (Functions::find(mas[(int) operation], 2)){
         std::vector<std::shared_ptr<Value>> vec = { value1, value2 };
         return Functions::get(mas[(int) operation], 2) -> execute(vec);
     }
     return calculate(operation, value1, value2);
-    //std::cout << " End (calc)\n";
-    //std::shared_ptr<Value> ptr = calculate(operation, value1, value2);
-    //BoolValue* val = (BoolValue*)(&*ptr);
-    //std::cout << "Ended\n";
-    //std::cout << int(BoolValue::TRUE_->type()) << "\n";
-    //std::cout << (val == nullptr) << "\n";
-    //std::cout << int(val -> type()) << "\n";
-    //std::cout << (val -> asBool()) << "\n";
-    //return new BoolValue(val -> asBool());
 }
 
 ConditionalExpression::operator std::string(){

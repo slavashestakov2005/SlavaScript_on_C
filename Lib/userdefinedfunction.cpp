@@ -43,7 +43,7 @@ std::shared_ptr<Value> UserDefinedFunction::execute(std::vector<std::shared_ptr<
         for(int i = 0; i < minimal; ++i){
             Variables::set(getArgsName(i), values[i]);
         }
-        std::shared_ptr<ArrayValue> array = std::make_shared<ArrayValue>(siz - minimal);
+        std::shared_ptr<ArrayValue> array = SHARE(ArrayValue, siz - minimal);
         for(int i = minimal; i < siz; ++i){
             array -> set(i - minimal, values[i]);
         }

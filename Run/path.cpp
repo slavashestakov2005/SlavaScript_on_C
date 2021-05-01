@@ -37,8 +37,8 @@ void Path::initContainers(){
 }
 
 void Path::setCommandArguments(std::vector<std::string> argv){
-    arguments = std::make_shared<ArrayValue>(argv.size());
-    for(int i = 0; i < argv.size(); ++i) arguments -> set(i, std::make_shared<StringValue>(argv[i]));
+    arguments = SHARE(ArrayValue, argv.size());
+    for(int i = 0; i < argv.size(); ++i) arguments -> set(i, SHARE(StringValue, argv[i]));
 }
 
 std::shared_ptr<ArrayValue> Path::getCommandArguments(){

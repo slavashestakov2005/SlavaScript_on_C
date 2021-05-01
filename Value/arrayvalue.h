@@ -1,7 +1,6 @@
 #ifndef ARRAYVALUE_H_INCLUDED
 #define ARRAYVALUE_H_INCLUDED
 
-#include <memory>
 #include <vector>
 #include "container.h"
 #include "value.h"

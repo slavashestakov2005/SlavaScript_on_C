@@ -8,7 +8,7 @@ namespace SlavaScript{ namespace lang{
     class ClassValue : public Value{
     private:
         std::string className;
-        std::shared_ptr<MapValue> thisMap = std::make_shared<MapValue>(1);
+        std::shared_ptr<MapValue> thisMap = SHARE(MapValue, 1);
         std::shared_ptr<ClassMethod> constructor = nullptr;
     public:
         ClassValue(std::string className);
@@ -27,7 +27,7 @@ namespace SlavaScript{ namespace lang{
         Bignum asBignum();
         Values type() const;
         operator std::string();
-        ~ClassValue();
+        ~ClassValue(){}
 
         friend bool operator==(ClassValue const& a, ClassValue const& b);
         friend bool operator!=(ClassValue const& a, ClassValue const& b);

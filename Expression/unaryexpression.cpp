@@ -22,12 +22,12 @@ namespace{
 std::shared_ptr<Value> UnaryExpression::calculate(UnaryOperator operation, std::shared_ptr<Value> value){
     if (value -> type() == Values::NULL_) return NullValue::NULL_;
     switch(operation){
-        case UnaryOperator::PLUS : return std::make_shared<NumberValue>(value -> asBignum());
-        case UnaryOperator::NEGATIVE : return std::make_shared<NumberValue>(-(value -> asBignum()));
-        case UnaryOperator::NOT : return std::make_shared<BoolValue>(!(value -> asBignum()));
+        case UnaryOperator::PLUS : return SHARE(NumberValue, value -> asBignum());
+        case UnaryOperator::NEGATIVE : return SHARE(NumberValue, -(value -> asBignum()));
+        case UnaryOperator::NOT : return SHARE(BoolValue, !(value -> asBignum()));
         /// case UnaryOperator::COMPLEMENT : return new NumberValue(~(value -> asBignum()));
-        case UnaryOperator::PLUSPLUS : return std::make_shared<NumberValue>(++(value -> asBignum()));
-        case UnaryOperator::MINUSMINUS : return std::make_shared<NumberValue>(--(value -> asBignum()));
+        case UnaryOperator::PLUSPLUS : return SHARE(NumberValue, ++(value -> asBignum()));
+        case UnaryOperator::MINUSMINUS : return SHARE(NumberValue, --(value -> asBignum()));
         default: throw new OperationIsNotSupportedException(mas[(int)operation]);
     }
 }

@@ -14,11 +14,11 @@ std::shared_ptr<MapValue> ClassValue::getThisMap(){
 }
 
 void ClassValue::addField(std::string name, std::shared_ptr<Value> value){
-    thisMap -> set(std::make_shared<StringValue>(name), value);
+    thisMap -> set(SHARE(StringValue, name), value);
 }
 
 void ClassValue::addMethod(std::string name, std::shared_ptr<ClassMethod> method){
-    thisMap -> set(std::make_shared<StringValue>(name), method);
+    thisMap -> set(SHARE(StringValue, name), method);
     if (name == className) constructor = method;
 }
 
@@ -65,13 +65,6 @@ Values ClassValue::type() const{
 
 ClassValue::operator std::string(){
     return asString();
-}
-
-ClassValue::~ClassValue(){
-    //delete thisMap;
-    //thisMap = nullptr;
-    //delete constructor;
-    //constructor = nullptr;
 }
 
 bool SlavaScript::lang::operator==(ClassValue const& a, ClassValue const& b){

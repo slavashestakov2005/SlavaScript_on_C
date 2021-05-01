@@ -20,7 +20,7 @@ namespace SlavaScript{ namespace lang{
         Bignum asBignum();
         Values type() const;
         operator std::string();
-        ~FunctionValue();
+        ~FunctionValue(){}
 
         friend bool operator==(FunctionValue const& a, FunctionValue const& b);
         friend bool operator!=(FunctionValue const& a, FunctionValue const& b);

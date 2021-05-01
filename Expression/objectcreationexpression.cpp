@@ -8,7 +8,7 @@ using namespace SlavaScript::lang;
 
 std::shared_ptr<Value> ObjectCreationExpression::eval(){
     ClassDeclarationsStatement* ds = ClassDeclarations::get(name);
-    std::shared_ptr<ClassValue> instance = std::make_shared<ClassValue>(name);
+    std::shared_ptr<ClassValue> instance = SHARE(ClassValue, name);
     for(AssignmentExpression* now : ds -> fields){
         std::string fieldName = now -> variable;
         instance -> addField(fieldName, now -> eval());
