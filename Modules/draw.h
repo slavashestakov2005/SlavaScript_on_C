@@ -5,7 +5,7 @@
 
 namespace SlavaScript{ namespace modules{
     namespace draw_f{
-        extern SlavaScript::lang::Function *window, *color, *line, *rect, *frect, *circle, *fcircle, *repaint, *clear, *framelimit, *keypressed, *mousehover, *close;
+        extern std::shared_ptr<SlavaScript::lang::Function> window, color, line, rect, frect, circle, fcircle, repaint, clear, framelimit, keypressed, mousehover, close;
     }
 
     class Draw : public Module<Draw> {

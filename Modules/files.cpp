@@ -20,7 +20,7 @@ namespace SlavaScript{ namespace modules{ namespace files_out{
 }}}
 
 namespace SlavaScript{ namespace modules{ namespace files_f{
-    Function* fopen = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(fopen)
         if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
         files_out::file.open(values[0] -> asString());
         if (!files_out::file){
@@ -31,20 +31,20 @@ namespace SlavaScript{ namespace modules{ namespace files_f{
         return NumberValue::ZERO;
     });
 
-    Function* fclose = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(fclose)
         if (values.size() != 0) throw new ArgumentsMismatchException("Zero arguments expected");
         files_out::file.close();
         return NullValue::NULL_;
     });
 
-    Function* readline = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(readline)
         if (values.size() != 0) throw new ArgumentsMismatchException("Zero arguments expected");
         std::string line;
         if (files_out::file) std::getline(files_out::file, line);
-        return new StringValue(line);
+        SH_RET(StringValue, line);
     });
 
-    Function* writeline = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(writeline)
         if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
         if (files_out::file && files_out::file.tellg() < files_out::file.end) files_out::file << values[0] -> asString();
         else if (!files_out::bad){
@@ -63,3 +63,4 @@ void Files::initFunctions(){
     Functions::set("readline", readline);
     Functions::set("writeline", writeline);
 }
+

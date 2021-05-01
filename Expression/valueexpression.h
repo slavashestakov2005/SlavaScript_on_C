@@ -14,17 +14,17 @@
 namespace SlavaScript{ namespace lang{
     class ValueExpression : public Expression{
     public:
-        Value* value;
-        ValueExpression(std::string val){ value = new StringValue(val); }
-        ValueExpression(ArrayValue val){ value = new ArrayValue(val); }
-        ValueExpression(bool val){ value = new BoolValue(val); }
-        ValueExpression(Function* val){ value = new FunctionValue(val); }
-        ValueExpression(MapValue val){ value = new MapValue(val); }
-        ValueExpression(Bignum val){ value = new NumberValue(val); }
-        ValueExpression(NullValue null){ value = new NullValue(); }
+        std::shared_ptr<Value> value;
+        ValueExpression(std::string val){ value = std::make_shared<StringValue>(val); }
+        ValueExpression(ArrayValue val){ value = std::make_shared<ArrayValue>(val); }
+        ValueExpression(bool val){ value = std::make_shared<BoolValue>(val); }
+        ValueExpression(Function* val){ value = std::make_shared<FunctionValue>(val); }
+        ValueExpression(MapValue val){ value = std::make_shared<MapValue>(val); }
+        ValueExpression(Bignum val){ value = std::make_shared<NumberValue>(val); }
+        ValueExpression(NullValue null){ value = std::make_shared<NullValue>(); }
         ValueExpression(Value* val);
         Expressions type(){ return Expressions::ValueExpression; }
-        Value* eval();
+        std::shared_ptr<Value> eval();
         operator std::string();
         ~ValueExpression();
         void accept(Visitor* visitor);

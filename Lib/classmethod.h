@@ -8,10 +8,10 @@ namespace SlavaScript{ namespace lang{
 
     class ClassMethod : public UserDefinedFunction{
     private:
-        ClassValue* classInstance;
+        std::shared_ptr<ClassValue> classInstance;
     public:
-        ClassMethod(Arguments args, Statement* body, ClassValue* classInstance);
-        Value* execute(std::vector<Value*> values);
+        ClassMethod(Arguments args, Statement* body, std::shared_ptr<ClassValue> classInstance);
+        std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values);
     };
 }}
 

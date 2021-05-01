@@ -13,8 +13,8 @@ namespace {
     };
 }
 
-Value* AssignmentExpression::calculate(AssignmentOperator operation, Value* left, Value* right){
-    Value* result;
+std::shared_ptr<Value> AssignmentExpression::calculate(AssignmentOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
+    std::shared_ptr<Value> result;
     switch(operation){
         case AssignmentOperator::ASSIGN : result = right; break;
         case AssignmentOperator::ADD : result = BinaryExpression::calculate(BinaryOperator::ADD, left, right); break;
@@ -28,21 +28,25 @@ Value* AssignmentExpression::calculate(AssignmentOperator operation, Value* left
         case AssignmentOperator::XOR : result = BinaryExpression::calculate(BinaryOperator::XOR, left, right); break;
         case AssignmentOperator::LSHIFT : result = BinaryExpression::calculate(BinaryOperator::LSHIFT, left, right); break;
         case AssignmentOperator::RSHIFT : result = BinaryExpression::calculate(BinaryOperator::RSHIFT, left, right); break;
-        case AssignmentOperator::_PLUSPLUS : result = BinaryExpression::calculate(BinaryOperator::ADD, left, new NumberValue(1)); break;
-        case AssignmentOperator::PLUSPLUS_ : result = BinaryExpression::calculate(BinaryOperator::ADD, left, new NumberValue(1)); break;
-        case AssignmentOperator::_MINUSMINUS : result = BinaryExpression::calculate(BinaryOperator::SUBSTRACT, left, new NumberValue(1)); break;
-        case AssignmentOperator::MINUSMINUS_ : result = BinaryExpression::calculate(BinaryOperator::SUBSTRACT, left, new NumberValue(1)); break;
+        case AssignmentOperator::_PLUSPLUS : result = BinaryExpression::calculate(BinaryOperator::ADD, left, NumberValue::ONE); break;
+        case AssignmentOperator::PLUSPLUS_ : result = BinaryExpression::calculate(BinaryOperator::ADD, left, NumberValue::ONE); break;
+        case AssignmentOperator::_MINUSMINUS : result = BinaryExpression::calculate(BinaryOperator::SUBSTRACT, left, NumberValue::M_ONE); break;
+        case AssignmentOperator::MINUSMINUS_ : result = BinaryExpression::calculate(BinaryOperator::SUBSTRACT, left, NumberValue::M_ONE); break;
         default: throw new OperationIsNotSupportedException(mas[(int)operation]);
     }
     return result;
 }
 
-Value* AssignmentExpression::eval(){
-    Value* left = Variables::get(variable);
-    Value* right = expression == nullptr ? nullptr : expression -> eval();
-    Value* result = calculate(operation, left, right);
+
+#include <iostream>
+std::shared_ptr<Value> AssignmentExpression::eval(){
+    //std::cout << "+= " << variable << "\n";
+    std::shared_ptr<Value> left = Variables::get(variable);
+    std::shared_ptr<Value> right = expression == nullptr ? nullptr : expression -> eval();
+    std::shared_ptr<Value> result = calculate(operation, left, right);
     Variables::set(variable, result);
     if (operation == AssignmentOperator::_PLUSPLUS || operation == AssignmentOperator::_MINUSMINUS) result = left;
+    //std::cout << "All\n";
     return result;
 }
 

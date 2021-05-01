@@ -17,6 +17,7 @@ namespace SlavaScript{ namespace lang{
         int pos, length, row, col, last_row, last_col;
         std::string input;
         std::vector<Token*> tokens;
+        void tokenizeToken();
         void tokenizeNumber();
         void tokenizeHexNumber();
         void tokenizeOperator();
@@ -25,6 +26,7 @@ namespace SlavaScript{ namespace lang{
         void tokenizeText();
         void tokenizeComment();
         void tokenizeMultilineComment();
+        void tokenizeIntegration();
         void addToken(TokenType type);
         void addToken(TokenType type, std::string text);
         char peek(int position);

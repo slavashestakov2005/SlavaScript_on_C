@@ -3,12 +3,12 @@
 
 using namespace SlavaScript::lang;
 
-Value* ArrayExpression::eval(){
-    ArrayValue* arr = new ArrayValue(elements.size());
+std::shared_ptr<Value> ArrayExpression::eval(){
+    ArrayValue arr(elements.size());
     for(int i = 0; i < elements.size(); ++i){
-        arr -> set(i, elements[i] -> eval());
+        arr.set(i, elements[i] -> eval());
     }
-    return arr;
+    return std::make_shared<ArrayValue>(arr);
 }
 
 ArrayExpression::operator std::string(){

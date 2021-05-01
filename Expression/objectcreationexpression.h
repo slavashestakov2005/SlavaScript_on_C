@@ -12,7 +12,7 @@ namespace SlavaScript{ namespace lang{
     public:
         ObjectCreationExpression(std::string name, std::vector<Expression*> constructorArguments) : name(name), constructorArguments(constructorArguments) {}
         Expressions type(){ return Expressions::ObjectCreationExpression; }
-        Value* eval();
+        std::shared_ptr<Value> eval();
         operator std::string();
         ~ObjectCreationExpression();
         void accept(Visitor* visitor);

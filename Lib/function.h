@@ -1,6 +1,7 @@
 #ifndef FUNCTION_H_INCLUDED
 #define FUNCTION_H_INCLUDED
 
+#include <memory>
 #include <vector>
 #include "../Value/value.h"
 #include "../Exception/typeexception.h"
@@ -11,9 +12,9 @@ namespace SlavaScript{ namespace lang{
     class Function{
     public:
         bool type = false;
-        virtual Value* execute(std::vector<Value*>) = 0;
+        virtual std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>>) = 0;
         virtual operator std::string(){  throw new TypeException("Cannot cast function to string"); }
-        virtual Value* operator()(std::vector<Value*> args) final { return execute(args); }
+        virtual std::shared_ptr<Value> operator()(std::vector<std::shared_ptr<Value>> args) final { return execute(args); }
     };
 }}
 

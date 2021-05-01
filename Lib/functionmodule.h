@@ -5,14 +5,14 @@
 #include "function.h"
 
 namespace SlavaScript{ namespace lang{
-    using function_type = std::function<Value*(std::vector<Value*>)>;
+    using function_type = std::function<std::shared_ptr<Value>(std::vector<std::shared_ptr<Value>>)>;
 
     class FunctionModule : public Function{
     private:
         function_type f;
     public:
         FunctionModule(function_type f) : f(f) {}
-        Value* execute(std::vector<Value*> values);
+        std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values);
         operator std::string();
     };
 }}

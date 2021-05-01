@@ -5,7 +5,7 @@
 
 namespace SlavaScript{ namespace modules{
     namespace global_f{
-        extern SlavaScript::lang::Function *input, *max, *min;
+        extern std::shared_ptr<SlavaScript::lang::Function> input;//, *max, *min;
     }
 
     class Global : public Module<Global> {

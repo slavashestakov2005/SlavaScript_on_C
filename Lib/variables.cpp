@@ -17,7 +17,7 @@ void VariablesScope::start(){
 }
 
 void VariablesScope::push(){
-    std::map<std::string, Value*>* cop = new std::map<std::string, Value*>();
+    std::map<std::string, std::shared_ptr<Value>>* cop = new std::map<std::string, std::shared_ptr<Value>>();
     for(auto x : variables) (*cop)[x.first] = x.second;
     vec.push_back(cop);
 }
@@ -27,7 +27,7 @@ void VariablesScope::pop(){
     vec.pop_back();
 }
 
-std::map<std::string, Value*> VariablesScope::getScope(){
+std::map<std::string, std::shared_ptr<Value>> VariablesScope::getScope(){
     return variables;
 }
 
@@ -35,13 +35,20 @@ bool VariablesScope::isExists(std::string key){
     return variables.find(key) != variables.cend();
 }
 
-Value* VariablesScope::get(std::string key){
+std::shared_ptr<Value> VariablesScope::get(std::string key){
     if (!isExists(key)) return NullValue::NULL_;
     else return variables[key];
 }
 
-void VariablesScope::set(std::string key, Value* value){
+void VariablesScope::set(std::string key, std::shared_ptr<Value> value){
+    //std::cout << "set " << key;
+    if (isExists(key)){
+        //std::cout << " update\n";
+        //delete variables[key];
+        variables[key] = nullptr;
+    }
     variables[key] = value;
+    //std::cout << " all\n";
 }
 
 void VariablesScope::print(){
@@ -57,10 +64,10 @@ void Variables::init(){
 void Variables::start() { scope.back().start(); }
 void Variables::push() { scope.back().push(); }
 void Variables::pop() { scope.back().pop(); }
-std::map<std::string, Value*> Variables::getScope(){ return scope.back().getScope(); }
+std::map<std::string, std::shared_ptr<Value>> Variables::getScope(){ return scope.back().getScope(); }
 bool Variables::isExists(std::string key) { return scope.back().isExists(key); }
-Value* Variables::get(std::string key) { return scope.back().get(key); }
-void Variables::set(std::string key, Value* value) { scope.back().set(key, value); }
+std::shared_ptr<Value> Variables::get(std::string key) { return scope.back().get(key); }
+void Variables::set(std::string key, std::shared_ptr<Value> value) { scope.back().set(key, value); }
 void Variables::print() { scope.back().print(); }
 
 void Variables::pushScope(){
@@ -73,7 +80,7 @@ void Variables::popScope(){
 }
 
 void Variables::copyScope(){
-    std::map<std::string, Value*> top = scope.back().getScope();
+    std::map<std::string, std::shared_ptr<Value>> top = scope.back().getScope();
     scope.pop_back();
     for(auto x : top){
         // if (!scope.back().isExists(x.first)) scope.back().set(x.first, x.second);

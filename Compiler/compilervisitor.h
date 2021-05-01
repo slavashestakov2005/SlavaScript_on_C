@@ -18,6 +18,7 @@ namespace SlavaScript{ namespace compiler{
         void visit(lang::FunctionDefineStatement* v);
         void visit(lang::FunctionStatement* v);
         void visit(lang::IfStatement* v);
+        void visit(lang::IntegrationStatement* v);
         void visit(lang::ImportStatement* v);
         void visit(lang::PrintlnStatement* v);
         void visit(lang::PrintStatement* v);

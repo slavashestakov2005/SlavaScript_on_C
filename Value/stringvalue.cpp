@@ -14,7 +14,7 @@ using SlavaScript::exceptions::ArgumentsMismatchException;
 using SlavaScript::exceptions::UnknownPropertyException;
 using SlavaScript::exceptions::TypeException;
 
-namespace{
+namespace{/*
     class Trim : public Function {
     private:
         std::string str;
@@ -225,20 +225,20 @@ namespace{
             }
             return new StringValue(ans);
         }
-    };
+    };*/
 }
 
-int StringValue::size(){
+int StringValue::size() const{
     return value.size();
 }
 
-void StringValue::set(int index, Value* val){
+void StringValue::set(int index, std::shared_ptr<Value> val){
     value = value.substr(0, index) + val -> asString() + value.substr(index + 1);
 }
 
-Value* StringValue::accessDot(Value* property){
+std::shared_ptr<Value> StringValue::accessDot(std::shared_ptr<Value> property){
     std::string prop = property -> asString();
-    if (prop == "length") return new NumberValue(size());
+    /*if (prop == "length") return new NumberValue(size());
     if (prop == "trim") return new FunctionValue(new Trim(value));
     if (prop == "to_upper") return new FunctionValue(new To_upper(value));
     if (prop == "to_lower") return new FunctionValue(new To_lower(value));
@@ -250,13 +250,13 @@ Value* StringValue::accessDot(Value* property){
     if (prop == "rfind") return new FunctionValue(new Rfind(value));
     if (prop == "split") return new FunctionValue(new Split(value));
     if (prop == "substring") return new FunctionValue(new Substring(value));
-    throw new UnknownPropertyException(prop);
+    */throw new UnknownPropertyException(prop);
 }
 
-Value* StringValue::accessBracket(Value* property){
+std::shared_ptr<Value> StringValue::accessBracket(std::shared_ptr<Value> property){
     std::string s;
     s += value[(int) property -> asDouble()];
-    return new StringValue(s);
+    return std::make_shared<StringValue>(s);
 }
 
 double StringValue::asDouble(){

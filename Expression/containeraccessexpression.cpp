@@ -3,6 +3,7 @@
 #include "../Value/numbervalue.h"
 #include "../Value/stringvalue.h"
 #include "../Value/classvalue.h"
+#include "../Value/integrationvalue.h"
 #include "../Exception/typeexception.h"
 #include "variableexpression.h"
 
@@ -15,57 +16,60 @@ ContainerAccessExpression::ContainerAccessExpression(std::string variable, std::
 
 ContainerAccessExpression::ContainerAccessExpression(Expression* root, std::vector<ContainerAccessElement> indices) : root(root), indices(indices) {}
 
-Value* ContainerAccessExpression::eval(){
+std::shared_ptr<Value> ContainerAccessExpression::eval(){
     return get();
 }
 
-Value* ContainerAccessExpression::get(){
-    Value* container = getContainer();
-    Value* lastindex = lastIndex();
+std::shared_ptr<Value> ContainerAccessExpression::get(){
+    std::shared_ptr<Value> container = getContainer();
+    std::shared_ptr<Value> lastindex = lastIndex();
     bool lastdot = lastDot();
     switch(container -> type()){
         case Values::ARRAY:
-            if (lastdot) return ((ArrayValue*) container) -> accessDot(lastindex);
-            else return ((ArrayValue*) container) -> accessBracket(lastindex);
+            if (lastdot) return (std::static_pointer_cast<ArrayValue>(container)) -> accessDot(lastindex);
+            else return (std::static_pointer_cast<ArrayValue>(container)) -> accessBracket(lastindex);
         case Values::MAP:
-            if (lastdot && !((MapValue*) container) -> isThisMap()) throw new std::logic_error("Cannot used DOT for map");
-            return ((MapValue*) container) -> get(lastindex);
+            if (lastdot && !(std::static_pointer_cast<MapValue>(container)) -> isThisMap()) throw new std::logic_error("Cannot used DOT for map");
+            return (std::static_pointer_cast<MapValue>(container)) -> get(lastindex);
         case Values::STRING:
-            if (lastdot) return ((StringValue*) container) -> accessDot(lastindex);
-            else return ((StringValue*) container) -> accessBracket(lastindex);
+            if (lastdot) return (std::static_pointer_cast<StringValue>(container)) -> accessDot(lastindex);
+            else return (std::static_pointer_cast<StringValue>(container)) -> accessBracket(lastindex);
         case Values::CLASS:
             if (!lastdot) throw new std::logic_error("Cannot used [] for class");
-            return ((ClassValue*) container) -> access(lastindex);
+            return (std::static_pointer_cast<ClassValue>(container)) -> access(lastindex);
+        case Values::INTEGRATION:
+            if (!lastdot) throw new std::logic_error("Cannot used [] for integration");
+            return (std::static_pointer_cast<IntegrationValue>(container)) -> accessDot(lastindex);
         default:
-            throw new TypeException("Array, map, string or class expected");
+            throw new TypeException("Array, map, string, class or integration expected");
     }
 }
 
-Value* ContainerAccessExpression::set(Value* value){
-    Value* container = getContainer();
-    Value* lastindex = lastIndex();
+std::shared_ptr<Value> ContainerAccessExpression::set(std::shared_ptr<Value> value){
+    std::shared_ptr<Value> container = getContainer();
+    std::shared_ptr<Value> lastindex = lastIndex();
     bool lastdot = lastDot();
     switch(container -> type()){
         case Values::ARRAY : {
             if (lastdot) throw new std::logic_error("Cannot used DOT for array");
             int arrayIndex = (int) lastindex -> asDouble();
-            ((ArrayValue*) container) -> set(arrayIndex, value);
+            (std::static_pointer_cast<ArrayValue>(container))-> set(arrayIndex, value);
             break;
         }
         case Values::MAP : {
-            if (lastdot && !((MapValue*) container) -> isThisMap()) throw new std::logic_error("Cannot used DOT for map");
-            ((MapValue*) container) -> set(lastindex, value);
+            if (lastdot && !(std::static_pointer_cast<MapValue>(container)) -> isThisMap()) throw new std::logic_error("Cannot used DOT for map");
+            (std::static_pointer_cast<MapValue>(container)) -> set(lastindex, value);
             break;
         }
         case Values::STRING : {
             if (lastdot) throw new std::logic_error("Cannot used DOT for string");
             int stringIndex = (int) lastindex -> asDouble();
-            ((StringValue*) container) -> set(stringIndex, value);
+            (std::static_pointer_cast<StringValue>(container)) -> set(stringIndex, value);
             break;
         }
         case Values::CLASS : {
             if (!lastdot) throw new std::logic_error("Cannot used [] for class");
-            ((ClassValue*) container) -> set(lastindex, value);
+            (std::static_pointer_cast<ClassValue>(container)) -> set(lastindex, value);
             break;
         }
         default: throw new TypeException("Array, map, string or class expected");
@@ -73,40 +77,40 @@ Value* ContainerAccessExpression::set(Value* value){
     return value;
 }
 
-Value* ContainerAccessExpression::getCopyElement(){
-    Value* container = getContainer();
+std::shared_ptr<Value> ContainerAccessExpression::getCopyElement(){
+    std::shared_ptr<Value> container = getContainer();
     switch(container -> type()){
-        case Values::ARRAY : return new ArrayValue(((ArrayValue*) container) -> getCopyElement());
-        case Values::MAP : return ((MapValue*) container) -> getCopyElement();
+        case Values::ARRAY : return std::make_shared<ArrayValue>((std::static_pointer_cast<ArrayValue>(container)) -> getCopyElement());
+        case Values::MAP : return (std::static_pointer_cast<MapValue>(container)) -> getCopyElement();
         default: return container;
     }
 }
 
-Value* ContainerAccessExpression::getContainer(){
-    Value* container = root -> eval();
+std::shared_ptr<Value> ContainerAccessExpression::getContainer(){
+    std::shared_ptr<Value> container = root -> eval();
     int last = indices.size() - 1;
     for(int i = 0; i < last; ++i){
-        Value* ind = index(i);
+        std::shared_ptr<Value> ind = index(i);
         bool isdot = isDot(i);
         switch(container -> type()){
             case Values::ARRAY : {
-                if (isdot) container = ((ArrayValue*) container) -> accessDot(ind);
-                else container = ((ArrayValue*) container) -> accessBracket(ind);
+                if (isdot) container = (std::static_pointer_cast<ArrayValue>(container)) -> accessDot(ind);
+                else container = (std::static_pointer_cast<ArrayValue>(container)) -> accessBracket(ind);
                 break;
             }
             case Values::MAP : {
-                if (isdot && !((MapValue*) container) -> isThisMap()) throw new std::logic_error("Cannot used DOT for map");
-                container = ((MapValue*) container) -> get(ind);
+                if (isdot && !(std::static_pointer_cast<MapValue>(container)) -> isThisMap()) throw new std::logic_error("Cannot used DOT for map");
+                container = (std::static_pointer_cast<MapValue>(container)) -> get(ind);
                 break;
             }
             case Values::STRING : {
-                if (isdot) container = ((StringValue*) container) -> accessDot(ind);
-                else container = ((StringValue*) container) -> accessBracket(ind);
+                if (isdot) container = (std::static_pointer_cast<StringValue>(container)) -> accessDot(ind);
+                else container = (std::static_pointer_cast<StringValue>(container)) -> accessBracket(ind);
                 break;
             }
             case Values::CLASS : {
                 if (!isdot) throw new std::logic_error("Cannot used [] for class");
-                container = ((ClassValue*) container) -> get(ind);
+                container = (std::static_pointer_cast<ClassValue>(container)) -> get(ind);
                 break;
             }
             default: throw new TypeException("Array, map, string or class expected");
@@ -115,7 +119,7 @@ Value* ContainerAccessExpression::getContainer(){
     return container;
 }
 
-Value* ContainerAccessExpression::lastIndex(){
+std::shared_ptr<Value> ContainerAccessExpression::lastIndex(){
     return index(indices.size() - 1);
 }
 
@@ -123,7 +127,7 @@ bool ContainerAccessExpression::lastDot(){
     return isDot(indices.size() - 1);
 }
 
-Value* ContainerAccessExpression::index(int index){
+std::shared_ptr<Value> ContainerAccessExpression::index(int index){
     return indices[index].eval();
 }
 

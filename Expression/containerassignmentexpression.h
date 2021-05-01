@@ -15,7 +15,7 @@ namespace SlavaScript{ namespace lang{
     public:
         ContainerAssignmentExpression(AssignmentOperator operation, ContainerAccessExpression* containerExpr, Expression* expression) : operation(operation), containerExpr(containerExpr), expression(expression) {}
         Expressions type(){ return Expressions::ContainerAssignmentExpression; }
-        Value* eval();
+        std::shared_ptr<Value> eval();
         operator std::string();
         ~ContainerAssignmentExpression();
         void accept(Visitor* visitor);

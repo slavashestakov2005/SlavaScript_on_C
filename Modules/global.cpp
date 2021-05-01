@@ -38,28 +38,28 @@ namespace SlavaScript{ namespace modules{ namespace global_out{
 }}}
 
 namespace SlavaScript{ namespace modules{ namespace global_f{
-    Function* input = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(input)
         for(int i = 0; i < values.size(); ++i) std::cout << std::string(*(values[i]));
         std::string str;
         getline(std::cin, str);
-        return new StringValue(str);
+        SH_RET(StringValue, str);
     });
 
-    Function* max = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(max)
         if (values.size() == 0) throw new ArgumentsMismatchException("One and least arguments expected");
-        Value* ans = values[0];
+        std::shared_ptr<Value> ans = values[0];
         for(int i = 1; i < values.size(); ++i) ans = global_out::operator_lt(*ans, *values[i]) ? values[i] : ans;
         return ans;
     });
 
-    Function* min = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(min)
         if (values.size() == 0) throw new ArgumentsMismatchException("One and least arguments expected");
-        Value* ans = values[0];
+        std::shared_ptr<Value> ans = values[0];
         for(int i = 1; i < values.size(); ++i) ans = global_out::operator_lt(*ans, *values[i]) ? ans : values[i];
         return ans;
     });
 
-    Function* set_color = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(set_color)
         int color = 0;
         if (values.size() > 1) throw new ArgumentsMismatchException("Zero or one argument expected");
         if (values.size() > 0 && values[0] -> type() != Values::NUMBER) throw new TypeException("Number expected in first argument");

@@ -17,18 +17,18 @@ namespace SlavaScript{ namespace lang{
         ContainerAccessExpression(std::string variable, std::vector<ContainerAccessElement> indices);
         ContainerAccessExpression(Expression* root, std::vector<ContainerAccessElement> indices);
         Expressions type(){ return Expressions::ContainerAccessExpression; }
-        Value* eval();
+        std::shared_ptr<Value> eval();
         /** @return  throw: std::logic_error*, TypeException*. */
-        Value* get();
+        std::shared_ptr<Value> get();
         /** @return  throw: std::logic_error*, TypeException*. */
-        Value* set(Value* value);
+        std::shared_ptr<Value> set(std::shared_ptr<Value> value);
         /** @return  throw: std::logic_error*, TypeException*. */
-        Value* getContainer();
-        Value* lastIndex();
+        std::shared_ptr<Value> getContainer();
+        std::shared_ptr<Value> lastIndex();
         bool lastDot();
-        Value* index(int index);
+        std::shared_ptr<Value> index(int index);
         bool isDot(int index);
-        Value* getCopyElement();
+        std::shared_ptr<Value> getCopyElement();
         operator std::string();
         ~ContainerAccessExpression(){}
         void accept(Visitor* visitor);

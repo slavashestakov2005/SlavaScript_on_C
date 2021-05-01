@@ -11,7 +11,7 @@ namespace SlavaScript{ namespace lang{
     public:
         MapExpression(std::map<Expression*, Expression*> elements) : elements(elements) {}
         Expressions type(){ return Expressions::MapExpression; }
-        Value* eval();
+        std::shared_ptr<Value> eval();
         operator std::string();
         ~MapExpression(){}
         void accept(Visitor* visitor);

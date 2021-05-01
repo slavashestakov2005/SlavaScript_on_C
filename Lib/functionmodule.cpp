@@ -4,7 +4,7 @@
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::TypeException;
 
-Value* FunctionModule::execute(std::vector<Value*> values){
+std::shared_ptr<Value> FunctionModule::execute(std::vector<std::shared_ptr<Value>> values){
     return f(values);
 }
 

@@ -9,33 +9,33 @@ ClassValue::ClassValue(std::string className) : className(className){
     thisMap -> setThisMap(true);
 };
 
-MapValue* ClassValue::getThisMap(){
+std::shared_ptr<MapValue> ClassValue::getThisMap(){
     return thisMap;
 }
 
-void ClassValue::addField(std::string name, Value* value){
-    thisMap -> set(new StringValue(name), value);
+void ClassValue::addField(std::string name, std::shared_ptr<Value> value){
+    thisMap -> set(std::make_shared<StringValue>(name), value);
 }
 
-void ClassValue::addMethod(std::string name, ClassMethod* method){
-    thisMap -> set(new StringValue(name), method);
+void ClassValue::addMethod(std::string name, std::shared_ptr<ClassMethod> method){
+    thisMap -> set(std::make_shared<StringValue>(name), method);
     if (name == className) constructor = method;
 }
 
-void ClassValue::callConstructor(std::vector<Value*> values){
+void ClassValue::callConstructor(std::vector<std::shared_ptr<Value>> values){
     if (constructor != nullptr) constructor -> execute(values);
 }
 
-Value* ClassValue::access(Value* value){
+std::shared_ptr<Value> ClassValue::access(std::shared_ptr<Value> value){
     return thisMap -> get(value);
 }
 
-void ClassValue::set(Value* key, Value* value){
+void ClassValue::set(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
     if (!thisMap -> containsKey(key)) throw new std::logic_error("Unable to add new field " + key -> asString() + " to class " + className);
     thisMap -> set(key, value);
 }
 
-Value* ClassValue::get(Value* key){
+std::shared_ptr<Value> ClassValue::get(std::shared_ptr<Value> key){
     if (!thisMap -> containsKey(key)){
         std::string s = "Field " + std::string(*key) + " undefined in " + className;
         throw new std::logic_error(s.c_str());
@@ -68,10 +68,10 @@ ClassValue::operator std::string(){
 }
 
 ClassValue::~ClassValue(){
-    delete thisMap;
-    thisMap = nullptr;
-    delete constructor;
-    constructor = nullptr;
+    //delete thisMap;
+    //thisMap = nullptr;
+    //delete constructor;
+    //constructor = nullptr;
 }
 
 bool SlavaScript::lang::operator==(ClassValue const& a, ClassValue const& b){

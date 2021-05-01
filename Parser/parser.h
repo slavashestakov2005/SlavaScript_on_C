@@ -34,6 +34,7 @@ namespace SlavaScript{ namespace lang{
         Statement* switchStatement();
         Statement* importStatement();
         Statement* tryStatement();
+        Statement* integrationStatement();
         Arguments functionArguments();
         Statement* functionBody();
         FunctionDefineStatement* functionDefine();

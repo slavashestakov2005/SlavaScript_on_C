@@ -19,23 +19,23 @@ namespace{
     };
 }
 
-Value* UnaryExpression::calculate(UnaryOperator operation, Value* value){
+std::shared_ptr<Value> UnaryExpression::calculate(UnaryOperator operation, std::shared_ptr<Value> value){
     if (value -> type() == Values::NULL_) return NullValue::NULL_;
     switch(operation){
-        case UnaryOperator::PLUS : return new NumberValue(value -> asBignum());
-        case UnaryOperator::NEGATIVE : return new NumberValue(-(value -> asBignum()));
-        case UnaryOperator::NOT : return new BoolValue(!(value -> asBignum()));
+        case UnaryOperator::PLUS : return std::make_shared<NumberValue>(value -> asBignum());
+        case UnaryOperator::NEGATIVE : return std::make_shared<NumberValue>(-(value -> asBignum()));
+        case UnaryOperator::NOT : return std::make_shared<BoolValue>(!(value -> asBignum()));
         /// case UnaryOperator::COMPLEMENT : return new NumberValue(~(value -> asBignum()));
-        case UnaryOperator::PLUSPLUS : return new NumberValue(++(value -> asBignum()));
-        case UnaryOperator::MINUSMINUS : return new NumberValue(--(value -> asBignum()));
+        case UnaryOperator::PLUSPLUS : return std::make_shared<NumberValue>(++(value -> asBignum()));
+        case UnaryOperator::MINUSMINUS : return std::make_shared<NumberValue>(--(value -> asBignum()));
         default: throw new OperationIsNotSupportedException(mas[(int)operation]);
     }
 }
 
-Value* UnaryExpression::eval(){
-    Value* val = expr -> eval();
+std::shared_ptr<Value> UnaryExpression::eval(){
+    std::shared_ptr<Value> val = expr -> eval();
     if (Functions::find(mas[(int) operation], 1)){
-        std::vector<Value*> value;
+        std::vector<std::shared_ptr<Value>> value;
         value.push_back(val);
         return Functions::get(mas[(int) operation], 1) -> execute(value);
     }

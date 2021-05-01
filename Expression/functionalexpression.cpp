@@ -16,31 +16,31 @@ void FunctionalExpression::addArguments(Expression* argument){
     arguments.push_back(argument);
 }
 
-Value* FunctionalExpression::eval(){
-    std::vector<Value*> values;
+std::shared_ptr<Value> FunctionalExpression::eval(){
+    std::vector<std::shared_ptr<Value>> values;
     for(int i = 0; i < arguments.size(); ++i) values.push_back(arguments[i] -> eval());
-    Function* f = consumeFunction(functionExpr);
+    std::shared_ptr<Function> f = consumeFunction(functionExpr);
     CallStack::push(std::string(*functionExpr), f);
-    Value* result = f -> execute(values);
+    std::shared_ptr<Value> result = f -> execute(values);
     CallStack::pop();
     return result;
 }
 
-Function* FunctionalExpression::consumeFunction(Expression* expr){
+std::shared_ptr<Function> FunctionalExpression::consumeFunction(Expression* expr){
     try{
-        Value* value = expr -> eval();
-        if (value -> type() == Values::FUNCTION) return ((FunctionValue*)value) -> getFunction();
+        std::shared_ptr<Value> value = expr -> eval();
+        if (value -> type() == Values::FUNCTION) return (std::static_pointer_cast<FunctionValue>(value)) -> getFunction();
         return getFunction(value -> asString());
     }catch(VariableDoesNotExistsException* ex){
         return getFunction(ex -> getVariable());
     }
 }
 
-Function* FunctionalExpression::getFunction(std::string name){
+std::shared_ptr<Function> FunctionalExpression::getFunction(std::string name){
     if (Functions::find(name, arguments.size())) return Functions::get(name, arguments.size());
     else if (Functions::isExists(name)) return Functions::get(name);
     else if (Variables::isExists(name)){
-        if (Variables::get(name) -> type() == Values::FUNCTION) return ((FunctionValue*)Variables::get(name)) -> getFunction();
+        if (Variables::get(name) -> type() == Values::FUNCTION) return (std::static_pointer_cast<FunctionValue>(Variables::get(name))) -> getFunction();
     }
     throw new UnknownFunctionException(name);
 }

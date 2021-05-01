@@ -14,8 +14,8 @@ namespace {
     };
 }
 
-Value* ContainerAssignmentExpression::eval(){
-    Value* result = containerExpr -> getCopyElement();
+std::shared_ptr<Value> ContainerAssignmentExpression::eval(){
+    std::shared_ptr<Value> result = containerExpr -> getCopyElement();
     containerExpr -> set(AssignmentExpression::calculate(operation, containerExpr -> get(), expression -> eval()));
     if (operation != AssignmentOperator::_PLUSPLUS && operation != AssignmentOperator::_MINUSMINUS) result = containerExpr -> getContainer();
     return result;

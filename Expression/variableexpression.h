@@ -11,7 +11,7 @@ namespace SlavaScript{ namespace lang{
         VariableExpression(std::string name) : name(name) {}
         Expressions type(){ return Expressions::VariableExpression; }
         /** @return  throw: VariableDoesNotExistsException*. */
-        Value* eval();
+        std::shared_ptr<Value> eval();
         operator std::string();
         void accept(Visitor* visitor);
         friend Visitor;

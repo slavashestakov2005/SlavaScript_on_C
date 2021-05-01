@@ -7,31 +7,26 @@
 namespace SlavaScript{ namespace lang{
     class FunctionValue : public Value{
     private:
-        Function* value;
+        std::shared_ptr<Function> value;
     public:
-        FunctionValue(Function* value) : value(value) {}
-        /** @return  throw: TypeException*. */
+        FunctionValue(std::shared_ptr<Function> value) : value(value) {}
+        FunctionValue(Function* value) : value(std::shared_ptr<Function>(value)) {}
+
+        std::shared_ptr<Function> getFunction();
+
         double asDouble();
         std::string asString();
-        /** @return  throw: TypeException*. */
         bool asBool();
-        /** @return  throw: TypeException*. */
         Bignum asBignum();
         Values type() const;
-        Function* getFunction();
         operator std::string();
         ~FunctionValue();
-        /** @return  throw: TypeException*. */
+
         friend bool operator==(FunctionValue const& a, FunctionValue const& b);
-        /** @return  throw: TypeException*. */
         friend bool operator!=(FunctionValue const& a, FunctionValue const& b);
-        /** @return  throw: TypeException*. */
         friend bool operator<(FunctionValue const& a, FunctionValue const& b);
-        /** @return  throw: TypeException*. */
         friend bool operator<=(FunctionValue const& a, FunctionValue const& b);
-        /** @return  throw: TypeException*. */
         friend bool operator>(FunctionValue const& a, FunctionValue const& b);
-        /** @return  throw: TypeException*. */
         friend bool operator>=(FunctionValue const& a, FunctionValue const& b);
     };
 }}

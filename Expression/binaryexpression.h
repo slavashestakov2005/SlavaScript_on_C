@@ -14,8 +14,8 @@ namespace SlavaScript{ namespace lang{
         BinaryExpression(BinaryOperator operation, Expression* expr1, Expression* expr2) : operation(operation), expr1(expr1), expr2(expr2) {}
         Expressions type(){ return Expressions::BinaryExpression; }
         /** @return  throw: TypeException*, OperationIsNotSupportedException*. */
-        static Value* calculate(BinaryOperator operation, Value* left, Value* right);
-        Value* eval();
+        static std::shared_ptr<Value> calculate(BinaryOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right);
+        std::shared_ptr<Value> eval();
         Value* eval(Value* value1, Value* value2);
         operator std::string();
         ~BinaryExpression();

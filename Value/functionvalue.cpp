@@ -24,7 +24,7 @@ Values FunctionValue::type() const{
     return Values::FUNCTION;
 }
 
-Function* FunctionValue::getFunction(){
+std::shared_ptr<Function> FunctionValue::getFunction(){
     return value;
 }
 
@@ -33,7 +33,7 @@ FunctionValue::operator std::string(){
 };
 
 FunctionValue::~FunctionValue(){
-    delete value;
+    //delete value;
 }
 
 bool SlavaScript::lang::operator==(FunctionValue const& a, FunctionValue const& b){

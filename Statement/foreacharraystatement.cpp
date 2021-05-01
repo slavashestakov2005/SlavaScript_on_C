@@ -10,10 +10,10 @@ using namespace SlavaScript::lang;
 using SlavaScript::exceptions::TypeException;
 
 void ForeachArrayStatement::execute(){
-    Value* start = Variables::isExists(variable) ? Variables::get(variable) : nullptr;
-    Value* containerValue = container -> eval();
+    std::shared_ptr<Value> start = Variables::isExists(variable) ? Variables::get(variable) : nullptr;
+    std::shared_ptr<Value> containerValue = container -> eval();
     if (containerValue -> type() != Values::ARRAY) throw new TypeException("Array expected in foreach");
-    for (auto now : *(ArrayValue*) containerValue){
+    for (auto now : *(std::static_pointer_cast<ArrayValue>(containerValue))){
         Variables::set(variable, now);
         try{
             body -> execute();

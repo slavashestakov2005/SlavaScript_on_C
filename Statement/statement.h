@@ -19,6 +19,7 @@ namespace SlavaScript{ namespace lang{
         FunctionDefineStatement,
         FunctionStatement,
         IfStatement,
+        IntegrationStatement,
         ImportStatement,
         PrintStatement,
         PrintlnStatement,

@@ -8,7 +8,7 @@ using namespace SlavaScript::lang;
 
 std::vector<std::string> Path::pathes = {};
 bool Path::import = true;
-ArrayValue* Path::arguments = nullptr;
+std::shared_ptr<ArrayValue> Path::arguments = nullptr;
 
 void Path::setPath(std::string path){
     pathes.push_back(path);
@@ -37,10 +37,10 @@ void Path::initContainers(){
 }
 
 void Path::setCommandArguments(std::vector<std::string> argv){
-    arguments = new ArrayValue(argv.size());
-    for(int i = 0; i < argv.size(); ++i) arguments -> set(i, new StringValue(argv[i]));
+    arguments = std::make_shared<ArrayValue>(argv.size());
+    for(int i = 0; i < argv.size(); ++i) arguments -> set(i, std::make_shared<StringValue>(argv[i]));
 }
 
-ArrayValue* Path::getCommandArguments(){
+std::shared_ptr<ArrayValue> Path::getCommandArguments(){
     return arguments;
 }

@@ -2,7 +2,7 @@
 
 using namespace SlavaScript::lang;
 
-Value* TernaryExpression::eval(){
+std::shared_ptr<Value> TernaryExpression::eval(){
     if (condition -> eval() -> asBool()) return trueExpr -> eval();
     else return falseExpr -> eval();
 }

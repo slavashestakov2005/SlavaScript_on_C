@@ -10,21 +10,21 @@ namespace SlavaScript{ namespace lang{
         std::string value;
     public:
         StringValue(std::string value) : value(value) {}
-        int size();
-        void set(int index, Value* val);
-        /** @return  throw: UnknownPropertyException*. */
-        Value* accessDot(Value* property);
-        Value* accessBracket(Value* property);
-        /** @return  throw: TypeException*. */
+
+        void set(int index, std::shared_ptr<Value> val);
+
+        int size() const;
+        std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property);
+        std::shared_ptr<Value> accessBracket(std::shared_ptr<Value> property);
+
         double asDouble();
         std::string asString();
-        /** @return  throw: TypeException*. */
         bool asBool();
-        /** @return  throw: TypeException*. */
         Bignum asBignum();
         Values type() const;
         operator std::string();
         ~StringValue(){}
+
         friend bool operator==(StringValue const& a, StringValue const& b);
         friend bool operator!=(StringValue const& a, StringValue const& b);
         friend bool operator<(StringValue const& a, StringValue const& b);

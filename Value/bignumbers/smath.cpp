@@ -1,6 +1,7 @@
 #include "bignum.h"
 #include <cmath>
 #include "../../Exception/mathexception.h"
+#include <iostream>
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::MathException;
@@ -12,11 +13,11 @@ namespace{
 
 namespace SlavaScript{ namespace modules{ namespace math_out{
     Bignum sin(const Bignum& x){
-        return sin(double(x % tau));
+        return std::sin(double(x % tau));
     }
 
     Bignum cos(const Bignum& x){
-        return cos(double(x % tau));
+        return std::cos(double(x % tau));
     }
 
     Bignum tan(const Bignum& x){
@@ -24,11 +25,11 @@ namespace SlavaScript{ namespace modules{ namespace math_out{
     }
 
     Bignum sinh(const Bignum& x){
-        return sinh(double(x));
+        return std::sinh(double(x));
     }
 
     Bignum cosh(const Bignum& x){
-        return cosh(double(x));
+        return std::cosh(double(x));
     }
 
     Bignum tanh(const Bignum& x){
@@ -37,48 +38,48 @@ namespace SlavaScript{ namespace modules{ namespace math_out{
 
     Bignum asin(const Bignum& x){
         if (x < -1 || x > 1) throw new MathException("For asin expected value in [-1; 1]");
-        return asin(double(x));
+        return std::asin(double(x));
     }
 
     Bignum acos(const Bignum& x){
         if (x < -1 || x > 1) throw new MathException("For acos expected value in [-1; 1]");
-        return acos(double(x));
+        return std::acos(double(x));
     }
 
     Bignum atan(const Bignum& x){
-        return atan(double(x));
+        return std::atan(double(x));
     }
 
     Bignum atan2(const Bignum& x, const Bignum& y){
-        return atan2(double(x), double(y));
+        return std::atan2(double(x), double(y));
     }
 
     Bignum exp(const Bignum& x){
-        return exp(double(x));
+        return std::exp(double(x));
     }
 
     Bignum log(const Bignum& x){
-        return log(double(x));
+        return std::log(double(x));
     }
 
     Bignum log10(const Bignum& x){
-        return log10(double(x));
+        return std::log10(double(x));
     }
 
     Bignum pow(const Bignum& x, const Bignum& y){
-        return pow(double(x), double(y));
+        return std::pow(double(x), double(y));
     }
 
     Bignum sqrt(const Bignum& x){
-        return sqrt(double(x));
+        return std::sqrt(double(x));
     }
 
     Bignum cbrt(const Bignum& x){
-        return cbrt(double(x));
+        return std::cbrt(double(x));
     }
 
     Bignum hypot(const Bignum& x, const Bignum& y){
-        return hypot(double(x), double(y));
+        return std::hypot(double(x), double(y));
     }
 
     Bignum to_degrees(const Bignum& x){
@@ -95,23 +96,23 @@ namespace SlavaScript{ namespace modules{ namespace math_out{
     }
 
     Bignum expm1(const Bignum& x){
-        return expm1(double(x));
+        return std::expm1(double(x));
     }
 
     Bignum log1p(const Bignum& x){
-        return log1p(double(x));
+        return std::log1p(double(x));
     }
 
     Bignum ceil(const Bignum& x){
-        return ceil(double(x));
+        return std::ceil(double(x));
     }
 
     Bignum floor(const Bignum& x){
-        return floor(double(x));
+        return std::floor(double(x));
     }
 
     Bignum round(const Bignum& x){
-        return round(double(x));
+        return std::round(double(x));
     }
 
     Bignum abs(const Bignum& x){

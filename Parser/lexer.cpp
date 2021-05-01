@@ -46,6 +46,7 @@ std::map<std::string, TokenType> Lexer::OPERATORS = {
     std::make_pair("|=", TokenType::BAREQ),
     std::make_pair("&=", TokenType::AMPEQ),
     std::make_pair("^=", TokenType::CARETEQ),
+    std::make_pair("##", TokenType::GRIDGRID),
 
     std::make_pair("(", TokenType::LPAREN),
     std::make_pair(")", TokenType::RPAREN),
@@ -96,19 +97,29 @@ Lexer::Lexer(std::string input){
 
 std::vector<Token*> Lexer::tokenize(){
     while(pos < length){
-        char current = peek(0);
-        if (isdigit(current)) tokenizeNumber();
-        else if (islower(current) || isupper(current) || current == '_' || current == '$') tokenizeWord();
-        else if (current == '#'){
-            next();
-            tokenizeHexNumber();
-        }
-        else if (current == '"') tokenizeText();
-        else if (current == '\'') tokenizeExtendedWord();
-        else if (Lexer::OPERATOR_CHARS.find(current) != std::string::npos) tokenizeOperator();
-        else next();
+        if (!tokens.empty() && tokens.back() -> getType() == TokenType::GRIDGRID) tokenizeIntegration();
+        else tokenizeToken();
     }
     return tokens;
+}
+
+void Lexer::tokenizeToken(){
+    char current = peek(0);
+    if (isdigit(current)) tokenizeNumber();
+    else if (islower(current) || isupper(current) || current == '_' || current == '$') tokenizeWord();
+    else if (current == '#' && peek(1) == '#'){
+        next();
+        next();
+        addToken(TokenType::GRIDGRID);
+    }
+    else if (current == '#'){
+        next();
+        tokenizeHexNumber();
+    }
+    else if (current == '"') tokenizeText();
+    else if (current == '\'') tokenizeExtendedWord();
+    else if (Lexer::OPERATOR_CHARS.find(current) != std::string::npos) tokenizeOperator();
+    else next();
 }
 
 void Lexer::tokenizeNumber(){
@@ -232,6 +243,21 @@ void Lexer::tokenizeMultilineComment(){
     }
     next();
     next();
+}
+
+void Lexer::tokenizeIntegration(){
+    while(tokens.back() -> getType() != TokenType::LBRACE && pos < length) tokenizeToken();
+    int start = pos;
+    char current = peek(0);
+    while(true){
+        if (current == '\0') throw error("Reached end of file while parsing code integration");
+        if (current == '\n' && peek(1) == '}') break;
+        current = next();
+    }
+    addToken(TokenType::TEXT, input.substr(start, pos - start));
+    next();
+    next();
+    addToken(TokenType::RBRACE);
 }
 
 void Lexer::addToken(TokenType type){

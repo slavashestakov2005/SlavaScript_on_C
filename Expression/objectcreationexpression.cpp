@@ -6,18 +6,18 @@
 
 using namespace SlavaScript::lang;
 
-Value* ObjectCreationExpression::eval(){
+std::shared_ptr<Value> ObjectCreationExpression::eval(){
     ClassDeclarationsStatement* ds = ClassDeclarations::get(name);
-    ClassValue* instance = new ClassValue(name);
+    std::shared_ptr<ClassValue> instance = std::make_shared<ClassValue>(name);
     for(AssignmentExpression* now : ds -> fields){
         std::string fieldName = now -> variable;
         instance -> addField(fieldName, now -> eval());
     }
     for(FunctionDefineStatement* function : ds -> methods){
-        instance -> addMethod(function -> name, new ClassMethod(function -> arguments, function -> body, instance));
+        instance -> addMethod(function -> name, std::make_shared<ClassMethod>(function -> arguments, function -> body, instance));
     }
     int size = constructorArguments.size();
-    std::vector<Value*> vec;
+    std::vector<std::shared_ptr<Value>> vec;
     for(int i = 0; i < size; ++i) vec.push_back(constructorArguments[i] -> eval());
     instance -> callConstructor(vec);
     return instance;

@@ -6,10 +6,9 @@ using namespace SlavaScript::lang;
 
 void SwitchStatement::execute(){
     bool trueCase = false;
-    Value* val = start -> eval();
     try{
         for(int i = 0; i < body.size(); ++i){
-            if (val == body[i].first -> eval()){
+            if (*(start -> eval()) == *(body[i].first -> eval())){
                 trueCase = true;
                 try{
                     body[i].second -> execute();

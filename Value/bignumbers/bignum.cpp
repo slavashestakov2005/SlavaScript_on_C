@@ -79,7 +79,7 @@ Bignum::Bignum(long long temp){
 Bignum::Bignum(double temp){
     ostringstream ss;
     string s;
-    ss << temp;
+    ss << fixed << temp;
     s = ss.str();
     (*this) = Bignum(s);
     /*

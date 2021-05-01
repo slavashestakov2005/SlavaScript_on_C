@@ -4,7 +4,7 @@ using namespace SlavaScript::lang;
 
 namespace {
     std::string mas[] = {
-        "Bool", "Number", "String", "Array", "Map", "Null", "Function", "Class"
+        "Bool", "Number", "String", "Array", "Map", "Null", "Function", "Class", "Integration"
     };
 }
 

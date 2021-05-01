@@ -15,33 +15,33 @@ using SlavaScript::exceptions::TypeException;
 namespace {
     class IsEmpty : public Function{
     private:
-        std::vector<Value*> elements;
+        std::vector<std::shared_ptr<Value>> elements;
     public:
-        IsEmpty(std::vector<Value*>* elements) : elements(*elements) {}
-        Value* execute(std::vector<Value*> values){
+        IsEmpty(std::vector<std::shared_ptr<Value>>* elements) : elements(*elements) {}
+        std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values){
             if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-            return new BoolValue(elements.empty());
+            return std::make_shared<BoolValue>(elements.empty());
         }
     };
 
     class Length : public Function{
     private:
-        std::vector<Value*> elements;
+        std::vector<std::shared_ptr<Value>> elements;
     public:
-        Length(std::vector<Value*>* elements) : elements(*elements) {}
-        Value* execute(std::vector<Value*> values){
+        Length(std::vector<std::shared_ptr<Value>>* elements) : elements(*elements) {}
+        std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values){
             if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-            return new NumberValue(elements.size());
+            return std::make_shared<NumberValue>(elements.size());
         }
     };
 }
 
 ArrayValue::ArrayValue(int size){
-    elements = new std::vector<Value*>(size);
+    elements = new std::vector<std::shared_ptr<Value>>(size);
 }
 
-ArrayValue::ArrayValue(std::vector<Value*> elem){
-    elements = new std::vector<Value*>(elem.size());
+ArrayValue::ArrayValue(std::vector<std::shared_ptr<Value>> elem){
+    elements = new std::vector<std::shared_ptr<Value>>(elem.size());
     for(int i = 0; i < elem.size(); ++i){
         (*elements)[i] = elem[i];
     }
@@ -51,58 +51,58 @@ ArrayValue::ArrayValue(const ArrayValue& arra){
     (*this) = ArrayValue(*arra.elements);
 }
 
-std::vector<Value*> ArrayValue::getCopyElement(){
+std::vector<std::shared_ptr<Value>> ArrayValue::getCopyElement(){
     int size = elements -> size();
-    std::vector<Value*> vec;
+    std::vector<std::shared_ptr<Value>> vec;
     for(int i = 0; i < size; ++i) vec.push_back(get(i));
     return vec;
 }
 
-Value* ArrayValue::get(int index) const{
+std::shared_ptr<Value> ArrayValue::get(int index) const{
     return (*elements)[index];
 }
 
-void ArrayValue::set(int index, Value* value){
+void ArrayValue::set(int index, std::shared_ptr<Value> value){
     (*elements)[index] = value;
 }
 
-ArrayValue* ArrayValue::add(ArrayValue* array, Value* value){
-    std::vector<Value*> vec;
+std::shared_ptr<ArrayValue> ArrayValue::add(std::shared_ptr<ArrayValue> array, std::shared_ptr<Value> value){
+    std::vector<std::shared_ptr<Value>> vec;
     int size = array -> elements -> size() + 1;
     for(int i = 0; i < size - 1; ++i) vec.push_back(array -> get(i));
     vec.push_back(value);
-    return new ArrayValue(vec);
+    return std::make_shared<ArrayValue>(vec);
 }
 
-ArrayValue* ArrayValue::add(ArrayValue* array1, ArrayValue* array2){
-    std::vector<Value*> vec;
+std::shared_ptr<ArrayValue> ArrayValue::add(std::shared_ptr<ArrayValue> array1, std::shared_ptr<ArrayValue> array2){
+    std::vector<std::shared_ptr<Value>> vec;
     int size = array1 -> elements -> size();
     for(int i = 0; i < size; ++i) vec.push_back(array1 -> get(i));
     size = array2 -> elements -> size();
     for(int i = 0; i < size; ++i) vec.push_back(array2 -> get(i));
-    return new ArrayValue(vec);
+    return std::make_shared<ArrayValue>(vec);
 }
 
 int ArrayValue::size() const{
     return elements -> size();
 }
 
-std::vector<Value*>::iterator ArrayValue::begin(){
+std::vector<std::shared_ptr<Value>>::iterator ArrayValue::begin(){
     elements -> begin();
 }
 
-std::vector<Value*>::iterator ArrayValue::end(){
+std::vector<std::shared_ptr<Value>>::iterator ArrayValue::end(){
     return elements -> end();
 }
 
-Value* ArrayValue::accessDot(Value* property){
+std::shared_ptr<Value> ArrayValue::accessDot(std::shared_ptr<Value> property){
     std::string prop = property -> asString();
-    if (prop == "length") return new FunctionValue(new Length(elements));
-    if (prop == "is_empty") return new FunctionValue(new IsEmpty(elements));
+    if (prop == "length") return std::make_shared<FunctionValue>(new Length(elements));
+    if (prop == "is_empty") return std::make_shared<FunctionValue>(new IsEmpty(elements));
     throw new UnknownPropertyException(prop);
 }
 
-Value* ArrayValue::accessBracket(Value* property){
+std::shared_ptr<Value> ArrayValue::accessBracket(std::shared_ptr<Value> property){
     return get((int)property -> asDouble());
 }
 
@@ -137,10 +137,10 @@ ArrayValue::operator std::string(){
 }
 
 ArrayValue::~ArrayValue(){
-    for(int i = 0; i < elements -> size(); ++i){
+    /*for(int i = 0; i < elements -> size(); ++i){
         delete (*elements)[i];
         (*elements)[i] = nullptr;
-    }
+    }*/
     delete elements;
     elements = nullptr;
 }
@@ -148,8 +148,8 @@ ArrayValue::~ArrayValue(){
 bool SlavaScript::lang::operator==(ArrayValue const& a, ArrayValue const& b){
     if (a.size() != b.size()) return false;
     for(int i = 0; i < a.size(); ++i){
-        Value* val1 = a.get(i);
-        Value* val2 = b.get(i);
+        std::shared_ptr<Value> val1 = a.get(i);
+        std::shared_ptr<Value> val2 = b.get(i);
         if (val1 -> type() != val2 -> type()) return false;
         if (*val1 != *val2) return false;
     }
@@ -164,8 +164,8 @@ bool SlavaScript::lang::operator<(ArrayValue const& a, ArrayValue const& b){
     if (a.size() > b.size()) return false;
     if (a.size() < b.size()) return true;
     for(int i = 0; i < a.size(); ++i){
-        Value* val1 = a.get(i);
-        Value* val2 = b.get(i);
+        std::shared_ptr<Value> val1 = a.get(i);
+        std::shared_ptr<Value> val2 = b.get(i);
         if (val1 -> type() != val2 -> type()) return (int) val1 -> type() < (int) val2 -> type();
         if (*val1 > *val2) return false;
         if (*val1 < *val2) return true;

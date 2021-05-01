@@ -3,9 +3,9 @@
 
 using namespace SlavaScript::lang;
 
-Value* MapExpression::eval(){
+std::shared_ptr<Value> MapExpression::eval(){
     int siz = elements.size();
-    MapValue* map = new MapValue(siz);
+    std::shared_ptr<MapValue> map = std::make_shared<MapValue>(siz);
     for (auto now : elements){
         map -> set(now.first -> eval(), now.second -> eval());
     }

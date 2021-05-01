@@ -5,7 +5,7 @@
 
 namespace SlavaScript{ namespace modules{
     namespace files_f{
-        extern SlavaScript::lang::Function *fopen, *fclose, *readline, *writeline;
+        extern std::shared_ptr<SlavaScript::lang::Function> fopen, fclose, readline, writeline;
     }
 
     class Files : public Module<Files> {

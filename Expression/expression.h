@@ -1,6 +1,7 @@
 #ifndef EXPRESSION_H_INCLUDED
 #define EXPRESSION_H_INCLUDED
 
+#include <memory>
 #include <string>
 #include "../Value/value.h"
 #include "../Visitor/node.h"
@@ -26,7 +27,7 @@ namespace SlavaScript{ namespace lang{
 
     class Expression : public Node{
     public:
-        virtual Value* eval() = 0;
+        virtual std::shared_ptr<Value> eval() = 0;
         virtual operator std::string() = 0;
         virtual ~Expression(){}
         virtual Expressions type() = 0;

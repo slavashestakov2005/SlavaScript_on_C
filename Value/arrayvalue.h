@@ -1,6 +1,7 @@
 #ifndef ARRAYVALUE_H_INCLUDED
 #define ARRAYVALUE_H_INCLUDED
 
+#include <memory>
 #include <vector>
 #include "container.h"
 #include "value.h"
@@ -8,33 +9,35 @@
 namespace SlavaScript{ namespace lang{
     class ArrayValue : public Value, Container{
     private:
-        std::vector<Value*>* elements;
+        std::vector<std::shared_ptr<Value>>* elements;
     public:
+        static std::shared_ptr<ArrayValue> add(std::shared_ptr<ArrayValue> array, std::shared_ptr<Value> value);
+        static std::shared_ptr<ArrayValue> add(std::shared_ptr<ArrayValue> array1, std::shared_ptr<ArrayValue> array2);
+
         ArrayValue(){}
         ArrayValue(int size);
-        ArrayValue(std::vector<Value*> elem);
+        ArrayValue(std::vector<std::shared_ptr<Value>> elem);
         ArrayValue(const ArrayValue& arra);
-        std::vector<Value*> getCopyElement();
-        Value* get(int index) const;
-        void set(int index, Value* value);
-        static ArrayValue* add(ArrayValue* array, Value* value);
-        static ArrayValue* add(ArrayValue* array1, ArrayValue* array2);
+
+        std::vector<std::shared_ptr<Value>> getCopyElement();
+        std::shared_ptr<Value> get(int index) const;
+        void set(int index, std::shared_ptr<Value> value);
+
+        std::vector<std::shared_ptr<Value>>::iterator begin();
+        std::vector<std::shared_ptr<Value>>::iterator end();
+
         int size() const;
-        std::vector<Value*>::iterator begin();
-        std::vector<Value*>::iterator end();
-        /** @return  throw: UnknownPropertyException*. */
-        Value* accessDot(Value* property);
-        Value* accessBracket(Value* property);
-        /** @return  throw: TypeException*. */
+        std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property);
+        std::shared_ptr<Value> accessBracket(std::shared_ptr<Value> property);
+
         double asDouble();
         std::string asString();
-        /** @return  throw: TypeException*. */
         bool asBool();
-        /** @return  throw: TypeException*. */
         Bignum asBignum();
         Values type() const;
         operator std::string();
         ~ArrayValue();
+
         friend bool operator==(ArrayValue const& a, ArrayValue const& b);
         friend bool operator!=(ArrayValue const& a, ArrayValue const& b);
         friend bool operator<(ArrayValue const& a, ArrayValue const& b);

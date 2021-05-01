@@ -78,6 +78,7 @@ namespace SlavaScript{ namespace lang{
         COLON,      /// :
         COMMA,      /// ,
         DOT,        /// .
+        GRIDGRID,   /// ##
 
         LPAREN,     /// (
         RPAREN,     /// )

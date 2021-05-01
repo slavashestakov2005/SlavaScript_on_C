@@ -11,7 +11,7 @@ namespace SlavaScript{ namespace lang{
     public:
         ArrayExpression(std::vector<Expression*> elements) : elements(elements) {}
         Expressions type(){ return Expressions::ArrayExpression; }
-        Value* eval();
+        std::shared_ptr<Value> eval();
         operator std::string();
         ~ArrayExpression();
         void accept(Visitor* visitor);

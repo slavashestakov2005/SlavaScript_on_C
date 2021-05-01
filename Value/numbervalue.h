@@ -4,13 +4,15 @@
 #include "value.h"
 #include "bignumbers/bignum.h"
 #include <ctime>
+#include <memory>
 
 namespace SlavaScript{ namespace lang{
     class NumberValue : public Value{
     private:
         Bignum value;
     public:
-        static NumberValue *M_ONE, *ZERO, *ONE;
+        static std::shared_ptr<NumberValue> M_ONE, ZERO, ONE;
+
         NumberValue(Bignum value) : value(value) {}
         NumberValue(std::string value) : value(Bignum(value)) {}
         NumberValue(int value) : value(Bignum(value)) {}
@@ -18,7 +20,7 @@ namespace SlavaScript{ namespace lang{
         NumberValue(size_t value) : value(Bignum((long long) value)) {}
         NumberValue(clock_t value) : value(Bignum((long long) value)) {}
         NumberValue(double value) : value(Bignum(value)) {}
-        /** @return  throw: std::logic_error. */
+
         double asDouble();
         std::string asString();
         bool asBool();
@@ -26,6 +28,7 @@ namespace SlavaScript{ namespace lang{
         Values type() const;
         operator std::string();
         ~NumberValue(){}
+
         friend bool operator==(NumberValue const& a, NumberValue const& b);
         friend bool operator!=(NumberValue const& a, NumberValue const& b);
         friend bool operator<(NumberValue const& a, NumberValue const& b);

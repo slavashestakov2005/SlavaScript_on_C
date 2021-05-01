@@ -3,7 +3,7 @@
 
 using namespace SlavaScript::lang;
 
-Value* ContainerAccessElement::eval(){
+std::shared_ptr<Value> ContainerAccessElement::eval(){
     return expression -> eval();
 }
 

@@ -5,7 +5,7 @@
 
 namespace SlavaScript{ namespace modules{
     namespace chemistry_f{
-        extern SlavaScript::lang::Function *electron, *latin_read, *mr, *neutron, *omega, *russian_read, *write;
+        extern std::shared_ptr<SlavaScript::lang::Function> electron, proton, latin_read, mr, neutron, omega, russian_read, write;
     }
 
     class Chemistry : public Module<Chemistry> {

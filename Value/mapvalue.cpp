@@ -5,17 +5,17 @@
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::TypeException;
 
-Value* MapValue::get(Value* key){
+std::shared_ptr<Value> MapValue::get(std::shared_ptr<Value> key){
     if (containsKey(key)) return map[key];
     else return NullValue::NULL_;
 }
 
-void MapValue::set(Value* key, Value* value){
+void MapValue::set(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
     map[key] = value;
 }
 
-void MapValue::set(Value* key, Function* value){
-    map[key] = new FunctionValue(value);
+void MapValue::set(std::shared_ptr<Value> key, std::shared_ptr<Function> value){
+    map[key] = std::make_shared<FunctionValue>(value);
 }
 
 bool MapValue::isThisMap(){
@@ -30,30 +30,30 @@ int MapValue::size() const{
     return map.size();
 }
 
-bool MapValue::containsKey(Value* key){
+bool MapValue::containsKey(std::shared_ptr<Value> key){
     return map.find(key) != map.cend();
 }
 
-MapValue* MapValue::getCopyElement(){
-    MapValue* newMap = new MapValue();
+std::shared_ptr<MapValue> MapValue::getCopyElement(){
+    std::shared_ptr<MapValue> newMap = std::make_shared<MapValue>();
     for(auto now : map){
         newMap -> set(now.first, now.second);
     }
     return newMap;
 }
 
-MapValue* MapValue::add(MapValue* map1, MapValue* map2){
-    MapValue* result = new MapValue();
+std::shared_ptr<MapValue> MapValue::add(std::shared_ptr<MapValue> map1, std::shared_ptr<MapValue> map2){
+    std::shared_ptr<MapValue> result = std::make_shared<MapValue>();
     for(auto now : map1 -> map) result -> set(now.first, now.second);
     for(auto now : map2 -> map) result -> set(now.first, now.second);
     return result;
 }
 
-std::map<Value*, Value*>::iterator MapValue::begin(){
+std::map<std::shared_ptr<Value>, std::shared_ptr<Value>>::iterator MapValue::begin(){
     return map.begin();
 }
 
-std::map<Value*, Value*>::iterator MapValue::end(){
+std::map<std::shared_ptr<Value>, std::shared_ptr<Value>>::iterator MapValue::end(){
     return map.end();
 }
 

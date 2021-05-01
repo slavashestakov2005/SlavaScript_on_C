@@ -11,13 +11,13 @@ namespace SlavaScript{ namespace lang{
         Expression* functionExpr;
         std::vector<Expression*> arguments;
         /** @return  throw: UnknownFunctionException*. */
-        Function* getFunction(std::string name);
-        Function* consumeFunction(Expression* expr);
+        std::shared_ptr<Function> getFunction(std::string name);
+        std::shared_ptr<Function> consumeFunction(Expression* expr);
     public:
         FunctionalExpression(Expression* functionExpr) : functionExpr(functionExpr) {}
         Expressions type(){ return Expressions::FunctionalExpression; }
         void addArguments(Expression* argument);
-        Value* eval();
+        std::shared_ptr<Value> eval();
         operator std::string();
         ~FunctionalExpression();
         void accept(Visitor* visitor);

@@ -233,73 +233,73 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_out{
 }}}
 
 namespace SlavaScript{ namespace modules{ namespace chemistry_f{
-    Function* electron = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(electron)
         if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
         if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
-        std::string str1 = ((StringValue*)values[0]) -> asString();
+        std::string str1 = CAST(StringValue, values[0]) -> asString();
         int finded = chemistry_out::get_element(str1);
         if (finded == -1) throw std::logic_error("First argument not element");
-        return new NumberValue(chemistry_out::elements[finded].number);
+        SH_RET(NumberValue, chemistry_out::elements[finded].number);
     });
 
-    Function* latin_read = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(latin_read)
         if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
         if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
-        std::string str1 = ((StringValue*)values[0]) -> asString();
+        std::string str1 = CAST(StringValue, values[0]) -> asString();
         int finded = chemistry_out::get_element(str1);
         if (finded == -1) throw std::logic_error("First argument not element");
-        return new StringValue(chemistry_out::elements[finded].latinRead);
+        SH_RET(StringValue, chemistry_out::elements[finded].latinRead);
     });
 
-    Function* mr = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(mr)
         if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
         if (values[0] -> type() != Values::STRING) throw TypeException("String expected in first argument");
-        std::string str = ((StringValue*)values[0]) -> asString();
-        return new NumberValue(chemistry_out::mr(str));
+        std::string str = CAST(StringValue, values[0]) -> asString();
+        SH_RET(NumberValue, chemistry_out::mr(str));
     });
 
-    Function* neutron = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(neutron)
         if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
         if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
-        std::string str1 = ((StringValue*)values[0]) -> asString();
+        std::string str1 = CAST(StringValue, values[0]) -> asString();
         int finded = chemistry_out::get_element(str1);
         if (finded == -1) throw std::logic_error("First argument not element");
-        return new NumberValue(round(chemistry_out::elements[finded].massa) - chemistry_out::elements[finded].number);
+        SH_RET(NumberValue, round(chemistry_out::elements[finded].massa) - chemistry_out::elements[finded].number);
     });
 
-    Function* omega = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(omega)
         if (values.size() != 2) throw ArgumentsMismatchException("Two argument excepted");
         if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
         if (values[1] -> type() != Values::STRING) throw TypeException("String excepted in second argument");
-        std::string str1 = ((StringValue*)values[0]) -> asString(), str2 = ((StringValue*)values[1]) -> asString();
+        std::string str1 = CAST(StringValue, values[0]) -> asString(), str2 = CAST(StringValue, values[1]) -> asString();
         int finded = chemistry_out::get_element(str1);
         if (finded == -1) throw std::logic_error("First argument not element");
         if (chemistry_out::mr(str2) == 0) throw std::logic_error("Bad second argument");
-        return new NumberValue(chemistry_out::omega(str2, str1));
+        SH_RET(NumberValue, chemistry_out::omega(str2, str1));
     });
 
-    Function* russian_read = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(russian_read)
         if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
         if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
-        std::string str1 = ((StringValue*)values[0]) -> asString();
+        std::string str1 = CAST(StringValue, values[0]) -> asString();
         int finded = chemistry_out::get_element(str1);
         if (finded == -1) throw std::logic_error("First argument not element");
-        return new StringValue(chemistry_out::elements[finded].russionRead);
+        SH_RET(StringValue, chemistry_out::elements[finded].russionRead);
     });
 
-    Function* write = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(write)
         if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
         if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
-        std::string str = ((StringValue*)values[0]) -> asString();
+        std::string str = CAST(StringValue, values[0]) -> asString();
         int finded = -1;
         for(int i = 0; i < chemistry_out::SizeOfTabel; ++i){
             if (chemistry_out::elements[i].russionRead == str) finded = i;
         }
         if (finded == -1) throw std::logic_error("First argument not element");
-        return new StringValue(chemistry_out::elements[finded].name);
+        SH_RET(StringValue, chemistry_out::elements[finded].name);
     });
 
-    Function* proton = electron;
+    std::shared_ptr<Function> proton = electron;
 }}}
 
 void Chemistry::initFunctions(){

@@ -79,6 +79,7 @@ Statement* Parser::statement(){
     if (match(TokenType::THROW)) return new ThrowStatement(expression());
     if (match(TokenType::TRY)) return tryStatement();
     if (match(TokenType::CLASS)) return classDeclaration();
+    if (match(TokenType::GRIDGRID)) return integrationStatement();
     return assignmentStatement();
 }
 
@@ -205,6 +206,16 @@ Statement* Parser::tryStatement(){
         return new TryStatement(body, name, statementOrBlock());
     }
     else throw new ParseException("Catch block not found after try block");
+}
+
+Statement* Parser::integrationStatement(){
+    std::string lang = consume(TokenType::WORD) -> getText();
+    consume(TokenType::AS);
+    std::string name = consume(TokenType::WORD) -> getText();
+    consume(TokenType::LBRACE);
+    std::string code = consume(TokenType::TEXT) -> getText();
+    consume(TokenType::RBRACE);
+    return new IntegrationStatement(lang, name, code);
 }
 
 Arguments Parser::functionArguments(){

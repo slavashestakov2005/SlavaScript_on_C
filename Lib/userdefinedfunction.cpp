@@ -18,7 +18,7 @@ std::string UserDefinedFunction::getArgsName(int index){
     else return arguments.get(index).getName();
 }
 
-Value* UserDefinedFunction::execute(std::vector<Value*> values){
+std::shared_ptr<Value> UserDefinedFunction::execute(std::vector<std::shared_ptr<Value>> values){
     int siz = values.size();
     int requiredArgsCount = arguments.getRequiredCount();
     int total = getArgsCount();
@@ -43,7 +43,7 @@ Value* UserDefinedFunction::execute(std::vector<Value*> values){
         for(int i = 0; i < minimal; ++i){
             Variables::set(getArgsName(i), values[i]);
         }
-        ArrayValue* array = new ArrayValue(siz - minimal);
+        std::shared_ptr<ArrayValue> array = std::make_shared<ArrayValue>(siz - minimal);
         for(int i = minimal; i < siz; ++i){
             array -> set(i - minimal, values[i]);
         }

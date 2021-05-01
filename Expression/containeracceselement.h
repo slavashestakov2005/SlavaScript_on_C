@@ -10,7 +10,7 @@ namespace SlavaScript{ namespace lang{
     public:
         Expression* expression;
         ContainerAccessElement(Expression* expression, bool dot) : dot(dot), expression(expression) { }
-        Value* eval();
+        std::shared_ptr<Value> eval();
         bool isDot();
         operator std::string();
     };

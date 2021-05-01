@@ -107,6 +107,8 @@ void CompilerVisitor::visit(lang::IfStatement* v){
     Compiler::write("}");
 }
 
+void CompilerVisitor::visit(lang::IntegrationStatement* v){}
+
 void CompilerVisitor::visit(lang::ImportStatement* v){}
 
 void CompilerVisitor::visit(lang::PrintlnStatement* v){

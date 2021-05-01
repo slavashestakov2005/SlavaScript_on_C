@@ -13,8 +13,8 @@ namespace SlavaScript{ namespace lang{
         UnaryExpression(UnaryOperator operation, Expression* expr) : operation(operation), expr(expr) {}
         Expressions type(){ return Expressions::UnaryExpression; }
         /** @return  throw: OperationIsNotSupportedException*. */
-        static Value* calculate(UnaryOperator operation, Value* value);
-        Value* eval();
+        static std::shared_ptr<Value> calculate(UnaryOperator operation, std::shared_ptr<Value> value);
+        std::shared_ptr<Value> eval();
         operator std::string();
         ~UnaryExpression();
         void accept(Visitor* visitor);

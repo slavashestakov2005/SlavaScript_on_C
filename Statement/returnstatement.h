@@ -9,11 +9,11 @@ namespace SlavaScript{ namespace lang{
     class ReturnStatement : public Statement{
     private:
         Expression* expression;
-        Value* result;
+        std::shared_ptr<Value> result;
     public:
         ReturnStatement(Expression* expression) : expression(expression) {}
         Statements type(){ return Statements::ReturnStatement; }
-        Value* getResult();
+        std::shared_ptr<Value> getResult();
         /** @return  throw: ReturnStatement*. */
         void execute();
         operator std::string();

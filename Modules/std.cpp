@@ -34,14 +34,14 @@ namespace SlavaScript{ namespace modules{ namespace std_out{
         return res;
     }
 
-    bool comparator(Value* a, Value* b){
+    bool comparator(std::shared_ptr<Value> a, std::shared_ptr<Value> b){
         return (*a) < (*b);
     }
 
-    ArrayValue* createArray(std::vector<Value*> values, int index){
+    std::shared_ptr<ArrayValue> createArray(std::vector<std::shared_ptr<Value>> values, int index){
         int size = int(values[index] -> asDouble());
         int last = values.size() - 1;
-        ArrayValue* arr = new ArrayValue(size);
+        std::shared_ptr<ArrayValue> arr = SHARE(ArrayValue, size);
         if (index == last){
             for(int i = 0; i < size; ++i){
                 arr -> set(i, NullValue::NULL_);
@@ -57,74 +57,74 @@ namespace SlavaScript{ namespace modules{ namespace std_out{
 }}}
 
 namespace SlavaScript{ namespace modules{ namespace std_f{
-    Function* array_combine = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(array_combine)
         if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
         if (values[0] -> type() != Values::ARRAY) throw new TypeException("Array expected in first argument");
         if (values[1] -> type() != Values::ARRAY) throw new TypeException("Array expected in second argument");
-        ArrayValue* keys = (ArrayValue*)values[0], *value = (ArrayValue*)values[1];
+        std::shared_ptr<ArrayValue> keys = CAST(ArrayValue, values[0]), value = CAST(ArrayValue, values[1]);
         int len = std::min(keys -> size(), value -> size());
-        MapValue* map = new MapValue(len);
+        std::shared_ptr<MapValue> map = SHARE(MapValue, len);
         for(int i = 0; i < len; ++i) map -> set(keys -> get(i), value -> get(i));
         return map;
     });
 
-    Function* echo = new FunctionModule([](std::vector<Value*> values) -> Value*{
-        for(Value* value : values) std::cout << value -> asString();
+    CREATE_FUNCTION(echo)
+        for(auto value : values) std::cout << value -> asString();
         std::cout << std::endl;
         return NullValue::NULL_;
     });
 
-    Function* len = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(len)
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
         int length;
         switch(values[0] -> type()){
-            case Values::ARRAY : length = ((ArrayValue*)values[0]) -> size(); break;
-            case Values::MAP : length = ((MapValue*)values[0]) -> size(); break;
-            case Values::STRING : length = ((StringValue*)values[0]) -> size(); break;
+            case Values::ARRAY : length = CAST(ArrayValue, values[0]) -> size(); break;
+            case Values::MAP : length = CAST(MapValue, values[0]) -> size(); break;
+            case Values::STRING : length = CAST(StringValue, values[0]) -> size(); break;
             case Values::FUNCTION :{
-                if (((FunctionValue*)values[0]) -> getFunction() -> type) length = ((UserDefinedFunction*)(((FunctionValue*)values[0]) -> getFunction())) -> getArgsCount();
+                if (CAST(FunctionValue, values[0]) -> getFunction() -> type) length = CAST(UserDefinedFunction, CAST(FunctionValue, values[0]) -> getFunction()) -> getArgsCount();
                 else length = 0;
                 break;
             }
             default : length = 0; break;
         }
-        return new NumberValue(length);
+        SH_RET(NumberValue, length);
     });
 
-    Function* map_key_exists = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(map_key_exists)
         if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
         if (values[0] -> type() != Values::MAP) throw new TypeException("Map expected in first argument");
-        MapValue* map = (MapValue*)values[0];
-        return new BoolValue(map -> containsKey(values[1]));
+        std::shared_ptr<MapValue> map = CAST(MapValue, values[0]);
+        SH_RET(BoolValue, map -> containsKey(values[1]));
     });
 
-    Function* map_keys = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(map_keys)
         if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
         if (values[0] -> type() != Values::MAP) throw new TypeException("Map expected in first argument");
-        MapValue* map = (MapValue*)values[0];
-        std::vector<Value*> keys;
+        std::shared_ptr<MapValue> map = CAST(MapValue, values[0]);
+        std::vector<std::shared_ptr<Value>> keys;
         int siz = map -> size();
         auto iter = map -> begin();
         for(int i = 0; i < siz; ++i, ++iter) keys.push_back(iter -> first);
-        return new ArrayValue(keys);
+        SH_RET(ArrayValue, keys);
     });
 
-    Function* map_values = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(map_values)
         if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
         if (values[0] -> type() != Values::MAP) throw new TypeException("Map expected in first argument");
-        MapValue* map = (MapValue*)values[0];
-        std::vector<Value*> keys;
+        std::shared_ptr<MapValue> map = CAST(MapValue, values[0]);
+        std::vector<std::shared_ptr<Value>> keys;
         int siz = map -> size();
         auto iter = map -> begin();
         for(int i = 0; i < siz; ++i, ++iter) keys.push_back(iter -> second);
-        return new ArrayValue(keys);
+        SH_RET(ArrayValue, keys);
     });
 
-    Function* new_array = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(new_array)
         return std_out::createArray(values, 0);
     });
 
-    Function* parse_number = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(parse_number)
         if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
         int radix = values.size() == 2 ? values[1] -> asDouble() : 10;
         Bignum power = 1, ans = 0;
@@ -137,10 +137,10 @@ namespace SlavaScript{ namespace modules{ namespace std_f{
             ans += current * power;
             power *= radix;
         }
-        return new NumberValue(ans);
+        SH_RET(NumberValue, ans);
     });
 
-    Function* rand = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(rand)
         int siz = values.size();
         double random = 1. * std::rand() / (RAND_MAX + 1), result;
         switch(siz){
@@ -154,10 +154,10 @@ namespace SlavaScript{ namespace modules{ namespace std_f{
             }
             default : throw new ArgumentsMismatchException("Fewer arguments expected");
         }
-        return new NumberValue(result);
+        SH_RET(NumberValue, result);
     });
 
-    Function* sleep = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(sleep)
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
         if (values[0] -> type() != Values::NUMBER) throw new TypeException("Number expected in first argument");
         long long start = clock(), finish = clock();
@@ -166,32 +166,32 @@ namespace SlavaScript{ namespace modules{ namespace std_f{
         return NullValue::NULL_;
     });
 
-    Function* sort = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(sort)
         if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
         if (values[0] -> type() != Values::ARRAY) throw new TypeException("Array expected in first argument");
-        ArrayValue* arr = (ArrayValue*)values[0];
+        std::shared_ptr<ArrayValue> arr = CAST(ArrayValue, values[0]);
         if (values.size() == 1) std::sort(arr -> begin(), arr -> end(), std_out::comparator);
         if (values.size() == 2){
             if (values[1] -> type() != Values::FUNCTION) throw new TypeException("Function expected in second argument");
-            Function* func = ((FunctionValue*)values[1]) -> getFunction();
-            std::sort(arr -> begin(), arr -> end(), [func](Value* l, Value* r) -> bool { return std_out::comparator(func -> execute({l}), func -> execute({r})); });
+            std::shared_ptr<Function> func = CAST(FunctionValue, values[1]) -> getFunction();
+            std::sort(arr -> begin(), arr -> end(), [func](std::shared_ptr<Value> l, std::shared_ptr<Value> r) -> bool { return std_out::comparator(func -> execute({l}), func -> execute({r})); });
         }
         return arr;
     });
 
-    Function* time = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(time)
         if (values.size() != 0) throw new ArgumentsMismatchException("Zero arguments expected");
-        return new NumberValue(clock());
+        SH_RET(NumberValue, clock());
     });
 
-    Function* to_char = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(to_char)
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
         std::string str;
         str += char(values[0] -> asDouble());
-        return new StringValue(str);
+        SH_RET(StringValue, str);
     });
 
-    Function* to_hex_string = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(to_hex_string)
         if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
         if (values[0] -> type() != Values::NUMBER) throw new TypeException("Number expected in first argument");
         long long value = values[0] -> asDouble();
@@ -202,7 +202,7 @@ namespace SlavaScript{ namespace modules{ namespace std_f{
             value /= 16;
         }
         reverse(ans.begin(), ans.end());
-        return new StringValue(ans);
+        SH_RET(StringValue, ans);
     });
 }}}
 
@@ -228,3 +228,4 @@ void Std::initFunctions(){
     Functions::set("to_char", to_char);
     Functions::set("to_hex_string", to_hex_string);
 }
+

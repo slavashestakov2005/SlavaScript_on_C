@@ -95,6 +95,8 @@ void Visitor::visit(IfStatement* v){
     if (v -> elseStatement != nullptr) v -> elseStatement -> accept(this);
 }
 
+void Visitor::visit(IntegrationStatement* v){ }
+
 void Visitor::visit(ImportStatement* v){ }
 
 void Visitor::visit(MapExpression* v){

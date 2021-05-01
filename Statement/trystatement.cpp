@@ -5,7 +5,7 @@
 using namespace SlavaScript::lang;
 
 void TryStatement::execute(){
-    Value* start = Variables::isExists(name) ? Variables::get(name) : nullptr;
+    std::shared_ptr<Value> start = Variables::isExists(name) ? Variables::get(name) : nullptr;
     try{
         body -> execute();
     } catch(ThrowStatement* ex){

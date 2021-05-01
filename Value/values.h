@@ -13,6 +13,7 @@ namespace SlavaScript{ namespace lang{
         NULL_,
         FUNCTION,
         CLASS,
+        INTEGRATION,
     };
 
     std::string getValueName(Values value);

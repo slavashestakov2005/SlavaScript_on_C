@@ -4,9 +4,9 @@
 
 using namespace SlavaScript::lang;
 
-NumberValue* NumberValue::M_ONE = new NumberValue(-1);
-NumberValue* NumberValue::ZERO = new NumberValue(0);
-NumberValue* NumberValue::ONE = new NumberValue(1);
+std::shared_ptr<NumberValue> NumberValue::M_ONE = std::make_shared<NumberValue>(-1);
+std::shared_ptr<NumberValue> NumberValue::ZERO = std::make_shared<NumberValue>(0);
+std::shared_ptr<NumberValue> NumberValue::ONE = std::make_shared<NumberValue>(1);
 
 double NumberValue::asDouble(){
     std::istringstream is(value);

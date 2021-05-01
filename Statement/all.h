@@ -13,6 +13,7 @@
 #include "functiondefinestatement.h"
 #include "functionstatement.h"
 #include "ifstatement.h"
+#include "integrationstatement.h"
 #include "importstatement.h"
 #include "printlnstatement.h"
 #include "printstatement.h"

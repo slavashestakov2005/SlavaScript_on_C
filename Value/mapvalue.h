@@ -8,39 +8,41 @@
 namespace SlavaScript{ namespace lang{
     class Comparator{
     public:
-        bool operator()(Value* a, Value* b){
+        bool operator()(std::shared_ptr<Value> a, std::shared_ptr<Value> b){
             return (*a) < (*b);
         }
     };
 
     class MapValue : public Value{
     private:
-        std::map<Value*, Value*, Comparator> map;
+        std::map<std::shared_ptr<Value>, std::shared_ptr<Value>, Comparator> map;
         bool thisMap = false;
     public:
+        static std::shared_ptr<MapValue> add(std::shared_ptr<MapValue> map1, std::shared_ptr<MapValue> map2);
+
         MapValue(int size){}
         MapValue(){}
-        Value* get(Value* key);
-        void set(Value* key, Value* value);
-        void set(Value* key, lang::Function* value);
+
+        std::shared_ptr<Value> get(std::shared_ptr<Value> key);
+        void set(std::shared_ptr<Value> key, std::shared_ptr<Value> value);
+        void set(std::shared_ptr<Value> key, std::shared_ptr<lang::Function> value);
         bool isThisMap();
         void setThisMap(bool thisMap);
         int size() const;
-        bool containsKey(Value* key);
-        MapValue* getCopyElement();
-        static MapValue* add(MapValue* map1, MapValue* map2);
-        std::map<Value*, Value*>::iterator begin();
-        std::map<Value*, Value*>::iterator end();
-        /** @return  throw: TypeException*. */
+        bool containsKey(std::shared_ptr<Value> key);
+        std::shared_ptr<MapValue> getCopyElement();
+
+        std::map<std::shared_ptr<Value>, std::shared_ptr<Value>>::iterator begin();
+        std::map<std::shared_ptr<Value>, std::shared_ptr<Value>>::iterator end();
+
         double asDouble();
         std::string asString();
-        /** @return  throw: TypeException*. */
         bool asBool();
-        /** @return  throw: TypeException*. */
         Bignum asBignum();
         Values type() const;
         operator std::string();
         ~MapValue(){}
+
         friend bool operator==(MapValue const& a, MapValue const& b);
         friend bool operator!=(MapValue const& a, MapValue const& b);
         friend bool operator<(MapValue const& a, MapValue const& b);

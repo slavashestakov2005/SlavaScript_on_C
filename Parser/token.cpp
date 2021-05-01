@@ -16,7 +16,7 @@ namespace{
         "EQ", "EQEQ", "EXCL", "EXCLEQ", "LT", "LTEQ", "GT", "GTEQ",
         "BAR", "BARBAR", "AMP", "AMPAMP", "CARET", "TILDE",
         "BAREQ", "AMPEQ", "CARETEQ",
-        "QUESTION", "COLON", "COMMA", "DOT",
+        "QUESTION", "COLON", "COMMA", "DOT", "GRIDGRID",
         "LPAREN", "RPAREN", "LBRACE", "RBRACE", "LBRACKET", "RBRACKET",
         "EOF"
     };

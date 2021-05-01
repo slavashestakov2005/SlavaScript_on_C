@@ -11,7 +11,7 @@ namespace SlavaScript{ namespace lang{
         TernaryExpression(Expression* condition, Expression* trueExpr, Expression* falseExpr)
         : condition(condition), trueExpr(trueExpr), falseExpr(falseExpr) {}
         Expressions type(){ return Expressions::TernaryExpression; }
-        Value* eval();
+        std::shared_ptr<Value> eval();
         operator std::string();
         ~TernaryExpression();
         void accept(Visitor* visitor);

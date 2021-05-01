@@ -35,12 +35,12 @@ void ImportStatement::execute(){
         }
     }
     if (named){
-        std::map<std::string, Value*> variables = Variables::getScope();
-        std::map<std::string, Function*> functions = Functions::getScope();
+        std::map<std::string, std::shared_ptr<Value>> variables = Variables::getScope();
+        std::map<std::string, std::shared_ptr<Function>> functions = Functions::getScope();
         // ClassDeclarations::getScope();
-        MapValue* map = new MapValue(1);
-        for(auto x : variables) map -> set(new StringValue(x.first), x.second);
-        for(auto x : functions) map -> set(new StringValue(x.first), x.second);
+        std::shared_ptr<MapValue> map = std::make_shared<MapValue>(1);
+        for(auto x : variables) map -> set(std::make_shared<StringValue>(x.first), x.second);
+        for(auto x : functions) map -> set(std::make_shared<StringValue>(x.first), x.second);
         // for each
         map -> setThisMap(true);
         Variables::popScope();

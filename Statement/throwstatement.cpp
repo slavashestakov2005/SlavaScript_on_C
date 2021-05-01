@@ -2,7 +2,7 @@
 
 using namespace SlavaScript::lang;
 
-Value* ThrowStatement::getResult(){
+std::shared_ptr<Value> ThrowStatement::getResult(){
     return result;
 }
 
@@ -18,8 +18,6 @@ ThrowStatement::operator std::string(){
 ThrowStatement::~ThrowStatement(){
     delete expression;
     expression = nullptr;
-    delete result;
-    result = nullptr;
 }
 
 void ThrowStatement::accept(Visitor* visitor){

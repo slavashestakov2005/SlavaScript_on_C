@@ -3,6 +3,7 @@
 
 #include "conditionaloperator.h"
 #include "expression.h"
+#include <memory>
 
 namespace SlavaScript{ namespace lang{
     class ConditionalExpression : public Expression{
@@ -12,9 +13,9 @@ namespace SlavaScript{ namespace lang{
     public:
         ConditionalExpression(ConditionalOperator operation, Expression* expr1, Expression* expr2) : operation(operation), expr1(expr1), expr2(expr2) {}
         /** @return  throw: OperationIsNotSupportedException*. */
-        static Value* calculate(ConditionalOperator operation, Value* left, Value* right);
+        static std::shared_ptr<Value> calculate(ConditionalOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right);
         Expressions type(){ return Expressions::ConditionalExpression; }
-        Value* eval();
+        std::shared_ptr<Value> eval();
         operator std::string();
         ~ConditionalExpression();
         void accept(Visitor* visitor);

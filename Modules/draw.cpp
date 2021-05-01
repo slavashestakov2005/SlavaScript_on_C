@@ -8,7 +8,6 @@
 #include "../Value/arrayvalue.h"
 #include "../Value/stringvalue.h"
 #include "../Exception/argumentsmismatchexception.h"
-#include <iostream>
 
 using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::draw_f;
@@ -42,7 +41,7 @@ namespace SlavaScript{ namespace modules{ namespace draw_out{
 }}}
 
 namespace SlavaScript{ namespace modules{ namespace draw_f{
-    Function* window = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(window)
         int siz = values.size();
         if (siz < 1 || siz > 3) throw new ArgumentsMismatchException("One or two or three arguments expected");
         switch(siz){
@@ -63,7 +62,7 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         return NullValue::NULL_;
     });
 
-    Function* color = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(color)
         int siz = values.size();
         if (siz > 3) throw new ArgumentsMismatchException("One or two or three arguments expected");
         if (!siz) draw_out::color = draw_out::defaultColor;
@@ -85,7 +84,7 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         return NullValue::NULL_;
     });
 
-    Function* line = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(line)
         if (values.size() != 4) throw new ArgumentsMismatchException("Four arguments expected");
         sf::VertexArray line(sf::Lines, 2);
         line[0].position = sf::Vector2f(values[0] -> asDouble(), values[1] -> asDouble());
@@ -96,7 +95,7 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         return NullValue::NULL_;
     });
 
-    Function* rect = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(rect)
         if (values.size() != 4) throw new ArgumentsMismatchException("Four arguments expected");
         sf::RectangleShape rect;
         rect.setSize(sf::Vector2f(values[2] -> asDouble(), values[3] -> asDouble()));
@@ -107,7 +106,7 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         return NullValue::NULL_;
     });
 
-    Function* frect = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(frect)
         if (values.size() != 4) throw new ArgumentsMismatchException("Four arguments expected");
         sf::RectangleShape rect;
         rect.setSize(sf::Vector2f(values[2] -> asDouble(), values[3] -> asDouble()));
@@ -117,7 +116,7 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         return NullValue::NULL_;
     });
 
-    Function* circle = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(circle)
         if (values.size() != 3) throw new ArgumentsMismatchException("Three arguments expected");
         sf::CircleShape cricle(values[2] -> asDouble());
         cricle.setPosition(values[0] -> asDouble(), values[1] -> asDouble());
@@ -125,7 +124,7 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         return NullValue::NULL_;
     });
 
-    Function* fcircle = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(fcircle)
         if (values.size() != 3) throw new ArgumentsMismatchException("Three arguments expected");
         sf::CircleShape cricle(values[2] -> asDouble());
         cricle.setPosition(values[0] -> asDouble(), values[1] -> asDouble());
@@ -134,63 +133,59 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         return NullValue::NULL_;
     });
 
-    Function* repaint = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(repaint)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         sf::Event event;
         while (draw_out::window.pollEvent(event)) if (event.type == sf::Event::Closed) draw_out::window.close();
-        //draw(*window);
         draw_out::window.display();
         return NullValue::NULL_;
     });
 
-    Function* clear = new FunctionModule([](std::vector<Value*> values) -> Value*{
-        // std::cout << "In clear size of vector : " << shapes.size() << "\tand : " << sizeof(*window) << std::endl;
+    CREATE_FUNCTION(clear)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         sf::Event event;
         while (draw_out::window.pollEvent(event)) if (event.type == sf::Event::Closed) draw_out::window.close();
         draw_out::window.clear();
-        // for (int i = 0; i < shapes.size(); ++i) delete shapes[i];
-        // shapes.clear();
         return NullValue::NULL_;
     });
 
-    Function* framelimit = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(framelimit)
         if (values.size() > 1) throw new ArgumentsMismatchException("Zero or one arguments expected");
         if (values.size()) draw_out::window.setFramerateLimit(values[0] -> asDouble());
         else draw_out::window.setFramerateLimit(draw_out::defaultLimit);
         return NullValue::NULL_;
     });
 
-    Function* keypressed = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(keypressed)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         sf::Event event;
         while (draw_out::window.pollEvent(event)){
             if (event.type == sf::Event::Closed) draw_out::window.close();
             if (event.type == sf::Event::KeyPressed){
-                if (event.key.code == sf::Keyboard::Escape) return new NumberValue(int(draw_out::Keys::ESCAPE));
-                if (event.key.code == sf::Keyboard::Up) return new NumberValue(int(draw_out::Keys::UP));
-                if (event.key.code == sf::Keyboard::Down) return new NumberValue(int(draw_out::Keys::DOWN));
-                if (event.key.code == sf::Keyboard::Left) return new NumberValue(int(draw_out::Keys::LEFT));
-                if (event.key.code == sf::Keyboard::Right) return new NumberValue(int(draw_out::Keys::RIGHT));
-                if (event.key.code == sf::Keyboard::Space) return new NumberValue(int(draw_out::Keys::SPACE));
+                if (event.key.code == sf::Keyboard::Escape) return SHARE(NumberValue, int(draw_out::Keys::ESCAPE));
+                if (event.key.code == sf::Keyboard::Up) return SHARE(NumberValue, int(draw_out::Keys::UP));
+                if (event.key.code == sf::Keyboard::Down) return SHARE(NumberValue, int(draw_out::Keys::DOWN));
+                if (event.key.code == sf::Keyboard::Left) return SHARE(NumberValue, int(draw_out::Keys::LEFT));
+                if (event.key.code == sf::Keyboard::Right) return SHARE(NumberValue, int(draw_out::Keys::RIGHT));
+                if (event.key.code == sf::Keyboard::Space) return SHARE(NumberValue, int(draw_out::Keys::SPACE));
             }
         }
         return NumberValue::M_ONE;
     });
 
-    Function* mousehover = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(mousehover)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-        ArrayValue* arr = new ArrayValue(2);
+        std::shared_ptr<ArrayValue> arr = SHARE(ArrayValue, 2);
         sf::Vector2i pixesPos = sf::Mouse::getPosition(draw_out::window);
         sf::Vector2f pos = draw_out::window.mapPixelToCoords(pixesPos);
-        arr -> set(0, new NumberValue(pos.x));
-        arr -> set(1, new NumberValue(pos.y));
+        arr -> set(0, SHARE(NumberValue, pos.x));
+        arr -> set(1, SHARE(NumberValue, pos.y));
         sf::Event event;
         while (draw_out::window.pollEvent(event)) if (event.type == sf::Event::Closed) draw_out::window.close();
         return arr;
     });
 
-    Function* close = new FunctionModule([](std::vector<Value*> values) -> Value*{
+    CREATE_FUNCTION(close)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         draw_out::window.close();
         return NullValue::NULL_;
@@ -198,12 +193,12 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
 }}}
 
 void Draw::initConstants(){
-    Variables::set("KB_ESCAPE", new NumberValue(int(draw_out::Keys::ESCAPE)));
-    Variables::set("KB_UP", new NumberValue(int(draw_out::Keys::UP)));
-    Variables::set("KB_DOWN", new NumberValue(int(draw_out::Keys::DOWN)));
-    Variables::set("KB_LEFT", new NumberValue(int(draw_out::Keys::LEFT)));
-    Variables::set("KB_RIGHT", new NumberValue(int(draw_out::Keys::RIGHT)));
-    Variables::set("KB_SPACE", new NumberValue(int(draw_out::Keys::SPACE)));
+    Variables::set("KB_ESCAPE", SHARE(NumberValue, int(draw_out::Keys::ESCAPE)));
+    Variables::set("KB_UP", SHARE(NumberValue, int(draw_out::Keys::UP)));
+    Variables::set("KB_DOWN", SHARE(NumberValue, int(draw_out::Keys::DOWN)));
+    Variables::set("KB_LEFT", SHARE(NumberValue, int(draw_out::Keys::LEFT)));
+    Variables::set("KB_RIGHT", SHARE(NumberValue, int(draw_out::Keys::RIGHT)));
+    Variables::set("KB_SPACE", SHARE(NumberValue, int(draw_out::Keys::SPACE)));
 }
 
 void Draw::initFunctions(){

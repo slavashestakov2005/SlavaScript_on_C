@@ -11,9 +11,9 @@ VariableExpression::operator std::string(){
     return "'" + name + "'";
 }
 
-Value* VariableExpression::eval(){
+std::shared_ptr<Value> VariableExpression::eval(){
     if (Variables::isExists(name)) return Variables::get(name);
-    if (Functions::isExists(name)) return new FunctionValue(Functions::get(name));
+    if (Functions::isExists(name)) return std::make_shared<FunctionValue>(Functions::get(name));
     throw new VariableDoesNotExistsException(name);
 
 }

@@ -5,7 +5,7 @@ using namespace SlavaScript::lang;
 
 std::vector<CallInfo*> CallStack::calls = {};
 
-void CallStack::push(std::string name, Function* function){
+void CallStack::push(std::string name, std::shared_ptr<Function> function){
     calls.push_back(new CallInfo(name, function));
 }
 

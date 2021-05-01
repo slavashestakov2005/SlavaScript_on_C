@@ -6,13 +6,13 @@
 using namespace SlavaScript::lang;
 
 void FunctionDefineStatement::execute(){
-    Functions::set(name, new UserDefinedFunction(arguments, body));
+    Functions::set(name, std::make_shared<UserDefinedFunction>(arguments, body));
 }
 
 void FunctionDefineStatement::execute(bool set){
     int start = arguments.getRequiredCount();
     int finish = arguments.getArrayCount() == 1 ? 100 : arguments.size();
-    bool add = Functions::add(name, new UserDefinedFunction(arguments, body), start, finish);
+    bool add = Functions::add(name, std::make_shared<UserDefinedFunction>(arguments, body), start, finish);
     if (!add){
         std::ostringstream cnt;
         cnt << arguments.size();

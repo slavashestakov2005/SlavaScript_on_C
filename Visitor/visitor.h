@@ -22,6 +22,7 @@ namespace SlavaScript{ namespace lang{
     class FunctionalExpression;
     class FunctionReferenceExpression;
     class IfStatement;
+    class IntegrationStatement;
     class ImportStatement;
     class MapExpression;
     class ObjectCreationExpression;
@@ -59,6 +60,7 @@ namespace SlavaScript{ namespace lang{
         virtual void visit(FunctionalExpression* v);
         virtual void visit(FunctionReferenceExpression* v);
         virtual void visit(IfStatement* v);
+        virtual void visit(IntegrationStatement* v);
         virtual void visit(ImportStatement* v);
         virtual void visit(MapExpression* v);
         virtual void visit(ObjectCreationExpression* v);

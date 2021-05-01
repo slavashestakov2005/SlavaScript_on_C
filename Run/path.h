@@ -10,7 +10,7 @@ namespace SlavaScript{ namespace lang{
     private:
         static std::vector<std::string> pathes;
         static bool import;
-        static ArrayValue* arguments;
+        static std::shared_ptr<ArrayValue> arguments;
     public:
         static void setPath(std::string path);
         static std::string getPath();
@@ -19,7 +19,7 @@ namespace SlavaScript{ namespace lang{
         static void setImpoted(bool imp);
         static void initContainers();
         static void setCommandArguments(std::vector<std::string> argv);
-        static ArrayValue* getCommandArguments();
+        static std::shared_ptr<ArrayValue> getCommandArguments();
     };
 }}
 

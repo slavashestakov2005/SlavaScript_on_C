@@ -4,7 +4,7 @@
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::TypeException;
 
-NullValue* NullValue::NULL_ = new NullValue();
+std::shared_ptr<NullValue> NullValue::NULL_ = std::make_shared<NullValue>();
 
 double NullValue::asDouble(){
     throw new TypeException("Cannot cast null to double");
