@@ -3,10 +3,10 @@
 
 using namespace SlavaScript::lang;
 
-std::vector<CallInfo*> CallStack::calls = {};
+std::vector<std::shared_ptr<CallInfo>> CallStack::calls = {};
 
 void CallStack::push(std::string name, std::shared_ptr<Function> function){
-    calls.push_back(new CallInfo(name, function));
+    calls.push_back(std::make_shared<CallInfo>(name, function));
 }
 
 void CallStack::pop(){

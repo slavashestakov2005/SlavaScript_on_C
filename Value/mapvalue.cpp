@@ -1,9 +1,12 @@
 #include "mapvalue.h"
+#include "nullvalue.h"
+#include "functionvalue.h"
 #include "../Exception/typeexception.h"
-#include "../Expression/valueexpression.h"
+#include "../Exception/unknownpropertyexception.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::TypeException;
+using SlavaScript::exceptions::UnknownPropertyException;
 
 std::shared_ptr<Value> MapValue::get(std::shared_ptr<Value> key){
     if (containsKey(key)) return map[key];
@@ -47,6 +50,19 @@ std::shared_ptr<MapValue> MapValue::add(std::shared_ptr<MapValue> map1, std::sha
     for(auto now : map1 -> map) result -> set(now.first, now.second);
     for(auto now : map2 -> map) result -> set(now.first, now.second);
     return result;
+}
+
+std::shared_ptr<Value> MapValue::accessDot(std::shared_ptr<Value> prop){
+    if (thisMap){
+        if (containsKey(prop)) return map[prop];
+        throw new std::logic_error("Cannot add property to 'this'");
+    }
+    throw new UnknownPropertyException(prop -> asString());
+}
+
+std::shared_ptr<Value> MapValue::accessBracket(std::shared_ptr<Value> prop){
+    if (!thisMap) return get(prop);
+    throw new std::logic_error("Cannot used [] for 'this'");
 }
 
 std::map<std::shared_ptr<Value>, std::shared_ptr<Value>>::iterator MapValue::begin(){

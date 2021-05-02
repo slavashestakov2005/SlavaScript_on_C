@@ -1,6 +1,4 @@
 #include "variables.h"
-#include "../Value/numbervalue.h"
-#include "../Value/boolvalue.h"
 #include "../Value/nullvalue.h"
 #include "../Modules/global.h"
 #include <iostream>
@@ -17,13 +15,11 @@ void VariablesScope::start(){
 }
 
 void VariablesScope::push(){
-    std::map<std::string, std::shared_ptr<Value>>* cop = new std::map<std::string, std::shared_ptr<Value>>();
-    for(auto x : variables) (*cop)[x.first] = x.second;
-    vec.push_back(cop);
+    vec.push_back(variables);
 }
 
 void VariablesScope::pop(){
-    variables = *(vec.back());
+    variables = vec.back();
     vec.pop_back();
 }
 

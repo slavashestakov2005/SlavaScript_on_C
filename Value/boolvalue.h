@@ -10,6 +10,7 @@ namespace SlavaScript{ namespace lang{
         bool value;
     public:
         static std::shared_ptr<BoolValue> TRUE_, FALSE_;
+        static std::shared_ptr<BoolValue> fromBool(bool b);
 
         BoolValue(bool value) : value(value) {}
 

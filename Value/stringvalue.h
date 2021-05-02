@@ -5,7 +5,7 @@
 #include "value.h"
 
 namespace SlavaScript{ namespace lang{
-    class StringValue : public Value, Container{
+    class StringValue : public Value, Container<std::string>{
     private:
         std::string value;
     public:
@@ -16,6 +16,8 @@ namespace SlavaScript{ namespace lang{
         int size() const;
         std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property);
         std::shared_ptr<Value> accessBracket(std::shared_ptr<Value> property);
+        std::string::iterator begin();
+        std::string::iterator end();
 
         double asDouble();
         std::string asString();

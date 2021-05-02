@@ -5,6 +5,10 @@ using namespace SlavaScript::lang;
 std::shared_ptr<BoolValue> BoolValue::TRUE_ = SHARE(BoolValue, true);
 std::shared_ptr<BoolValue> BoolValue::FALSE_ = SHARE(BoolValue, false);
 
+std::shared_ptr<BoolValue> BoolValue::fromBool(bool b){
+    return (b ? TRUE_ : FALSE_);
+}
+
 double BoolValue::asDouble(){
     return (value ? 1 : 0);
 }

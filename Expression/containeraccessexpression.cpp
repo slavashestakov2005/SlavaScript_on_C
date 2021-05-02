@@ -29,8 +29,8 @@ std::shared_ptr<Value> ContainerAccessExpression::get(){
             if (lastdot) return CAST(ArrayValue, container) -> accessDot(lastindex);
             else return CAST(ArrayValue, container) -> accessBracket(lastindex);
         case Values::MAP:
-            if (lastdot && !CAST(MapValue, container) -> isThisMap()) throw new std::logic_error("Cannot used DOT for map");
-            return CAST(MapValue, container) -> get(lastindex);
+            if (lastdot) return CAST(MapValue, container) -> accessDot(lastindex);
+            else return CAST(MapValue, container) -> accessBracket(lastindex);
         case Values::STRING:
             if (lastdot) return CAST(StringValue, container) -> accessDot(lastindex);
             else return CAST(StringValue, container) -> accessBracket(lastindex);
@@ -99,8 +99,8 @@ std::shared_ptr<Value> ContainerAccessExpression::getContainer(){
                 break;
             }
             case Values::MAP : {
-                if (isdot && !CAST(MapValue, container) -> isThisMap()) throw new std::logic_error("Cannot used DOT for map");
-                container = CAST(MapValue, container) -> get(ind);
+                if (isdot) container = CAST(ArrayValue, container) -> accessDot(ind);
+                else container = CAST(ArrayValue, container) -> accessBracket(ind);
                 break;
             }
             case Values::STRING : {

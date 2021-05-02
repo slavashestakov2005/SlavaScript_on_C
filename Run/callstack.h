@@ -17,7 +17,7 @@ namespace SlavaScript{ namespace lang{
 
     class CallStack{
     private:
-        static std::vector<CallInfo*> calls;
+        static std::vector<std::shared_ptr<CallInfo>> calls;
     public:
         static void push(std::string name, std::shared_ptr<Function> function);
         static void pop();

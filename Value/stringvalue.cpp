@@ -232,6 +232,14 @@ int StringValue::size() const{
     return value.size();
 }
 
+std::string::iterator StringValue::begin(){
+    return value.begin();
+}
+
+std::string::iterator StringValue::end(){
+    return value.end();
+}
+
 void StringValue::set(int index, std::shared_ptr<Value> val){
     value = value.substr(0, index) + val -> asString() + value.substr(index + 1);
 }

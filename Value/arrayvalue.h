@@ -6,7 +6,7 @@
 #include "value.h"
 
 namespace SlavaScript{ namespace lang{
-    class ArrayValue : public Value, Container{
+    class ArrayValue : public Value, Container<std::vector<std::shared_ptr<Value>>>{
     private:
         std::vector<std::shared_ptr<Value>>* elements;
     public:
@@ -22,12 +22,11 @@ namespace SlavaScript{ namespace lang{
         std::shared_ptr<Value> get(int index) const;
         void set(int index, std::shared_ptr<Value> value);
 
-        std::vector<std::shared_ptr<Value>>::iterator begin();
-        std::vector<std::shared_ptr<Value>>::iterator end();
-
         int size() const;
         std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property);
         std::shared_ptr<Value> accessBracket(std::shared_ptr<Value> property);
+        std::vector<std::shared_ptr<Value>>::iterator begin();
+        std::vector<std::shared_ptr<Value>>::iterator end();
 
         double asDouble();
         std::string asString();

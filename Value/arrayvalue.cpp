@@ -20,7 +20,7 @@ namespace {
         IsEmpty(std::vector<std::shared_ptr<Value>>* elements) : elements(*elements) {}
         CREATE_MEMBER_FUNCTION
             if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-            SH_RET(BoolValue, elements.empty());
+            return BoolValue::fromBool(elements.empty());
         }
     };
 

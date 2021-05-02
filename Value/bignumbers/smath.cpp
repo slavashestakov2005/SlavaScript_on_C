@@ -12,11 +12,11 @@ namespace{
 
 namespace SlavaScript{ namespace modules{ namespace math_out{
     Bignum sin(const Bignum& x){
-        return std::sin(double(x % tau));
+        return std::sin(double(x));
     }
 
     Bignum cos(const Bignum& x){
-        return std::cos(double(x % tau));
+        return std::cos(double(x));
     }
 
     Bignum tan(const Bignum& x){

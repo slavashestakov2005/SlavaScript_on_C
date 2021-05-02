@@ -5,7 +5,7 @@ using namespace SlavaScript::lang;
 ValueExpression::ValueExpression(Value* val){
     if (val -> type() == Values::ARRAY) value = SHARE(ArrayValue, *(ArrayValue*)val);
     else if (val -> type() == Values::STRING) value = SHARE(StringValue, *(StringValue*)val);
-    else if (val -> type() == Values::BOOL) value = SHARE(BoolValue, *(BoolValue*)val);
+    else if (val -> type() == Values::BOOL) value = BoolValue::fromBool(val -> asBool());
     else if (val -> type() == Values::FUNCTION) value = SHARE(FunctionValue, *(FunctionValue*)val);
     else if (val -> type() == Values::MAP) value = SHARE(MapValue, *(MapValue*)val);
     else if (val -> type() == Values::NUMBER) value = SHARE(NumberValue, *(NumberValue*)val);

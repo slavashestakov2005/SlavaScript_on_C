@@ -26,7 +26,7 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_out{
                  latinRead(latinRead), electrons(electrons), massa(massa), period(period), group(group), metal(metal), mainGroup(mainGroup) {}
     };
 
-    const int SizeOfTabel = 72;
+    const int SizeOfTabel = 110;
 
     Element elements[SizeOfTabel] = {
         Element(1, "H", "водород", "аш", "1s1", 1.00797, 1, 1, false, true),
@@ -94,19 +94,21 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_out{
         Element(56, "Ba", "барий", "барий", "6s2", 137.34, 6, 2, true, true),
         Element(57, "La", "лантан", "лантан", "5d16s2", 138.81, 6, 3, true, false),
         /** лантаноиды **/
-        /*new Element(58, "B", "бор", "бор", "2s22p1", 10.811, 2, 3),
-        Elemnent(59, "B", "бор", "бор", "2s22p1", 10.811, 2, 3),
-        Elemnent(60, "B", "бор", "бор", "2s22p1", 10.811, 2, 3),
-        Elemnent(61, "B", "бор", "бор", "2s22p1", 10.811, 2, 3),
-        Elemnent(62, "B", "бор", "бор", "2s22p1", 10.811, 2, 3),
-        Elemnent(63, "B", "бор", "бор", "2s22p1", 10.811, 2, 3),
-        Elemnent(64, "B", "бор", "бор", "2s22p1", 10.811, 2, 3),
-        Elemnent(65, "B", "бор", "бор", "2s22p1", 10.811, 2, 3),
-        Elemnent(66, "B", "бор", "бор", "2s22p1", 10.811, 2, 3),
-        Elemnent(67, "B", "бор", "бор", "2s22p1", 10.811, 2, 3),
-        Elemnent(68, "B", "бор", "бор", "2s22p1", 10.811, 2, 3),
-        Elemnent(69, "B", "бор", "бор", "2s22p1", 10.811, 2, 3),
-        Elemnent(70, "B", "бор", "бор", "2s22p1", 10.811, 2, 3),*/
+        Element(58, "Ce", "церий", "церий", "4f15d16s2", 140.12, 6, 3, true, false),
+        Element(59, "Pr", "празеодим", "празеодим", "4f35d06s2", 140.907, 6, 3, true, false),
+        Element(60, "Nd", "неодим", "неодим", "4f45d06s2", 144.24, 6, 3, true, false),
+        Element(61, "Pm", "прометий", "прометий", "4f55d06s2", 145, 6, 3, true, false),
+        Element(62, "Sm", "самарий", "самарий", "4f65d06s2", 150.35, 6, 3, true, false),
+        Element(63, "Eu", "европий", "европий", "4f75d06s2", 151.96, 6, 3, true, false),
+        Element(64, "Gd", "гадолиний", "гадолиний", "4f75d16s2", 157.25, 6, 3, true, false),
+        Element(65, "Tb", "тербий", "тербий", "4f95d06s2", 158.924, 6, 3, true, false),
+        Element(66, "Dy", "диспрозий", "диспрозий", "4f105d06s2", 162.50, 6, 3, true, false),
+        Element(67, "Ho", "гольмий", "гольмий", "4f115d06s2", 164.930, 6, 3, true, false),
+        Element(68, "Er", "эрбий", "эрбий", "4f125d06s2", 167.26, 6, 3, true, false),
+        Element(69, "Tm", "тулий", "тулий", "4f135d06s2", 168.934, 6, 3, true, false),
+        Element(70, "Yb", "иттербий", "иттербий", "4f145d06s2", 173.04, 6, 3, true, false),
+        Element(71, "Lu", "лютеций", "лютеций", "4f145d16s2", 174.97, 6, 3, true, false),
+        /** лантаноиды **/
         Element(72, "Hf", "гафний", "гафний", "4f145d26s2", 178.49, 6, 4, true, false),
         Element(73, "Ta", "тантал", "тантал", "4f145d36s2", 180.948, 6, 5, true, false),
         Element(74, "W", "вольфрам", "вольфрам", "4f145d46s2", 183.85, 6, 6, true, false),
@@ -114,6 +116,7 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_out{
         Element(76, "Os", "осмий", "осмий", "4f145d66s2", 190.2, 6, 8, true, false),
         Element(77, "Ir", "иридий", "иридий", "4f145d76s2", 192.2, 6, 8, true, false),
         Element(78, "Pt", "платина", "платина", "5d96s1", 195.09, 6, 8, true, false),
+
         Element(79, "Au", "золото", "аурум", "5d106s1", 196.967, 6, 1, true, false),
         Element(80, "Hg", "ртуть", "гидраргирум", "5d106s2", 200.59, 6, 2, true, false),
         Element(81, "Tl", "таллий", "таллий", "6s26p1", 204.37, 6, 3, true, true),
@@ -122,6 +125,33 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_out{
         Element(84, "Po", "полоний", "полоний", "6s26p4", 210, 6, 6, true, true),
         Element(85, "At", "астат", "астат", "6s26p5", 210, 6, 7, false, true),
         Element(86, "Rn", "радон", "радон", "6s26p6", 222, 6, 8, false, true),
+
+        Element(87, "Fr", "франций", "франций", "7s1", 223, 7, 1, true, true),
+        Element(88, "Ra", "радий", "радий", "7s2", 226, 7, 2, true, true),
+        Element(89, "Ac", "актиний", "актиний", "6d17s2", 227, 7, 3, true, false),
+        /** актиноиды **/
+        Element(90, "Th", "торий", "торий", "5f06d27s2", 232.038, 7, 3, true, false),
+        Element(91, "Pa", "протактиний", "протактиний", "5f26d17s2", 231, 7, 3, true, false),
+        Element(92, "U", "уран", "уран", "5f36d17s2", 238.03, 7, 3, true, false),
+        Element(93, "Np", "нептуний", "нептуний", "5f46d17s2", 237, 7, 3, true, false),
+        Element(94, "Pu", "плутоний", "плутоний", "5f66d07s2", 242, 7, 3, true, false),
+        Element(95, "Am", "америций", "америций", "5f76d07s2", 243, 7, 3, true, false),
+        Element(96, "Cm", "кюрий", "кюрий", "5f76d17s2", 247, 7, 3, true, false),
+        Element(97, "Bk", "берклий", "берклий", "5f96d07s2", 247, 7, 3, true, false),
+        Element(95, "Cf", "калифорний", "калифорний", "5f106d07s2", 249, 7, 3, true, false),
+        Element(99, "Es", "эйнштейний", "эйнштейний", "5f116d07s2", 254, 7, 3, true, false),
+        Element(100, "Fm", "фермий", "фермий", "5f126d07s2", 253, 7, 3, true, false),
+        Element(101, "Md", "менделевий", "менделевий", "5f136d07s2", 256, 7, 3, true, false),
+        Element(102, "No", "нобелий", "нобелий", "5f146d07s2", 255, 7, 3, true, false),
+        Element(103, "Lr", "лоуренсий", "лоуренсий", "5f146d17s2", 257, 7, 3, true, false),
+        /** актиноиды **/
+        Element(104, "Rf", "разерфордий", "разерфордий", "5f146d27s2", 261, 7, 4, true, false),
+        Element(105, "Db", "дубний", "дубний", "5f146d37s2", 262, 7, 5, true, false),
+        Element(106, "Sg", "сиборгий", "сиборгий", "5f146d47s2", 263, 7, 6, true, false),
+        Element(107, "Bh", "борий", "борий", "5f146d57s2", 262, 7, 7, true, false),
+        Element(108, "Hs", "хассий", "хассий", "5f146d67s2", 265, 7, 8, true, false),
+        Element(109, "Mt", "мейтнерий", "мейтнерий", "5f146d77s2", 266, 7, 8, true, false),
+        Element(110, "Ds", "дармштадтий", "дармштадтий", "6d97s1", 271, 7, 8, true, false),
     };
 
     int get_element(std::string name){

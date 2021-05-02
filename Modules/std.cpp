@@ -95,7 +95,7 @@ namespace SlavaScript{ namespace modules{ namespace std_f{
         if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
         if (values[0] -> type() != Values::MAP) throw new TypeException("Map expected in first argument");
         std::shared_ptr<MapValue> map = CAST(MapValue, values[0]);
-        SH_RET(BoolValue, map -> containsKey(values[1]));
+        return BoolValue::fromBool(map -> containsKey(values[1]));
     });
 
     CREATE_FUNCTION(map_keys)

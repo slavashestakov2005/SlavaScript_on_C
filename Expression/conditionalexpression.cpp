@@ -61,7 +61,7 @@ std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator oper
         case ConditionalOperator::OR : result = left -> asBool() || right -> asBool(); break;
         default: throw new OperationIsNotSupportedException(mas[(int)operation]);
     }
-    return (result ? BoolValue::TRUE_ : BoolValue::FALSE_);
+    return BoolValue::fromBool(result);
 }
 
 std::shared_ptr<Value> ConditionalExpression::eval(){

@@ -17,7 +17,7 @@ namespace SlavaScript{ namespace lang{
         std::shared_ptr<Value> value;
         ValueExpression(std::string val){ value = SHARE(StringValue, val); }
         ValueExpression(ArrayValue val){ value = SHARE(ArrayValue, val); }
-        ValueExpression(bool val){ value = SHARE(BoolValue, val); }
+        ValueExpression(bool val){ value = BoolValue::fromBool(val); }
         ValueExpression(Function* val){ value = SHARE(FunctionValue, val); }
         ValueExpression(MapValue val){ value = SHARE(MapValue, val); }
         ValueExpression(Bignum val){ value = SHARE(NumberValue, val); }

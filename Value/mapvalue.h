@@ -3,6 +3,7 @@
 
 #include <map>
 #include "value.h"
+#include "container.h"
 #include "../Lib/function.h"
 
 namespace SlavaScript{ namespace lang{
@@ -13,7 +14,7 @@ namespace SlavaScript{ namespace lang{
         }
     };
 
-    class MapValue : public Value{
+    class MapValue : public Value, Container<std::map<std::shared_ptr<Value>, std::shared_ptr<Value>, Comparator>>{
     private:
         std::map<std::shared_ptr<Value>, std::shared_ptr<Value>, Comparator> map;
         bool thisMap = false;
@@ -28,10 +29,12 @@ namespace SlavaScript{ namespace lang{
         void set(std::shared_ptr<Value> key, std::shared_ptr<lang::Function> value);
         bool isThisMap();
         void setThisMap(bool thisMap);
-        int size() const;
         bool containsKey(std::shared_ptr<Value> key);
         std::shared_ptr<MapValue> getCopyElement();
 
+        int size() const;
+        std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property);
+        std::shared_ptr<Value> accessBracket(std::shared_ptr<Value> property);
         std::map<std::shared_ptr<Value>, std::shared_ptr<Value>>::iterator begin();
         std::map<std::shared_ptr<Value>, std::shared_ptr<Value>>::iterator end();
 

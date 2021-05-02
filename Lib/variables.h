@@ -11,7 +11,7 @@ namespace SlavaScript{ namespace lang{
     class VariablesScope{
     private:
         std::map<std::string, std::shared_ptr<Value>> variables;
-        std::vector<std::map<std::string, std::shared_ptr<Value>>*> vec;
+        std::vector<std::map<std::string, std::shared_ptr<Value>>> vec;
     public:
         void start();
         void push();
