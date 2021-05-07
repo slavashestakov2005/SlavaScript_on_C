@@ -29,6 +29,7 @@ namespace SlavaScript{ namespace lang{
         virtual Bignum asBignum() = 0;
         virtual Values type() const = 0;
         virtual operator std::string() = 0;
+        virtual bool isClassFromModule(){ return false; }
         virtual ~Value(){}
         friend bool operator==(Value const& a, Value const& b);
         friend bool operator!=(Value const& a, Value const& b);

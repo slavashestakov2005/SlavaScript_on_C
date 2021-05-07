@@ -2,6 +2,7 @@
 #include "../Lib/variables.h"
 #include "../Value/numbervalue.h"
 #include "../Value/stringvalue.h"
+#include "../Value/classmodulevalue.h"
 #include "../Value/classvalue.h"
 #include "../Value/integrationvalue.h"
 #include "../Exception/typeexception.h"
@@ -35,6 +36,10 @@ std::shared_ptr<Value> ContainerAccessExpression::get(){
             if (lastdot) return CAST(StringValue, container) -> accessDot(lastindex);
             else return CAST(StringValue, container) -> accessBracket(lastindex);
         case Values::CLASS:
+            if (container -> isClassFromModule()){
+                if (lastdot) return CAST(ClassModuleValue, container) -> accessDot(lastindex);
+                else return CAST(ClassModuleValue, container) -> accessBracket(lastindex);
+            }
             if (!lastdot) throw new std::logic_error("Cannot used [] for class");
             return CAST(ClassValue, container) -> access(lastindex);
         case Values::INTEGRATION:
@@ -68,6 +73,7 @@ std::shared_ptr<Value> ContainerAccessExpression::set(std::shared_ptr<Value> val
             break;
         }
         case Values::CLASS : {
+            if (container -> isClassFromModule()) throw new std::logic_error("Cannot set property to built-in class");
             if (!lastdot) throw new std::logic_error("Cannot used [] for class");
             CAST(ClassValue, container) -> set(lastindex, value);
             break;
@@ -109,6 +115,10 @@ std::shared_ptr<Value> ContainerAccessExpression::getContainer(){
                 break;
             }
             case Values::CLASS : {
+                if (container -> isClassFromModule()){
+                    if (isdot) return CAST(ClassModuleValue, container) -> accessDot(ind);
+                    else return CAST(ClassModuleValue, container) -> accessBracket(ind);
+                }
                 if (!isdot) throw new std::logic_error("Cannot used [] for class");
                 container = CAST(ClassValue, container) -> get(ind);
                 break;
