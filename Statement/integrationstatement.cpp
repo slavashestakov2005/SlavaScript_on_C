@@ -1,8 +1,7 @@
 #include "integrationstatement.h"
 #include "../Lib/variables.h"
 #include "../Value/integrationvalue.h"
-#include <fstream>
-#include <exception>
+#include "../Cpp17/filesystem.h"
 
 using namespace SlavaScript::lang;
 
@@ -26,10 +25,9 @@ namespace{
 void IntegrationStatement::execute(){
     std::string fileCount = "example_code";
     std::string fileEnd = "py";
-    std::ofstream fout(fileCount + "." + fileEnd);
-    fout << replace_all(code);
-    fout.close();
-    Variables::set(name, std::make_shared<IntegrationValue>(fileCount, fileEnd));
+    std::string filename = fileCount + "." + fileEnd;
+    dll::FS::writeToCache(filename, replace_all(code));
+    Variables::set(name, std::make_shared<IntegrationValue>("example_code", "py"));
 }
 
 IntegrationStatement::operator std::string(){

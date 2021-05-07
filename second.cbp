@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="second" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/second" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option parameters='-f &quot;bin\Debug\6 agario.s++&quot;' />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add library="dlls/libCpp17.a" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/second" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="Compiler/compiler.cpp" />
+		<Unit filename="Compiler/compiler.h" />
+		<Unit filename="Compiler/compilervisitor.cpp" />
+		<Unit filename="Compiler/compilervisitor.h" />
+		<Unit filename="Cpp17/filesystem.h" />
+		<Unit filename="Exception/argumentsmismatchexception.h" />
+		<Unit filename="Exception/lexerexception.cpp" />
+		<Unit filename="Exception/lexerexception.h" />
+		<Unit filename="Exception/mathexception.h" />
+		<Unit filename="Exception/operationIsnotsupportedexception.h" />
+		<Unit filename="Exception/parseexception.h" />
+		<Unit filename="Exception/typeexception.h" />
+		<Unit filename="Exception/unknownclassexception.h" />
+		<Unit filename="Exception/unknownfunctionexception.h" />
+		<Unit filename="Exception/unknownmoduleexception.h" />
+		<Unit filename="Exception/unknownpropertyexception.h" />
+		<Unit filename="Exception/variabledoesnotexistsexception.h" />
+		<Unit filename="Expression/all.h" />
+		<Unit filename="Expression/arrayexpression.cpp" />
+		<Unit filename="Expression/arrayexpression.h" />
+		<Unit filename="Expression/assignmentexpression.cpp" />
+		<Unit filename="Expression/assignmentexpression.h" />
+		<Unit filename="Expression/assignmentoperator.h" />
+		<Unit filename="Expression/binaryexpression.cpp" />
+		<Unit filename="Expression/binaryexpression.h" />
+		<Unit filename="Expression/binaryoperator.h" />
+		<Unit filename="Expression/conditionalexpression.cpp" />
+		<Unit filename="Expression/conditionalexpression.h" />
+		<Unit filename="Expression/conditionaloperator.h" />
+		<Unit filename="Expression/containeracceselement.cpp" />
+		<Unit filename="Expression/containeracceselement.h" />
+		<Unit filename="Expression/containeraccessexpression.cpp" />
+		<Unit filename="Expression/containeraccessexpression.h" />
+		<Unit filename="Expression/containerassignmentexpression.cpp" />
+		<Unit filename="Expression/containerassignmentexpression.h" />
+		<Unit filename="Expression/expression.h" />
+		<Unit filename="Expression/functionalexpression.cpp" />
+		<Unit filename="Expression/functionalexpression.h" />
+		<Unit filename="Expression/mapexpression.cpp" />
+		<Unit filename="Expression/mapexpression.h" />
+		<Unit filename="Expression/objectcreationexpression.cpp" />
+		<Unit filename="Expression/objectcreationexpression.h" />
+		<Unit filename="Expression/ternaryexpression.cpp" />
+		<Unit filename="Expression/ternaryexpression.h" />
+		<Unit filename="Expression/unaryexpression.cpp" />
+		<Unit filename="Expression/unaryexpression.h" />
+		<Unit filename="Expression/unaryoperator.h" />
+		<Unit filename="Expression/valueexpression.cpp" />
+		<Unit filename="Expression/valueexpression.h" />
+		<Unit filename="Expression/variableexpression.cpp" />
+		<Unit filename="Expression/variableexpression.h" />
+		<Unit filename="Lib/argument.cpp" />
+		<Unit filename="Lib/argument.h" />
+		<Unit filename="Lib/arguments.cpp" />
+		<Unit filename="Lib/arguments.h" />
+		<Unit filename="Lib/classdeclarations.cpp" />
+		<Unit filename="Lib/classdeclarations.h" />
+		<Unit filename="Lib/classmethod.cpp" />
+		<Unit filename="Lib/classmethod.h" />
+		<Unit filename="Lib/function.h" />
+		<Unit filename="Lib/functionmodule.cpp" />
+		<Unit filename="Lib/functionmodule.h" />
+		<Unit filename="Lib/functions.cpp" />
+		<Unit filename="Lib/functions.h" />
+		<Unit filename="Lib/userdefinedfunction.cpp" />
+		<Unit filename="Lib/userdefinedfunction.h" />
+		<Unit filename="Lib/variables.cpp" />
+		<Unit filename="Lib/variables.h" />
+		<Unit filename="Modules/all.h" />
+		<Unit filename="Modules/chemistry.cpp" />
+		<Unit filename="Modules/chemistry.h" />
+		<Unit filename="Modules/draw.cpp" />
+		<Unit filename="Modules/draw.h" />
+		<Unit filename="Modules/files.cpp" />
+		<Unit filename="Modules/files.h" />
+		<Unit filename="Modules/functional.cpp" />
+		<Unit filename="Modules/functional.h" />
+		<Unit filename="Modules/global.cpp" />
+		<Unit filename="Modules/global.h" />
+		<Unit filename="Modules/math.cpp" />
+		<Unit filename="Modules/math.h" />
+		<Unit filename="Modules/module.h" />
+		<Unit filename="Modules/modules.cpp" />
+		<Unit filename="Modules/modules.h" />
+		<Unit filename="Modules/std.cpp" />
+		<Unit filename="Modules/std.h" />
+		<Unit filename="Modules/types.cpp" />
+		<Unit filename="Modules/types.h" />
+		<Unit filename="Parser/lexer.cpp" />
+		<Unit filename="Parser/lexer.h" />
+		<Unit filename="Parser/parseerror.cpp" />
+		<Unit filename="Parser/parseerror.h" />
+		<Unit filename="Parser/parseerrors.cpp" />
+		<Unit filename="Parser/parseerrors.h" />
+		<Unit filename="Parser/parser.cpp" />
+		<Unit filename="Parser/parser.h" />
+		<Unit filename="Parser/token.cpp" />
+		<Unit filename="Parser/token.h" />
+		<Unit filename="Parser/tokentype.h" />
+		<Unit filename="Run/callstack.cpp" />
+		<Unit filename="Run/callstack.h" />
+		<Unit filename="Run/path.cpp" />
+		<Unit filename="Run/path.h" />
+		<Unit filename="Run/repl.cpp" />
+		<Unit filename="Run/repl.h" />
+		<Unit filename="Run/start.cpp" />
+		<Unit filename="Run/start.h" />
+		<Unit filename="Statement/all.h" />
+		<Unit filename="Statement/blockstatement.cpp" />
+		<Unit filename="Statement/blockstatement.h" />
+		<Unit filename="Statement/breakstatement.cpp" />
+		<Unit filename="Statement/breakstatement.h" />
+		<Unit filename="Statement/classdeclarationsstatement.cpp" />
+		<Unit filename="Statement/classdeclarationsstatement.h" />
+		<Unit filename="Statement/continuestatement.cpp" />
+		<Unit filename="Statement/continuestatement.h" />
+		<Unit filename="Statement/dowhilestatement.cpp" />
+		<Unit filename="Statement/dowhilestatement.h" />
+		<Unit filename="Statement/exprstatement.cpp" />
+		<Unit filename="Statement/exprstatement.h" />
+		<Unit filename="Statement/foreacharraystatement.cpp" />
+		<Unit filename="Statement/foreacharraystatement.h" />
+		<Unit filename="Statement/foreachmapstatement.cpp" />
+		<Unit filename="Statement/foreachmapstatement.h" />
+		<Unit filename="Statement/forstatement.cpp" />
+		<Unit filename="Statement/forstatement.h" />
+		<Unit filename="Statement/functiondefinestatement.cpp" />
+		<Unit filename="Statement/functiondefinestatement.h" />
+		<Unit filename="Statement/functionstatement.cpp" />
+		<Unit filename="Statement/functionstatement.h" />
+		<Unit filename="Statement/ifstatement.cpp" />
+		<Unit filename="Statement/ifstatement.h" />
+		<Unit filename="Statement/importstatement.cpp" />
+		<Unit filename="Statement/importstatement.h" />
+		<Unit filename="Statement/integrationstatement.cpp" />
+		<Unit filename="Statement/integrationstatement.h" />
+		<Unit filename="Statement/printlnstatement.cpp" />
+		<Unit filename="Statement/printlnstatement.h" />
+		<Unit filename="Statement/printstatement.cpp" />
+		<Unit filename="Statement/printstatement.h" />
+		<Unit filename="Statement/returnstatement.cpp" />
+		<Unit filename="Statement/returnstatement.h" />
+		<Unit filename="Statement/statement.h" />
+		<Unit filename="Statement/switchstatement.cpp" />
+		<Unit filename="Statement/switchstatement.h" />
+		<Unit filename="Statement/throwstatement.cpp" />
+		<Unit filename="Statement/throwstatement.h" />
+		<Unit filename="Statement/trystatement.cpp" />
+		<Unit filename="Statement/trystatement.h" />
+		<Unit filename="Statement/whilestatement.cpp" />
+		<Unit filename="Statement/whilestatement.h" />
+		<Unit filename="Value/arrayvalue.cpp" />
+		<Unit filename="Value/arrayvalue.h" />
+		<Unit filename="Value/bignumbers/bignum.cpp" />
+		<Unit filename="Value/bignumbers/bignum.h" />
+		<Unit filename="Value/bignumbers/smath.cpp" />
+		<Unit filename="Value/bignumbers/smath.h" />
+		<Unit filename="Value/boolvalue.cpp" />
+		<Unit filename="Value/boolvalue.h" />
+		<Unit filename="Value/classmodulevalue.h" />
+		<Unit filename="Value/classvalue.cpp" />
+		<Unit filename="Value/classvalue.h" />
+		<Unit filename="Value/container.h" />
+		<Unit filename="Value/functionvalue.cpp" />
+		<Unit filename="Value/functionvalue.h" />
+		<Unit filename="Value/integrationvalue.cpp" />
+		<Unit filename="Value/integrationvalue.h" />
+		<Unit filename="Value/mapvalue.cpp" />
+		<Unit filename="Value/mapvalue.h" />
+		<Unit filename="Value/nullvalue.cpp" />
+		<Unit filename="Value/nullvalue.h" />
+		<Unit filename="Value/numbervalue.cpp" />
+		<Unit filename="Value/numbervalue.h" />
+		<Unit filename="Value/stringvalue.cpp" />
+		<Unit filename="Value/stringvalue.h" />
+		<Unit filename="Value/value.cpp" />
+		<Unit filename="Value/value.h" />
+		<Unit filename="Value/values.cpp" />
+		<Unit filename="Value/values.h" />
+		<Unit filename="Visitor/assignvalidator.cpp" />
+		<Unit filename="Visitor/assignvalidator.h" />
+		<Unit filename="Visitor/functionadder.cpp" />
+		<Unit filename="Visitor/functionadder.h" />
+		<Unit filename="Visitor/importadder.cpp" />
+		<Unit filename="Visitor/importadder.h" />
+		<Unit filename="Visitor/node.h" />
+		<Unit filename="Visitor/variableprinter.cpp" />
+		<Unit filename="Visitor/variableprinter.h" />
+		<Unit filename="Visitor/visitor.cpp" />
+		<Unit filename="Visitor/visitor.h" />
+		<Unit filename="dlls/Cpp17.dll" />
+		<Unit filename="icon.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

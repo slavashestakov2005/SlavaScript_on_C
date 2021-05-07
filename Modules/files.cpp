@@ -10,7 +10,9 @@
 #include "../Value/classmodulevalue.h"
 #include "../Exception/argumentsmismatchexception.h"
 #include "../Exception/unknownpropertyexception.h"
+#include "../Run/path.h"
 #include <fstream>
+#include <sstream>
 
 using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::files_f;
@@ -24,8 +26,8 @@ namespace SlavaScript{ namespace modules{ namespace files_out{
         std::string name;
         std::fstream file;
         bool bad;
-        FileValue(std::string name){
-            file.open(name);
+        FileValue(std::string name) : name(name){
+            file.open(Path::getPath() + name);
             bad = !file;
         }
         operator std::string() { return "<file=" + name + ">"; }
@@ -37,6 +39,13 @@ namespace SlavaScript{ namespace modules{ namespace files_out{
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         file -> file.close();
         return NullValue::NULL_;
+    }};
+
+    CLASS_MODULE_FUNCTION(Read, FileValue, file)
+        file -> file.seekg(0, file -> file.beg);
+        std::stringstream str;
+        str << file -> file.rdbuf();
+        SH_RET(StringValue, str.str());
     }};
 
     CLASS_MODULE_FUNCTION(ReadLine, FileValue, file)
@@ -61,6 +70,7 @@ namespace SlavaScript{ namespace modules{ namespace files_out{
         std::string prop = property -> asString();
         if (bad) throw new TypeException("Cannot use DOT for not opened file");
         if (prop == "close") SH_RET(FunctionValue, new Close(this));
+        if (prop == "read") SH_RET(FunctionValue, new Read(this));
         if (prop == "readline") SH_RET(FunctionValue, new ReadLine(this));
         if (prop == "writeline") SH_RET(FunctionValue, new WriteLine(this));
         throw new UnknownPropertyException(prop);

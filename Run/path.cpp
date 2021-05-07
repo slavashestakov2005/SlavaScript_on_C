@@ -3,7 +3,7 @@
 #include "../Lib/variables.h"
 #include "../Lib/functions.h"
 #include "../Lib/classdeclarations.h"
-
+#include "../Cpp17/filesystem.h"
 using namespace SlavaScript::lang;
 
 std::vector<std::string> Path::pathes = {};
@@ -39,6 +39,7 @@ void Path::initContainers(){
 void Path::setCommandArguments(std::vector<std::string> argv){
     arguments = SHARE(ArrayValue, argv.size());
     for(int i = 0; i < argv.size(); ++i) arguments -> set(i, SHARE(StringValue, argv[i]));
+    dll::FS::setApplicationPath(argv[0]);
 }
 
 std::shared_ptr<ArrayValue> Path::getCommandArguments(){

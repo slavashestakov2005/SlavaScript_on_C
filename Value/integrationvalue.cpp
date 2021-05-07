@@ -5,7 +5,7 @@
 #include "nullvalue.h"
 #include "../Exception/argumentsmismatchexception.h"
 #include "../Exception/unknownpropertyexception.h"
-#include <fstream>
+#include "../Cpp17/filesystem.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::TypeException;
@@ -21,25 +21,16 @@ namespace{
         std::string start, finish;
     public:
         Get(std::string start, std::string finish) : start(start), finish(finish) {}
-        std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values){
-           if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-           if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
-           std::string filename = start + "_" + mas[COUNT++] + "." + finish;
-           std::ofstream fout(filename);
-           fout << "import " << start << "\n";
-           fout << "with open('out.txt', 'w') as f:\n";
-           fout << "\tf.write(str(" << start << "." << values[0] -> asString() << "))\n";
-           fout.close();
-           system(("py " + filename).c_str());
-           std::ifstream fin("out.txt");
-           std::string answer;
-           while(!fin.eof()){
-                getline(fin, filename);
-                answer += filename + "\n";
-           }
-           fin.close();
-           return std::make_shared<StringValue>(answer);
-           /// return new StringValue(str);
+        CREATE_MEMBER_FUNCTION
+            if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
+            if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
+            std::string filename = start + "_" + mas[COUNT++] + "." + finish;
+            dll::FS::writeToCache(filename, "import " + start + "\n"
+                                 "with open('out.txt', 'w') as f:\n"
+                                 "\tf.write(str(" + start + "." + values[0] -> asString() + "))\n");
+            dll::FS::cdCacheAndCall("py \"" + start + "_" + mas[COUNT-1] + "." + finish + "\"");
+            std::string answer = dll::FS::readFromCache("out.txt");
+            SH_RET(StringValue, answer);
         }
     };
 }
