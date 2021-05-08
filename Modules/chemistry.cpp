@@ -270,7 +270,7 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_f{
         int finded = chemistry_out::get_element(str1);
         if (finded == -1) throw std::logic_error("First argument not element");
         SH_RET(NumberValue, chemistry_out::elements[finded].number);
-    });
+    FE
 
     CREATE_FUNCTION(latin_read)
         if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
@@ -279,14 +279,14 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_f{
         int finded = chemistry_out::get_element(str1);
         if (finded == -1) throw std::logic_error("First argument not element");
         SH_RET(StringValue, chemistry_out::elements[finded].latinRead);
-    });
+    FE
 
     CREATE_FUNCTION(mr)
         if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
         if (values[0] -> type() != Values::STRING) throw TypeException("String expected in first argument");
         std::string str = CAST(StringValue, values[0]) -> asString();
         SH_RET(NumberValue, chemistry_out::mr(str));
-    });
+    FE
 
     CREATE_FUNCTION(neutron)
         if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
@@ -295,7 +295,7 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_f{
         int finded = chemistry_out::get_element(str1);
         if (finded == -1) throw std::logic_error("First argument not element");
         SH_RET(NumberValue, round(chemistry_out::elements[finded].massa) - chemistry_out::elements[finded].number);
-    });
+    FE
 
     CREATE_FUNCTION(omega)
         if (values.size() != 2) throw ArgumentsMismatchException("Two argument excepted");
@@ -306,7 +306,7 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_f{
         if (finded == -1) throw std::logic_error("First argument not element");
         if (chemistry_out::mr(str2) == 0) throw std::logic_error("Bad second argument");
         SH_RET(NumberValue, chemistry_out::omega(str2, str1));
-    });
+    FE
 
     CREATE_FUNCTION(russian_read)
         if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
@@ -315,7 +315,7 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_f{
         int finded = chemistry_out::get_element(str1);
         if (finded == -1) throw std::logic_error("First argument not element");
         SH_RET(StringValue, chemistry_out::elements[finded].russionRead);
-    });
+    FE
 
     CREATE_FUNCTION(write)
         if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
@@ -327,7 +327,7 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_f{
         }
         if (finded == -1) throw std::logic_error("First argument not element");
         SH_RET(StringValue, chemistry_out::elements[finded].name);
-    });
+    FE
 
     std::shared_ptr<Function> proton = electron;
 }}}

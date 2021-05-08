@@ -1,0 +1,12 @@
+##python as py1{
+	import math
+	import requests
+	value = "Hello world"
+	def f(a, b):
+		return a + b
+	html = requests.get("http://example.com").text
+}
+println py1.get("f(4, 7)")		/* 11 */
+println py1.get("html")			/* html-page from http://example.com */
+println py1
+py1 += 5						/* error */

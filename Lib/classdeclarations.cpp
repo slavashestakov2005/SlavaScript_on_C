@@ -1,14 +1,16 @@
 #include "classdeclarations.h"
 #include "../Exception/unknownclassexception.h"
+#include "../Modules/global.h"
 
 using namespace SlavaScript::lang;
+using SlavaScript::modules::Global;
 using SlavaScript::exceptions::UnknownClassException;
 
 std::vector<ClassDeclarationsScope> ClassDeclarations::scope = {};
 
 void ClassDeclarationsScope::start(){
     declarations.clear();
-    // Global::initClasses();
+    Global::initClasses();
 }
 
 std::map<std::string, ClassDeclarationsStatement*> ClassDeclarationsScope::getScope(){

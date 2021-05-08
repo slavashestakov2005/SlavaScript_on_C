@@ -8,7 +8,7 @@ std::shared_ptr<Value> ArrayExpression::eval(){
     for(int i = 0; i < elements.size(); ++i){
         arr.set(i, elements[i] -> eval());
     }
-    return std::make_shared<ArrayValue>(arr);
+    SH_RET(ArrayValue, arr);
 }
 
 ArrayExpression::operator std::string(){

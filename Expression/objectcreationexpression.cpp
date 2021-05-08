@@ -14,7 +14,7 @@ std::shared_ptr<Value> ObjectCreationExpression::eval(){
         instance -> addField(fieldName, now -> eval());
     }
     for(FunctionDefineStatement* function : ds -> methods){
-        instance -> addMethod(function -> name, std::make_shared<ClassMethod>(function -> arguments, function -> body, instance));
+        instance -> addMethod(function -> name, SHARE_3(ClassMethod, function -> arguments, function -> body, instance));
     }
     int size = constructorArguments.size();
     std::vector<std::shared_ptr<Value>> vec;

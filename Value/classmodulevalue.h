@@ -4,17 +4,10 @@
 #include <memory>
 #include "value.h"
 #include "../Exception/typeexception.h"
+#include "../Lib/macros.h"
 using SlavaScript::exceptions::TypeException;
 
 namespace SlavaScript{ namespace lang{
-    #define CLASS_MODULE_FUNCTION(className, fieldType, fieldName) \
-        class className : public Function { \
-        private: \
-            fieldType* fieldName; \
-        public: \
-            className(fieldType* fieldName) : fieldName(fieldName) {} \
-            CREATE_MEMBER_FUNCTION
-
     class ClassModuleValue : public Value{
     public:
         virtual std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property){}

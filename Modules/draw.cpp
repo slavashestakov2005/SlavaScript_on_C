@@ -60,11 +60,11 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         }
         draw_out::window.setFramerateLimit(draw_out::defaultLimit);
         return NullValue::NULL_;
-    });
+    FE
 
     CREATE_FUNCTION(color)
         int siz = values.size();
-        if (siz > 3) throw new ArgumentsMismatchException("One or two or three arguments expected");
+        if (siz > 3) throw new ArgumentsMismatchException("Zero, one, two or three arguments expected");
         if (!siz) draw_out::color = draw_out::defaultColor;
         else{
             if (siz == 1){
@@ -82,7 +82,7 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
             }
         }
         return NullValue::NULL_;
-    });
+    FE
 
     CREATE_FUNCTION(line)
         if (values.size() != 4) throw new ArgumentsMismatchException("Four arguments expected");
@@ -93,7 +93,7 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         line[1].color = draw_out::color;
         draw_out::window.draw(line);
         return NullValue::NULL_;
-    });
+    FE
 
     CREATE_FUNCTION(rect)
         if (values.size() != 4) throw new ArgumentsMismatchException("Four arguments expected");
@@ -104,7 +104,7 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         rect.setOutlineColor(sf::Color::Black);
         draw_out::window.draw(rect);
         return NullValue::NULL_;
-    });
+    FE
 
     CREATE_FUNCTION(frect)
         if (values.size() != 4) throw new ArgumentsMismatchException("Four arguments expected");
@@ -114,7 +114,7 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         rect.setFillColor(draw_out::color);
         draw_out::window.draw(rect);
         return NullValue::NULL_;
-    });
+    FE
 
     CREATE_FUNCTION(circle)
         if (values.size() != 3) throw new ArgumentsMismatchException("Three arguments expected");
@@ -122,7 +122,7 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         cricle.setPosition(values[0] -> asDouble(), values[1] -> asDouble());
         draw_out::window.draw(cricle);
         return NullValue::NULL_;
-    });
+    FE
 
     CREATE_FUNCTION(fcircle)
         if (values.size() != 3) throw new ArgumentsMismatchException("Three arguments expected");
@@ -131,7 +131,7 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         cricle.setFillColor(draw_out::color);
         draw_out::window.draw(cricle);
         return NullValue::NULL_;
-    });
+    FE
 
     CREATE_FUNCTION(repaint)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
@@ -139,7 +139,7 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         while (draw_out::window.pollEvent(event)) if (event.type == sf::Event::Closed) draw_out::window.close();
         draw_out::window.display();
         return NullValue::NULL_;
-    });
+    FE
 
     CREATE_FUNCTION(clear)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
@@ -147,14 +147,14 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         while (draw_out::window.pollEvent(event)) if (event.type == sf::Event::Closed) draw_out::window.close();
         draw_out::window.clear();
         return NullValue::NULL_;
-    });
+    FE
 
     CREATE_FUNCTION(framelimit)
         if (values.size() > 1) throw new ArgumentsMismatchException("Zero or one arguments expected");
         if (values.size()) draw_out::window.setFramerateLimit(values[0] -> asDouble());
         else draw_out::window.setFramerateLimit(draw_out::defaultLimit);
         return NullValue::NULL_;
-    });
+    FE
 
     CREATE_FUNCTION(keypressed)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
@@ -162,16 +162,16 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         while (draw_out::window.pollEvent(event)){
             if (event.type == sf::Event::Closed) draw_out::window.close();
             if (event.type == sf::Event::KeyPressed){
-                if (event.key.code == sf::Keyboard::Escape) return SHARE(NumberValue, int(draw_out::Keys::ESCAPE));
-                if (event.key.code == sf::Keyboard::Up) return SHARE(NumberValue, int(draw_out::Keys::UP));
-                if (event.key.code == sf::Keyboard::Down) return SHARE(NumberValue, int(draw_out::Keys::DOWN));
-                if (event.key.code == sf::Keyboard::Left) return SHARE(NumberValue, int(draw_out::Keys::LEFT));
-                if (event.key.code == sf::Keyboard::Right) return SHARE(NumberValue, int(draw_out::Keys::RIGHT));
-                if (event.key.code == sf::Keyboard::Space) return SHARE(NumberValue, int(draw_out::Keys::SPACE));
+                if (event.key.code == sf::Keyboard::Escape) SH_RET(NumberValue, int(draw_out::Keys::ESCAPE));
+                if (event.key.code == sf::Keyboard::Up) SH_RET(NumberValue, int(draw_out::Keys::UP));
+                if (event.key.code == sf::Keyboard::Down) SH_RET(NumberValue, int(draw_out::Keys::DOWN));
+                if (event.key.code == sf::Keyboard::Left) SH_RET(NumberValue, int(draw_out::Keys::LEFT));
+                if (event.key.code == sf::Keyboard::Right) SH_RET(NumberValue, int(draw_out::Keys::RIGHT));
+                if (event.key.code == sf::Keyboard::Space) SH_RET(NumberValue, int(draw_out::Keys::SPACE));
             }
         }
         return NumberValue::M_ONE;
-    });
+    FE
 
     CREATE_FUNCTION(mousehover)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
@@ -183,13 +183,13 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         sf::Event event;
         while (draw_out::window.pollEvent(event)) if (event.type == sf::Event::Closed) draw_out::window.close();
         return arr;
-    });
+    FE
 
     CREATE_FUNCTION(close)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         draw_out::window.close();
         return NullValue::NULL_;
-    });
+    FE
 }}}
 
 void Draw::initConstants(){

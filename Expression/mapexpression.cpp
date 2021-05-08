@@ -5,7 +5,7 @@ using namespace SlavaScript::lang;
 
 std::shared_ptr<Value> MapExpression::eval(){
     int siz = elements.size();
-    std::shared_ptr<MapValue> map = std::make_shared<MapValue>(siz);
+    std::shared_ptr<MapValue> map = SHARE(MapValue, siz);
     for (auto now : elements){
         map -> set(now.first -> eval(), now.second -> eval());
     }

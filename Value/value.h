@@ -4,23 +4,9 @@
 #include <string>
 #include "values.h"
 #include "bignumbers/bignum.h"
+#include "../Lib/macros.h"
 
 namespace SlavaScript{ namespace lang{
-    #define CREATE_FUNCTION(name) \
-        std::shared_ptr<Function> name = std::make_shared<FunctionModule>([](std::vector<std::shared_ptr<Value>> values) -> std::shared_ptr<Value>{
-
-    #define CREATE_MEMBER_FUNCTION \
-        std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values){
-
-    #define CAST(type, value) \
-        (std::static_pointer_cast<type>(value))
-
-    #define SHARE(type, value) \
-        std::make_shared<type>(value)
-
-    #define SH_RET(type, value) \
-        return std::make_shared<type>(value)
-
     class Value{
     public:
         virtual double asDouble() = 0;

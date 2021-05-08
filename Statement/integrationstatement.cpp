@@ -4,6 +4,7 @@
 #include "../Cpp17/filesystem.h"
 
 using namespace SlavaScript::lang;
+using namespace SlavaScript::Cpp17;
 
 namespace{
     std::string replace_all(std::string str){
@@ -23,11 +24,11 @@ namespace{
 }
 
 void IntegrationStatement::execute(){
-    std::string fileCount = "example_code";
+    std::string fileBegin = "example_code";
     std::string fileEnd = "py";
-    std::string filename = fileCount + "." + fileEnd;
-    dll::FS::writeToCache(filename, replace_all(code));
-    Variables::set(name, std::make_shared<IntegrationValue>("example_code", "py"));
+    std::string filename = fileBegin + "." + fileEnd;
+    FS::writeToCache(filename, replace_all(code));
+    Variables::set(name, SHARE_2(IntegrationValue, fileBegin, fileEnd));
 }
 
 IntegrationStatement::operator std::string(){

@@ -1,9 +1,9 @@
-import math
-import draw
-import std
+import [math, draw, std]
+
+
 w = 800		h = 600
 w2 = w / 2 	h2 = h / 2
-window("agar.io clone", w, h)
+window("���� agar.io", w, h)
 framelimit(50)
 fieldWidth = 10000
 fieldHeight = 6000
@@ -27,9 +27,12 @@ println "Ok"
 while run{
 	mouse = mousehover()
 	angle = 45
-	//angle = atan2(mouse[1] - h2, mouse[0] - w2)
-	fieldX = fieldX + cos(angle) * 200 / playerSize
-	fieldY = fieldY + sin(angle) * 200 / playerSize
+	angle = atan2(mouse[1] - h2, mouse[0] - w2)
+	dX = cos(angle) * (200 / playerSize)
+	dY = sin(angle) * (200 / playerSize)
+	println(dX * dX + dY * dY)
+	fieldX += dX
+	fieldY += dY
 	if fieldX < -w2 fieldX = -w2
 	elif fieldX > fieldWidth - w2 - 1 fieldX = fieldWidth - w2 - 1
 	if fieldY < -h2 fieldY = -h2
@@ -51,16 +54,16 @@ while run{
 			food[3][i] = rand(#ffffff)
 		}
 		color(food[3][i])
-		//mcircle(food[0][i] - fieldX, food[1][i] - fieldY, food[2][i])
+		//fcircle()
+		//fcircle(food[0][i] - fieldX - food[2][i], food[1][i] - fieldY - food[2][i], food[2][i])
+		mcircle(food[0][i] - fieldX, food[1][i] - fieldY, food[2][i])
 	}
 	color(playerColor)
-	//mcircle(w2, h2, playerSize)
-	/* + 6Мб */repaint()/* becose there is window -> display(), I don't know why */
-	/* + 1.5 Мб */clear()
-	/* + 1.5 Мб */if (keypressed() == KB_ESCAPE) { print "+++++\n" break}
+	mcircle(w2, h2, playerSize)
+	repaint()
+	clear()
+	if (keypressed() == KB_ESCAPE) { print "+++++\n" break}
 }
 
-def mcircle(cx, cy, rad) fcircle(cx - rad, cy - rad, rad)
+def mcircle(cx, cy, rad) fcircle(cx - rad, cy - rad, 0 + rad)
 close()
-/* We had one problem in code : arr[i][j] is not optimize */
-/* Now that code use ~6 Мб/сек */

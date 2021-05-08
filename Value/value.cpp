@@ -3,6 +3,7 @@
 #include "boolvalue.h"
 #include "classvalue.h"
 #include "functionvalue.h"
+#include "integrationvalue.h"
 #include "mapvalue.h"
 #include "nullvalue.h"
 #include "stringvalue.h"
@@ -21,6 +22,7 @@ bool SlavaScript::lang::operator==(Value const& a, Value const& b){
         case Values::STRING : return *(StringValue*)(&a) == *(StringValue*)(&b);
         case Values::NULL_ : return *(NullValue*)(&a) == *(NullValue*)(&b);
         case Values::CLASS : return *(ClassValue*)(&a) == *(ClassValue*)(&b);
+        case Values::INTEGRATION : return *(IntegrationValue*)(&a) == *(IntegrationValue*)(&b);
     }
 }
 
@@ -39,6 +41,7 @@ bool SlavaScript::lang::operator<(Value const& a, Value const& b){
         case Values::STRING : return *(StringValue*)(&a) < *(StringValue*)(&b);
         case Values::NULL_ : return *(NullValue*)(&a) < *(NullValue*)(&b);
         case Values::CLASS : return *(ClassValue*)(&a) < *(ClassValue*)(&b);
+        case Values::INTEGRATION : return *(IntegrationValue*)(&a) < *(IntegrationValue*)(&b);
     }
 }
 

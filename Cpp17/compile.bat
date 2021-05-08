@@ -1,6 +1,6 @@
 cls
 
-set F=C:\Users\Слава\Desktop\Презентации\Информатика и Информационные технологии\Языки программирования\CodeBlocks\S++\second\Cpp17
+set F=%cd%
 
 cd C:\MinGW-9.2.0\bin
 

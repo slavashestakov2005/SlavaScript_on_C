@@ -1,0 +1,31 @@
+import functional
+a  = [11, 7, 6, 9, 0, -2, 4]
+println a								/* [11, 7, 6, 9, 0, -2, 4] */
+println sortby(a, def(x) = -x)			/* [11, 9, 7, 6, 4, 0, -2] */
+println sortby(a, def(x) = x)			/* [-2, 0, 4, 6, 7, 9, 11] */
+println a								/* [-2, 0, 4, 6, 7, 9, 11] */
+println a = take_while(a, def(x) = x < 9)	/* [-2, 0, 4, 6, 7] */
+println a = drop_while(a, def(x) = x < 0)	/* [0, 4, 6, 7] */
+println a = filter(a, def(x) = x % 2 == 0)	/* [0, 4, 6] */
+println reduce(a, 0, def(x, y) = x + y)		/* 10 */
+
+
+f = def(x){
+	print x + "\t"
+}
+a = [0, 1, 2, 3, 6, 8]
+println a
+foreach(a, f)
+println ""
+println "*" * 20
+a = {"one" : 1, "two" : 2}
+fi = def(key, value){
+	println key + " : " + value
+}
+foreach(a, fi)
+
+
+def f1(x) = -x
+def f2(x) = x + 1
+x = combine(f1, f2)
+println x(6)				/* -5 */

@@ -66,13 +66,13 @@ namespace SlavaScript{ namespace modules{ namespace std_f{
         std::shared_ptr<MapValue> map = SHARE(MapValue, len);
         for(int i = 0; i < len; ++i) map -> set(keys -> get(i), value -> get(i));
         return map;
-    });
+    FE
 
     CREATE_FUNCTION(echo)
         for(auto value : values) std::cout << value -> asString();
         std::cout << std::endl;
         return NullValue::NULL_;
-    });
+    FE
 
     CREATE_FUNCTION(len)
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
@@ -89,14 +89,14 @@ namespace SlavaScript{ namespace modules{ namespace std_f{
             default : length = 0; break;
         }
         SH_RET(NumberValue, length);
-    });
+    FE
 
     CREATE_FUNCTION(map_key_exists)
         if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
         if (values[0] -> type() != Values::MAP) throw new TypeException("Map expected in first argument");
         std::shared_ptr<MapValue> map = CAST(MapValue, values[0]);
         return BoolValue::fromBool(map -> containsKey(values[1]));
-    });
+    FE
 
     CREATE_FUNCTION(map_keys)
         if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
@@ -107,7 +107,7 @@ namespace SlavaScript{ namespace modules{ namespace std_f{
         auto iter = map -> begin();
         for(int i = 0; i < siz; ++i, ++iter) keys.push_back(iter -> first);
         SH_RET(ArrayValue, keys);
-    });
+    FE
 
     CREATE_FUNCTION(map_values)
         if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
@@ -118,11 +118,11 @@ namespace SlavaScript{ namespace modules{ namespace std_f{
         auto iter = map -> begin();
         for(int i = 0; i < siz; ++i, ++iter) keys.push_back(iter -> second);
         SH_RET(ArrayValue, keys);
-    });
+    FE
 
     CREATE_FUNCTION(new_array)
         return std_out::createArray(values, 0);
-    });
+    FE
 
     CREATE_FUNCTION(parse_number)
         if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
@@ -138,7 +138,7 @@ namespace SlavaScript{ namespace modules{ namespace std_f{
             power *= radix;
         }
         SH_RET(NumberValue, ans);
-    });
+    FE
 
     CREATE_FUNCTION(rand)
         int siz = values.size();
@@ -155,7 +155,7 @@ namespace SlavaScript{ namespace modules{ namespace std_f{
             default : throw new ArgumentsMismatchException("Fewer arguments expected");
         }
         SH_RET(NumberValue, result);
-    });
+    FE
 
     CREATE_FUNCTION(sleep)
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
@@ -164,7 +164,7 @@ namespace SlavaScript{ namespace modules{ namespace std_f{
         double tim = values[0] -> asDouble();
         while(finish - start < tim) finish = clock();
         return NullValue::NULL_;
-    });
+    FE
 
     CREATE_FUNCTION(sort)
         if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
@@ -177,19 +177,19 @@ namespace SlavaScript{ namespace modules{ namespace std_f{
             std::sort(arr -> begin(), arr -> end(), [func](std::shared_ptr<Value> l, std::shared_ptr<Value> r) -> bool { return std_out::comparator(func -> execute({l}), func -> execute({r})); });
         }
         return arr;
-    });
+    FE
 
     CREATE_FUNCTION(time)
         if (values.size() != 0) throw new ArgumentsMismatchException("Zero arguments expected");
         SH_RET(NumberValue, clock());
-    });
+    FE
 
     CREATE_FUNCTION(to_char)
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
         std::string str;
         str += char(values[0] -> asDouble());
         SH_RET(StringValue, str);
-    });
+    FE
 
     CREATE_FUNCTION(to_hex_string)
         if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
@@ -203,7 +203,7 @@ namespace SlavaScript{ namespace modules{ namespace std_f{
         }
         reverse(ans.begin(), ans.end());
         SH_RET(StringValue, ans);
-    });
+    FE
 }}}
 
 void Std::initConstants(){
@@ -228,4 +228,3 @@ void Std::initFunctions(){
     Functions::set("to_char", to_char);
     Functions::set("to_hex_string", to_hex_string);
 }
-

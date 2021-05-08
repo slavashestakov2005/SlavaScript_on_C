@@ -1,0 +1,13 @@
+import files as f
+file = f.open("chemistry.s++")
+println file.read()				/* Выведить исходный код из файла */
+file.close()					/* Закрывает файл */
+println file.read_line()		/* "", так как файл закрыт */
+file = f.open("files.s++")
+println file.read_line()		/* "import files as f" */
+file.write_line("Hello world")	/* Изменяет начало файла */
+println file					/* "<file="files.s++">" */
+file.close()
+file = f.open("file.txt")
+println file					/* -1, так как такого файла нет */
+file.close()					/* Ошибка, так как file == -1 */

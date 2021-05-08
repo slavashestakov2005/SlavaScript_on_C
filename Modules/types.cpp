@@ -12,7 +12,7 @@ namespace SlavaScript{ namespace modules{ namespace types_f{
     CREATE_FUNCTION(float_)
         if (values.size() != 1) throw std::logic_error("One argument expected");
         SH_RET(NumberValue, values[0] -> asBignum());
-    });
+    FE
 
     CREATE_FUNCTION(int_)
         if (values.size() != 1) throw std::logic_error("One argument expected");
@@ -22,22 +22,22 @@ namespace SlavaScript{ namespace modules{ namespace types_f{
             else cop += str[i];
         }
         SH_RET(NumberValue, cop);
-    });
+    FE
 
     CREATE_FUNCTION(string)
         if (values.size() != 1) throw std::logic_error("One argument expected");
         SH_RET(StringValue, values[0] -> asString());
-    });
+    FE
 
     CREATE_FUNCTION(type_to_string)
         if (values.size() != 1) throw std::logic_error("One argument expected");
         SH_RET(StringValue, getValueName(values[0] -> type()));
-    });
+    FE
 
     CREATE_FUNCTION(typeof)
         if (values.size() != 1) throw std::logic_error("One argument expected");
         SH_RET(NumberValue, int(values[0] -> type()));
-    });
+    FE
 }}}
 
 void Types::initConstants(){

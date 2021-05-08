@@ -1,0 +1,17 @@
+import types
+inputstr = input()
+println inputstr
+println int(inputstr)
+
+vals = [1, "1", [1], {"1" : 1}, float("1"), string(1)]
+for val : vals println type_to_string(val)
+/*
+"Number"
+"String"
+"Array"
+"Map"
+"Number"
+"String"
+*/
+println max(1, "2")			/* "2", так как String > Number */
+println min([0], [1, 2])	/* [0], так как длина меньше */

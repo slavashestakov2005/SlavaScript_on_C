@@ -579,7 +579,7 @@ Expression* Parser::primary(){          /// () | :: | lambda
     if (match(TokenType::LPAREN)){
         Expression* result = expression();
         consume(TokenType::RPAREN);
-        return result;
+        return primarySuffix(result);
     }
     if (match(TokenType::DEF)){
         Arguments args = functionArguments();

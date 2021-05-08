@@ -1,11 +1,7 @@
 import draw
 import std
 w = 800 h = 600
-window("Hello", w, h)
-/*
-Запись ниже не работает!!!
-if (i == 0) print "Zero\n"
-*/
+window("�����", w, h)
 color(#0000ff)
 for j = 0, j < 10, j = j + 1{
 	step = rand(20)
@@ -23,6 +19,6 @@ for j = 0, j < 10, j = j + 1{
 		sleep(10)
 		if i > 100 break
 	}
-	print j + "\n"
+	println j
 }
 close()

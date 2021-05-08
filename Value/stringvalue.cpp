@@ -15,217 +15,151 @@ using SlavaScript::exceptions::UnknownPropertyException;
 using SlavaScript::exceptions::TypeException;
 
 namespace{
-    class Trim : public Function {
-    private:
-        std::string str;
-    public:
-        Trim(std::string str) : str(str) {}
-        CREATE_MEMBER_FUNCTION
-            if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-            std::string ans;
-            for(int i = 0; i < str.size(); ++i){
-                if (str[i] != ' ' && str[i] != '\t' && str[i] != '\n' || ans.size()) ans += str[i];
+    CLASS_MODULE_FUNCTION_(Trim, std::string, str)
+        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        std::string ans;
+        for(int i = 0; i < str.size(); ++i){
+            if (str[i] != ' ' && str[i] != '\t' && str[i] != '\n' || ans.size()) ans += str[i];
+        }
+        str = "";
+        for(int i = ans.size() - 1; i > -1; --i){
+            if (ans[i] != ' ' && ans[i] != '\t' && ans[i] != '\n' || str.size()) str += ans[i];
+        }
+        reverse(str.begin(), str.end());
+        SH_RET(StringValue, str);
+    CMFE
+
+    CLASS_MODULE_FUNCTION_(To_upper, std::string, str)
+        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        for(char& x : str) x = toupper(x);
+        SH_RET(StringValue, str);
+    CMFE
+
+    CLASS_MODULE_FUNCTION_(To_lower, std::string, str)
+        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        for(char& x : str) x = tolower(x);
+        SH_RET(StringValue, str);
+    CMFE
+
+    CLASS_MODULE_FUNCTION_(Chars, std::string, str)
+        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        std::vector<std::shared_ptr<Value>> vec;
+        for(auto x : str){
+            std::string s;
+            s += x;
+            vec.push_back(SHARE(StringValue, s));
+        }
+        SH_RET(ArrayValue, vec);
+    CMFE
+
+    CLASS_MODULE_FUNCTION_(Find, std::string, str)
+        if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
+        if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
+        if (values.size() == 2 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
+        std::string str2 = values[0] -> asString();
+        int position = ((values.size() == 2) ? (int)values[1] -> asDouble() : 0);
+        size_t x = str.find(str2, position);
+        if (x == std::string::npos) return NumberValue::M_ONE;
+        SH_RET(NumberValue, x);
+    CMFE
+
+    CLASS_MODULE_FUNCTION_(Join, std::string, delimiter)
+        if (values.size() < 1) throw new ArgumentsMismatchException("At least one argument expected");
+        std::string ans;
+        if (values.size() == 1 && values[0] -> type() == Values::ARRAY){
+            std::shared_ptr<ArrayValue> arr = CAST(ArrayValue, values[0]);
+            for(int i = 0; i < arr -> size(); ++i){
+                ans += arr -> get(i) -> asString();
+                if (i < arr -> size() - 1) ans += delimiter;
             }
-            str = "";
-            for(int i = ans.size() - 1; i > -1; --i){
-                if (ans[i] != ' ' && ans[i] != '\t' && ans[i] != '\n' || str.size()) str += ans[i];
+        }
+        else{
+            for(int i = 0; i < values.size(); ++i){
+                ans += values[i] -> asString();
+                if (i < values.size() - 1) ans += delimiter;
             }
-            reverse(str.begin(), str.end());
-            SH_RET(StringValue, str);
         }
-    };
+        SH_RET(StringValue, ans);
+    CMFE
 
-    class To_upper : public Function {
-    private:
-        std::string str;
-    public:
-        To_upper(std::string str) : str(str) {}
-        CREATE_MEMBER_FUNCTION
-            if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-            for(char& x : str) x = toupper(x);
-            SH_RET(StringValue, str);
+    CLASS_MODULE_FUNCTION_(Replace, std::string, str)
+        if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
+        if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
+        if (values[1] -> type() != Values::STRING) throw new TypeException("String expected in second argument");
+        std::string start = values[0] -> asString(), finish = values[1] -> asString(), result;
+        /// using regex
+        //std::regex rx(start.c_str());
+        //return new StringValue(std::regex_replace(str, rx, finish));
+        int last = 0;
+        size_t pos = str.find(start);
+        while(pos != std::string::npos) {
+            result += str.substr(last, pos - last);
+            result += finish;
+            last = pos + start.size();
+            pos = str.find(start, last);
         }
-    };
+        result += str.substr(last);
+        SH_RET(StringValue, result);
+    CMFE
 
-    class To_lower : public Function {
-    private:
-        std::string str;
-    public:
-        To_lower(std::string str) : str(str) {}
-        CREATE_MEMBER_FUNCTION
-            if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-            for(char& x : str) x = tolower(x);
-            SH_RET(StringValue, str);
-        }
-    };
+    CLASS_MODULE_FUNCTION_(ReplaceFirst, std::string, str)
+        if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
+        if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
+        if (values[1] -> type() != Values::STRING) throw new TypeException("String expected in second argument");
+        std::string start = values[0] -> asString(), finish = values[1] -> asString(), result;
+        size_t pos = str.find(start);
+        if (pos != std::string::npos) result = str.substr(0, pos) + finish + str.substr(pos + start.size());
+        else result = str;
+        SH_RET(StringValue, result);
+    CMFE
 
-    class Chars : public Function {
-    private:
-        std::string str;
-    public:
-        Chars(std::string str) : str(str) {}
-        CREATE_MEMBER_FUNCTION
-            if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-            std::vector<std::shared_ptr<Value>> vec;
-            for(auto x : str){
-                std::string s;
-                s += x;
-                vec.push_back(SHARE(StringValue, s));
-            }
-            SH_RET(ArrayValue, vec);
-        }
-    };
+    CLASS_MODULE_FUNCTION_(Rfind, std::string, str)
+        if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
+        if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
+        if (values.size() == 2 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
+        std::string str2 = values[0] -> asString();
+        int position = ((values.size() == 2) ? (int)values[1] -> asDouble() : 0);
+        size_t x = str.rfind(str2, position);
+        if (x == std::string::npos) return NumberValue::M_ONE;
+        SH_RET(NumberValue, x);
+    CMFE
 
-    class Find : public Function {
-    private:
-         std::string str;
-    public:
-        Find(std::string str) : str(str) {}
-        CREATE_MEMBER_FUNCTION
-            if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
-            if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
-            if (values.size() == 2 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
-            std::string str2 = values[0] -> asString();
-            int position = ((values.size() == 2) ? (int)values[1] -> asDouble() : 0);
-            size_t x = str.find(str2, position);
-            if (x == std::string::npos) return NumberValue::M_ONE;
-            SH_RET(NumberValue, x);
+    CLASS_MODULE_FUNCTION_(Split, std::string, str)
+        if (values.size() > 2) throw new ArgumentsMismatchException("Two and less arguments expected");
+        if (values.size() > 0 && values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
+        if (values.size() > 1 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
+        std::string reg = values.size() ? values[0] -> asString() : " ";
+        int limit = (values.size() > 1) ? (int)values[1] -> asDouble() - 1 : -1;
+        if (limit <= 0) limit = -1;
+        std::vector<std::shared_ptr<Value>> val;
+        int pos = str.find(reg), last = 0;
+        std::string t;
+        while(pos != std::string::npos){
+            std::string temp;
+            for(int i = last; i < pos; ++i) temp += str[i];
+            if (limit == -1 || val.size() < limit) val.push_back(SHARE(StringValue, temp));
+            else break;
+            last = pos + 1;
+            pos = str.find(reg, last);
         }
-    };
+        for(int i = last; i < str.size(); ++i) t += str[i];
+        if (t != "") val.push_back(SHARE(StringValue, t));
+        SH_RET(ArrayValue, val);
+    CMFE
 
-    class Join : public Function {
-    private:
-         std::string delimiter;
-    public:
-        Join(std::string delimiter) : delimiter(delimiter) {}
-        CREATE_MEMBER_FUNCTION
-            if (values.size() < 1) throw new ArgumentsMismatchException("At least one argument expected");
-            std::string ans;
-            if (values.size() == 1 && values[0] -> type() == Values::ARRAY){
-                std::shared_ptr<ArrayValue> arr = CAST(ArrayValue, values[0]);
-                for(int i = 0; i < arr -> size(); ++i){
-                    ans += arr -> get(i) -> asString();
-                    if (i < arr -> size() - 1) ans += delimiter;
-                }
-            }
-            else{
-                for(int i = 0; i < values.size(); ++i){
-                    ans += values[i] -> asString();
-                    if (i < values.size() - 1) ans += delimiter;
-                }
-            }
-            SH_RET(StringValue, ans);
+    CLASS_MODULE_FUNCTION_(Substring, std::string, str)
+        if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
+        if (values[0] -> type() != Values::NUMBER) throw new TypeException("Number expected in first argument");
+        if (values.size() == 2 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
+        std::string ans;
+        int start = values[0] -> asDouble();
+        if (values.size() == 1) ans = str.substr(start);
+        else{
+            int finish = values[1] -> asDouble();
+            ans = str.substr(start, finish - start);
         }
-    };
-
-    class Replace : public Function {
-    private:
-         std::string str;
-    public:
-        Replace(std::string str) : str(str) {}
-        CREATE_MEMBER_FUNCTION
-            if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
-            if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
-            if (values[1] -> type() != Values::STRING) throw new TypeException("String expected in second argument");
-            std::string start = values[0] -> asString(), finish = values[1] -> asString(), result;
-            /// using regex
-            //std::regex rx(start.c_str());
-            //return new StringValue(std::regex_replace(str, rx, finish));
-            int last = 0;
-            size_t pos = str.find(start);
-            while(pos != std::string::npos) {
-                result += str.substr(last, pos - last);
-                result += finish;
-                last = pos + start.size();
-                pos = str.find(start, last);
-            }
-            result += str.substr(last);
-            SH_RET(StringValue, result);
-        }
-    };
-
-    class ReplaceFirst : public Function {
-    private:
-         std::string str;
-    public:
-        ReplaceFirst(std::string str) : str(str) {}
-        CREATE_MEMBER_FUNCTION
-            if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
-            if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
-            if (values[1] -> type() != Values::STRING) throw new TypeException("String expected in second argument");
-            std::string start = values[0] -> asString(), finish = values[1] -> asString(), result;
-            size_t pos = str.find(start);
-            if (pos != std::string::npos) result = str.substr(0, pos) + finish + str.substr(pos + start.size());
-            else result = str;
-            SH_RET(StringValue, result);
-        }
-    };
-
-    class Rfind : public Function {
-    private:
-         std::string str;
-    public:
-        Rfind(std::string str) : str(str) {}
-        CREATE_MEMBER_FUNCTION
-            if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
-            if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
-            if (values.size() == 2 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
-            std::string str2 = values[0] -> asString();
-            int position = ((values.size() == 2) ? (int)values[1] -> asDouble() : 0);
-            size_t x = str.rfind(str2, position);
-            if (x == std::string::npos) return NumberValue::M_ONE;
-            SH_RET(NumberValue, x);
-        }
-    };
-
-    class Split : public Function {
-    private:
-         std::string str;
-    public:
-        Split(std::string str) : str(str) {}
-        CREATE_MEMBER_FUNCTION
-            if (values.size() > 2) throw new ArgumentsMismatchException("Two and less arguments expected");
-            if (values.size() > 0 && values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
-            if (values.size() > 1 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
-            std::string reg = values.size() ? values[0] -> asString() : " ";
-            int limit = (values.size() > 1) ? (int)values[1] -> asDouble() - 1 : -1;
-            if (limit <= 0) limit = -1;
-            std::vector<std::shared_ptr<Value>> val;
-            int pos = str.find(reg), last = 0;
-            std::string t;
-            while(pos != std::string::npos){
-                std::string temp;
-                for(int i = last; i < pos; ++i) temp += str[i];
-                if (limit == -1 || val.size() < limit) val.push_back(SHARE(StringValue, temp));
-                else break;
-                last = pos + 1;
-                pos = str.find(reg, last);
-            }
-            for(int i = last; i < str.size(); ++i) t += str[i];
-            if (t != "") val.push_back(SHARE(StringValue, t));
-            SH_RET(ArrayValue, val);
-        }
-    };
-
-    class Substring : public Function {
-    private:
-         std::string str;
-    public:
-        Substring(std::string str) : str(str) {}
-        CREATE_MEMBER_FUNCTION
-            if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
-            if (values[0] -> type() != Values::NUMBER) throw new TypeException("Number expected in first argument");
-            if (values.size() == 2 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
-            std::string ans;
-            int start = values[0] -> asDouble();
-            if (values.size() == 1) ans = str.substr(start);
-            else{
-                int finish = values[1] -> asDouble();
-                ans = str.substr(start, finish - start);
-            }
-            SH_RET(StringValue, ans);
-        }
-    };
+        SH_RET(StringValue, ans);
+    CMFE
 }
 
 int StringValue::size() const{

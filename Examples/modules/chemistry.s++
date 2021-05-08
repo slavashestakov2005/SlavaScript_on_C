@@ -1,0 +1,42 @@
+import chemistry as chem
+
+def call(sub, elem){
+	println "Вещество " + sub + ", элемент " + elem + " -> " + chem.omega(elem, sub)
+}
+
+println "Молярные массы и массовые доли"
+substances = ["2H2O", "C6H12O6", "CaCO3", "Fe2(SO4)3", "Ca3(PO4)2", "5H2O"]
+elements1 = ["C", "H", "O"]
+elements2 = ["Ca", "O", "C"]
+elements3 = ["Fe", "S", "O"]
+
+for sub : substances{
+	println "Вещество " + sub + " -> " + chem.mr(sub)
+}
+for elem : elements1{
+	call(substances[1], elem)
+}
+for elem : elements2{
+	call(substances[2], elem)
+}
+for elem : elements3{
+	call(substances[3], elem)
+}
+call(substances[4], "Ca")
+sub = substances[2]
+elem = elements2[1]
+println "Другой споссоб:\nВещество " + sub + ", элемент " + elem + " -> " + chem.mr(elem) * 3 / chem.mr(sub)
+/*	a = mr("O") * 3 / mr("C6H12O6")
+	b = omega("O", "C6H12O6")
+	При этом a == b
+*/
+
+println "Количества протонов и нейтронов"
+println "Протонов в Li: " + chem.proton("Li")				/* 3 */
+println "Неётронов в Li: " + chem.neutron("Li")				/* 4 */
+println "Русское прочтение C: " + chem.russian_read("C")	/* углерод */
+println "Латинское прочтение C: " + chem.latin_read("C") 	/* цэ */
+println chem.write("кислород")								/* "O" */
+println chem.electron("At")									/* 85 */
+println chem.write("водород")								/* "H" */
+

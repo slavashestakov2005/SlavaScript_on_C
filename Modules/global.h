@@ -12,6 +12,7 @@ namespace SlavaScript{ namespace modules{
     public:
         static void initConstants();
         static void initFunctions();
+        static void initClasses(){}
     };
 }}
 

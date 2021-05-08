@@ -43,21 +43,21 @@ namespace SlavaScript{ namespace modules{ namespace global_f{
         std::string str;
         getline(std::cin, str);
         SH_RET(StringValue, str);
-    });
+    FE
 
     CREATE_FUNCTION(max)
         if (values.size() == 0) throw new ArgumentsMismatchException("One and least arguments expected");
         std::shared_ptr<Value> ans = values[0];
         for(int i = 1; i < values.size(); ++i) ans = global_out::operator_lt(*ans, *values[i]) ? values[i] : ans;
         return ans;
-    });
+    FE
 
     CREATE_FUNCTION(min)
         if (values.size() == 0) throw new ArgumentsMismatchException("One and least arguments expected");
         std::shared_ptr<Value> ans = values[0];
         for(int i = 1; i < values.size(); ++i) ans = global_out::operator_lt(*ans, *values[i]) ? ans : values[i];
         return ans;
-    });
+    FE
 
     CREATE_FUNCTION(set_color)
         int color = 0;
@@ -66,7 +66,7 @@ namespace SlavaScript{ namespace modules{ namespace global_f{
         if (values.size() == 1) color = values[0] -> asDouble();
         SetConsoleTextAttribute(global_out::handle, color);
         return NullValue::NULL_;
-    });
+    FE
 }}}
 
 void Global::initConstants(){

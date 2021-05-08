@@ -8,6 +8,7 @@
 #include "../Cpp17/filesystem.h"
 
 using namespace SlavaScript::lang;
+using namespace SlavaScript::Cpp17;
 using SlavaScript::exceptions::TypeException;
 using SlavaScript::exceptions::UnknownPropertyException;
 using SlavaScript::exceptions::ArgumentsMismatchException;
@@ -25,13 +26,13 @@ namespace{
             if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
             if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
             std::string filename = start + "_" + mas[COUNT++] + "." + finish;
-            dll::FS::writeToCache(filename, "import " + start + "\n"
+            FS::writeToCache(filename, "import " + start + "\n"
                                  "with open('out.txt', 'w') as f:\n"
                                  "\tf.write(str(" + start + "." + values[0] -> asString() + "))\n");
-            dll::FS::cdCacheAndCall("py \"" + start + "_" + mas[COUNT-1] + "." + finish + "\"");
-            std::string answer = dll::FS::readFromCache("out.txt");
+            FS::cdCacheAndCall("py \"" + filename + "\"");
+            std::string answer = FS::readFromCache("out.txt");
             SH_RET(StringValue, answer);
-        }
+        MFE
     };
 }
 
@@ -39,7 +40,7 @@ namespace{
 
 std::shared_ptr<Value> IntegrationValue::accessDot(std::shared_ptr<Value> property){
     std::string prop = property -> asString();
-    if (prop == "get") return std::make_shared<FunctionValue>(new Get(fileNameBegin, fileNameEnd));
+    if (prop == "get") SH_RET(FunctionValue, SHARE_2(Get, fileNameBegin, fileNameEnd));
     throw new UnknownPropertyException(prop);
 }
 

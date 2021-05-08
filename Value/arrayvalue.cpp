@@ -13,62 +13,50 @@ using SlavaScript::exceptions::UnknownPropertyException;
 using SlavaScript::exceptions::TypeException;
 
 namespace {
-    class IsEmpty : public Function{
-    private:
-        std::vector<std::shared_ptr<Value>> elements;
-    public:
-        IsEmpty(std::vector<std::shared_ptr<Value>>* elements) : elements(*elements) {}
-        CREATE_MEMBER_FUNCTION
-            if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-            return BoolValue::fromBool(elements.empty());
-        }
-    };
+    CLASS_MODULE_FUNCTION_(IsEmpty, std::vector<std::shared_ptr<Value>>, elements)
+        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        return BoolValue::fromBool(elements.empty());
+    CMFE
 
-    class Length : public Function{
-    private:
-        std::vector<std::shared_ptr<Value>> elements;
-    public:
-        Length(std::vector<std::shared_ptr<Value>>* elements) : elements(*elements) {}
-        CREATE_MEMBER_FUNCTION
-            if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-            SH_RET(NumberValue, elements.size());
-        }
-    };
+    CLASS_MODULE_FUNCTION_(Length, std::vector<std::shared_ptr<Value>>, elements)
+        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        SH_RET(NumberValue, elements.size());
+    CMFE
 }
 
 ArrayValue::ArrayValue(int size){
-    elements = new std::vector<std::shared_ptr<Value>>(size);
+    elements = std::vector<std::shared_ptr<Value>>(size);
 }
 
 ArrayValue::ArrayValue(std::vector<std::shared_ptr<Value>> elem){
-    elements = new std::vector<std::shared_ptr<Value>>(elem.size());
+    elements = std::vector<std::shared_ptr<Value>>(elem.size());
     for(int i = 0; i < elem.size(); ++i){
-        (*elements)[i] = elem[i];
+        elements[i] = elem[i];
     }
 }
 
 ArrayValue::ArrayValue(const ArrayValue& arra){
-    (*this) = ArrayValue(*arra.elements);
+    (*this) = ArrayValue(arra.elements);
 }
 
 std::vector<std::shared_ptr<Value>> ArrayValue::getCopyElement(){
-    int size = elements -> size();
+    int size = elements.size();
     std::vector<std::shared_ptr<Value>> vec;
     for(int i = 0; i < size; ++i) vec.push_back(get(i));
     return vec;
 }
 
 std::shared_ptr<Value> ArrayValue::get(int index) const{
-    return (*elements)[index];
+    return elements[index];
 }
 
 void ArrayValue::set(int index, std::shared_ptr<Value> value){
-    (*elements)[index] = value;
+    elements[index] = value;
 }
 
 std::shared_ptr<ArrayValue> ArrayValue::add(std::shared_ptr<ArrayValue> array, std::shared_ptr<Value> value){
     std::vector<std::shared_ptr<Value>> vec;
-    int size = array -> elements -> size() + 1;
+    int size = array -> elements.size() + 1;
     for(int i = 0; i < size - 1; ++i) vec.push_back(array -> get(i));
     vec.push_back(value);
     SH_RET(ArrayValue, vec);
@@ -76,23 +64,23 @@ std::shared_ptr<ArrayValue> ArrayValue::add(std::shared_ptr<ArrayValue> array, s
 
 std::shared_ptr<ArrayValue> ArrayValue::add(std::shared_ptr<ArrayValue> array1, std::shared_ptr<ArrayValue> array2){
     std::vector<std::shared_ptr<Value>> vec;
-    int size = array1 -> elements -> size();
+    int size = array1 -> elements.size();
     for(int i = 0; i < size; ++i) vec.push_back(array1 -> get(i));
-    size = array2 -> elements -> size();
+    size = array2 -> elements.size();
     for(int i = 0; i < size; ++i) vec.push_back(array2 -> get(i));
     SH_RET(ArrayValue, vec);
 }
 
 int ArrayValue::size() const{
-    return elements -> size();
+    return elements.size();
 }
 
 std::vector<std::shared_ptr<Value>>::iterator ArrayValue::begin(){
-    elements -> begin();
+    return elements.begin();
 }
 
 std::vector<std::shared_ptr<Value>>::iterator ArrayValue::end(){
-    return elements -> end();
+    return elements.end();
 }
 
 std::shared_ptr<Value> ArrayValue::accessDot(std::shared_ptr<Value> property){
@@ -112,9 +100,9 @@ double ArrayValue::asDouble(){
 
 std::string ArrayValue::asString(){
     std::string result = "[";
-    for(unsigned i = 0; i < (*elements).size(); ++i){
-        result += std::string(*(*elements)[i]);
-        if (i < (*elements).size() - 1) result += ", ";
+    for(unsigned i = 0; i < elements.size(); ++i){
+        result += std::string(*elements[i]);
+        if (i < elements.size() - 1) result += ", ";
     }
     result += "]";
     return result;
@@ -134,11 +122,6 @@ Values ArrayValue::type() const{
 
 ArrayValue::operator std::string(){
     return asString();
-}
-
-ArrayValue::~ArrayValue(){
-    delete elements;
-    elements = nullptr;
 }
 
 bool SlavaScript::lang::operator==(ArrayValue const& a, ArrayValue const& b){

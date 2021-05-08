@@ -1,7 +1,7 @@
 import draw
 import std
 w = 800 h = 600
-window("Animate line", w, h)
+window("Движущаяся прямая", w, h)
 framelimit(100)
 color(#ffffff)
 frect(0, 0, w, h)
@@ -10,16 +10,16 @@ y1 = rand(h)
 x2 = rand(w)
 y2 = rand(h)
 
-d1x = rand() / 10000
-d1y = -rand() / 10000
-d2x = rand() / 10000
-d2y = rand() / 10000
+d1x = rand()
+d1y = -rand()
+d2x = rand()
+d2y = rand()
 
 hue = 0
 run = 0
 print sum(10, 15) + "\n"
 print sum(10, 15) + "\n"
-while(run < 1000){
+while(run < 10000){
 	if checkhoriz(x1) d1x = -d1x
 	if checkhoriz(x2) d2x = -d2x
 	if checkvert(y1) d1y = -d1y
@@ -32,6 +32,7 @@ while(run < 1000){
 	sethsbcolor(hue)
 	line(x1, y1, x2, y2)
 	repaint()
+	clear()
 	run = run + 1
 	key = keypressed()
 	if (key == KB_ESCAPE){

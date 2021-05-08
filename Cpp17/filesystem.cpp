@@ -3,6 +3,7 @@
 #include <fstream>
 
 namespace fs = std::filesystem;
+using namespace SlavaScript::Cpp17;
 
 namespace{
     fs::path appPath;
@@ -21,14 +22,14 @@ std::wstring convert(std::string s){
     return converter.from_bytes(s);
 }
 
-void dll::FS::setApplicationPath(std::string s){
+void FS::setApplicationPath(std::string s){
     appPath = fs::path(s);
     appPath = appPath.parent_path();
     strPath = s;
     while(!strPath.empty() && strPath.back() != '/' && strPath.back() != '\\') strPath.pop_back();
 }
 
-void dll::FS::writeToCache(std::string file, std::string data){
+void FS::writeToCache(std::string file, std::string data){
     fs::path path(file);
     path = appPath / "cache" / path;
     std::ofstream fout(path);
@@ -36,7 +37,7 @@ void dll::FS::writeToCache(std::string file, std::string data){
     fout.close();
 }
 
-std::string dll::FS::readFromCache(std::string file){
+std::string FS::readFromCache(std::string file){
     fs::path path(file);
     path = appPath / "cache" / path;
     std::ifstream f(path);
@@ -46,7 +47,7 @@ std::string dll::FS::readFromCache(std::string file){
     return str.str();
 }
 
-void dll::FS::cdCacheAndCall(std::string command){
+void FS::cdCacheAndCall(std::string command){
     std::string s = "cd " + strPath + "cache && " + command;
     system(s.c_str());
 }

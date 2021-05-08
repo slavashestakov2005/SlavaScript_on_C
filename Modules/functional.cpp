@@ -89,7 +89,7 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
             result = function -> execute({result, values[i + 1]});
         }
         return result;
-    });
+    FE
 
     CREATE_FUNCTION(combine)
         if (values.size() < 1) throw new ArgumentsMismatchException("At least one arg expected");
@@ -106,7 +106,7 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
             });
         }
         SH_RET(FunctionValue, result);
-    });
+    FE
 
     CREATE_FUNCTION(drop_while)
         if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
@@ -125,7 +125,7 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
             vec.push_back(array -> get(i));
         }
         SH_RET(ArrayValue, vec);
-    });
+    FE
 
     CREATE_FUNCTION(filter)
         if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments excepted");
@@ -135,14 +135,14 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
         if (container -> type() == Values::ARRAY) return functional_out::filterArray(CAST(ArrayValue, container), consumer);
         if (container -> type() == Values::MAP) return functional_out::filterMap(CAST(MapValue, container), consumer);
         throw new TypeException("Invalid first argument. Array or map expected");
-    });
+    FE
 
     CREATE_FUNCTION(flat_map)
         if (values.size() < 2) throw new ArgumentsMismatchException("At least arguments excepted");
         if (values[0] -> type() != Values::ARRAY) throw new TypeException("Array expected at first argument");
         if (values[1] -> type() != Values::FUNCTION) throw new TypeException("Function expected at second arguments");
         return functional_out::flatMapArray(CAST(ArrayValue, values[0]), CAST(FunctionValue, values[1]) -> getFunction());
-    });
+    FE
 
     CREATE_FUNCTION(foreach)
         if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
@@ -168,7 +168,7 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
         }
         else throw new TypeException("Invalid first argument. Array or map expected");
         return NullValue::NULL_;
-    });
+    FE
 
     CREATE_FUNCTION(map)
         if (values.size() < 2 || values.size() > 3) throw new ArgumentsMismatchException("Two or three arguments excepted");
@@ -186,7 +186,7 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
             return functional_out::mapMap(CAST(MapValue, container), consumer, consumer2);
         }
         throw new TypeException("Invalid first argument. Array or map expected");
-    });
+    FE
 
     CREATE_FUNCTION(reduce)
         if (values.size() != 3) throw new ArgumentsMismatchException("Three arguments expected");
@@ -215,7 +215,7 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
             return result;
         }
         throw new TypeException("Invalid first argument. Array or map expected");
-    });
+    FE
 
     CREATE_FUNCTION(sortby)
         if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments excepted");
@@ -225,7 +225,7 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
         std::shared_ptr<Function> func = CAST(FunctionValue, values[1]) -> getFunction();
         std::sort(arr -> begin(), arr -> end(), [func](std::shared_ptr<Value> l, std::shared_ptr<Value> r) -> bool { return functional_out::comparator(func -> execute({l}), func -> execute({r})); });
         return arr;
-    });
+    FE
 
     CREATE_FUNCTION(take_while)
         if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
@@ -254,7 +254,7 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
             return result;
         }
         throw new TypeException("Invalid first argument. Array or map expected");
-    });
+    FE
 }}}
 
 void Functional::initFunctions(){

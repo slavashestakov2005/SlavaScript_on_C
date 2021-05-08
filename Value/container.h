@@ -3,6 +3,7 @@
 
 #include <memory>
 #include "value.h"
+#include "../Lib/macros.h"
 
 namespace SlavaScript{ namespace lang{
     template<typename T>

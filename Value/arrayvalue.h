@@ -8,7 +8,7 @@
 namespace SlavaScript{ namespace lang{
     class ArrayValue : public Value, Container<std::vector<std::shared_ptr<Value>>>{
     private:
-        std::vector<std::shared_ptr<Value>>* elements;
+        std::vector<std::shared_ptr<Value>> elements;
     public:
         static std::shared_ptr<ArrayValue> add(std::shared_ptr<ArrayValue> array, std::shared_ptr<Value> value);
         static std::shared_ptr<ArrayValue> add(std::shared_ptr<ArrayValue> array1, std::shared_ptr<ArrayValue> array2);
@@ -34,7 +34,7 @@ namespace SlavaScript{ namespace lang{
         Bignum asBignum();
         Values type() const;
         operator std::string();
-        ~ArrayValue();
+        ~ArrayValue(){}
 
         friend bool operator==(ArrayValue const& a, ArrayValue const& b);
         friend bool operator!=(ArrayValue const& a, ArrayValue const& b);

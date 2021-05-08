@@ -47,7 +47,7 @@ namespace SlavaScript{ namespace modules{ namespace math_f{
         int n = values[0] -> asDouble();
         for(int i = 2; i <= n; ++i) result *= i;
         SH_RET(NumberValue, result);
-    });
+    FE
 
     MATH_FUNCTION(floor)
     MATH_BINARY_FUNCTION(hypot)
@@ -63,7 +63,7 @@ namespace SlavaScript{ namespace modules{ namespace math_f{
         if (x < 0) return NumberValue::M_ONE;
         else if (x > 0) return NumberValue::ONE;
         else return NumberValue::ZERO;
-    });
+    FE
 
     MATH_FUNCTION(sin)
     MATH_FUNCTION(sinh)
@@ -72,7 +72,7 @@ namespace SlavaScript{ namespace modules{ namespace math_f{
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
         if (values[0] -> asDouble() < 0) throw new MathException("Sqrt from negative argument");
         SH_RET(NumberValue, math_out::sqrt(values[0] -> asBignum()));
-    });
+    FE
 
     MATH_FUNCTION(tan)
     MATH_FUNCTION(tanh)

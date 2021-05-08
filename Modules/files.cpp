@@ -30,7 +30,7 @@ namespace SlavaScript{ namespace modules{ namespace files_out{
             file.open(Path::getPath() + name);
             bad = !file;
         }
-        operator std::string() { return "<file=" + name + ">"; }
+        operator std::string() { return "<file=\"" + name + "\">"; }
         ~FileValue(){}
         std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property);
     };
@@ -39,21 +39,21 @@ namespace SlavaScript{ namespace modules{ namespace files_out{
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         file -> file.close();
         return NullValue::NULL_;
-    }};
+    CMFE
 
     CLASS_MODULE_FUNCTION(Read, FileValue, file)
         file -> file.seekg(0, file -> file.beg);
         std::stringstream str;
         str << file -> file.rdbuf();
         SH_RET(StringValue, str.str());
-    }};
+    CMFE
 
     CLASS_MODULE_FUNCTION(ReadLine, FileValue, file)
         if (values.size() != 0) throw new ArgumentsMismatchException("Zero arguments expected");
         std::string line;
         if (file -> file) std::getline(file -> file, line);
         SH_RET(StringValue, line);
-    }};
+    CMFE
 
     CLASS_MODULE_FUNCTION(WriteLine, FileValue, file)
         if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
@@ -64,15 +64,15 @@ namespace SlavaScript{ namespace modules{ namespace files_out{
         }
         else return NumberValue::M_ONE;
         return NumberValue::ZERO;
-    }};
+    CMFE
 
     std::shared_ptr<Value> FileValue::accessDot(std::shared_ptr<Value> property){
         std::string prop = property -> asString();
         if (bad) throw new TypeException("Cannot use DOT for not opened file");
         if (prop == "close") SH_RET(FunctionValue, new Close(this));
         if (prop == "read") SH_RET(FunctionValue, new Read(this));
-        if (prop == "readline") SH_RET(FunctionValue, new ReadLine(this));
-        if (prop == "writeline") SH_RET(FunctionValue, new WriteLine(this));
+        if (prop == "read_line") SH_RET(FunctionValue, new ReadLine(this));
+        if (prop == "write_line") SH_RET(FunctionValue, new WriteLine(this));
         throw new UnknownPropertyException(prop);
     }
 }}}
@@ -83,7 +83,7 @@ namespace SlavaScript{ namespace modules{ namespace files_f{
         std::shared_ptr<files_out::FileValue> file = SHARE(files_out::FileValue, values[0] -> asString());
         if (file -> bad) return NumberValue::M_ONE;
         return CAST(Value, file);
-    });
+    FE
 }}}
 
 void Files::initFunctions(){

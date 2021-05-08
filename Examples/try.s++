@@ -1,42 +1,16 @@
-import types
-/*def division(a, b){
-	if !b throw -1
-	return a / b
+def division(x, y){
+	if !y throw -1
+	return x / y
 }
-a = 1
-b = 1
-do{
-	a = int(input())
-	b = int(input())
+
+a = [1, 2, 3, 4, 0]
+b = [7, 8, 9, 0, 1]
+
+for i = 0, i < 5, ++i{
 	try{
-		println division(a, b)
+		println division(a[i], b[i])
 	}catch ex{
 		println ex
 		println "error"
 	}
-}while a*/
-import std
-mas = [3, 2, 1]
-println sort(mas)
-println mas
-println true
-println false
-println null
-println "      tr      ".trim()
-println mas + mas
-println mas
-println mas[0]++
-println mas
-map = {"zero" : 0, "one" : 1}
-map2 = {"two" : 2}
-println map
-println map2
-println map + map2
-println map
-println map2
-println map["zero"]++
-println map
-println ++map["zero"]
-println map
-println map["zero"] -= 2
-println map
+}
