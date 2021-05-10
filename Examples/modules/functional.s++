@@ -1,9 +1,9 @@
 import functional
 a  = [11, 7, 6, 9, 0, -2, 4]
-println a								/* [11, 7, 6, 9, 0, -2, 4] */
+println a					/* [11, 7, 6, 9, 0, -2, 4] */
 println sortby(a, def(x) = -x)			/* [11, 9, 7, 6, 4, 0, -2] */
 println sortby(a, def(x) = x)			/* [-2, 0, 4, 6, 7, 9, 11] */
-println a								/* [-2, 0, 4, 6, 7, 9, 11] */
+println a					/* [-2, 0, 4, 6, 7, 9, 11] */
 println a = take_while(a, def(x) = x < 9)	/* [-2, 0, 4, 6, 7] */
 println a = drop_while(a, def(x) = x < 0)	/* [0, 4, 6, 7] */
 println a = filter(a, def(x) = x % 2 == 0)	/* [0, 4, 6] */

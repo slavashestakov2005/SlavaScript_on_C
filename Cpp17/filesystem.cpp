@@ -1,5 +1,6 @@
 #include "filesystem.h"
 #include <filesystem>
+#include <sstream>
 #include <fstream>
 
 namespace fs = std::filesystem;
@@ -8,6 +9,22 @@ using namespace SlavaScript::Cpp17;
 namespace{
     fs::path appPath;
     std::string strPath;
+
+    std::string decode(std::string w){
+        std::string s;
+        int i = 0;
+        for(;i < w.size() - 1; ++i){
+            int c = (unsigned char)w[i] * 256 + (unsigned char)w[i + 1];
+            if (208 * 256 + 144 <= c && c <= 208 * 256 + 175) ++i, s += char(c - (208 * 256 + 144) - 64);
+            else if (208 * 256 + 176 <= c && c <= 208 * 256 + 191) ++i, s += char(c - (208 * 256 + 176) - 32);
+            else if (209 * 256 + 128 <= c && c <= 209 * 256 + 143) ++i, s += char(c - (209 * 256 + 128) - 16);
+            else if (c == 208 * 256 + 129) ++i, s += char(-88);
+            else if (c == 209 * 256 + 145) ++i, s += char(-72);
+            else s += w[i];
+        }
+        if (i < w.size()) s += w[i];
+        return s;
+    }
 }
 
 std::string convert(std::wstring w){
@@ -42,9 +59,17 @@ std::string FS::readFromCache(std::string file){
     path = appPath / "cache" / path;
     std::ifstream f(path);
     f.seekg(0, f.beg);
-    std::stringstream str;
-    str << f.rdbuf();
-    return str.str();
+    std::stringstream ss;
+    ss << f.rdbuf();
+    return ss.str();
+}
+
+std::string FS::read(std::string file){
+    fs::path path(file);
+    std::ifstream f(path);
+    std::stringstream ss;
+    ss << f.rdbuf();
+    return decode(ss.str());
 }
 
 void FS::cdCacheAndCall(std::string command){

@@ -10,6 +10,18 @@
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::ParseException;
 
+namespace{
+    #define ASSIGN_TO_WORD(start, end) \
+        if(lookMatch(1, TokenType::start)){ \
+            std::string variable = consume(TokenType::WORD) -> getText(); \
+            consume(TokenType::start); \
+            return new AssignmentExpression(AssignmentOperator::end, variable, expression()); \
+        }
+
+    #define ASSIGN_TO_CONTAINER(start, end) \
+        if (match(TokenType::start)) return new ContainerAssignmentExpression(AssignmentOperator::end, (ContainerAccessExpression*)nameExpression, expression());
+}
+
 ParseErrors Parser::getParseErrors(){
     return parseErrors;
 }
@@ -65,28 +77,19 @@ Statement* Parser::statement(){
     if (match(TokenType::PRINTLN)) return new PrintlnStatement(expression());
     if (match(TokenType::IF)) return ifelseStatement();
     if (match(TokenType::WHILE)) return whileStatement();
-    if (match(TokenType::FOR)) return forStatement();
     if (match(TokenType::DO)) return doWhileStatement();
+    if (match(TokenType::FOR)) return forStatement();
     if (match(TokenType::BREAK)) return new BreakStatement();
     if (match(TokenType::CONTINUE)) return new ContinueStatement();
     if (match(TokenType::RETURN)) return new ReturnStatement(expression());
-    if (match(TokenType::DEF)) return functionDefine();
-    if (match(TokenType::IMPORT)) return importStatement();
-    if (match(TokenType::SWITCH)) return switchStatement();
-    if (lookMatch(0, TokenType::WORD) && lookMatch(1, TokenType::LPAREN)){
-        return new ExprStatement(functionChain(qualifiedName()));
-    }
     if (match(TokenType::THROW)) return new ThrowStatement(expression());
     if (match(TokenType::TRY)) return tryStatement();
+    if (match(TokenType::SWITCH)) return switchStatement();
     if (match(TokenType::CLASS)) return classDeclaration();
     if (match(TokenType::GRIDGRID)) return integrationStatement();
-    return assignmentStatement();
-}
-
-Statement* Parser::assignmentStatement(){
-    Expression* expr = expression();
-    if (expr != nullptr) return new ExprStatement(expr);
-    throw new ParseException("Unknown statement: " + std::string(*(get(0))));
+    if (match(TokenType::IMPORT)) return importStatement();
+    if (match(TokenType::DEF)) return functionDefine();
+    return exprStatement();
 }
 
 Statement* Parser::ifelseStatement(){
@@ -122,11 +125,11 @@ Statement* Parser::forStatement(){
         return foreachMapStatement();
     }
     bool openParen = match(TokenType::LPAREN);
-    Statement* initialization = assignmentStatement();
+    Statement* initialization = exprStatement();
     consume(TokenType::COMMA);
     Expression* termination = expression();
     consume(TokenType::COMMA);
-    Statement* increment = assignmentStatement();
+    Statement* increment = exprStatement();
     if (openParen) consume(TokenType::RPAREN);
     Statement* statement = statementOrBlock();
     return new ForStatement(initialization, termination, increment, statement);
@@ -152,6 +155,16 @@ ForeachMapStatement* Parser::foreachMapStatement(){
     if (openParen) consume(TokenType::RPAREN);
     Statement* statement = statementOrBlock();
     return new ForeachMapStatement(key, value, container, statement);
+}
+
+Statement* Parser::tryStatement(){
+    Statement* body = statementOrBlock();
+    if (lookMatch(0, TokenType::CATCH) && lookMatch(1, TokenType::WORD)){
+        consume(TokenType::CATCH);
+        std::string name = consume(TokenType::WORD) -> getText();
+        return new TryStatement(body, name, statementOrBlock());
+    }
+    else throw new ParseException("Catch block not found after try block");
 }
 
 Statement* Parser::switchStatement(){
@@ -182,6 +195,34 @@ Statement* Parser::switchStatement(){
     return new SwitchStatement(start, body, defaultCase);
 }
 
+Statement* Parser::classDeclaration(){
+    std::string name = consume(TokenType::WORD) -> getText();
+    ClassDeclarationsStatement* classDeclaration = new ClassDeclarationsStatement(name);
+    consume(TokenType::LBRACE);
+    do{
+        if (match(TokenType::DEF)) classDeclaration -> addMethod(functionDefine());
+        else{
+            if (!lookMatch(0, TokenType::WORD) || !lookMatch(1, TokenType::EQ)) throw new ParseException("Class can only assignments and declarations");
+            std::string name = consume(TokenType::WORD) -> getText();
+            consume(TokenType::EQ);
+            Expression* expr = expression();
+            if (expr != nullptr) classDeclaration -> addField(new AssignmentExpression(AssignmentOperator::ASSIGN, name, expr));
+            else throw new ParseException("Class can only assignments and declarations");
+        }
+    }while(!match(TokenType::RBRACE));
+    return classDeclaration;
+}
+
+Statement* Parser::integrationStatement(){
+    std::string lang = consume(TokenType::WORD) -> getText();
+    consume(TokenType::AS);
+    std::string name = consume(TokenType::WORD) -> getText();
+    consume(TokenType::LBRACE);
+    std::string code = consume(TokenType::TEXT) -> getText();
+    consume(TokenType::RBRACE);
+    return new IntegrationStatement(lang, name, code);
+}
+
 Statement* Parser::importStatement(){
     std::vector<std::string> modules;
     if (lookMatch(0, TokenType::WORD)) modules.push_back(consume(TokenType::WORD) -> getText());
@@ -196,26 +237,6 @@ Statement* Parser::importStatement(){
     std::string name;
     if (match(TokenType::AS)) name = consume(TokenType::WORD) -> getText();
     return new ImportStatement(modules, name);
-}
-
-Statement* Parser::tryStatement(){
-    Statement* body = statementOrBlock();
-    if (lookMatch(0, TokenType::CATCH) && lookMatch(1, TokenType::WORD)){
-        consume(TokenType::CATCH);
-        std::string name = consume(TokenType::WORD) -> getText();
-        return new TryStatement(body, name, statementOrBlock());
-    }
-    else throw new ParseException("Catch block not found after try block");
-}
-
-Statement* Parser::integrationStatement(){
-    std::string lang = consume(TokenType::WORD) -> getText();
-    consume(TokenType::AS);
-    std::string name = consume(TokenType::WORD) -> getText();
-    consume(TokenType::LBRACE);
-    std::string code = consume(TokenType::TEXT) -> getText();
-    consume(TokenType::RBRACE);
-    return new IntegrationStatement(lang, name, code);
 }
 
 Arguments Parser::functionArguments(){
@@ -255,71 +276,28 @@ FunctionDefineStatement* Parser::functionDefine(){
     return new FunctionDefineStatement(name, args, body);
 }
 
-Expression* Parser::functionChain(Expression* nameExpression){              /// rec: function()
-    Expression* expr = function(nameExpression);                        // name()
-    if (lookMatch(0, TokenType::LPAREN)) return functionChain(expr);    // 'name()'() = ''()
-    if (lookMatch(0, TokenType::DOT)){                                  // name(). ...
-        std::vector<ContainerAccessElement> indices = variableSuffix();
-        if (!indices.size()) return expr;
-        if (lookMatch(0, TokenType::LPAREN)) return functionChain(new ContainerAccessExpression(expr, indices));
-        return new ContainerAccessExpression(expr, indices);
-    }
-    return expr;
-}
-
-FunctionalExpression* Parser::function(Expression* nameExpression){         /// name(args)
+std::vector<Expression*> Parser::functionCallArguments(){
+    std::vector<Expression*> args;
     consume(TokenType::LPAREN);
-    FunctionalExpression* function = new FunctionalExpression(nameExpression);
     while(!match(TokenType::RPAREN)){
-        function -> addArguments(expression());
+        args.push_back(expression());
         if (match(TokenType::RPAREN)) break;
         consume(TokenType::COMMA);
     }
+    return args;
+}
+
+FunctionalExpression* Parser::function(Expression* nameExpression){
+    FunctionalExpression* function = new FunctionalExpression(nameExpression);
+    std::vector<Expression*> args = functionCallArguments();
+    for(Expression* now : args) function -> addArguments(now);
     return function;
 }
 
-Expression* Parser::array(){
-    consume(TokenType::LBRACKET);
-    std::vector<Expression*> elements;
-    if (!match(TokenType::RBRACKET)){
-        while(true){
-            elements.push_back(expression());
-            if (match(TokenType::RBRACKET)) break;
-            consume(TokenType::COMMA);
-        }
-    }
-    return new ArrayExpression(elements);
-}
-
-Expression* Parser::map(){
-    consume(TokenType::LBRACE);
-    std::map<Expression*, Expression*> elements;
-    if (!match(TokenType::RBRACE)){
-        while(true){
-            Expression* key = primary();
-            consume(TokenType::COLON);
-            Expression* value = expression();
-            elements[key] = value;
-            if (match(TokenType::RBRACE)) break;
-            consume(TokenType::COMMA);
-        }
-    }
-    return new MapExpression(elements);
-}
-
-Statement* Parser::classDeclaration(){
-    std::string name = consume(TokenType::WORD) -> getText();
-    ClassDeclarationsStatement* classDeclaration = new ClassDeclarationsStatement(name);
-    consume(TokenType::LBRACE);
-    do{
-        if (match(TokenType::DEF)) classDeclaration -> addMethod(functionDefine());
-        else{
-            Expression* expression = assignmentStrict();
-            if (expression != nullptr) classDeclaration -> addField((AssignmentExpression*) expression);
-            else throw new ParseException("Class can only assignments and declarations");
-        }
-    }while(!match(TokenType::RBRACE));
-    return classDeclaration;
+Statement* Parser::exprStatement(){
+    Expression* expr = expression();
+    if (expr != nullptr) return new ExprStatement(expr);
+    throw new ParseException("Unknown statement: " + std::string(*(get(0))));
 }
 
 Expression* Parser::expression(){
@@ -327,93 +305,48 @@ Expression* Parser::expression(){
 }
 
 Expression* Parser::assignment(){
-    Expression* assignment = assignmentStrict();
-    if (assignment == nullptr) return ternary();
-    else return assignment;
-}
-
-Expression* Parser::assignmentStrict(){
     if (lookMatch(0, TokenType::WORD)){
-        if(lookMatch(1, TokenType::EQ)){
+        ASSIGN_TO_WORD(EQ, ASSIGN)
+        ASSIGN_TO_WORD(PLUSEQ, ADD)
+        ASSIGN_TO_WORD(MINUSEQ, SUBSTRACT)
+        ASSIGN_TO_WORD(STAREQ, MULTIPLY)
+        ASSIGN_TO_WORD(SLASHEQ, DIVIDE)
+        ASSIGN_TO_WORD(PERCENTEQ, REMAINDER)
+        ASSIGN_TO_WORD(STARSTAREQ, POWER)
+        ASSIGN_TO_WORD(LTLTEQ, LSHIFT)
+        ASSIGN_TO_WORD(GTGTEQ, RSHIFT)
+        ASSIGN_TO_WORD(BAREQ, OR)
+        ASSIGN_TO_WORD(AMPEQ, AND)
+        ASSIGN_TO_WORD(CARETEQ, XOR)
+        if(lookMatch(1, TokenType::PLUSPLUS)){
             std::string variable = consume(TokenType::WORD) -> getText();
-            consume(TokenType::EQ);
-            return new AssignmentExpression(AssignmentOperator::ASSIGN, variable, expression());
+            consume(TokenType::PLUSPLUS);
+            return new AssignmentExpression(AssignmentOperator::_PLUSPLUS, variable, new ValueExpression(Bignum(1)));
         }
-        if(lookMatch(1, TokenType::PLUSEQ)){
+        if(lookMatch(1, TokenType::MINUSMINUS)){
             std::string variable = consume(TokenType::WORD) -> getText();
-            consume(TokenType::PLUSEQ);
-            return new AssignmentExpression(AssignmentOperator::ADD, variable, expression());
-        }
-        if(lookMatch(1, TokenType::MINUSEQ)){
-            std::string variable = consume(TokenType::WORD) -> getText();
-            consume(TokenType::MINUSEQ);
-            return new AssignmentExpression(AssignmentOperator::SUBSTRACT, variable, expression());
-        }
-        if(lookMatch(1, TokenType::STAREQ)){
-            std::string variable = consume(TokenType::WORD) -> getText();
-            consume(TokenType::STAREQ);
-            return new AssignmentExpression(AssignmentOperator::MULTIPLY, variable, expression());
-        }
-        if(lookMatch(1, TokenType::SLASHEQ)){
-            std::string variable = consume(TokenType::WORD) -> getText();
-            consume(TokenType::SLASHEQ);
-            return new AssignmentExpression(AssignmentOperator::DIVIDE, variable, expression());
-        }
-        if(lookMatch(1, TokenType::PERCENTEQ)){
-            std::string variable = consume(TokenType::WORD) -> getText();
-            consume(TokenType::PERCENTEQ);
-            return new AssignmentExpression(AssignmentOperator::REMAINDER, variable, expression());
-        }
-        if(lookMatch(1, TokenType::STARSTAREQ)){
-            std::string variable = consume(TokenType::WORD) -> getText();
-            consume(TokenType::STARSTAREQ);
-            return new AssignmentExpression(AssignmentOperator::POWER, variable, expression());
-        }
-        if(lookMatch(1, TokenType::LTLTEQ)){
-            std::string variable = consume(TokenType::WORD) -> getText();
-            consume(TokenType::LTLTEQ);
-            return new AssignmentExpression(AssignmentOperator::LSHIFT, variable, expression());
-        }
-        if(lookMatch(1, TokenType::GTGTEQ)){
-            std::string variable = consume(TokenType::WORD) -> getText();
-            consume(TokenType::GTGTEQ);
-            return new AssignmentExpression(AssignmentOperator::RSHIFT, variable, expression());
-        }
-        if(lookMatch(1, TokenType::BAREQ)){
-            std::string variable = consume(TokenType::WORD) -> getText();
-            consume(TokenType::BAREQ);
-            return new AssignmentExpression(AssignmentOperator::OR, variable, expression());
-        }
-        if(lookMatch(1, TokenType::AMPEQ)){
-            std::string variable = consume(TokenType::WORD) -> getText();
-            consume(TokenType::AMPEQ);
-            return new AssignmentExpression(AssignmentOperator::AND, variable, expression());
-        }
-        if(lookMatch(1, TokenType::CARETEQ)){
-            std::string variable = consume(TokenType::WORD) -> getText();
-            consume(TokenType::CARETEQ);
-            return new AssignmentExpression(AssignmentOperator::XOR, variable, expression());
+            consume(TokenType::MINUSMINUS);
+            return new AssignmentExpression(AssignmentOperator::_MINUSMINUS, variable, new ValueExpression(Bignum(1)));
         }
     }
-    /** Add AssignmentOperator :: _PLUSPLUS and _MINUSMINUS **/
-    int position = pos;
-    Expression* nameExpression = qualifiedName();
+    Expression* nameExpression = ternary();
     if (nameExpression != nullptr && nameExpression -> type() == Expressions::ContainerAccessExpression){
-        if (match(TokenType::EQ)) return new ContainerAssignmentExpression(AssignmentOperator::ASSIGN, (ContainerAccessExpression*)nameExpression, expression());
-        if (match(TokenType::PLUSEQ)) return new ContainerAssignmentExpression(AssignmentOperator::ADD, (ContainerAccessExpression*)nameExpression, expression());
-        if (match(TokenType::MINUSEQ)) return new ContainerAssignmentExpression(AssignmentOperator::SUBSTRACT, (ContainerAccessExpression*)nameExpression, expression());
-        if (match(TokenType::STAREQ)) return new ContainerAssignmentExpression(AssignmentOperator::MULTIPLY, (ContainerAccessExpression*)nameExpression, expression());
-        if (match(TokenType::SLASHEQ)) return new ContainerAssignmentExpression(AssignmentOperator::DIVIDE, (ContainerAccessExpression*)nameExpression, expression());
-        if (match(TokenType::PERCENTEQ)) return new ContainerAssignmentExpression(AssignmentOperator::REMAINDER, (ContainerAccessExpression*)nameExpression, expression());
-        if (match(TokenType::STARSTAREQ)) return new ContainerAssignmentExpression(AssignmentOperator::POWER, (ContainerAccessExpression*)nameExpression, expression());
-        if (match(TokenType::LTLTEQ)) return new ContainerAssignmentExpression(AssignmentOperator::LSHIFT, (ContainerAccessExpression*)nameExpression, expression());
-        if (match(TokenType::GTGTEQ)) return new ContainerAssignmentExpression(AssignmentOperator::RSHIFT, (ContainerAccessExpression*)nameExpression, expression());
-        if (match(TokenType::BAREQ)) return new ContainerAssignmentExpression(AssignmentOperator::OR, (ContainerAccessExpression*)nameExpression, expression());
-        if (match(TokenType::AMPEQ)) return new ContainerAssignmentExpression(AssignmentOperator::AND, (ContainerAccessExpression*)nameExpression, expression());
-        if (match(TokenType::CARETEQ)) return new ContainerAssignmentExpression(AssignmentOperator::XOR, (ContainerAccessExpression*)nameExpression, expression());
+        ASSIGN_TO_CONTAINER(EQ, ASSIGN)
+        ASSIGN_TO_CONTAINER(PLUSEQ, ADD)
+        ASSIGN_TO_CONTAINER(MINUSEQ, SUBSTRACT)
+        ASSIGN_TO_CONTAINER(STAREQ, MULTIPLY)
+        ASSIGN_TO_CONTAINER(SLASHEQ, DIVIDE)
+        ASSIGN_TO_CONTAINER(PERCENTEQ, REMAINDER)
+        ASSIGN_TO_CONTAINER(STARSTAREQ, POWER)
+        ASSIGN_TO_CONTAINER(LTLTEQ, LSHIFT)
+        ASSIGN_TO_CONTAINER(GTGTEQ, RSHIFT)
+        ASSIGN_TO_CONTAINER(BAREQ, OR)
+        ASSIGN_TO_CONTAINER(AMPEQ, AND)
+        ASSIGN_TO_CONTAINER(CARETEQ, XOR)
+        if (match(TokenType::PLUSPLUS)) return new ContainerAssignmentExpression(AssignmentOperator::_PLUSPLUS, (ContainerAccessExpression*)nameExpression, new ValueExpression(Bignum(1)));
+        if (match(TokenType::MINUSMINUS)) return new ContainerAssignmentExpression(AssignmentOperator::_MINUSMINUS, (ContainerAccessExpression*)nameExpression, new ValueExpression(Bignum(1)));
     }
-    pos = position;
-    return nullptr;
+    return nameExpression;
 }
 
 Expression* Parser::ternary(){
@@ -538,12 +471,7 @@ Expression* Parser::multiplicative(){
 Expression* Parser::objectCreation(){
     if (match(TokenType::NEW)){
         std::string className = consume(TokenType::WORD) -> getText();
-        std::vector<Expression*> args;
-        consume(TokenType::LPAREN);
-        while(!match(TokenType::RPAREN)){
-            args.push_back(expression());
-            match(TokenType::COMMA);
-        }
+        std::vector<Expression*> args = functionCallArguments();
         return new ObjectCreationExpression(className, args);
     }
     return unary();
@@ -570,55 +498,35 @@ Expression* Parser::unary(){
 }
 
 Expression* Parser::exponential(){
-    Expression* left = primary();
+    Expression* left = primaryWithSuffix();
     if (match(TokenType::STARSTAR)) return new BinaryExpression(BinaryOperator::POWER, left, unary());
     return left;
 }
 
-Expression* Parser::primary(){          /// () | :: | lambda
-    if (match(TokenType::LPAREN)){
-        Expression* result = expression();
-        consume(TokenType::RPAREN);
-        return primarySuffix(result);
-    }
+Expression* Parser::primaryWithSuffix(){
     if (match(TokenType::DEF)){
         Arguments args = functionArguments();
         Statement* body = functionBody();
         return new ValueExpression(new UserDefinedFunction(args, body));
     }
-    return variable();
+    return suffix(primary());
 }
 
-Expression* Parser::variable(){         /// name() | 'q.name'() | 'q.name' ++ / -- | [...] | {...}
-    if (lookMatch(0, TokenType::WORD) && lookMatch(1, TokenType::LPAREN)){
-        return functionChain(new ValueExpression(consume(TokenType::WORD) -> getText()));
-    }
-    Expression* nameExpression = qualifiedName();
-    if (nameExpression != nullptr){
-        if (lookMatch(0, TokenType::LPAREN)) return functionChain(nameExpression);
-        if (nameExpression -> type() == Expressions::ContainerAccessExpression){
-            if (match(TokenType::PLUSPLUS)) return new ContainerAssignmentExpression(AssignmentOperator::_PLUSPLUS, (ContainerAccessExpression*)nameExpression, new ValueExpression(Bignum(0)));
-            if (match(TokenType::MINUSMINUS)) return new ContainerAssignmentExpression(AssignmentOperator::_MINUSMINUS, (ContainerAccessExpression*)nameExpression, new ValueExpression(Bignum(0)));
-        }
-        if (nameExpression -> type() == Expressions::VariableExpression){
-            if (match(TokenType::PLUSPLUS)) return new AssignmentExpression(AssignmentOperator::_PLUSPLUS, ((VariableExpression*) nameExpression) -> name, new ValueExpression(Bignum(0)));
-            if (match(TokenType::MINUSMINUS)) return new AssignmentExpression(AssignmentOperator::_MINUSMINUS, ((VariableExpression*) nameExpression) -> name, new ValueExpression(Bignum(0)));
-        }
-        return nameExpression;
-    }
-    if (lookMatch(0, TokenType::LBRACKET)){
-        Expression* _array = array();
-        return primarySuffix(_array);
-    }
-    if (lookMatch(0, TokenType::LBRACE)){
-        Expression* _map = map();
-        return primarySuffix(_map);
+Expression* Parser::primary(){
+    if (match(TokenType::LPAREN)){
+        Expression* result = expression();
+        consume(TokenType::RPAREN);
+        return result;
     }
     return value();
 }
 
-Expression* Parser::value(){            /// 123 | #2F3C53 | "..."
+Expression* Parser::value(){
+    if (lookMatch(0, TokenType::LBRACKET)) return array();
+    if (lookMatch(0, TokenType::LBRACE)) return map();
     Token* current = get(0);
+    if (match(TokenType::WORD)) return new VariableExpression(current -> getText());
+    if (match(TokenType::TEXT)) return new ValueExpression(current -> getText());;
     if (match(TokenType::NUMBER)) return new ValueExpression(new NumberValue(current -> getText()));
     if (match(TokenType::HEX_NUMBER)){
         Bignum big = 0;
@@ -629,47 +537,56 @@ Expression* Parser::value(){            /// 123 | #2F3C53 | "..."
             else if (str[i] >= 'A' && str[i] <= 'F') big += str[i] - 'A' + 10;
             else if (str[i] >= 'a' && str[i] <= 'f') big += str[i] - 'a' + 10;
         }
-        return new ValueExpression(NumberValue(big));
-    }
-    if (match(TokenType::TEXT)){
-        ValueExpression* stringExpr = new ValueExpression(current -> getText());
-        return primarySuffix(stringExpr);
+        return new ValueExpression(new NumberValue(big));
     }
     throw new ParseException("Unknown expression: " + std::string(*current));
 }
 
-Expression* Parser::qualifiedName(){        /// word 'var.Suffix'
-    Token* current = get(0);
-    if (!match(TokenType::WORD)) return nullptr;
-    std::vector<ContainerAccessElement> indices = variableSuffix();
-    if (!indices.size()) return new VariableExpression(current -> getText());
-    return new ContainerAccessExpression(current -> getText(), indices);
+Expression* Parser::array(){
+    consume(TokenType::LBRACKET);
+    std::vector<Expression*> elements;
+    if (!match(TokenType::RBRACKET)){
+        while(true){
+            elements.push_back(expression());
+            if (match(TokenType::RBRACKET)) break;
+            consume(TokenType::COMMA);
+        }
+    }
+    return new ArrayExpression(elements);
 }
 
-std::vector<ContainerAccessElement> Parser::variableSuffix(){   /// .---[---]
-    std::vector<ContainerAccessElement> indices;
-    while(lookMatch(0, TokenType::DOT) || lookMatch(0, TokenType::LBRACKET)){
-        if (match(TokenType::DOT)){
-            indices.push_back(ContainerAccessElement(new ValueExpression(consume(TokenType::WORD) -> getText()), true));
+Expression* Parser::map(){
+    consume(TokenType::LBRACE);
+    std::map<Expression*, Expression*> elements;
+    if (!match(TokenType::RBRACE)){
+        while(true){
+            Expression* key = expression();
+            consume(TokenType::COLON);
+            Expression* value = expression();
+            elements[key] = value;
+            if (match(TokenType::RBRACE)) break;
+            consume(TokenType::COMMA);
         }
-        if (match(TokenType::LBRACKET)){
-            indices.push_back(ContainerAccessElement(expression(), false));
+    }
+    return new MapExpression(elements);
+}
+
+Expression* Parser::suffix(Expression* root){
+    while(true){
+        if (match(TokenType::DOT)){
+            root = new ContainerAccessExpression(root,
+                        new ContainerAccessElement(new ValueExpression(consume(TokenType::WORD) -> getText()), true) );
+        }
+        else if (match(TokenType::LBRACKET)){
+            root = new ContainerAccessExpression(root, new ContainerAccessElement(expression(), false) );
             consume(TokenType::RBRACKET);
         }
+        else if (lookMatch(0, TokenType::LPAREN)){
+            root = function(root);
+        }
+        else break;
     }
-    return indices;
-}
-
-Expression* Parser::primarySuffix(Expression* root){            /// primary 'var.Suffix' | primary.name() | primary
-     if (lookMatch(0, TokenType::DOT) && lookMatch(1, TokenType::WORD) && lookMatch(2, TokenType::LPAREN)){
-        match(TokenType::DOT);
-        return functionChain(new ContainerAccessExpression(root, std::vector<ContainerAccessElement>{
-            ContainerAccessElement(new ValueExpression(consume(TokenType::WORD) -> getText()), true)
-            }));
-    }
-    std::vector<ContainerAccessElement> indices = variableSuffix();
-    if (!indices.size()) return root;
-    return new ContainerAccessExpression(root, indices);
+    return root;
 }
 
 Token* Parser::get(int position){

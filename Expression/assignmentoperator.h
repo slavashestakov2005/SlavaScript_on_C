@@ -1,6 +1,8 @@
 #ifndef ASSIGNMENTOPERATOR_H_INCLUDED
 #define ASSIGNMENTOPERATOR_H_INCLUDED
 
+#include <string>
+
 namespace SlavaScript{ namespace lang{
     enum class AssignmentOperator{
         ASSIGN,         /// =
@@ -22,6 +24,8 @@ namespace SlavaScript{ namespace lang{
         _PLUSPLUS,      /// _++
         _MINUSMINUS     /// _--
     };
+
+    std::string getOperator(AssignmentOperator);
 }}
 
 #endif // ASSIGNMENTOPERATOR_H_INCLUDED

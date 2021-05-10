@@ -2,7 +2,7 @@ import draw
 import std
 
 w = 640 h = 480
-window("Управление точкой", w, h)
+window("РЈРїСЂР°РІР»РµРЅРёРµ С‚РѕС‡РєРѕР№", w, h)
 
 x = rand(w)
 y = rand(h)

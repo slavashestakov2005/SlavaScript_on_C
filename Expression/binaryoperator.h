@@ -1,6 +1,8 @@
 #ifndef BINARYOPERATOR_H_INCLUDED
 #define BINARYOPERATOR_H_INCLUDED
 
+#include <string>
+
 namespace SlavaScript{ namespace lang{
     enum class BinaryOperator{
         ADD,        /// +
@@ -16,6 +18,8 @@ namespace SlavaScript{ namespace lang{
         LSHIFT,     /// <<
         RSHIFT      /// >>
     };
+
+    std::string getOperator(BinaryOperator);
 }}
 
 #endif // BINARYOPERATOR_H_INCLUDED

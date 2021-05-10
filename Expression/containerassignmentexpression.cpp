@@ -8,24 +8,18 @@
 
 using namespace SlavaScript::lang;
 
-namespace {
-    std::string mas[] = {
-        "=", "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=", "<<=", ">>=", "++", "--", "++", "--"
-    };
-}
-
 std::shared_ptr<Value> ContainerAssignmentExpression::eval(){
-    std::shared_ptr<Value> result = containerExpr -> getCopyElement();
-    containerExpr -> set(AssignmentExpression::calculate(operation, containerExpr -> get(), expression -> eval()));
-    if (operation != AssignmentOperator::_PLUSPLUS && operation != AssignmentOperator::_MINUSMINUS) result = containerExpr -> getContainer();
+    std::shared_ptr<Value> result = containerExpr -> eval();
+    containerExpr -> set(AssignmentExpression::calculate(operation, result, expression -> eval()));
+    if (operation != AssignmentOperator::_PLUSPLUS && operation != AssignmentOperator::_MINUSMINUS) result = containerExpr -> get();
     return result;
 }
 
 ContainerAssignmentExpression::operator std::string(){
     if (operation == AssignmentOperator::MINUSMINUS_ || operation == AssignmentOperator::PLUSPLUS_){
-        return mas[int(operation)] + " " + std::string(*containerExpr);
+        return getOperator(operation) + " " + std::string(*containerExpr);
     }
-    return std::string(*containerExpr) + " " + mas[int(operation)] + " " + std::string(*expression);
+    return std::string(*containerExpr) + " " + getOperator(operation) + " " + std::string(*expression);
 }
 
 ContainerAssignmentExpression::~ContainerAssignmentExpression(){

@@ -1,6 +1,8 @@
 #ifndef UNARYOPERATOR_H_INCLUDED
 #define UNARYOPERATOR_H_INCLUDED
 
+#include <string>
+
 namespace SlavaScript{ namespace lang{
     enum class UnaryOperator{
         PLUS,           /// +
@@ -10,6 +12,8 @@ namespace SlavaScript{ namespace lang{
         PLUSPLUS,       /// ++
         MINUSMINUS,     /// --
     };
+
+    std::string getOperator(UnaryOperator);
 }}
 
 #endif // UNARYOPERATOR_H_INCLUDED

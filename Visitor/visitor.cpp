@@ -36,7 +36,7 @@ void Visitor::visit(ConditionalExpression* v){
 
 void Visitor::visit(ContainerAccessExpression* v){
     v -> root -> accept(this);
-    for(int i = 0; i < v -> indices.size(); ++i) v -> indices[i].expression -> accept(this);
+    v -> access -> expression -> accept(this);
 }
 
 void Visitor::visit(ContainerAssignmentExpression* v){

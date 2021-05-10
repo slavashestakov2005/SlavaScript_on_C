@@ -1,7 +1,7 @@
 import draw
 import std
 w = 800 h = 600
-window("Движущаяся прямая", w, h)
+window("Р”РІРёР¶СѓС‰Р°СЏСЃСЏ РїСЂСЏРјР°СЏ", w, h)
 framelimit(100)
 color(#ffffff)
 frect(0, 0, w, h)

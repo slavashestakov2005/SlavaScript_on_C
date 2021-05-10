@@ -2,10 +2,10 @@ import glob
 import sys
 
 
-sys.stdout = open('./Modules/modules.cpp', 'w')
+sys.stdout = open('../Modules/modules.cpp', 'w')
 pattern = "// [[not imported module]]"
 print(pattern)
-files = glob.glob("./Modules/*.cpp")
+files = glob.glob("../Modules/*.cpp")
 result = []
 print("#include \"modules.h\"")
 print("#include \"all.h\"")
@@ -19,7 +19,7 @@ for file in files:
 	if text[0:26] != pattern:
 		result.append(file)
 for i in range(len(result)):
-	name = result[i][10:-4].lower()
+	name = result[i][11:-4].lower()
 	module_name = name[0].upper() + name[1:]
 	if module_name == 'Modules':
 		continue

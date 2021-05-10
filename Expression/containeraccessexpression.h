@@ -12,23 +12,17 @@ namespace SlavaScript{ namespace lang{
     class ContainerAccessExpression : public Expression{
     private:
         Expression* root;
-        std::vector<ContainerAccessElement> indices;
+        ContainerAccessElement* access;
+        std::shared_ptr<Value> container;
+        std::shared_ptr<Value> index;
+        bool dot;
     public:
-        ContainerAccessExpression(std::string variable, std::vector<ContainerAccessElement> indices);
-        ContainerAccessExpression(Expression* root, std::vector<ContainerAccessElement> indices);
+        ContainerAccessExpression(std::string variable, ContainerAccessElement* access);
+        ContainerAccessExpression(Expression* root, ContainerAccessElement* access);
         Expressions type(){ return Expressions::ContainerAccessExpression; }
         std::shared_ptr<Value> eval();
-        /** @return  throw: std::logic_error*, TypeException*. */
         std::shared_ptr<Value> get();
-        /** @return  throw: std::logic_error*, TypeException*. */
         std::shared_ptr<Value> set(std::shared_ptr<Value> value);
-        /** @return  throw: std::logic_error*, TypeException*. */
-        std::shared_ptr<Value> getContainer();
-        std::shared_ptr<Value> lastIndex();
-        bool lastDot();
-        std::shared_ptr<Value> index(int index);
-        bool isDot(int index);
-        std::shared_ptr<Value> getCopyElement();
         operator std::string();
         ~ContainerAccessExpression(){}
         void accept(Visitor* visitor);

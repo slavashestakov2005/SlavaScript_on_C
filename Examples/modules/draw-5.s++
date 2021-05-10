@@ -3,7 +3,7 @@ import [math, draw, std]
 
 w = 800		h = 600
 w2 = w / 2 	h2 = h / 2
-window("Клон agar.io", w, h)
+window("РљР»РѕРЅ agar.io", w, h)
 framelimit(50)
 fieldWidth = 10000
 fieldHeight = 6000

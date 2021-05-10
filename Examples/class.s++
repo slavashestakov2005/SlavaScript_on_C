@@ -12,7 +12,7 @@ class Point{
 a = new Point({"two" : 2}, [0, 1, [2, 3]], def(x) = -x)
 b = new Point({2 : "two"}, [[3, 2], 1, 0], def(x) = x)
 
-println "Объекты сконструированы: " + a.map
+println "РћР±СЉРµРєС‚С‹ СЃРѕР·РґР°РЅС‹: " + a.map
 println b
 b.map = a.map
 println b.map

@@ -13,5 +13,5 @@ for val : vals println type_to_string(val)
 "Number"
 "String"
 */
-println max(1, "2")			/* "2", òàê êàê String > Number */
-println min([0], [1, 2])	/* [0], òàê êàê äëèíà ìåíüøå */
+println max(1, "2")		/* "2", Ñ‚Ð°Ðº ÐºÐ°Ðº String > Number */
+println min([0], [1, 2])	/* [0], Ñ‚Ð°Ðº ÐºÐ°Ðº Ð´Ð»Ð¸Ð½Ð° Ð¼ÐµÐ½ÑŒÑˆÐµ */

@@ -3,8 +3,8 @@ sub = def (a, b) = a - b
 mul = def (a, b) = a * b
 div = def (a, b) = a / b
 cube = def (x) return x * mul(x, x)
-println mul(8, 5)								/* 40 */
-println cube(2)									/* 8 */
+println mul(8, 5)					/* 40 */
+println cube(2)						/* 8 */
 functions = [add, sub, mul, div]
 def function(f, a, b) return f(a, b)
 for i = 0, i < 4, ++i{
@@ -14,10 +14,10 @@ for i = 0, i < 4, ++i{
 
 map = { "+" : add, "-" : sub, "*" : mul, "/" : div}
 println map
-println function(map["+"], 4, 5)				/* 9 */
-println map["*"](7, 8)							/* 56 */
-println [0, 1] + [2, 3]							/* [0, 1, 2, 3] */
-// println add + sub							/* error */
+println function(map["+"], 4, 5)			/* 9 */
+println map["*"](7, 8)					/* 56 */
+println [0, 1] + [2, 3]					/* [0, 1, 2, 3] */
+// println add + sub					/* error */
 
 
 import types

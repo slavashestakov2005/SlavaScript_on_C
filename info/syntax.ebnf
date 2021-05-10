@@ -1,0 +1,101 @@
+ident_begin:		'a..z' | 'A..Z' | '_' | '$'
+number:			'0..9'
+WORD: 			ident_begin (ident_begin | number)* | ''' charset1* '''
+NUMBER: 		number+ '.' number* | '#' (number | 'a..f' | 'A..F')*
+TEXT:			'"' charset2* '"'
+
+# charset1: Любой символ, кроме '\0', '\n', '\r', ''', экранирования нет. 
+# charset2: Любой символ, поддерживаются экранирования '\0', '\n', '\r', '\t', '\"'.
+# Симолы после '//' и до конца строки, а также символы между '/*' и '*/' считаются комментариями и не анализируются.
+# Симолы между '{', ближайшей к '##', и '\n}' считаются кодом из другого языка и не анализируются.
+
+
+
+cond_op: 		'<' | '>' | '>=' | '<='
+assign_op: 		'=' | '+=' | '-=' | '*=' | '/=' | '%=' | '**=' | '&=' | '|=' | '^=' | '<<=' | '>>='
+pp_mm_op:		'++' | '--'
+unary_op: 		'+' | '-' | '!' | '~' | pp_mm_op
+shift_op:		'<<' | '>>'
+additive_op:		'+' | '-'
+multiplicative_op:	'*' | '/' | '%'
+exponential_op:		'**'
+
+
+func_args:		'(' [ expr (',' expr)* ] ')'
+func_params:		'(' [func_1_params | func_2_params | func_3_params | func_1_params ',' func_2_params |
+				func_1_params ',' func_3_params | func_2_params ',' func_3_params | func_1_params ',' func_2_params ',' func_3_params] ')'
+func_1_params:		WORD (',' WORD)*
+func_2_params:		WORD '=' expr (',', WORD '=' expr)*
+func_3_params:		'*' WORD
+func_body:		'=' expr | stat_or_block
+stat_or_block:		stat | block
+block:			'{' stat* '}'
+
+
+
+stat:			print_stat | println_stat | if_stat | while_stat | do_stat | for_stat |
+				break_stat | continue_stat | return_stat | throw_stat | try_stat | switch_stat |
+				class_stat | integ_stat | import_stat | def_stat | expr_stat
+
+print_stat:		'print' expr
+println_stat:		'println' expr
+
+if_stat:		'if' expr stat_or_block [elif_stat | else_stat]
+elif_stat:		'elif' expr stat_or_block [elif_stat | else_stat]
+else_stat:		'else' stat_or_block
+
+while_stat:		'while' expr stat_or_block
+do_stat:		'do' stat_or_block 'while' expr
+for_stat:		'for' (for_stats | '(' for_stats ')') stat_or_block
+for_stats:		for_base_stat | for_arr_stat | for_map_stat
+for_base_stat:		expr_stat ',' expr ',' expr_stat
+for_arr_stat:		WORD ':' expr
+for_map_stat:		WORD ',' WORD ':' expr
+
+break_stat:		'break'
+continue_stat:		'continue'
+return_stat:		'return' expr
+throw_stat:		'throw' expr
+try_stat:		'try' stat_or_block 'catch' WORD stat_or_block
+
+switch_stat:		'switch' expr (switch_case_stat | switch_def_stat | '{' switch_case_stat* '}' |
+				'{' switch_case_stat* switch_def_stat switch_case_stat* '}' )
+switch_case_stat:	'case' expr ':' stat_or_block
+switch_def_stat:	'default' ':' stat_or_block
+
+class_stat:		'class' WORD '{' [class_dv_stats] '}'
+class_dv_stats:		(class_def_stat | class_var_stat) [class_dv_stats]
+class_def_stat:		def_stat
+class_var_stat:		WORD '=' expr
+
+integ_stat:		'##' WORD 'as' WORD '{' code '}'
+# code: Исходный код на каком-либо языке программирования.
+import_stat:		(WORD | '[' WORD (',' WORD)* ']') ['as' WORD]
+def_stat:		'def' WORD func_params func_body
+
+expr_stat:		expr
+
+
+
+expr:			assign
+assign:			ternary (assign_op expr)* | ternary pp_mm_op
+ternary:		logical_or ('?' expr ':' expr)*
+logical_or:		logical_and ('||' logical_and)*
+logical_and:		bit_or ('&&' bit_or)*
+bit_or:			bit_xor ('|' bit_xor)*
+bit_xor:		bit_and ('^' bit_and)*
+bit_and:		equality ('&' equality)*
+equality:		coditional ['==' conditioal | '!=' conditioal]
+conditioal:		shift (cond_op shift)*
+shift:			additive (shift_op additive)*
+additive:		multiplicative (additive_op multiplicative)*
+multiplicative:		object_creation (multiplicative_op object_creation)*
+object_creation:	'new' WORD func_args | unary
+unary:			unary_op unary | exponential
+exponential:		primary_suffix [exponential_op unary]
+primary_suffix:		primary suffix* | 'def' func_params func_body
+primary:		'(' expr ')' | value
+value:			array | map | WORD | TEXT | NUMBER
+array:			'[' [ expr (',' expr)* ] ']'
+map:			'{' [ expr ':' expr (',' expr ':' expr )* ] '}'
+suffix: 		'(' func_args ')' | '[' expr ']' | '.' WORD

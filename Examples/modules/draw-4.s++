@@ -1,6 +1,6 @@
 import draw
 w = 800 h = 600
-window("Фрактал", w, h)
+window("Р¤СЂР°РєС‚Р°Р»", w, h)
 clear()
 fractal(w/2, w/2, w/2)
 repaint()

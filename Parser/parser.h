@@ -21,31 +21,31 @@ namespace SlavaScript{ namespace lang{
         int getErrorsLine();
         void recover();
 
-        Statement* block();
         Statement* statementOrBlock();
+        Statement* block();
         Statement* statement();
-        Statement* assignmentStatement();
+
         Statement* ifelseStatement();
         Statement* whileStatement();
         Statement* doWhileStatement();
         Statement* forStatement();
         ForeachArrayStatement* foreachArrayStatement();
         ForeachMapStatement* foreachMapStatement();
-        Statement* switchStatement();
-        Statement* importStatement();
         Statement* tryStatement();
+        Statement* switchStatement();
+        Statement* classDeclaration();
         Statement* integrationStatement();
+        Statement* importStatement();
+
         Arguments functionArguments();
         Statement* functionBody();
         FunctionDefineStatement* functionDefine();
-        Expression* functionChain(Expression* nameExpression);
+        std::vector<Expression*> functionCallArguments();
         FunctionalExpression* function(Expression* nameExpression);
-        Expression* array();
-        Expression* map();
-        Statement* classDeclaration();
+        Statement* exprStatement();
+
         Expression* expression();
         Expression* assignment();
-        Expression* assignmentStrict();
         Expression* ternary();
         Expression* logicalOr();
         Expression* logicalAnd();
@@ -60,13 +60,13 @@ namespace SlavaScript{ namespace lang{
         Expression* objectCreation();
         Expression* unary();
         Expression* exponential();
+        Expression* primaryWithSuffix();
         Expression* primary();
-        Expression* variable();
         Expression* value();
+        Expression* array();
+        Expression* map();
 
-        Expression* qualifiedName();
-        std::vector<ContainerAccessElement> variableSuffix();
-        Expression* primarySuffix(Expression* root);
+        Expression* suffix(Expression* root);
         Token* get(int position);
         bool lookMatch(int position, TokenType type);
         bool match(TokenType type);

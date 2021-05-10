@@ -3,6 +3,7 @@
 #include "../Value/arrayvalue.h"
 #include "../Lib/functions.h"
 #include "../Value/classvalue.h"
+#include "../Value/integrationvalue.h"
 #include "valueexpression.h"
 #include "../Exception/operationIsnotsupportedexception.h"
 #include "../Exception/typeexception.h"
@@ -13,12 +14,6 @@ using namespace SlavaScript::lang;
 using SlavaScript::exceptions::OperationIsNotSupportedException;
 
 namespace{
-    std::string mas[] = {
-        "==", "!=",
-        "<", "<=", ">", ">=",
-        "&&", "||"
-    };
-
     bool operator_gtgt(Value const& a, Value const& b){
         if (a.type() != b.type()) return false;
         switch(a.type()){
@@ -30,6 +25,7 @@ namespace{
             case Values::STRING : return *(StringValue*)(&a) == *(StringValue*)(&b);
             case Values::NULL_ : return *(NullValue*)(&a) == *(NullValue*)(&b);
             case Values::CLASS : return *(ClassValue*)(&a) == *(ClassValue*)(&b);
+            case Values::INTEGRATION : return *(IntegrationValue*)(&a) == *(IntegrationValue*)(&b);
         }
     }
 
@@ -44,6 +40,7 @@ namespace{
             case Values::STRING : return *(StringValue*)(&a) < *(StringValue*)(&b);
             case Values::NULL_ : return *(NullValue*)(&a) < *(NullValue*)(&b);
             case Values::CLASS : return *(ClassValue*)(&a) < *(ClassValue*)(&b);
+            case Values::INTEGRATION : return *(IntegrationValue*)(&a) < *(IntegrationValue*)(&b);
         }
     }
 }
@@ -59,7 +56,7 @@ std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator oper
         case ConditionalOperator::GTEQ : result = operator_lt(*right, *left) || operator_gtgt(*left, *right); break;
         case ConditionalOperator::AND : result = left -> asBool() && right -> asBool(); break;
         case ConditionalOperator::OR : result = left -> asBool() || right -> asBool(); break;
-        default: throw new OperationIsNotSupportedException(mas[(int)operation]);
+        default: throw new OperationIsNotSupportedException(getOperator(operation));
     }
     return BoolValue::fromBool(result);
 }
@@ -67,15 +64,15 @@ std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator oper
 std::shared_ptr<Value> ConditionalExpression::eval(){
     std::shared_ptr<Value> value1 = expr1 -> eval();
     std::shared_ptr<Value> value2 = expr2 -> eval();
-    if (Functions::find(mas[(int) operation], 2)){
+    if (Functions::find(getOperator(operation), 2)){
         std::vector<std::shared_ptr<Value>> vec = { value1, value2 };
-        return Functions::get(mas[(int) operation], 2) -> execute(vec);
+        return Functions::get(getOperator(operation), 2) -> execute(vec);
     }
     return calculate(operation, value1, value2);
 }
 
 ConditionalExpression::operator std::string(){
-    return "[" + std::string(*expr1) + " " + mas[int(operation)] + " " + std::string(*expr2) + "]";
+    return "[" + std::string(*expr1) + " " + getOperator(operation) + " " + std::string(*expr2) + "]";
 }
 
 ConditionalExpression::~ConditionalExpression(){

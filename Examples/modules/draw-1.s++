@@ -1,7 +1,7 @@
 import draw
 import std
 w = 800 h = 600
-window("Сетка", w, h)
+window("РЎРµС‚РєР°", w, h)
 color(#0000ff)
 for j = 0, j < 10, j = j + 1{
 	step = rand(20)

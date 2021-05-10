@@ -7,12 +7,6 @@
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::OperationIsNotSupportedException;
 
-namespace {
-    std::string mas[] = {
-        "=", "+=", "-=", "*=", "/=", "%=", "**=", "&=", "|=", "^=", "<<=", ">>=", "++", "--", "++", "--"
-    };
-}
-
 std::shared_ptr<Value> AssignmentExpression::calculate(AssignmentOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
     std::shared_ptr<Value> result;
     switch(operation){
@@ -32,7 +26,7 @@ std::shared_ptr<Value> AssignmentExpression::calculate(AssignmentOperator operat
         case AssignmentOperator::PLUSPLUS_ : result = BinaryExpression::calculate(BinaryOperator::ADD, left, NumberValue::ONE); break;
         case AssignmentOperator::_MINUSMINUS : result = BinaryExpression::calculate(BinaryOperator::SUBSTRACT, left, NumberValue::ONE); break;
         case AssignmentOperator::MINUSMINUS_ : result = BinaryExpression::calculate(BinaryOperator::SUBSTRACT, left, NumberValue::ONE); break;
-        default: throw new OperationIsNotSupportedException(mas[(int)operation]);
+        default: throw new OperationIsNotSupportedException(getOperator(operation));
     }
     return result;
 }
@@ -48,9 +42,9 @@ std::shared_ptr<Value> AssignmentExpression::eval(){
 
 AssignmentExpression::operator std::string(){
     if (operation == AssignmentOperator::MINUSMINUS_ || operation == AssignmentOperator::PLUSPLUS_){
-        return mas[int(operation)] + " '" + variable + "'";
+        return getOperator(operation) + " '" + variable + "'";
     }
-    return "'" + variable + "' " + mas[int(operation)] + " " + std::string(*expression);
+    return "'" + variable + "' " + getOperator(operation) + " " + std::string(*expression);
 }
 
 AssignmentExpression::~AssignmentExpression(){

@@ -16,13 +16,6 @@ using SlavaScript::modules::math_out::pow;
 using SlavaScript::exceptions::TypeException;
 using SlavaScript::exceptions::OperationIsNotSupportedException;
 
-namespace{
-    std::string mas[] = {
-        "+", "-", "*", "/", "%", "**",
-        "&", "|", "^", "<<", ">>"
-    };
-}
-
 std::shared_ptr<Value> BinaryExpression::calculate(BinaryOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
     if (left -> type() == Values::INTEGRATION || right -> type() == Values::INTEGRATION) throw new TypeException("Cannot used binary operation for integration");
     if (left -> type() == Values::CLASS || right -> type() == Values::CLASS) throw new TypeException("Cannot used binary operation for class");
@@ -57,7 +50,7 @@ std::shared_ptr<Value> BinaryExpression::calculate(BinaryOperator operation, std
                 for(int i = 0; i < iterations; ++i) result += string1;
                 return SHARE(StringValue, result);
             }
-            default: throw new OperationIsNotSupportedException(mas[(int)operation]);
+            default: throw new OperationIsNotSupportedException(getOperator(operation));
         }
     }
     Bignum num1 = left -> asBignum();
@@ -76,7 +69,7 @@ std::shared_ptr<Value> BinaryExpression::calculate(BinaryOperator operation, std
 ///        case BinaryOperator::XOR: return new NumberValue(lon1 ^ lon2);
 ///        case BinaryOperator::LSHIFT: return new NumberValue(lon1 << lon2);
 ///        case BinaryOperator::RSHIFT: return new NumberValue(lon1 >> lon2);
-        default: throw new OperationIsNotSupportedException(mas[(int)operation]);
+        default: throw new OperationIsNotSupportedException(getOperator(operation));
     }
     return SHARE(NumberValue, result);
 }
@@ -84,15 +77,15 @@ std::shared_ptr<Value> BinaryExpression::calculate(BinaryOperator operation, std
 std::shared_ptr<Value> BinaryExpression::eval(){
     std::shared_ptr<Value> value1 = expr1 -> eval();
     std::shared_ptr<Value> value2 = expr2 -> eval();
-    if (Functions::find(mas[int(operation)], 2)){
+    if (Functions::find(getOperator(operation), 2)){
         std::vector<std::shared_ptr<Value>> vec = {value1, value2};
-        return Functions::get(mas[int(operation)], 2) -> execute(vec);
+        return Functions::get(getOperator(operation), 2) -> execute(vec);
     }
     return calculate(operation, value1, value2);
 }
 
 BinaryExpression::operator std::string(){
-    return "[" + std::string(*expr1) + " " + mas[int(operation)] + " " + std::string(*expr2) + "]";
+    return "[" + std::string(*expr1) + " " + getOperator(operation) + " " + std::string(*expr2) + "]";
 }
 
 void BinaryExpression::accept(Visitor* visitor){
