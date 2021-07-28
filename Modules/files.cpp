@@ -87,5 +87,5 @@ namespace SlavaScript{ namespace modules{ namespace files_f{
 }}}
 
 void Files::initFunctions(){
-    Functions::set("open", open);
+    UNARY_F(open)
 }

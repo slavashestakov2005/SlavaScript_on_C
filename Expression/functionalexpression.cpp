@@ -4,6 +4,7 @@
 #include "../Lib/variables.h"
 #include "../Value/functionvalue.h"
 #include "valueexpression.h"
+#include "variableexpression.h"
 #include "../Exception/variabledoesnotexistsexception.h"
 #include "../Exception/unknownfunctionexception.h"
 #include "../Run/callstack.h"
@@ -27,21 +28,17 @@ std::shared_ptr<Value> FunctionalExpression::eval(){
 }
 
 std::shared_ptr<Function> FunctionalExpression::consumeFunction(Expression* expr){
-    try{
-        std::shared_ptr<Value> value = expr -> eval();
-        if (value -> type() == Values::FUNCTION) return CAST(FunctionValue, value) -> getFunction();
-        return getFunction(value -> asString());
-    }catch(VariableDoesNotExistsException* ex){
-        return getFunction(ex -> getVariable());
-    }
-}
-
-std::shared_ptr<Function> FunctionalExpression::getFunction(std::string name){
-    if (Functions::find(name, arguments.size())) return Functions::get(name, arguments.size());
-    else if (Functions::isExists(name)) return Functions::get(name);
-    else if (Variables::isExists(name)){
-        if (Variables::get(name) -> type() == Values::FUNCTION) return CAST(FunctionValue, Variables::get(name)) -> getFunction();
-    }
+    std::shared_ptr<Function> f = nullptr;
+    if (expr -> type() == Expressions::VariableExpression) f = Functions::get(((VariableExpression*)expr) -> name, arguments.size());
+    if (f) return f;
+    std::shared_ptr<Value> value = expr -> eval();
+    if (value -> type() == Values::FUNCTION) f = CAST(FunctionValue, value) -> getFunction();
+    if (f) return f;
+    std::string name = value -> asString();
+    if (Functions::find(name, arguments.size())) f = Functions::get(name, arguments.size());
+    if (f) return f;
+    if (Variables::isExists(name) && Variables::get(name) -> type() == Values::FUNCTION) f = CAST(FunctionValue, Variables::get(name)) -> getFunction();
+    if (f) return f;
     throw new UnknownFunctionException(name);
 }
 

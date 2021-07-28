@@ -138,7 +138,7 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
     FE
 
     CREATE_FUNCTION(flat_map)
-        if (values.size() < 2) throw new ArgumentsMismatchException("At least arguments excepted");
+        if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments excepted");
         if (values[0] -> type() != Values::ARRAY) throw new TypeException("Array expected at first argument");
         if (values[1] -> type() != Values::FUNCTION) throw new TypeException("Function expected at second arguments");
         return functional_out::flatMapArray(CAST(ArrayValue, values[0]), CAST(FunctionValue, values[1]) -> getFunction());
@@ -258,14 +258,14 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
 }}}
 
 void Functional::initFunctions(){
-    Functions::set("chain", chain);
-    Functions::set("combine", combine);
-    Functions::set("drop_while", drop_while);
-    Functions::set("filter", filter);
-    Functions::set("flat_map", flat_map);
-    Functions::set("foreach", foreach);
-    Functions::set("map", map);
-    Functions::set("reduce", reduce);
-    Functions::set("sortby", sortby);
-    Functions::set("take_while", take_while);
+    INFO_F(chain, ArgumentsInfo(3, 0, 1))
+    INFO_F(combine, ArgumentsInfo(1, 0, 1))
+    BINARY_F(drop_while)
+    BINARY_F(filter)
+    BINARY_F(flat_map)
+    BINARY_F(foreach)
+    INFO_F(map, ArgumentsInfo(2, 1))
+    TERNARY_F(reduce)
+    BINARY_F(sortby)
+    BINARY_F(take_while)
 }

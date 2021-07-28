@@ -333,12 +333,12 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_f{
 }}}
 
 void Chemistry::initFunctions(){
-    Functions::set("electron", electron);
-    Functions::set("latin_read", latin_read);
-    Functions::set("mr", mr);
-    Functions::set("neutron", neutron);
-    Functions::set("omega", omega);
-    Functions::set("proton", proton);
-    Functions::set("russian_read", russian_read);
-    Functions::set("write", write);
+    UNARY_F(electron)
+    UNARY_F(latin_read)
+    UNARY_F(mr)
+    UNARY_F(neutron)
+    BINARY_F(omega)
+    UNARY_F(proton)
+    UNARY_F(russian_read)
+    UNARY_F(write)
 }

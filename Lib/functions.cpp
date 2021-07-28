@@ -4,10 +4,14 @@
 #include "functions.h"
 #include "../Exception/unknownfunctionexception.h"
 #include "../Modules/global.h"
+#include "names.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::modules::Global;
 using SlavaScript::exceptions::UnknownFunctionException;
+
+ArgumentsInfo ArgumentsInfo::without(0), ArgumentsInfo::unary(1), ArgumentsInfo::binary(2), ArgumentsInfo::ternary(3), ArgumentsInfo::quaternary(4),
+            ArgumentsInfo::inf(0, 0, 1), ArgumentsInfo::inf1(1, 0, 1);
 
 std::vector<FunctionsScope> Functions::scope = {};
 
@@ -16,7 +20,7 @@ void FunctionsScope::start(){
     Global::initFunctions();
 }
 
-std::map<std::string, std::shared_ptr<Function>> FunctionsScope::getScope(){
+std::map<std::string, std::vector<std::pair<ArgumentsInfo, std::shared_ptr<Function>>>> FunctionsScope::getScope(){
     return functions;
 }
 
@@ -24,46 +28,55 @@ bool FunctionsScope::isExists(std::string key){
     return functions.find(key) != functions.cend();
 }
 
-std::shared_ptr<Function> FunctionsScope::get(std::string key){
-    if (!isExists(key)) throw new UnknownFunctionException(key);
-    else return functions[key];
+void FunctionsScope::set(std::string key, std::shared_ptr<Function> function, ArgumentsInfo info){
+    if (!isExists(key)) functions[key] = {{info, function}};
+    else functions[key].push_back({info, function});
 }
 
-void FunctionsScope::set(std::string key, std::shared_ptr<Function> function){
-    functions[key] = function;
+void FunctionsScope::set(std::string key, std::vector<std::pair<ArgumentsInfo, std::shared_ptr<Function>>> vals){
+    functions[key] = vals;
 }
 
-bool FunctionsScope::add(std::string key, std::shared_ptr<Function> function, int start, int finish){
-    int i = start;
-    bool result = true;
-    key = "'" + key + "'";
-    while(i <= finish && result){
-        std::stringstream ss;
-        ss << i;
-        std::string now = key + ss.str();
-        result = !isExists(now);
-        if (result) functions[now] = function;
-        ++i;
-    }
-    return result;
+void FunctionsScope::erase(std::string key){
+    functions.erase(key);
 }
 
 bool FunctionsScope::find(std::string key, int count){
-    std::stringstream ss;
-    ss << count;
-    return isExists("'" + key + "'" + ss.str());
+    if (!isExists(key)) return false;
+    int goodCount = 0;
+    for(auto x : functions[key]){
+        if(x.first.canCalled(count)) ++goodCount;
+    }
+    return goodCount == 1;
+}
+
+std::shared_ptr<Function> FunctionsScope::get(std::string key){
+    if (!isExists(key)) throw std::logic_error("Function " + key + " undefined");
+    if (functions[key].size() > 1) throw std::logic_error("Cannot get overloaded function " + key);
+    return functions[key][0].second;
 }
 
 std::shared_ptr<Function> FunctionsScope::get(std::string key, int count){
-    std::stringstream ss;
-    ss << count;
-    return get("'" + key + "'" + ss.str());
+    for(auto x : functions[key]){
+        if (x.first.canCalled(count)) return x.second;
+    }
+    return nullptr;
 }
 
 void FunctionsScope::print(){
-    for (auto now : functions) std::cout << now.first << "\t\t" << now.second -> type << std::endl;
+    for (auto now : functions){
+        for(auto now2 : now.second) std::cout << now.first << "\t\t" << now2.second -> type << std::endl;
+    }
 }
 
+std::vector<std::pair<ArgumentsInfo, std::shared_ptr<Function>>> FunctionsScope::save(std::string key){
+    if (!isExists(key)) return {};
+    else return functions[key];
+}
+
+void FunctionsScope::restore(NamedValue named){
+    functions[named.name] = named.function;
+}
 
 
 void Functions::init(){
@@ -71,14 +84,16 @@ void Functions::init(){
 }
 
 void Functions::start() { scope.back().start(); }
-std::map<std::string, std::shared_ptr<Function>> Functions::getScope(){ return scope.back().getScope(); }
+std::map<std::string, std::vector<std::pair<ArgumentsInfo, std::shared_ptr<Function>>>> Functions::getScope(){ return scope.back().getScope(); }
 bool Functions::isExists(std::string key) { return scope.back().isExists(key); }
 std::shared_ptr<Function> Functions::get(std::string key) { return scope.back().get(key); }
 std::shared_ptr<Function> Functions::get(std::string key, int count) { return scope.back().get(key, count); }
-void Functions::set(std::string key, std::shared_ptr<Function> function) { scope.back().set(key, function); }
-bool Functions::add(std::string key, std::shared_ptr<Function> function, int start, int finish) { return scope.back().add(key, function, start, finish); }
+void Functions::set(std::string key, std::shared_ptr<Function> function, ArgumentsInfo info) { scope.back().set(key, function, info); }
+void Functions::erase(std::string key){ scope.back().erase(key); }
 bool Functions::find(std::string key, int count){ return scope.back().find(key, count); }
 void Functions::print() { scope.back().print(); }
+std::vector<std::pair<ArgumentsInfo, std::shared_ptr<Function>>> Functions::save(std::string key) { return scope.back().save(key); }
+void Functions::restore(NamedValue named){ scope.back().restore(named); }
 
 void Functions::pushScope(){
     scope.push_back(FunctionsScope());
@@ -90,7 +105,7 @@ void Functions::popScope(){
 }
 
 void Functions::copyScope(){
-    std::map<std::string, std::shared_ptr<Function>> top = scope.back().getScope();
+    std::map<std::string, std::vector<std::pair<ArgumentsInfo, std::shared_ptr<Function>>>> top = scope.back().getScope();
     scope.pop_back();
     for(auto x : top){
         // if (!scope.back().isExists(x.first)) scope.back().set(x.first, x.second);

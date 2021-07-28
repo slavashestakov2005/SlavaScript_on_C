@@ -1,8 +1,6 @@
 #include "path.h"
 #include "../Value/stringvalue.h"
-#include "../Lib/variables.h"
-#include "../Lib/functions.h"
-#include "../Lib/classdeclarations.h"
+#include "../Lib/names.h"
 #include "../Cpp17/filesystem.h"
 
 using namespace SlavaScript::lang;
@@ -33,9 +31,7 @@ void Path::setImpoted(bool imp){
 }
 
 void Path::initContainers(){
-    Variables::init();
-    Functions::init();
-    ClassDeclarations::init();
+    Names::init();
 }
 
 void Path::setCommandArguments(std::vector<std::string> argv){

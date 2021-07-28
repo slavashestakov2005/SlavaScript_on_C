@@ -102,6 +102,8 @@
 		<Unit filename="Lib/functions.cpp" />
 		<Unit filename="Lib/functions.h" />
 		<Unit filename="Lib/macros.h" />
+		<Unit filename="Lib/names.cpp" />
+		<Unit filename="Lib/names.h" />
 		<Unit filename="Lib/userdefinedfunction.cpp" />
 		<Unit filename="Lib/userdefinedfunction.h" />
 		<Unit filename="Lib/variables.cpp" />

@@ -8,6 +8,8 @@
 #include "../Value/value.h"
 
 namespace SlavaScript{ namespace lang{
+    struct NamedValue;
+
     class VariablesScope{
     private:
         std::map<std::string, std::shared_ptr<Value>> variables;
@@ -20,7 +22,10 @@ namespace SlavaScript{ namespace lang{
         bool isExists(std::string key);
         std::shared_ptr<Value> get(std::string key);
         void set(std::string key, std::shared_ptr<Value> value);
+        void erase(std::string key);
         void print();
+        std::shared_ptr<Value> save(std::string key);
+        void restore(NamedValue named);
     };
 
     class Variables{
@@ -35,7 +40,10 @@ namespace SlavaScript{ namespace lang{
         static bool isExists(std::string key);
         static std::shared_ptr<Value> get(std::string key);
         static void set(std::string key, std::shared_ptr<Value> value);
+        static void erase(std::string key);
         static void print();
+        static std::shared_ptr<Value> save(std::string key);
+        static void restore(NamedValue named);
         static void pushScope();
         static void popScope();
         static void copyScope();

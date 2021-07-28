@@ -5,6 +5,7 @@
 #include "../Lib/functions.h"
 #include "../Lib/variables.h"
 #include "../Lib/classdeclarations.h"
+#include "../Lib/names.h"
 #include "../Modules/all.h"
 #include "../Value/mapvalue.h"
 #include "../Value/stringvalue.h"
@@ -17,9 +18,7 @@ using SlavaScript::exceptions::UnknownModuleException;
 void ImportStatement::execute(){
     if (!Path::getImpoted()) return;
     bool named = moduleName != "";
-    Variables::pushScope();
-    Functions::pushScope();
-    ClassDeclarations::pushScope();
+    Names::pushScope();
     for(std::string name : names){
         if (!try_import_module(name)){
             try{
@@ -27,32 +26,27 @@ void ImportStatement::execute(){
                 Start start(name);
                 start.start();
             }catch(...){
-                Variables::popScope();
-                Functions::popScope();
-                ClassDeclarations::popScope();
+                Names::popScope();
                 throw new UnknownModuleException(name);
             }
         }
     }
     if (named){
         std::map<std::string, std::shared_ptr<Value>> variables = Variables::getScope();
-        std::map<std::string, std::shared_ptr<Function>> functions = Functions::getScope();
+        std::map<std::string, std::vector<std::pair<ArgumentsInfo, std::shared_ptr<Function>>>> functions = Functions::getScope();
         // ClassDeclarations::getScope();
         std::shared_ptr<MapValue> map = SHARE(MapValue, 1);
         for(auto x : variables) map -> set(SHARE(StringValue, x.first), x.second);
-        for(auto x : functions) map -> set(SHARE(StringValue, x.first), x.second);
+        for(auto x : functions){
+            if (x.second.size() > 1) throw std::logic_error("Cannot import overloaded function");
+            map -> set(SHARE(StringValue, x.first), x.second[0].second);
+        }
         // for each
         map -> setThisMap(true);
-        Variables::popScope();
-        Functions::popScope();
-        ClassDeclarations::popScope();
-        Variables::set(moduleName, map);
+        Names::popScope();
+        Names::setVariable(moduleName, map);
     }
-    else{
-        Variables::copyScope();
-        Functions::copyScope();
-        ClassDeclarations::copyScope();
-    }
+    else Names::copyScope();
 }
 
 ImportStatement::operator std::string(){

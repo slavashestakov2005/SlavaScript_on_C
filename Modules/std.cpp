@@ -213,18 +213,18 @@ void Std::initConstants(){
 void Std::initFunctions(){
     srand(std::time(0));
     std::rand();
-    Functions::set("array_combine", array_combine);
-    Functions::set("echo", echo);
-    Functions::set("len", len);
-    Functions::set("map_key_exists", map_key_exists);
-    Functions::set("map_keys", map_keys);
-    Functions::set("map_values", map_values);
-    Functions::set("new_array", new_array);
-    Functions::set("parse_number", parse_number);
-    Functions::set("rand", std_f::rand);
-    Functions::set("sleep", sleep);
-    Functions::set("sort", sort);
-    Functions::set("time", std_f::time);
-    Functions::set("to_char", to_char);
-    Functions::set("to_hex_string", to_hex_string);
+    BINARY_F(array_combine)
+    INF_F(echo)
+    UNARY_F(len)
+    BINARY_F(map_key_exists)
+    UNARY_F(map_keys)
+    UNARY_F(map_values)
+    INF_F(new_array)
+    INFO_F(parse_number, ArgumentsInfo(1, 1))
+    INFO_F_(std_f, rand, ArgumentsInfo(0, 2))
+    UNARY_F(sleep)
+    INFO_F(sort, ArgumentsInfo(1, 1))
+    WITHOUT_F_(std_f, time)
+    UNARY_F(to_char)
+    UNARY_F(to_hex_string)
 }

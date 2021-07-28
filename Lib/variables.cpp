@@ -1,6 +1,7 @@
 #include "variables.h"
 #include "../Value/nullvalue.h"
 #include "../Modules/global.h"
+#include "names.h"
 #include <iostream>
 
 using namespace SlavaScript::lang;
@@ -40,10 +41,22 @@ void VariablesScope::set(std::string key, std::shared_ptr<Value> value){
     variables[key] = value;
 }
 
+void VariablesScope::erase(std::string key){
+    variables.erase(key);
+}
+
 void VariablesScope::print(){
     for (auto now : variables) std::cout << now.first << "\t\t" << std::string(*now.second) << std::endl;
 }
 
+std::shared_ptr<Value> VariablesScope::save(std::string key){
+    if (!isExists(key)) return nullptr;
+    else return variables[key];
+}
+
+void VariablesScope::restore(NamedValue named){
+    variables[named.name] = named.variable;
+}
 
 
 void Variables::init(){
@@ -57,7 +70,10 @@ std::map<std::string, std::shared_ptr<Value>> Variables::getScope(){ return scop
 bool Variables::isExists(std::string key) { return scope.back().isExists(key); }
 std::shared_ptr<Value> Variables::get(std::string key) { return scope.back().get(key); }
 void Variables::set(std::string key, std::shared_ptr<Value> value) { scope.back().set(key, value); }
+void Variables::erase(std::string key) { scope.back().erase(key); }
 void Variables::print() { scope.back().print(); }
+std::shared_ptr<Value> Variables::save(std::string key) { return scope.back().save(key); }
+void Variables::restore(NamedValue named){ scope.back().restore(named); }
 
 void Variables::pushScope(){
     scope.push_back(VariablesScope());

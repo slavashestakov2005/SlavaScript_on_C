@@ -1,7 +1,7 @@
 #include "breakstatement.h"
 #include "continuestatement.h"
 #include "foreacharraystatement.h"
-#include "../Lib/variables.h"
+#include "../Lib/names.h"
 #include "../Value/arrayvalue.h"
 #include "../Exception/typeexception.h"
 #include "../Value/value.h"
@@ -10,11 +10,11 @@ using namespace SlavaScript::lang;
 using SlavaScript::exceptions::TypeException;
 
 void ForeachArrayStatement::execute(){
-    std::shared_ptr<Value> start = Variables::isExists(variable) ? Variables::get(variable) : nullptr;
+    NamedValue start = Names::getNamed(variable);
     std::shared_ptr<Value> containerValue = container -> eval();
     if (containerValue -> type() != Values::ARRAY) throw new TypeException("Array expected in foreach");
     for (auto now : *CAST(ArrayValue, containerValue)){
-        Variables::set(variable, now);
+        Names::setVariable(variable, now);
         try{
             body -> execute();
         }
@@ -25,9 +25,7 @@ void ForeachArrayStatement::execute(){
             //continue;
         }
     }
-    if (start != nullptr){
-        Variables::set(variable, start);
-    }
+    Names::restore(start);
 }
 
 ForeachArrayStatement::operator std::string(){

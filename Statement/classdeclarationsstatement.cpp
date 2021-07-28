@@ -1,7 +1,7 @@
 #include "classdeclarationsstatement.h"
 #include "functiondefinestatement.h"
 #include "../Expression/assignmentexpression.h"
-#include "../Lib/classdeclarations.h"
+#include "../Lib/names.h"
 
 using namespace SlavaScript::lang;
 
@@ -14,7 +14,7 @@ void ClassDeclarationsStatement::addMethod(FunctionDefineStatement* statement){
 }
 
 void ClassDeclarationsStatement::execute(){
-    ClassDeclarations::set(name, this);
+    Names::setClass(name, this);
 }
 
 ClassDeclarationsStatement::operator std::string(){

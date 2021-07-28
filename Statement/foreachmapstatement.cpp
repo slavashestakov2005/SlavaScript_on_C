@@ -1,7 +1,7 @@
 #include "breakstatement.h"
 #include "continuestatement.h"
 #include "foreachmapstatement.h"
-#include "../Lib/variables.h"
+#include "../Lib/names.h"
 #include "../Value/mapvalue.h"
 #include "../Exception/typeexception.h"
 
@@ -9,13 +9,12 @@ using namespace SlavaScript::lang;
 using SlavaScript::exceptions::TypeException;
 
 void ForeachMapStatement::execute(){
-    std::shared_ptr<Value> startKey = Variables::isExists(key) ? Variables::get(key) : nullptr;
-    std::shared_ptr<Value> startValue = Variables::isExists(value) ? Variables::get(value) : nullptr;
+    NamedValue startKey = Names::getNamed(key), startValue = Names::getNamed(value);
     std::shared_ptr<Value> containerValue = container -> eval();
     if (containerValue -> type() != Values::MAP) throw new TypeException("Map expected in foreach");
     for(auto now : *CAST(MapValue, containerValue)){
-        Variables::set(key, now.first);
-        Variables::set(value, now.second);
+        Names::setVariable(key, now.first);
+        Names::setVariable(value, now.second);
         try{
             body -> execute();
         }
@@ -26,8 +25,8 @@ void ForeachMapStatement::execute(){
             //continue;
         }
     }
-    if (startKey != nullptr) Variables::set(key, startKey);
-    if (startValue != nullptr) Variables::set(value, startValue);
+    Names::restore(startKey);
+    Names::restore(startValue);
 }
 
 ForeachMapStatement::operator std::string(){

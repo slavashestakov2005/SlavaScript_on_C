@@ -202,17 +202,17 @@ void Draw::initConstants(){
 }
 
 void Draw::initFunctions(){
-    Functions::set("window", window);
-    Functions::set("color", color);
-    Functions::set("line", line);
-    Functions::set("rect", rect);
-    Functions::set("frect", frect);
-    Functions::set("circle", circle);
-    Functions::set("fcircle", fcircle);
-    Functions::set("repaint", repaint);
-    Functions::set("clear", clear);
-    Functions::set("framelimit", framelimit);
-    Functions::set("keypressed", keypressed);
-    Functions::set("mousehover", mousehover);
-    Functions::set("close", close);
+    INFO_F(window, ArgumentsInfo(1, 2))
+    INFO_F(color, ArgumentsInfo(0, 3))
+    QUATERNARY_F(line)
+    QUATERNARY_F(rect)
+    QUATERNARY_F(frect)
+    TERNARY_F(circle)
+    TERNARY_F(fcircle)
+    WITHOUT_F(repaint)
+    WITHOUT_F(clear)
+    INFO_F(framelimit, ArgumentsInfo(0, 1))
+    WITHOUT_F(keypressed)
+    WITHOUT_F(mousehover)
+    WITHOUT_F(close)
 }

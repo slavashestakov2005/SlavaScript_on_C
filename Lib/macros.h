@@ -2,7 +2,7 @@
 #define MACROS_H_INCLUDED
 
 namespace SlavaScript{ namespace modules{
-    /** included by module.h **/
+    /** using by module.h **/
     #define CREATE_TEMPLATE(name) \
         template<typename T, typename = void> struct Has##name: std::false_type{}; \
         template<typename T> struct Has##name<T, std::enable_if_t<std::is_same<decltype(std::declval<T>().init##name()), void>::value>>: std::true_type{}; \
@@ -13,7 +13,7 @@ namespace SlavaScript{ namespace modules{
 }}
 
 namespace SlavaScript{ namespace lang{
-    /** included by value.h **/
+    /** using by value.h **/
     #define CREATE_FUNCTION(name) \
         std::shared_ptr<Function> name = std::make_shared<FunctionModule>([](std::vector<std::shared_ptr<Value>> values) -> std::shared_ptr<Value>{
 
@@ -42,10 +42,10 @@ namespace SlavaScript{ namespace lang{
     #define SH_RET_2(type, arg1, arg2) \
         return SHARE_2(type, arg1, arg2)
 
-     #define SH_RET_3(type, arg1, arg2, arg3) \
+    #define SH_RET_3(type, arg1, arg2, arg3) \
         return SHARE_3(type, arg1, arg2, arg3)
 
-    /** included by classmodulevalue.h and container.h **/
+    /** using by classmodulevalue.h and container.h **/
     #define CLASS_MODULE_FUNCTION_(className, fieldType, fieldName) \
         class className : public Function { \
         private: \
@@ -57,6 +57,32 @@ namespace SlavaScript{ namespace lang{
     #define CLASS_MODULE_FUNCTION(className, fieldType, fieldName) CLASS_MODULE_FUNCTION_(className, fieldType*, fieldName)
 
     #define CMFE }};
+
+    /** using by Modules/... **/
+    #define _INFO_F(oldName, newName, info) Functions::set(newName, oldName, info);
+    #define INFO_F_(space, text, info) Functions::set(#text, space::text, info);
+    #define INFO_F(text, info) Functions::set(#text, text, info);
+
+    #define WITHOUT_F_(space, text) INFO_F_(space, text, ArgumentsInfo::without)
+    #define WITHOUT_F(text) INFO_F(text, ArgumentsInfo::without)
+
+    #define UNARY_F_(space, text) INFO_F_(space, text, ArgumentsInfo::unary)
+    #define UNARY_F(text) INFO_F(text, ArgumentsInfo::unary)
+
+    #define BINARY_F_(space, text) INFO_F_(space, text, ArgumentsInfo::binary)
+    #define BINARY_F(text) INFO_F(text, ArgumentsInfo::binary)
+
+    #define TERNARY_F_(space, text) INFO_F_(space, text, ArgumentsInfo::ternary)
+    #define TERNARY_F(text) INFO_F(text, ArgumentsInfo::ternary)
+
+    #define QUATERNARY_F_(space, text) INFO_F_(space, text, ArgumentsInfo::quaternary)
+    #define QUATERNARY_F(text) INFO_F(text, ArgumentsInfo::quaternary)
+
+    #define INF_F_(space, text) INFO_F_(space, text, ArgumentsInfo::inf)
+    #define INF_F(text) INFO_F(text, ArgumentsInfo::inf)
+
+    #define INF1_F_(space, text) INFO_F_(space, text, ArgumentsInfo::inf1)
+    #define INF1_F(text) INFO_F(text, ArgumentsInfo::inf1)
 }}
 
 #endif // MACROS_H_INCLUDED

@@ -76,8 +76,8 @@ void Global::initConstants(){
 }
 
 void Global::initFunctions(){
-    Functions::set("input", input);
-    Functions::set("max", max);
-    Functions::set("min", min);
-    Functions::set("set_color", set_color);
+    INF_F(input)
+    INF1_F(max)
+    INF1_F(min)
+    INFO_F(set_color, ArgumentsInfo(0, 1))
 }

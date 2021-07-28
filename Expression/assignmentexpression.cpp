@@ -1,5 +1,5 @@
 #include "assignmentexpression.h"
-#include "../Lib/variables.h"
+#include "../Lib/names.h"
 #include "../Expression/binaryexpression.h"
 #include "../Expression/valueexpression.h"
 #include "../Exception/operationIsnotsupportedexception.h"
@@ -32,10 +32,10 @@ std::shared_ptr<Value> AssignmentExpression::calculate(AssignmentOperator operat
 }
 
 std::shared_ptr<Value> AssignmentExpression::eval(){
-    std::shared_ptr<Value> left = Variables::get(variable);
+    std::shared_ptr<Value> left = Names::get(variable, true);
     std::shared_ptr<Value> right = expression == nullptr ? nullptr : expression -> eval();
     std::shared_ptr<Value> result = calculate(operation, left, right);
-    Variables::set(variable, result);
+    Names::setVariable(variable, result);
     if (operation == AssignmentOperator::_PLUSPLUS || operation == AssignmentOperator::_MINUSMINUS) result = left;
     return result;
 }

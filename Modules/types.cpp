@@ -52,9 +52,9 @@ void Types::initConstants(){
 }
 
 void Types::initFunctions(){
-    Functions::set("float", float_);
-    Functions::set("int", int_);
-    Functions::set("string", string);
-    Functions::set("type_to_string", type_to_string);
-    Functions::set("typeof", typeof);
+    _INFO_F(float_, "float", ArgumentsInfo::unary)
+    _INFO_F(int_, "int", ArgumentsInfo::unary)
+    UNARY_F(string)
+    UNARY_F(type_to_string)
+    UNARY_F(typeof)
 }

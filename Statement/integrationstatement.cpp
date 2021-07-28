@@ -1,5 +1,5 @@
 #include "integrationstatement.h"
-#include "../Lib/variables.h"
+#include "../Lib/names.h"
 #include "../Value/integrationvalue.h"
 #include "../Cpp17/filesystem.h"
 
@@ -28,7 +28,7 @@ void IntegrationStatement::execute(){
     std::string fileEnd = "py";
     std::string filename = fileBegin + "." + fileEnd;
     FS::writeToCache(filename, replace_all(code));
-    Variables::set(name, SHARE_2(IntegrationValue, fileBegin, fileEnd));
+    Names::setVariable(name, SHARE_2(IntegrationValue, fileBegin, fileEnd));
 }
 
 IntegrationStatement::operator std::string(){

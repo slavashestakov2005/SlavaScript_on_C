@@ -1,18 +1,19 @@
 #include "throwstatement.h"
 #include "trystatement.h"
-#include "../Lib/variables.h"
+#include "../Lib/names.h"
 
 using namespace SlavaScript::lang;
 
 void TryStatement::execute(){
-    std::shared_ptr<Value> start = Variables::isExists(name) ? Variables::get(name) : nullptr;
+    std::shared_ptr<Value> start = Names::isExists(name) ? Names::get(name) : nullptr;
     try{
         body -> execute();
     } catch(ThrowStatement* ex){
-        Variables::set(name, ex -> getResult());
+        Names::setVariable(name, ex -> getResult());
         catchBlock -> execute();
     }
-    if (start != nullptr) Variables::set(name, start);
+    if (start != nullptr) Names::setVariable(name, start);
+    else Names::erase(name);
 }
 
 TryStatement::operator std::string(){

@@ -86,34 +86,34 @@ void Math::initConstants(){
 }
 
 void Math::initFunctions(){
-    Functions::set("abs", math_f::abs);
-    Functions::set("acos", math_f::acos);
-    Functions::set("asin", math_f::asin);
-    Functions::set("atan", math_f::atan);
-    Functions::set("atan2", math_f::atan2);
-    Functions::set("cbrt", math_f::cbrt);
-    Functions::set("ceil", math_f::ceil);
-    Functions::set("copy_sign", math_f::copy_sign);
-    Functions::set("cos", math_f::cos);
-    Functions::set("cosh", math_f::cosh);
-    Functions::set("exp", math_f::exp);
-    Functions::set("expm1", math_f::expm1);
-    Functions::set("factorial", math_f::factorial);
-    Functions::set("floor", math_f::floor);
-    Functions::set("hypot", math_f::hypot);
-    Functions::set("log", math_f::log);
-    Functions::set("log10", math_f::log10);
-    Functions::set("log1p", math_f::log1p);
-    Functions::set("pow", math_f::pow);
-    Functions::set("round", math_f::round);
-    Functions::set("signum", math_f::signum);
-    Functions::set("sin", math_f::sin);
-    Functions::set("sinh", math_f::sinh);
-    Functions::set("sqrt", math_f::sqrt);
-    Functions::set("tan", math_f::tan);
-    Functions::set("tanh", math_f::tanh);
-    Functions::set("to_degrees", math_f::to_degrees);
-    Functions::set("to_radians", math_f::to_radians);
+    UNARY_F_(math_f, abs)
+    UNARY_F_(math_f, acos)
+    UNARY_F_(math_f, asin)
+    UNARY_F_(math_f, atan)
+    BINARY_F_(math_f, atan2)
+    UNARY_F_(math_f, cbrt)
+    UNARY_F_(math_f, ceil)
+    BINARY_F_(math_f, copy_sign)
+    UNARY_F_(math_f, cos)
+    UNARY_F_(math_f, cosh)
+    UNARY_F_(math_f, exp)
+    UNARY_F_(math_f, expm1)
+    UNARY_F_(math_f, factorial)
+    UNARY_F_(math_f, floor)
+    BINARY_F_(math_f, hypot)
+    UNARY_F_(math_f, log)
+    UNARY_F_(math_f, log10)
+    UNARY_F_(math_f, log1p)
+    BINARY_F_(math_f, pow)
+    UNARY_F_(math_f, round)
+    UNARY_F_(math_f, signum)
+    UNARY_F_(math_f, sin)
+    UNARY_F_(math_f, sinh)
+    UNARY_F_(math_f, sqrt)
+    UNARY_F_(math_f, tan)
+    UNARY_F_(math_f, tanh)
+    UNARY_F_(math_f, to_degrees)
+    UNARY_F_(math_f, to_radians)
 }
 
 /*

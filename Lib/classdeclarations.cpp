@@ -1,6 +1,7 @@
 #include "classdeclarations.h"
 #include "../Exception/unknownclassexception.h"
 #include "../Modules/global.h"
+#include "names.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::modules::Global;
@@ -30,6 +31,19 @@ void ClassDeclarationsScope::set(std::string key, ClassDeclarationsStatement* cl
     declarations[key] = new ClassDeclarationsStatement(*classDef);
 }
 
+void ClassDeclarationsScope::erase(std::string key){
+    declarations.erase(key);
+}
+
+ClassDeclarationsStatement* ClassDeclarationsScope::save(std::string key){
+    if (!isExists(key)) return nullptr;
+    return declarations[key];
+}
+
+void ClassDeclarationsScope::restore(NamedValue named){
+    declarations[named.name] = named.classDec;
+}
+
 
 void ClassDeclarations::init(){
     pushScope();
@@ -40,7 +54,11 @@ std::map<std::string, ClassDeclarationsStatement*> ClassDeclarations::getScope()
 bool ClassDeclarations::isExists(std::string key){ return scope.back().isExists(key); }
 ClassDeclarationsStatement* ClassDeclarations::get(std::string key){ return scope.back().get(key); }
 void ClassDeclarations::set(std::string key, ClassDeclarationsStatement* classDef){ scope.back().set(key, classDef); }
+void ClassDeclarations::erase(std::string key){ scope.back().erase(key); }
 //void print();
+ClassDeclarationsStatement* ClassDeclarations::save(std::string key){ return scope.back().save(key); }
+void ClassDeclarations::restore(NamedValue named){ scope.back().restore(named); }
+
 void ClassDeclarations::pushScope(){
     scope.push_back(ClassDeclarationsScope());
     start();

@@ -5,6 +5,8 @@
 #include "../Statement/classdeclarationsstatement.h"
 
 namespace SlavaScript{ namespace lang{
+    struct NamedValue;
+
     class ClassDeclarationsScope{
     private:
         std::map<std::string, ClassDeclarationsStatement*> declarations;
@@ -15,6 +17,9 @@ namespace SlavaScript{ namespace lang{
         /** @return  throw: UnknownClassException*. */
         ClassDeclarationsStatement* get(std::string key);
         void set(std::string key, ClassDeclarationsStatement* classDef);
+        void erase(std::string key);
+        ClassDeclarationsStatement* save(std::string key);
+        void restore(NamedValue named);
     };
 
     class ClassDeclarations{
@@ -27,7 +32,10 @@ namespace SlavaScript{ namespace lang{
         static bool isExists(std::string key);
         static ClassDeclarationsStatement* get(std::string key);
         static void set(std::string key, ClassDeclarationsStatement* classDef);
+        static void erase(std::string key);
         //static void print();
+        static ClassDeclarationsStatement* save(std::string key);
+        static void restore(NamedValue named);
         static void pushScope();
         static void popScope();
         static void copyScope();
