@@ -13,6 +13,7 @@ namespace SlavaScript{ namespace lang{
         static std::shared_ptr<BoolValue> fromBool(bool b);
 
         BoolValue(bool value) : value(value) {}
+        std::shared_ptr<Value> copy();
 
         double asDouble();
         std::string asString();

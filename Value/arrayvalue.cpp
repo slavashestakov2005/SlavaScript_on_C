@@ -39,11 +39,11 @@ ArrayValue::ArrayValue(const ArrayValue& arra){
     (*this) = ArrayValue(arra.elements);
 }
 
-std::vector<std::shared_ptr<Value>> ArrayValue::getCopyElement(){
+std::shared_ptr<Value> ArrayValue::copy(){
     int size = elements.size();
-    std::vector<std::shared_ptr<Value>> vec;
-    for(int i = 0; i < size; ++i) vec.push_back(get(i));
-    return vec;
+    std::shared_ptr<ArrayValue> arr = SHARE(ArrayValue, size);
+    for(int i = 0; i < size; ++i) arr -> set(i, get(i) -> copy());
+    return arr;
 }
 
 std::shared_ptr<Value> ArrayValue::get(int index) const{

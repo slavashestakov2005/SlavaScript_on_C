@@ -9,6 +9,13 @@ ClassValue::ClassValue(std::string className) : className(className){
     thisMap -> setThisMap(true);
 };
 
+std::shared_ptr<Value> ClassValue::copy(){
+    std::shared_ptr<ClassValue> val = SHARE(ClassValue, this -> className);
+    val -> constructor = this -> constructor;
+    val -> thisMap = CAST(MapValue, this -> thisMap -> copy());
+    return val;
+}
+
 std::shared_ptr<MapValue> ClassValue::getThisMap(){
     return thisMap;
 }

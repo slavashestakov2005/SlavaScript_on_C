@@ -23,6 +23,7 @@ namespace SlavaScript{ namespace lang{
 
         MapValue(int size){}
         MapValue(){}
+        std::shared_ptr<Value> copy();
 
         std::shared_ptr<Value> get(std::shared_ptr<Value> key);
         void set(std::shared_ptr<Value> key, std::shared_ptr<Value> value);
@@ -30,7 +31,6 @@ namespace SlavaScript{ namespace lang{
         bool isThisMap();
         void setThisMap(bool thisMap);
         bool containsKey(std::shared_ptr<Value> key);
-        std::shared_ptr<MapValue> getCopyElement();
 
         int size() const;
         std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property);

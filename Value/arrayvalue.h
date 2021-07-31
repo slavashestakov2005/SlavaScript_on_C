@@ -17,8 +17,8 @@ namespace SlavaScript{ namespace lang{
         ArrayValue(int size);
         ArrayValue(std::vector<std::shared_ptr<Value>> elem);
         ArrayValue(const ArrayValue& arra);
+        std::shared_ptr<Value> copy();
 
-        std::vector<std::shared_ptr<Value>> getCopyElement();
         std::shared_ptr<Value> get(int index) const;
         void set(int index, std::shared_ptr<Value> value);
 

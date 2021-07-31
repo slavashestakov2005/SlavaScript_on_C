@@ -10,6 +10,7 @@ namespace SlavaScript{ namespace lang{
         static std::shared_ptr<NullValue> NULL_;
 
         NullValue(){}
+        std::shared_ptr<Value> copy();
 
         double asDouble();
         std::string asString();

@@ -162,6 +162,10 @@ namespace{
     CMFE
 }
 
+std::shared_ptr<Value> StringValue::copy(){
+    return SHARE(StringValue, value);
+}
+
 int StringValue::size() const{
     return value.size();
 }

@@ -8,6 +8,10 @@ std::shared_ptr<NumberValue> NumberValue::M_ONE = SHARE(NumberValue, -1);
 std::shared_ptr<NumberValue> NumberValue::ZERO = SHARE(NumberValue, 0);
 std::shared_ptr<NumberValue> NumberValue::ONE = SHARE(NumberValue, 1);
 
+std::shared_ptr<Value> NumberValue::copy(){
+    return SHARE(NumberValue, value);
+}
+
 double NumberValue::asDouble(){
     std::istringstream is(value);
     double val = 0;

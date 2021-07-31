@@ -4,6 +4,10 @@
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::TypeException;
 
+std::shared_ptr<Value> FunctionValue::copy(){
+    return SHARE(FunctionValue, value);
+}
+
 double FunctionValue::asDouble(){
     throw new TypeException("Cannot cast function to number");
 }

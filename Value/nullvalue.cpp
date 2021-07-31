@@ -6,6 +6,10 @@ using SlavaScript::exceptions::TypeException;
 
 std::shared_ptr<NullValue> NullValue::NULL_ = SHARE(NullValue, );
 
+std::shared_ptr<Value> NullValue::copy(){
+    return NULL_;
+}
+
 double NullValue::asDouble(){
     throw new TypeException("Cannot cast null to double");
 }

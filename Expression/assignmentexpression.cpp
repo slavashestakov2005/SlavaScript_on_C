@@ -10,7 +10,7 @@ using SlavaScript::exceptions::OperationIsNotSupportedException;
 std::shared_ptr<Value> AssignmentExpression::calculate(AssignmentOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
     std::shared_ptr<Value> result;
     switch(operation){
-        case AssignmentOperator::ASSIGN : result = right; break;
+        case AssignmentOperator::ASSIGN : result = right -> copy(); break;
         case AssignmentOperator::ADD : result = BinaryExpression::calculate(BinaryOperator::ADD, left, right); break;
         case AssignmentOperator::SUBSTRACT : result = BinaryExpression::calculate(BinaryOperator::SUBSTRACT , left, right); break;
         case AssignmentOperator::MULTIPLY : result = BinaryExpression::calculate(BinaryOperator::MULTIPLY, left, right); break;

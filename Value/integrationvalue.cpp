@@ -37,6 +37,10 @@ namespace{
 }
 
 
+std::shared_ptr<Value> IntegrationValue::copy(){
+    return SHARE_2(IntegrationValue, fileNameBegin, fileNameEnd);
+}
+
 
 std::shared_ptr<Value> IntegrationValue::accessDot(std::shared_ptr<Value> property){
     std::string prop = property -> asString();

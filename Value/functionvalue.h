@@ -11,6 +11,7 @@ namespace SlavaScript{ namespace lang{
     public:
         FunctionValue(std::shared_ptr<Function> value) : value(value) {}
         FunctionValue(Function* value) : value(std::shared_ptr<Function>(value)) {}
+        std::shared_ptr<Value> copy();
 
         std::shared_ptr<Function> getFunction();
 

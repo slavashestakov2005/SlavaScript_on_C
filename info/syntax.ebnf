@@ -66,7 +66,7 @@ switch_def_stat:	'default' ':' stat_or_block
 class_stat:		'class' WORD '{' [class_dv_stats] '}'
 class_dv_stats:		(class_def_stat | class_var_stat) [class_dv_stats]
 class_def_stat:		def_stat
-class_var_stat:		WORD '=' expr
+class_var_stat:		(WORD '=')+ expr
 
 integ_stat:		'##' WORD 'as' WORD '{' code '}'
 # code: Исходный код на каком-либо языке программирования.

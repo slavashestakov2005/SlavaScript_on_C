@@ -202,11 +202,14 @@ Statement* Parser::classDeclaration(){
     do{
         if (match(TokenType::DEF)) classDeclaration -> addMethod(functionDefine());
         else{
-            if (!lookMatch(0, TokenType::WORD) || !lookMatch(1, TokenType::EQ)) throw new ParseException("Class can only assignments and declarations");
-            std::string name = consume(TokenType::WORD) -> getText();
-            consume(TokenType::EQ);
+            std::vector<std::string> names;
+            while(lookMatch(0, TokenType::WORD) && lookMatch(1, TokenType::EQ)){
+                names.push_back(consume(TokenType::WORD) -> getText());
+                consume(TokenType::EQ);
+            }
+            if (names.empty()) throw new ParseException("Class can only assignments and declarations");
             Expression* expr = expression();
-            if (expr != nullptr) classDeclaration -> addField(new AssignmentExpression(AssignmentOperator::ASSIGN, name, expr));
+            if (expr != nullptr) classDeclaration -> addField(names, expr);
             else throw new ParseException("Class can only assignments and declarations");
         }
     }while(!match(TokenType::RBRACE));

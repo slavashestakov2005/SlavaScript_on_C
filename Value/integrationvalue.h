@@ -9,6 +9,7 @@ namespace SlavaScript{ namespace lang{
         std::string fileNameBegin, fileNameEnd;
     public:
         IntegrationValue(std::string fileNameBegin, std::string fileNameEnd) : fileNameBegin(fileNameBegin), fileNameEnd(fileNameEnd) {}
+        std::shared_ptr<Value> copy();
 
         std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property);
 

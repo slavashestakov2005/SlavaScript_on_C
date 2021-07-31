@@ -30,6 +30,9 @@ namespace SlavaScript{ namespace modules{ namespace files_out{
             file.open(Path::getPath() + name);
             bad = !file;
         }
+        std::shared_ptr<Value> copy(){
+            return SHARE(FileValue, name);
+        }
         operator std::string() { return "<file=\"" + name + "\">"; }
         ~FileValue(){}
         std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property);

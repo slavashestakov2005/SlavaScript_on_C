@@ -10,6 +10,7 @@ namespace SlavaScript{ namespace lang{
         std::string value;
     public:
         StringValue(std::string value) : value(value) {}
+        std::shared_ptr<Value> copy();
 
         void set(int index, std::shared_ptr<Value> val);
 

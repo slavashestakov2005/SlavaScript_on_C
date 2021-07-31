@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "statement.h"
+#include "../Expression/expression.h"
 
 namespace SlavaScript{ namespace lang{
     class ClassDeclarationsStatement : public Statement{
@@ -10,11 +11,11 @@ namespace SlavaScript{ namespace lang{
         std::string name;
     public:
         std::vector<FunctionDefineStatement*> methods;
-        std::vector<AssignmentExpression*> fields;
+        std::vector<std::pair<std::vector<std::string>, Expression*>> fields;
         ClassDeclarationsStatement() : name("") { }
         ClassDeclarationsStatement(std::string name) : name(name) { }
         Statements type(){ return Statements::ClassDeclarationsStatement; }
-        void addField(AssignmentExpression* expr);
+        void addField(std::vector<std::string> v, Expression* expr);
         void addMethod(FunctionDefineStatement* statement);
         void execute();
         operator std::string();

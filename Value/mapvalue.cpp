@@ -8,6 +8,14 @@ using namespace SlavaScript::lang;
 using SlavaScript::exceptions::TypeException;
 using SlavaScript::exceptions::UnknownPropertyException;
 
+std::shared_ptr<Value> MapValue::copy(){
+    std::shared_ptr<MapValue> newMap = SHARE(MapValue, );
+    for(auto now : map){
+        newMap -> set(now.first -> copy(), now.second -> copy());
+    }
+    return newMap;
+}
+
 std::shared_ptr<Value> MapValue::get(std::shared_ptr<Value> key){
     if (containsKey(key)) return map[key];
     else return NullValue::NULL_;
@@ -35,14 +43,6 @@ int MapValue::size() const{
 
 bool MapValue::containsKey(std::shared_ptr<Value> key){
     return map.find(key) != map.cend();
-}
-
-std::shared_ptr<MapValue> MapValue::getCopyElement(){
-    std::shared_ptr<MapValue> newMap = SHARE(MapValue, );
-    for(auto now : map){
-        newMap -> set(now.first, now.second);
-    }
-    return newMap;
 }
 
 std::shared_ptr<MapValue> MapValue::add(std::shared_ptr<MapValue> map1, std::shared_ptr<MapValue> map2){

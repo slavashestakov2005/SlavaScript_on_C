@@ -10,6 +10,7 @@ using SlavaScript::exceptions::TypeException;
 namespace SlavaScript{ namespace lang{
     class ClassModuleValue : public Value{
     public:
+        virtual std::shared_ptr<Value> copy() = 0;
         virtual std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property){}
         virtual std::shared_ptr<Value> accessBracket(std::shared_ptr<Value> property){}
         virtual double asDouble() { throw new TypeException("Cannot cast class to double"); }

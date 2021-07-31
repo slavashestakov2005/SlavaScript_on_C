@@ -9,6 +9,10 @@ std::shared_ptr<BoolValue> BoolValue::fromBool(bool b){
     return (b ? TRUE_ : FALSE_);
 }
 
+std::shared_ptr<Value> BoolValue::copy(){
+    return fromBool(this -> value);
+}
+
 double BoolValue::asDouble(){
     return (value ? 1 : 0);
 }

@@ -20,6 +20,7 @@ namespace SlavaScript{ namespace lang{
         NumberValue(size_t value) : value(Bignum((long long) value)) {}
         NumberValue(clock_t value) : value(Bignum((long long) value)) {}
         NumberValue(double value) : value(Bignum(value)) {}
+        std::shared_ptr<Value> copy();
 
         double asDouble();
         std::string asString();

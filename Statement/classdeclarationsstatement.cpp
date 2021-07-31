@@ -5,8 +5,8 @@
 
 using namespace SlavaScript::lang;
 
-void ClassDeclarationsStatement::addField(AssignmentExpression* expr){
-    fields.push_back(expr);
+void ClassDeclarationsStatement::addField(std::vector<std::string> v, Expression* expr){
+    fields.push_back({v, expr});
 }
 
 void ClassDeclarationsStatement::addMethod(FunctionDefineStatement* statement){
@@ -20,8 +20,9 @@ void ClassDeclarationsStatement::execute(){
 ClassDeclarationsStatement::operator std::string(){
     std::string result = "class '" + name + "'{\n ";
     int i = 0;
-    for(AssignmentExpression* expr : fields){
-        result += std::string(*expr);
+    for(auto now : fields){
+        for(auto field : now.first) result += "'" + field + "' = ";
+        result += std::string(*now.second);
         if (i < fields.size() - 1) result += ", ";
         ++i;
     }
@@ -41,8 +42,8 @@ ClassDeclarationsStatement::~ClassDeclarationsStatement(){
         methods[i] = nullptr;
     }
     for(int i = 0; i < fields.size(); ++i){
-        delete fields[i];
-        fields[i] = nullptr;
+        delete fields[i].second;
+        fields[i].second = nullptr;
     }
 }
 
