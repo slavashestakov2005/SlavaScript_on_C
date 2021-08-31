@@ -240,26 +240,14 @@ StringValue::operator std::string(){
     return "\"" + asString() + "\"";
 };
 
-bool SlavaScript::lang::operator==(StringValue const& a, StringValue const& b){
-    return a.value == b.value;
-}
+namespace SlavaScript{ namespace lang{
+    bool operator==(StringValue const& a, StringValue const& b){
+        return a.value == b.value;
+    }
 
-bool SlavaScript::lang::operator!=(StringValue const& a, StringValue const& b){
-    return a.value != b.value;
-}
+    bool operator<(StringValue const& a, StringValue const& b){
+        return a.value < b.value;
+    }
 
-bool SlavaScript::lang::operator<(StringValue const& a, StringValue const& b){
-    return a.value < b.value;
-}
-
-bool SlavaScript::lang::operator<=(StringValue const& a, StringValue const& b){
-    return a.value <= b.value;
-}
-
-bool SlavaScript::lang::operator>(StringValue const& a, StringValue const& b){
-    return a.value > b.value;
-}
-
-bool SlavaScript::lang::operator>=(StringValue const& a, StringValue const& b){
-    return a.value >= b.value;
-}
+    COND_OPS(StringValue)
+}}

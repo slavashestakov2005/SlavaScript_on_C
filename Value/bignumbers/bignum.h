@@ -3,69 +3,109 @@
 
 #include <vector>
 #include <string>
+#include "../../Lib/macros.h"
 
 namespace SlavaScript{ namespace lang{
-    class Bignum{
+    class UnsignedBig{
     private:
-        std::vector<int> mas;
-        const int BASE = 1000000000;
-        const int POW = 9;
-        bool neg;
-        int exponent;
-        int tochnost;
-        bool isCorect(std::string);
+        std::vector<int> digits;
         void delete_end_zero();
     public:
+        static UnsignedBig pow_10_to_n(int n);
+        static const int BASE, POW;
+        static const std::string EXAMPLE;
+        static const UnsignedBig ONE;
+
+        void shift(int position);
+        void shift10(int position);
+        int size() const;
+
+        UnsignedBig();
+        UnsignedBig(UnsignedBig const&);
+        UnsignedBig(int);
+        UnsignedBig(long long);
+        explicit UnsignedBig(std::string);
+
+        UnsignedBig& operator=(UnsignedBig const& temp);
+        UnsignedBig& operator=(int temp);
+        UnsignedBig& operator=(long long temp);
+        UnsignedBig& operator=(std::string temp);
+
+        explicit operator bool() const;
+        operator std::string() const;
+
+        UnsignedBig& operator++();
+        UnsignedBig operator++(int);
+        UnsignedBig& operator--();
+        UnsignedBig operator--(int);
+
+        DECS_1(UnsignedBig)
+        DECS_COND(UnsignedBig)
+    };
+
+    std::istream& operator>>(std::istream& is, UnsignedBig& temp);
+    std::ostream& operator<<(std::ostream& os, const UnsignedBig& temp);
+    DECS_2(UnsignedBig)
+
+    class Bignum{
+    private:
+        UnsignedBig value;
+        bool sign;
+        int dot;
+        void delete_end_zero();
+    public:
+        static const bool PLUS, MINUS;
+        static const int EPS;
+
         Bignum();
         explicit Bignum(std::string);
         Bignum(Bignum const&);
         Bignum(int);
         Bignum(long long);
         Bignum(double);
+
         Bignum& operator=(Bignum const& temp);
         Bignum& operator=(std::string temp);
         Bignum& operator=(int temp);
         Bignum& operator=(long long temp);
         Bignum& operator=(double temp);
+
         explicit operator bool() const;
-        operator std::string() const;
         explicit operator double() const;
-        void shift(int n);
-        void setTochnost(int n);
+        operator std::string() const;
+
         Bignum operator-();
         Bignum operator+();
         Bignum& operator++();
         Bignum operator++(int);
         Bignum& operator--();
         Bignum operator--(int);
-        //
-        Bignum& operator+=(Bignum const& temp);
-        Bignum& operator-=(Bignum const& temp);
-        Bignum& operator*=(Bignum const& temp);
-        /**
-            Operator /= can @throw  std::domain_error("Division by zero").
-        **/
-        Bignum& operator/=(Bignum const& temp);
-        /**
-            Operator %= can @throw  std::domain_error("Modulo by zero").
-        **/
-        Bignum& operator%=(Bignum const& temp);
-        //
-        friend bool operator==(Bignum const& a, Bignum const& b);
-        friend bool operator!=(Bignum const& a, Bignum const& b);
-        friend bool operator<(Bignum const& a, Bignum const& b);
-        friend bool operator>(Bignum const& a, Bignum const& b);
-        friend bool operator<=(Bignum const& a, Bignum const& b);
-        friend bool operator>=(Bignum const& a, Bignum const& b);
+
+        DECS_1(Bignum)
+        DECS_COND(Bignum)
     };
 
     std::istream& operator>>(std::istream& is, Bignum& temp);
     std::ostream& operator<<(std::ostream& os, const Bignum& temp);
-    Bignum& operator+(Bignum a, Bignum const& b);
-    Bignum& operator-(Bignum a, Bignum const& b);
-    Bignum& operator*(Bignum a, Bignum const& b);
-    Bignum& operator/(Bignum a, Bignum const& b);
-    Bignum& operator%(Bignum a, Bignum const& b);
+    DECS_2(Bignum)
+
+    class RationalBig{
+    private:
+        Bignum numerator, denominator;
+    public:
+        Bignum div();
+
+        RationalBig();
+        RationalBig(Bignum numerator);
+        RationalBig(Bignum numerator, Bignum denominator);
+
+        explicit operator bool() const;
+        RationalBig operator-();
+
+        DEC_1(RationalBig, +=) DEC_1(RationalBig, -=) DEC_1(RationalBig, *=) DEC_1(RationalBig, /=)
+    };
+
+    DEC_2(RationalBig, +) DEC_2(RationalBig, -) DEC_2(RationalBig, *) DEC_2(RationalBig, /)
 }}
 
 #endif // BIGNUM_H_INCLUDED

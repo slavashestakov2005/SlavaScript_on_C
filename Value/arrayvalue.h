@@ -36,12 +36,7 @@ namespace SlavaScript{ namespace lang{
         operator std::string();
         ~ArrayValue(){}
 
-        friend bool operator==(ArrayValue const& a, ArrayValue const& b);
-        friend bool operator!=(ArrayValue const& a, ArrayValue const& b);
-        friend bool operator<(ArrayValue const& a, ArrayValue const& b);
-        friend bool operator<=(ArrayValue const& a, ArrayValue const& b);
-        friend bool operator>(ArrayValue const& a, ArrayValue const& b);
-        friend bool operator>=(ArrayValue const& a, ArrayValue const& b);
+        DECS_COND(ArrayValue)
     };
 }}
 

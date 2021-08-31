@@ -74,26 +74,14 @@ ClassValue::operator std::string(){
     return asString();
 }
 
-bool SlavaScript::lang::operator==(ClassValue const& a, ClassValue const& b){
-    return a.className == b.className;
-}
+namespace SlavaScript{ namespace lang{
+    bool operator==(ClassValue const& a, ClassValue const& b){
+        return a.className == b.className;
+    }
 
-bool SlavaScript::lang::operator!=(ClassValue const& a, ClassValue const& b){
-    return a.className != b.className;
-}
+    bool operator<(ClassValue const& a, ClassValue const& b){
+        return a.className < b.className;
+    }
 
-bool SlavaScript::lang::operator<(ClassValue const& a, ClassValue const& b){
-    return a.className < b.className;
-}
-
-bool SlavaScript::lang::operator<=(ClassValue const& a, ClassValue const& b){
-    return a.className <= b.className;
-}
-
-bool SlavaScript::lang::operator>(ClassValue const& a, ClassValue const& b){
-    return a.className > b.className;
-}
-
-bool SlavaScript::lang::operator>=(ClassValue const& a, ClassValue const& b){
-    return a.className >= b.className;
-}
+    COND_OPS(ClassValue)
+}}

@@ -124,42 +124,30 @@ ArrayValue::operator std::string(){
     return asString();
 }
 
-bool SlavaScript::lang::operator==(ArrayValue const& a, ArrayValue const& b){
-    if (a.size() != b.size()) return false;
-    for(int i = 0; i < a.size(); ++i){
-        std::shared_ptr<Value> val1 = a.get(i);
-        std::shared_ptr<Value> val2 = b.get(i);
-        if (val1 -> type() != val2 -> type()) return false;
-        if (*val1 != *val2) return false;
+namespace SlavaScript{ namespace lang{
+    bool operator==(ArrayValue const& a, ArrayValue const& b){
+        if (a.size() != b.size()) return false;
+        for(int i = 0; i < a.size(); ++i){
+            std::shared_ptr<Value> val1 = a.get(i);
+            std::shared_ptr<Value> val2 = b.get(i);
+            if (val1 -> type() != val2 -> type()) return false;
+            if (*val1 != *val2) return false;
+        }
+        return true;
     }
-    return true;
-}
 
-bool SlavaScript::lang::operator!=(ArrayValue const& a, ArrayValue const& b){
-    return !(a == b);
-}
-
-bool SlavaScript::lang::operator<(ArrayValue const& a, ArrayValue const& b){
-    if (a.size() > b.size()) return false;
-    if (a.size() < b.size()) return true;
-    for(int i = 0; i < a.size(); ++i){
-        std::shared_ptr<Value> val1 = a.get(i);
-        std::shared_ptr<Value> val2 = b.get(i);
-        if (val1 -> type() != val2 -> type()) return (int) val1 -> type() < (int) val2 -> type();
-        if (*val1 > *val2) return false;
-        if (*val1 < *val2) return true;
+    bool operator<(ArrayValue const& a, ArrayValue const& b){
+        if (a.size() > b.size()) return false;
+        if (a.size() < b.size()) return true;
+        for(int i = 0; i < a.size(); ++i){
+            std::shared_ptr<Value> val1 = a.get(i);
+            std::shared_ptr<Value> val2 = b.get(i);
+            if (val1 -> type() != val2 -> type()) return (int) val1 -> type() < (int) val2 -> type();
+            if (*val1 > *val2) return false;
+            if (*val1 < *val2) return true;
+        }
+        return false;
     }
-    return false;
-}
 
-bool SlavaScript::lang::operator<=(ArrayValue const& a, ArrayValue const& b){
-    return !(a > b);
-}
-
-bool SlavaScript::lang::operator>(ArrayValue const& a, ArrayValue const& b){
-    return b < a;
-}
-
-bool SlavaScript::lang::operator>=(ArrayValue const& a, ArrayValue const& b){
-    return !(a < b);
-}
+    COND_OPS(ArrayValue)
+}}

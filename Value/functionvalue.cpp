@@ -36,26 +36,14 @@ FunctionValue::operator std::string(){
     return asString();
 };
 
-bool SlavaScript::lang::operator==(FunctionValue const& a, FunctionValue const& b){
-    throw new TypeException("Operator '==' cannot used for two functions");
-}
+namespace SlavaScript{ namespace lang{
+    bool operator==(FunctionValue const& a, FunctionValue const& b){
+        throw new TypeException("Conditional operators cannot used for two functions");
+    }
 
-bool SlavaScript::lang::operator!=(FunctionValue const& a, FunctionValue const& b){
-    throw new TypeException("Operator '!=' cannot used for two functions");
-}
+    bool operator<(FunctionValue const& a, FunctionValue const& b){
+        throw new TypeException("Conditional operators cannot used for two functions");
+    }
 
-bool SlavaScript::lang::operator<(FunctionValue const& a, FunctionValue const& b){
-    throw new TypeException("Operator '<' cannot used for two functions");
-}
-
-bool SlavaScript::lang::operator<=(FunctionValue const& a, FunctionValue const& b){
-    throw new TypeException("Operator '<=' cannot used for two functions");
-}
-
-bool SlavaScript::lang::operator>(FunctionValue const& a, FunctionValue const& b){
-    throw new TypeException("Operator '>' cannot used for two functions");
-}
-
-bool SlavaScript::lang::operator>=(FunctionValue const& a, FunctionValue const& b){
-    throw new TypeException("Operator '>=' cannot used for two functions");
-}
+    COND_OPS(FunctionValue)
+}}

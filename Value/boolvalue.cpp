@@ -37,26 +37,14 @@ BoolValue::operator std::string(){
     return asString();
 }
 
-bool SlavaScript::lang::operator==(BoolValue const& a, BoolValue const& b){
-    return a.value == b.value;
-}
+namespace SlavaScript{ namespace lang{
+    bool operator==(BoolValue const& a, BoolValue const& b){
+        return a.value == b.value;
+    }
 
-bool SlavaScript::lang::operator!=(BoolValue const& a, BoolValue const& b){
-    return a.value != b.value;
-}
+    bool operator<(BoolValue const& a, BoolValue const& b){
+        return a.value < b.value;
+    }
 
-bool SlavaScript::lang::operator<(BoolValue const& a, BoolValue const& b){
-    return a.value < b.value;
-}
-
-bool SlavaScript::lang::operator<=(BoolValue const& a, BoolValue const& b){
-    return a.value <= b.value;
-}
-
-bool SlavaScript::lang::operator>(BoolValue const& a, BoolValue const& b){
-    return a.value > b.value;
-}
-
-bool SlavaScript::lang::operator>=(BoolValue const& a, BoolValue const& b){
-    return a.value >= b.value;
-}
+    COND_OPS(BoolValue)
+}}

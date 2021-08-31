@@ -21,12 +21,7 @@ namespace SlavaScript{ namespace lang{
         operator std::string();
         ~IntegrationValue(){}
 
-        friend bool operator==(IntegrationValue const& a, IntegrationValue const& b);
-        friend bool operator!=(IntegrationValue const& a, IntegrationValue const& b);
-        friend bool operator<(IntegrationValue const& a, IntegrationValue const& b);
-        friend bool operator<=(IntegrationValue const& a, IntegrationValue const& b);
-        friend bool operator>(IntegrationValue const& a, IntegrationValue const& b);
-        friend bool operator>=(IntegrationValue const& a, IntegrationValue const& b);
+        DECS_COND(IntegrationValue)
     };
 }}
 

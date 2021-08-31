@@ -34,26 +34,14 @@ NullValue::operator std::string(){
     return "null";
 }
 
-bool SlavaScript::lang::operator==(NullValue const& a, NullValue const& b){
-    return true;
-}
+namespace SlavaScript{ namespace lang{
+    bool operator==(NullValue const& a, NullValue const& b){
+        return true;
+    }
 
-bool SlavaScript::lang::operator!=(NullValue const& a, NullValue const& b){
-    return false;
-}
+    bool operator<(NullValue const& a, NullValue const& b){
+        return false;
+    }
 
-bool SlavaScript::lang::operator<(NullValue const& a, NullValue const& b){
-    return false;
-}
-
-bool SlavaScript::lang::operator<=(NullValue const& a, NullValue const& b){
-    return true;
-}
-
-bool SlavaScript::lang::operator>(NullValue const& a, NullValue const& b){
-    return false;
-}
-
-bool SlavaScript::lang::operator>=(NullValue const& a, NullValue const& b){
-    return true;
-}
+    COND_OPS(NullValue)
+}}

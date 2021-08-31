@@ -30,12 +30,7 @@ namespace SlavaScript{ namespace lang{
         operator std::string();
         ~NumberValue(){}
 
-        friend bool operator==(NumberValue const& a, NumberValue const& b);
-        friend bool operator!=(NumberValue const& a, NumberValue const& b);
-        friend bool operator<(NumberValue const& a, NumberValue const& b);
-        friend bool operator<=(NumberValue const& a, NumberValue const& b);
-        friend bool operator>(NumberValue const& a, NumberValue const& b);
-        friend bool operator>=(NumberValue const& a, NumberValue const& b);
+        DECS_COND(NumberValue)
     };
 }}
 

@@ -109,53 +109,41 @@ MapValue::operator std::string(){
     return asString();
 }
 
-bool SlavaScript::lang::operator==(MapValue const& a, MapValue const& b){
-    if (a.size() != b.size()) return false;
-    auto nowa = a.map.begin();
-    auto nowb = b.map.begin();
-    while(nowa != a.map.end()){
-        if (nowa -> first -> type() != nowb -> first -> type()) return false;
-        if (nowa -> second -> type() != nowb -> second -> type()) return false;
-        if (*(nowa -> first) != *(nowb -> first)) return false;
-        if (*(nowa -> second) != *(nowb -> second)) return false;
-        ++nowa;
-        ++nowb;
+namespace SlavaScript{ namespace lang{
+    bool operator==(MapValue const& a, MapValue const& b){
+        if (a.size() != b.size()) return false;
+        auto nowa = a.map.begin();
+        auto nowb = b.map.begin();
+        while(nowa != a.map.end()){
+            if (nowa -> first -> type() != nowb -> first -> type()) return false;
+            if (nowa -> second -> type() != nowb -> second -> type()) return false;
+            if (*(nowa -> first) != *(nowb -> first)) return false;
+            if (*(nowa -> second) != *(nowb -> second)) return false;
+            ++nowa;
+            ++nowb;
+        }
+        return true;
     }
-    return true;
-}
 
-bool SlavaScript::lang::operator!=(MapValue const& a, MapValue const& b){
-    return !(a == b);
-}
-
-bool SlavaScript::lang::operator<(MapValue const& a, MapValue const& b){
-    if (a.size() < b.size()) return true;
-    if (a.size() > b.size()) return false;
-    auto nowa = a.map.begin();
-    auto nowb = b.map.begin();
-    while(nowa != a.map.end()){
-        if (nowa -> first -> type() < nowb -> first -> type()) return true;
-        if (nowa -> first -> type() > nowb -> first -> type()) return false;
-        if (*(nowa -> first) < *(nowb -> first)) return true;
-        if (*(nowa -> first) > *(nowb -> first)) return false;
-        if (nowa -> second -> type() < nowb -> second -> type()) return true;
-        if (nowa -> second -> type() > nowb -> second -> type()) return false;
-        if (*(nowa -> second) < *(nowb -> second)) return true;
-        if (*(nowa -> second) > *(nowb -> second)) return false;
-        ++nowa;
-        ++nowb;
+    bool operator<(MapValue const& a, MapValue const& b){
+        if (a.size() < b.size()) return true;
+        if (a.size() > b.size()) return false;
+        auto nowa = a.map.begin();
+        auto nowb = b.map.begin();
+        while(nowa != a.map.end()){
+            if (nowa -> first -> type() < nowb -> first -> type()) return true;
+            if (nowa -> first -> type() > nowb -> first -> type()) return false;
+            if (*(nowa -> first) < *(nowb -> first)) return true;
+            if (*(nowa -> first) > *(nowb -> first)) return false;
+            if (nowa -> second -> type() < nowb -> second -> type()) return true;
+            if (nowa -> second -> type() > nowb -> second -> type()) return false;
+            if (*(nowa -> second) < *(nowb -> second)) return true;
+            if (*(nowa -> second) > *(nowb -> second)) return false;
+            ++nowa;
+            ++nowb;
+        }
+        return false;
     }
-    return false;
-}
 
-bool SlavaScript::lang::operator<=(MapValue const& a, MapValue const& b){
-    return !(a > b);
-}
-
-bool SlavaScript::lang::operator>(MapValue const& a, MapValue const& b){
-    return b < a;
-}
-
-bool SlavaScript::lang::operator>=(MapValue const& a, MapValue const& b){
-    return !(a < b);
-}
+    COND_OPS(MapValue)
+}}

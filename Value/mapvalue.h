@@ -46,12 +46,7 @@ namespace SlavaScript{ namespace lang{
         operator std::string();
         ~MapValue(){}
 
-        friend bool operator==(MapValue const& a, MapValue const& b);
-        friend bool operator!=(MapValue const& a, MapValue const& b);
-        friend bool operator<(MapValue const& a, MapValue const& b);
-        friend bool operator<=(MapValue const& a, MapValue const& b);
-        friend bool operator>(MapValue const& a, MapValue const& b);
-        friend bool operator>=(MapValue const& a, MapValue const& b);
+        DECS_COND(MapValue)
     };
 }}
 

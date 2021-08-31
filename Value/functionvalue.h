@@ -23,12 +23,7 @@ namespace SlavaScript{ namespace lang{
         operator std::string();
         ~FunctionValue(){}
 
-        friend bool operator==(FunctionValue const& a, FunctionValue const& b);
-        friend bool operator!=(FunctionValue const& a, FunctionValue const& b);
-        friend bool operator<(FunctionValue const& a, FunctionValue const& b);
-        friend bool operator<=(FunctionValue const& a, FunctionValue const& b);
-        friend bool operator>(FunctionValue const& a, FunctionValue const& b);
-        friend bool operator>=(FunctionValue const& a, FunctionValue const& b);
+        DECS_COND(FunctionValue)
     };
 }}
 

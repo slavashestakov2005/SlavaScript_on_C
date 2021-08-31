@@ -13,6 +13,20 @@ namespace SlavaScript{ namespace modules{
 }}
 
 namespace SlavaScript{ namespace lang{
+    /** using by Value **/
+    #define COND_OP(cls, op, exp) bool operator op(cls const& a, cls const& b){ return exp; }
+    #define COND_OPS(cls) COND_OP(cls, !=, !(a == b)) COND_OP(cls, >, b < a) COND_OP(cls, <=, !(b < a)) COND_OP(cls, >=, !(a < b))
+    #define BINARY_OP(cls, op) cls& operator op(cls a, cls const& b){ return a op##= b; }
+    #define BINARY_OPS(cls) BINARY_OP(cls, +) BINARY_OP(cls, -) BINARY_OP(cls, *) BINARY_OP(cls, /) BINARY_OP(cls, %)
+    #define CLS_OPS(cls) BINARY_OPS(cls) COND_OPS(cls)
+
+    #define DEC_1(cls, op) cls& operator op(cls const& temp);
+    #define DECS_1(cls) DEC_1(cls, +=) DEC_1(cls, -=) DEC_1(cls, *=) DEC_1(cls, /=) DEC_1(cls, %=)
+    #define DEC_2(cls, op) cls& operator op(cls a, cls const& b);
+    #define DECS_2(cls) DEC_2(cls, +) DEC_2(cls, -) DEC_2(cls, *) DEC_2(cls, /) DEC_2(cls, %)
+    #define DEC_COND(cls, op) friend bool operator op(cls const& a, cls const& b);
+    #define DECS_COND(cls) DEC_COND(cls, ==) DEC_COND(cls, !=) DEC_COND(cls, <) DEC_COND(cls, >) DEC_COND(cls, <=) DEC_COND(cls, >=)
+
     /** using by value.h **/
     #define CREATE_FUNCTION(name) \
         std::shared_ptr<Function> name = std::make_shared<FunctionModule>([](std::vector<std::shared_ptr<Value>> values) -> std::shared_ptr<Value>{

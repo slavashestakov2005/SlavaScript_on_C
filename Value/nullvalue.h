@@ -20,12 +20,7 @@ namespace SlavaScript{ namespace lang{
         operator std::string();
         ~NullValue(){}
 
-        friend bool operator==(NullValue const& a, NullValue const& b);
-        friend bool operator!=(NullValue const& a, NullValue const& b);
-        friend bool operator<(NullValue const& a, NullValue const& b);
-        friend bool operator<=(NullValue const& a, NullValue const& b);
-        friend bool operator>(NullValue const& a, NullValue const& b);
-        friend bool operator>=(NullValue const& a, NullValue const& b);
+        DECS_COND(NullValue)
     };
 }}
 

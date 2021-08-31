@@ -1,549 +1,528 @@
 #include "bignum.h"
 #include <sstream>
+#include <algorithm>
 #include "../../Exception/mathexception.h"
 
-using namespace std;
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::MathException;
 
-Bignum::Bignum(){
-    neg = false;
-    mas.push_back(0);
-    exponent = 0;
-    tochnost = 10;
+const std::string UnsignedBig::EXAMPLE = "000000000";
+const UnsignedBig UnsignedBig::ONE = UnsignedBig(1);
+const int UnsignedBig::BASE = 1000000000, UnsignedBig::POW = 9, Bignum::EPS = 9;
+const bool Bignum::PLUS = true, Bignum::MINUS = false;
+
+UnsignedBig UnsignedBig::pow_10_to_n(int n){
+    UnsignedBig b = UnsignedBig::ONE;
+    b.shift(n);
+    return b;
 }
-Bignum::Bignum(string s){
-    if (!isCorect(s)){
-        exponent = 0;
-        neg = false;
-        mas.push_back(0);
-        return;
+
+void UnsignedBig::delete_end_zero(){
+    while(digits.size() && !digits.back()) digits.pop_back();
+    if (digits.empty()) digits.push_back(0);
+}
+
+void UnsignedBig::shift(int position){
+    if (digits.size() == 1 && digits[0] == 0) return;
+    if (position > 0){
+        int x = 1;
+        for(int i = 0; i < position % UnsignedBig::POW; ++i) x *= 10;
+        (*this) *= UnsignedBig(x);
+        shift10(position / UnsignedBig::POW);
     }
-    int last = 0;
-    if (s[0] == '-') { neg = true; last = 1; }
-    else neg = false;
-    int coun_exponent = 0;
-    bool b = true;
-    for(int i = s.size() - 1; i >= last; i -= 9){
-        int l = 0;
-        string temp;
-        for(int j = i; j > i - 9 && j >= last; --j){
-            if (s[j] >= '0' && s[j] <= '9'){
-                if (b) ++coun_exponent;
-                temp = s[j] + temp;
-            }
-            else{
-                b = false;
-                --i;
-            }
+    if (position < 0){
+        shift(UnsignedBig::POW - (-position % UnsignedBig::POW));
+        shift10(position / UnsignedBig::POW - bool(position));
+    }
+}
+
+void UnsignedBig::shift10(int position){
+    if (digits.size() == 1 && digits[0] == 0) return;
+    if (position > 0){
+        std::vector<int> new_digits(position, 0);
+        for(int x : digits) new_digits.push_back(x);
+        digits = new_digits;
+    }
+    if (position < 0){
+        std::vector<int> new_digits;
+        for(int i = -position; i < digits.size(); ++i) new_digits.push_back(digits[i]);
+        if (new_digits.empty()) new_digits.push_back(0);
+        digits = new_digits;
+    }
+}
+
+int UnsignedBig::size() const{
+    int cur = digits.back(), cnt = 0;
+    while(cur) ++cnt, cur /= 10;
+    return UnsignedBig::POW * (digits.size() - 1) + cnt;
+}
+
+UnsignedBig::UnsignedBig(){
+    digits.push_back(0);
+}
+
+UnsignedBig::UnsignedBig(UnsignedBig const& b){
+    digits = b.digits;
+}
+
+UnsignedBig::UnsignedBig(int n){
+    digits.clear();
+    while(n){
+        digits.push_back(n % UnsignedBig::BASE);
+        n /= UnsignedBig::BASE;
+    }
+    if (digits.empty()) digits.push_back(0);
+}
+
+UnsignedBig::UnsignedBig(long long n){
+    digits.clear();
+    while(n){
+        digits.push_back(n % UnsignedBig::BASE);
+        n /= UnsignedBig::BASE;
+    }
+    if (digits.empty()) digits.push_back(0);
+}
+
+UnsignedBig::UnsignedBig(std::string s){
+    for(int i = s.size() - 1; i > -1; i -= UnsignedBig::POW){
+        int current = 0;
+        for(int j = std::max(0, i - UnsignedBig::POW + 1); j <= i; ++j){
+            current *= 10;
+            current += s[j] - '0';
         }
-        for(int j = 0; j < temp.size(); ++j){
-            l *= 10;
-            l += temp[j] - '0';
-        }
-        mas.push_back(l);
-    }
-    if (b) coun_exponent = 0;
-    exponent = coun_exponent;
-    tochnost = max(10, coun_exponent);
-    if (exponent) delete_end_zero();
-}
-Bignum::Bignum(Bignum const& temp){
-    mas = temp.mas;
-    neg = temp.neg;
-    tochnost = temp.tochnost;
-    exponent = temp.exponent;
-}
-Bignum::Bignum(int temp){
-    exponent = 0;
-    tochnost = 10;
-    while(mas.size() > 0) mas.pop_back();
-    if (temp < 0) { neg = true; temp = -temp; }
-    else neg = false;
-    while(temp > 0){
-        mas.push_back(temp % BASE);
-        temp /= BASE;
+        digits.push_back(current);
     }
 }
-Bignum::Bignum(long long temp){
-    exponent = 0;
-    tochnost = 10;
-    while(mas.size() > 0) mas.pop_back();
-    if (temp < 0) { neg = true; temp = -temp; }
-    else neg = false;
-    while(temp > 0){
-        mas.push_back(temp % BASE);
-        temp /= BASE;
-    }
-}
-Bignum::Bignum(double temp){
-    ostringstream ss;
-    string s;
-    ss << fixed << temp;
-    s = ss.str();
-    (*this) = Bignum(s);
-    /*
-    17 знаков может хранить double с округлением при больших (18) числах начинаются потери точности
-    */
-}
 
+UnsignedBig& UnsignedBig::operator=(UnsignedBig const& temp){ digits = temp.digits; return *this; }
+UnsignedBig& UnsignedBig::operator=(int temp){ return *this = UnsignedBig(temp); }
+UnsignedBig& UnsignedBig::operator=(long long temp){ return *this = UnsignedBig(temp); }
+UnsignedBig& UnsignedBig::operator=(std::string s){ return *this = UnsignedBig(s); }
 
-
-Bignum& Bignum::operator=(Bignum const& temp){
-    mas = temp.mas;
-    neg = temp.neg;
-    exponent = temp.exponent;
-    tochnost = temp.tochnost;
-    return (*this);
-}
-Bignum& Bignum::operator=(string s){
-    (*this) = Bignum(s);
-    return (*this);
-}
-Bignum& Bignum::operator=(int temp){
-    (*this) = Bignum(temp);
-    return (*this);
-}
-Bignum& Bignum::operator=(long long temp){
-    (*this) = Bignum(temp);
-    return (*this);
-}
-Bignum& Bignum::operator=(double temp){
-    (*this) = Bignum(temp);
-    return (*this);
-}
-
-
-
-Bignum::operator bool() const{
-    if (mas.size() == 1 && mas[0] == 0) return false;
+UnsignedBig::operator bool() const{
+    if (digits.size() == 1 && digits[0] == 0) return false;
     else return true;
 }
-Bignum::operator double() const{
-    istringstream is(string(*this));
-    double result;
-    is >> result;
-    return result;
-}
-Bignum::operator string() const{
-    string os;
-    if (mas.size() == 1 && mas[0] == 0) return "0";
-    for(int i = mas.size() - 1; i > -1; --i){
-        if (i == mas.size() - 1){
-            int l = mas[i];
-            string s;
-            while(l > 0){
-                s = char('0' + l % 10) + s;
-                l /= 10;
-            }
-            os += s;
+
+UnsignedBig::operator std::string() const{
+    std::ostringstream str;
+    str << digits.back();
+    for(int i = digits.size() - 2; i > -1; --i){
+        std::string s = UnsignedBig::EXAMPLE;
+        int l = digits[i], coun = UnsignedBig::POW - 1;
+        while(l > 0){
+            s[coun] += l % 10;
+            --coun;
+            l /= 10;
         }
-        else{
-            string s = "000000000";
-            int l = mas[i], coun = 8;
-            while(l > 0){
-                s[coun] = '0' + l % 10;
-                --coun;
-                l /= 10;
-            }
-            os += s;
-        }
+        str << s;
     }
-    string cop;
-    int expr = exponent;
-    if (os.size() <= expr) cop += "0";
-    if (os.size() > expr){
-        for(int i = 0; i < os.size() - expr; ++i)
-            cop += os[i];
-    }
-    if (expr > 0) cop += ".";
-    while(expr > os.size()){
-        cop += "0";
-        --expr;
-    }
-    for(int i = os.size() - expr; i < os.size(); ++i) if (i >= 0) cop += os[i];
-    if (neg) cop = "-" + cop;
-    return cop;
+    return str.str();
 }
 
+UnsignedBig& UnsignedBig::operator++(){
+    return *this += UnsignedBig::ONE;
+}
 
-
-Bignum Bignum::operator-(){
-    Bignum temp(*this);
-    temp.neg = !neg;
+UnsignedBig UnsignedBig::operator++(int){
+    UnsignedBig temp = *this;
+    ++*this;
     return temp;
 }
-Bignum Bignum::operator+(){
-    return (*this);
+
+UnsignedBig& UnsignedBig::operator--(){
+    return *this -= UnsignedBig::ONE;
 }
-Bignum& Bignum::operator++(){
-    (*this) += Bignum("1");
+
+UnsignedBig UnsignedBig::operator--(int){
+    UnsignedBig temp = *this;
+    --*this;
+    return temp;
+}
+
+UnsignedBig& UnsignedBig::operator+=(UnsignedBig const& temp){
+    std::vector<int> new_digits;
+    int carry = 0;
+    for(int i = 0; i < digits.size() || i < temp.digits.size() || carry; ++i){
+        if (i < digits.size()) carry += digits[i];
+        if (i < temp.digits.size()) carry += temp.digits[i];
+        new_digits.push_back(carry % UnsignedBig::BASE);
+        carry /= UnsignedBig::BASE;
+    }
+    digits = new_digits;
+    delete_end_zero();
     return *this;
 }
-Bignum Bignum::operator++(int){
-    Bignum temp = (*this);
-    ++(*this);
-    return temp;
-}
-Bignum& Bignum::operator--(){
-    (*this) -= Bignum("1");
-    return *this;
-}
-Bignum Bignum::operator--(int){
-    Bignum temp = (*this);
-    --(*this);
-    return temp;
-}
 
-
-
-void Bignum::setTochnost(int n){
-    tochnost = n;
-}
-bool Bignum::isCorect(string s){
-    int first = 0;
-    bool tch = false;
-    if (s[0] == '-') first = 1;
-    for(int i = first; i < s.size(); ++i){
-        if (s[i] == '.'){
-            if (tch) return false;
-            else tch = true;
-        }
-        else if (s[i] < '0' || s[i] > '9') return false;
-    }
-    return true;
-}
-void Bignum::shift(int n){
-    vector<int> digits;
-    if (n > 0){
-        for(int i = 0; i < n / POW; ++i) digits.push_back(0);
-        int p = 1, k = 1;
-        for(int i = 0; i < POW - n % POW; ++i) p *= 10;
-        for(int i = 0; i < n % POW; ++i) k *= 10;
-        int carry = 0;
-        for(int i = 0; i < mas.size() || carry != 0; ++i){
-            int a = 0;
-            if (i < mas.size()) a = mas[i];
-            digits.push_back(a % p * k + carry);
-            carry = a / p;
-        }
-    }
-    else{
-        n = -n;
-        int p = 1, k = 1;
-        for(int i = 0; i < n % POW; ++i) p *= 10;
-        for(int i = 0; i < POW - n % POW; ++i) k *= 10;
-        int carry = 0;
-        for(int i = n / POW; i < mas.size() || carry != 0; ++i){
-            digits.push_back(mas[i] / p);
-            if (i > n / POW){
-                digits[digits.size() - 2] += mas[i] % p * k;
-            }
-        }
-        while(digits.size() > 1 && digits.back() == 0) digits.pop_back();
-    }
-    mas = digits;
-}
-void Bignum::delete_end_zero(){
-    if (exponent > 0){
-        string s = string(*this);
+UnsignedBig& UnsignedBig::operator-=(UnsignedBig const& temp){
+    std::vector<int> new_digits;
+    int carry = 0;
+    for(int i = 0; i < digits.size() || i < temp.digits.size() || carry; ++i){
+        bool take = false;
+        if (i < digits.size()) { take = true; carry += digits[i]; }
+        if (i < temp.digits.size()) { take = true; carry -= temp.digits[i]; }
         int coun = 0;
-        while(s.size() > 0 && s.back() == '0') { ++coun; s.pop_back(); }
-        exponent -= coun;
-        shift(-coun);
+        if (carry < 0){ carry += UnsignedBig::BASE; ++coun; }
+        new_digits.push_back(carry % UnsignedBig::BASE);
+        carry = -coun;
+        if (!take) break;
     }
-    else throw domain_error("Wrong exponent");
+    digits = new_digits;
+    delete_end_zero();
+    return *this;
 }
 
+UnsignedBig& UnsignedBig::operator*=(UnsignedBig const& temp){
+    std::vector<int> new_digits(digits.size() + temp.digits.size(), 0);
+    for(int i = 0; i < digits.size(); ++i){
+        int carry = 0;
+        for(int j = 0; j < temp.digits.size(); ++j){
+            long long l = (long long)digits[i] * temp.digits[j] + new_digits[i + j] + carry;
+            new_digits[i + j] = l % UnsignedBig::BASE;
+            carry = l / UnsignedBig::BASE;
+        }
+        new_digits[i + temp.digits.size()] = carry;
+    }
+    digits = new_digits;
+    delete_end_zero();
+    return *this;
+}
 
+UnsignedBig& UnsignedBig::operator/=(UnsignedBig const& temp){
+    if (!temp) throw new MathException("Division by zero");
+    if ((*this) < temp){
+        digits.clear();
+        digits.push_back(0);
+        return *this;
+    }
+    UnsignedBig divisior(temp);
+    int steps = size() - temp.size();
+    divisior.shift(steps);
+    ++steps;
+    std::string result;
+    if (*this < divisior) divisior.shift(-1), --steps;
+    for(int i = 0; i < steps; ++i){
+        int cnt = 0;
+        while(*this >= divisior){
+            *this -= divisior;
+            ++cnt;
+        }
+        result += char('0' + cnt);
+        divisior.shift(-1);
+    }
+    *this = UnsignedBig(result);
+    delete_end_zero();
+    return *this;
+}
 
-Bignum& Bignum::operator+=(Bignum const& tem){
-    Bignum temp(tem);
-    if (neg != temp.neg){
-        if (!neg){
-            Bignum a = temp;
-            a.neg = false;
-            (*this) -= a;
+UnsignedBig& UnsignedBig::operator%=(UnsignedBig const& temp){
+    if (!temp) throw new MathException("Modulo by zero");
+    UnsignedBig divisior(temp);
+    int steps = size() - temp.size();
+    divisior.shift(steps);
+    ++steps;
+    if (*this < divisior) divisior.shift(-1), --steps;
+    for(int i = 0; i < steps; ++i){
+        while(*this >= divisior){
+            *this -= divisior;
         }
-        else{
-            neg = false;
-            (*this) -= temp;
-            neg = !neg;
-        }
+        divisior.shift(-1);
     }
-    else{
-        int exa = exponent, exb = temp.exponent;
-        if (exa > exb) temp.shift(exa - exb);
-        if (exa < exb) shift(exb - exa);
-        vector<int> digits;
-        int carry = 0;
-        for(int i = 0; i < mas.size() || i < temp.mas.size() || carry != 0; ++i){
-            if (i < mas.size()) carry += mas[i];
-            if (i < temp.mas.size()) carry += temp.mas[i];
-            digits.push_back(carry % BASE);
-            carry /= BASE;
-        }
-        while(digits.size() > 1 && digits.back() == 0) digits.pop_back();
-        mas = digits;
-        if (neg && temp.neg) neg = true;
-        if (mas.size() == 1 && mas[0] == 0) neg = false;
-        exponent = max(exponent, temp.exponent);
-        if (exponent) delete_end_zero();
-    }
-    return (*this);
-}
-Bignum& Bignum::operator-=(Bignum const& temp){
-    if (neg != temp.neg){
-        if (!neg){
-            Bignum a = temp;
-            a.neg = false;
-            (*this) += a;
-        }
-        else{
-            neg = false;
-            (*this) += temp;
-            neg = !neg;
-        }
-    }
-    else{
-        Bignum a = (*this), b = temp;
-        bool flag = false;
-        if (!neg && temp > (*this) || neg && temp < (*this)){
-            a = temp;
-            b = (*this);
-            flag = true;
-        }
-        int exa = a.exponent, exb = b.exponent;
-        if (exa > exb) b.shift(exa - exb);
-        if (exa < exb) a.shift(exb - exa);
-        vector<int> digits;
-        int carry = 0;
-        for(int i = 0; i < a.mas.size() || i < b.mas.size() || carry != 0; ++i){
-            bool take = false;
-            if (i < a.mas.size()) { take = true; carry += a.mas[i]; }
-            if (i < b.mas.size()) { take = true; carry -= b.mas[i]; }
-            int coun = 0;
-            if (carry < 0){ carry += BASE; ++coun; }
-            digits.push_back(carry % BASE);
-            carry = -coun;
-            if (!take) break;
-        }
-        while(digits.size() > 1 && digits.back() == 0) digits.pop_back();
-        mas = digits;
-        if (neg && temp.neg) neg = true;
-        if (flag) neg = !neg;
-        if (mas.size() == 1 && mas[0] == 0) neg = false;
-        exponent = max(exa, exb);
-        if (exponent) delete_end_zero();
-    }
-    return (*this);
-}
-Bignum& Bignum::operator*=(Bignum const& temp){
-    int exa = exponent, exb = temp.exponent;
-    vector<int> digits(mas.size() + temp.mas.size(), 0);
-    for(int i = 0; i < mas.size(); ++i){
-        int carry = 0;
-        for(int j = 0; j < temp.mas.size(); ++j){
-            long long l = (long long)mas[i] * temp.mas[j] + digits[i + j] + carry;
-            digits[i + j] = l % BASE;
-            carry = l / BASE;
-        }
-        digits[i + temp.mas.size()] = carry;
-    }
-    while(digits.size() > 1 && digits.back() == 0) digits.pop_back();
-    mas = digits;
-    if (neg != temp.neg) neg = true;
-    else neg = false;
-    if (mas.size() == 1 && mas[0] == 0) neg = false;
-    exponent = exa + exb;
-    if (exponent) delete_end_zero();
-    return (*this);
-}
-Bignum& Bignum::operator/=(Bignum const& temp){
-    //if (temp.mas.size() == 1 && temp.mas[0] == 0) throw domain_error("Division by zero");
-    if (temp.mas.size() == 1 && temp.mas[0] == 0) throw new MathException("Division by zero");
-    Bignum divisor = temp;
-    int sh = max(exponent, divisor.exponent);
-    int end_exponent = max(tochnost, temp.tochnost);
-    shift(sh - exponent);
-    divisor.shift(sh - divisor.exponent);
-    exponent = 0;
-    divisor.exponent = 0;
-    int n = (mas.size() - 1) * POW, m = (divisor.mas.size() - 1) * POW;
-    int k = mas[mas.size() - 1];
-    while(k > 0){ ++n; k /= 10; }
-    k = divisor.mas[divisor.mas.size() - 1];
-    while(k > 0){ ++m; k /= 10; }
-    bool flag = (divisor.neg != neg);
-    divisor.neg = false;
-    neg = false;
-    Bignum ans("0");
-    int f = 0;
-    if ((*this) < divisor && n > m) { divisor.shift(-1); ++f; }
-    bool b = false;
-    while(divisor < (*this)){
-        b = true;
-        divisor.shift(1);
-    }
-    if (b && divisor > (*this)) divisor.shift(-1);
-    int maximal = 0;
-    string s = string(divisor);
-    while(s.size() > 1 && s.back() == '0') { ++maximal; s.pop_back(); }
-    while(f <= maximal && f <= n - m){
-        ++f;
-        ans.shift(1);
-        long long coun = 0;
-        while((*this) >= divisor){
-            (*this) -= divisor;
-            ++coun;
-        }
-        Bignum t;
-        t = coun;
-        ans += t;
-        if (f <= maximal && f <= n - m) divisor.shift(-1);
-    }
-    f = 0;
-    int znak = string(ans).size();
-    if (ans.mas.size() == 1 && ans.mas[0] == 0) znak = 0;
-    bool zero = false;
-    if (ans.mas.size() == 1 && ans.mas[0] == 0) zero = true;
-    int zeros = 0;
-    while(f <= max(tochnost, temp.tochnost)){
-        if (mas.size() == 1 && mas[0] == 0) break;
-        ++f;
-        long long coun = 0;
-        shift(1);
-        while((*this) >= divisor && string(divisor) != "0"){
-            (*this) -= divisor;
-            ++coun;
-        }
-        Bignum t;
-        t = coun;
-        if (f > 1 && ans.mas.size() == 1 && ans.mas[0] == 0) ++zeros;
-        ans.shift(1);
-        ans += t;
-    }
-    ans.exponent = string(ans).size() - znak;
-    ans.tochnost = ans.exponent;
-    (*this) = ans;
-    neg = flag;
-    if (exponent) delete_end_zero();
-    exponent += zeros;
-    return (*this);
-}
-Bignum& Bignum::operator%=(Bignum const& temp){
-    //if (temp.mas.size() == 1 && temp.mas[0] == 0) throw domain_error("Modulo by zero");
-    if (temp.mas.size() == 1 && temp.mas[0] == 0) throw new MathException("Modulo by zero");
-    Bignum divisor = temp;
-    int sh = max(exponent, divisor.exponent);
-    shift(sh - exponent);
-    divisor.shift(sh - divisor.exponent);
-    exponent = 0;
-    divisor.exponent = 0;
-    int n = (mas.size() - 1) * POW, m = (divisor.mas.size() - 1) * POW;
-    int k = mas[mas.size() - 1];
-    while(k > 0){ ++n; k /= 10; }
-    k = divisor.mas[divisor.mas.size() - 1];
-    while(k > 0){ ++m; k /= 10; }
-    bool flag = neg;
-    divisor.neg = false;
-    neg = false;
-    divisor.shift(n - m);
-    int f = 0;
-    if ((*this) < divisor && n > m) { divisor.shift(-1); ++f; }
-    while(f <= n - m){
-        ++f;
-        while((*this) >= divisor){
-            (*this) -= divisor;
-        }
-        divisor.shift(-1);
-    }
-    exponent = sh;
-    if (flag){
-        neg = flag;
-        if (!temp.neg) (*this) += temp;
-        else (*this) -= temp;
-    }
-    if (exponent) delete_end_zero();
-    return (*this);
+    delete_end_zero();
+    return *this;
 }
 
 
 namespace SlavaScript{ namespace lang{
-    istream& operator>>(istream& is, Bignum& temp){
-        string s;
+    std::istream& operator>>(std::istream& is, UnsignedBig& temp){
+        std::string s;
+        is >> s;
+        temp = UnsignedBig(s);
+        return is;
+    }
+
+    std::ostream& operator<<(std::ostream& os, const UnsignedBig& temp){
+        os << std::string(temp);
+        return os;
+    }
+
+    bool operator==(UnsignedBig const& a, UnsignedBig const& b){
+        return a.size() == b.size() && std::string(a) == std::string(b);
+    }
+
+    bool operator<(UnsignedBig const& a, UnsignedBig const& b){
+        if (a.size() != b.size()) return a.size() < b.size();
+        return std::string(a) < std::string(b);
+    }
+
+    CLS_OPS(UnsignedBig)
+}}
+
+void Bignum::delete_end_zero(){
+    std::string s = std::string(value);
+    if (s == "0"){ dot = 0; return; }
+    int cnt = 0, pos = s.size() - 1;
+    while(pos > -1 && s[pos] == '0') --pos, ++cnt;
+    value.shift(-std::min(cnt, dot));
+    dot -= std::min(cnt, dot);
+}
+
+Bignum::Bignum() : value(UnsignedBig()), sign(PLUS), dot(0) {}
+
+Bignum::Bignum(std::string s){
+    std::string r;
+    int pos = 0;
+    if (s[0] == '-') sign = MINUS, ++pos;
+    else sign = PLUS;
+    dot = 0;
+    for(; pos < s.size(); ++pos){
+        if (dot) ++dot;
+        if (s[pos] != '.') r += s[pos];
+        else dot = 1;
+    }
+    dot = std::max(dot - 1, 0);
+    value = r;
+    delete_end_zero();
+}
+
+Bignum::Bignum(Bignum const& temp){
+    value = temp.value;
+    sign = temp.sign;
+    dot = temp.dot;
+}
+
+Bignum::Bignum(int temp){
+    dot = 0;
+    sign = (temp >= 0 ? PLUS : MINUS);
+    value = abs(temp);
+}
+
+Bignum::Bignum(long long temp){
+    dot = 0;
+    sign = (temp >= 0 ? PLUS : MINUS);
+    value = abs(temp);
+}
+
+Bignum::Bignum(double temp){
+    std::ostringstream ss;
+    std::string s;
+    ss << std::fixed << temp;
+    s = ss.str();
+    *this = Bignum(s);
+}
+
+Bignum& Bignum::operator=(Bignum const& temp){
+    value = temp.value;
+    sign = temp.sign;
+    dot = temp.dot;
+}
+
+Bignum& Bignum::operator=(std::string s){ return *this = Bignum(s); }
+Bignum& Bignum::operator=(int temp){ return *this = Bignum(temp); }
+Bignum& Bignum::operator=(long long temp){ return *this = Bignum(temp); }
+Bignum& Bignum::operator=(double temp){ return *this = Bignum(temp); }
+
+Bignum::operator bool() const{ return bool(value); }
+
+Bignum::operator double() const{
+    std::istringstream is(std::string(*this));
+    double result;
+    is >> result;
+    return result;
+}
+
+Bignum::operator std::string() const{
+    std::string s = std::string(value), r;
+    std::reverse(s.begin(), s.end());
+    while(s.size() <= dot) s += "0";
+    std::reverse(s.begin(), s.end());
+    if (sign == MINUS) r += "-";
+    for(int i = 0; i < s.size() - dot; ++i) r += s[i];
+    if (dot) r += ".";
+    for(int i = s.size() - dot; i < s.size(); ++i) r += s[i];
+    return r;
+}
+
+Bignum Bignum::operator-(){
+    Bignum temp(*this);
+    temp.sign = !sign;
+    return temp;
+}
+
+Bignum Bignum::operator+(){
+    return *this;
+}
+
+Bignum& Bignum::operator++(){
+    if (sign == PLUS) ++value;
+    else --value;
+    if (!value) sign = PLUS;
+    return *this;
+}
+
+Bignum Bignum::operator++(int){
+    Bignum temp = *this;
+    ++*this;
+    return temp;
+}
+
+Bignum& Bignum::operator--(){
+    if (!value) sign = MINUS;
+    if (sign == PLUS) --value;
+    else ++value;
+    return *this;
+}
+
+Bignum Bignum::operator--(int){
+    Bignum temp = *this;
+    --*this;
+    return temp;
+}
+
+Bignum& Bignum::operator+=(Bignum const& temp){
+    Bignum t(temp);
+    int dots = std::max(dot, t.dot);
+    value.shift(dots - dot);
+    t.value.shift(dots - t.dot);
+    if (sign == t.sign) value += t.value;
+    else{
+        sign = (value > t.value ? sign : !sign);
+        value = std::max(value, t.value) - std::min(value, t.value);
+    }
+    dot = dots;
+    delete_end_zero();
+    return *this;
+}
+
+Bignum& Bignum::operator-=(Bignum const& temp){
+    Bignum t(temp);
+    int dots = std::max(dot, t.dot);
+    value.shift(dots - dot);
+    t.value.shift(dots - t.dot);
+    if (sign != t.sign) value += t.value;
+    else{
+        sign = (value > t.value ? sign : !sign);
+        value = std::max(value, t.value) - std::min(value, t.value);
+    }
+    dot = dots;
+    delete_end_zero();
+    return *this;
+}
+
+Bignum& Bignum::operator*=(Bignum const& temp){
+    value *= temp.value;
+    sign = (sign == temp.sign ? PLUS : MINUS);
+    dot += temp.dot;
+    delete_end_zero();
+    return *this;
+}
+
+Bignum& Bignum::operator/=(Bignum const& temp){
+    Bignum t(temp);
+    int dots = std::max(dot, t.dot);
+    value.shift(dots - dot + EPS);
+    t.value.shift(dots - t.dot);
+    value /= t.value;
+    sign = (sign == t.sign ? PLUS : MINUS);
+    dot = EPS;
+    delete_end_zero();
+    return *this;
+}
+
+Bignum& Bignum::operator%=(Bignum const& temp){
+    Bignum t(temp);
+    int dots = std::max(dot, t.dot);
+    value.shift(dots - dot);
+    t.value.shift(dots - t.dot);
+    value %= t.value;
+    if (sign == MINUS) value = t.value - value;
+    sign = PLUS;
+    dot = dots;
+    delete_end_zero();
+    return *this;
+}
+
+namespace SlavaScript{ namespace lang{
+    std::istream& operator>>(std::istream& is, Bignum& temp){
+        std::string s;
         is >> s;
         temp = Bignum(s);
         return is;
     }
-    ostream& operator<<(ostream& os, const Bignum& temp){
-        os << string(temp);
+
+    std::ostream& operator<<(std::ostream& os, const Bignum& temp){
+        os << std::string(temp);
         return os;
     }
 
-
-
-    Bignum& operator+(Bignum a, Bignum const& b){
-        return a += b;
-    }
-    Bignum& operator-(Bignum a, Bignum const& b){
-        return a -= b;
-    }
-    Bignum& operator*(Bignum a, Bignum const& b){
-        return a *= b;
-    }
-    Bignum& operator/(Bignum a, Bignum const& b){
-        return a /= b;
-    }
-    Bignum& operator%(Bignum a, Bignum const& b){
-        return a %= b;
-    }
-
-
     bool operator==(Bignum const& a, Bignum const& b){
-        if (a.mas.size() == b.mas.size() && a.neg == b.neg && a.exponent == b.exponent && a.mas == b.mas) return true;
-        else return false;
+        return a.sign == b.sign && a.dot == b.dot && a.value == b.value;
     }
-    bool operator!=(Bignum const& a, Bignum const& b){
-        return !(a == b);
-    }
+
     bool operator<(Bignum const& a, Bignum const& b){
-        if (a.neg && !b.neg) return true;
-        if (!a.neg && b.neg) return false;
-        if (!a.neg){
-            string s = string(a), s2 = string(b);
-            if (s.size() - a.exponent - bool(a.exponent) < s2.size() - b.exponent - bool(b.exponent) || s.size() - a.exponent - bool(a.exponent) == s2.size() - b.exponent - bool(b.exponent) && s[0] == '0' && s2[0] != '0') return true;
-            if (s.size() - a.exponent - bool(a.exponent) > s2.size() - b.exponent - bool(b.exponent) || s.size() - a.exponent - bool(a.exponent) == s2.size() - b.exponent - bool(b.exponent) && s2[0] == '0' && s[0] != '0') return false;
-            for(int i = 0; i < min(s.size(), s2.size()); ++i){
-                if (s[i] == '.' && s2[i] >= '0' && s2[i] <= '9') return true;
-                if (s2[i] == '.' && s[i] >= '0' && s[i] <= '9') return false;
-                if (s[i] > s2[i]) return false;
-                if (s[i] < s2[i]) return true;
-            }
-            if (s.size() < s2.size()) return true;
-            return false;
+        std::string s = std::string(a), t = std::string(b);
+        int n = s.find('.'), m = t.find('.');
+        n = (n == std::string::npos ? s.size() : n);
+        m = (m == std::string::npos ? t.size() : m);
+        std::string s1 = s.substr(0, n), s2 = s.substr(n), t1 = t.substr(0, m), t2 = t.substr(m);
+        if (s[0] == '-' && t[0] != '-') return true;
+        if (t[0] == '-' && s[0] != '-') return false;
+        if (s[0] == '-'){
+            if (s1.size() != t1.size()) return s1.size() > t1.size();
+            if (s1 != t1) return s1 > t1;
+            return s2 > t2;
         }
-        else{
-            string s = string(a), s2 = string(b);
-            if (s.size() - a.exponent - bool(a.exponent) < s2.size() - b.exponent - bool(b.exponent) || s.size() - a.exponent - bool(a.exponent) == s2.size() - b.exponent - bool(b.exponent) && s.size() > 1 && s2.size() > 1 && s[1] == '0' && s2[1] != '0') return false;
-            if (s.size() - a.exponent - bool(a.exponent) > s2.size() - b.exponent - bool(b.exponent) || s.size() - a.exponent - bool(a.exponent) == s2.size() - b.exponent - bool(b.exponent) && s.size() > 1 && s2.size() > 1 && s2[1] == '0' && s[1] != '0') return true;
-            for(int i = 1; i < min(s.size(), s2.size()); ++i){
-                if (s[i] == '.' && s2[i] >= '0' && s2[i] <= '9') return false;
-                if (s2[i] == '.' && s[i] >= '0' && s[i] <= '9') return true;
-                if (s[i] > s2[i]) return true;
-                if (s[i] < s2[i]) return false;
-            }
-            if (s.size() < s2.size()) return false;
-            return false;
-        }
+        if (s1.size() != t1.size()) return s1.size() < t1.size();
+        if (s1 != t1) return s1 < t1;
+        return s2 < t2;
     }
-    bool operator>(Bignum const& a, Bignum const& b){
-        return b < a;
-    }
-    bool operator<=(Bignum const& a, Bignum const& b){
-        return !(b < a);
-    }
-    bool operator>=(Bignum const& a, Bignum const& b){
-        return !(a < b);
-    }
+
+    CLS_OPS(Bignum)
+}}
+
+
+Bignum RationalBig::div(){
+    return numerator / denominator;
+}
+
+RationalBig::RationalBig() : numerator(UnsignedBig()), denominator(UnsignedBig::ONE) {}
+RationalBig::RationalBig(Bignum numerator) : numerator(numerator), denominator(UnsignedBig::ONE) {}
+RationalBig::RationalBig(Bignum numerator, Bignum denominator) : numerator(numerator), denominator(denominator) {
+    if (!denominator) throw new MathException("Division by zero");
+}
+
+RationalBig::operator bool() const{ return bool(numerator); }
+RationalBig RationalBig::operator-(){
+    RationalBig r(*this);
+    r.numerator = -r.numerator;
+    return r;
+}
+
+RationalBig& RationalBig::operator+=(RationalBig const& temp){
+    numerator = numerator * temp.denominator + temp.numerator * denominator;
+    denominator *= temp.denominator;
+    return *this;
+}
+
+RationalBig& RationalBig::operator-=(RationalBig const& temp){
+    numerator = numerator * temp.denominator - temp.numerator * denominator;
+    denominator *= temp.denominator;
+    return *this;
+}
+
+RationalBig& RationalBig::operator*=(RationalBig const& temp){
+    numerator *= temp.numerator;
+    denominator *= temp.denominator;
+    return *this;
+}
+
+RationalBig& RationalBig::operator/=(RationalBig const& temp){
+    numerator *= temp.denominator;
+    denominator *= temp.numerator;
+    if (!denominator) throw new MathException("Division by zero");
+    return *this;
+}
+
+namespace SlavaScript{ namespace lang{
+    BINARY_OP(RationalBig, +) BINARY_OP(RationalBig, -) BINARY_OP(RationalBig, *) BINARY_OP(RationalBig, /)
 }}

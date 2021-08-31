@@ -1,11 +1,16 @@
 #include "math.h"
 #include <cmath>
 #include "../Lib/function.h"
+#include "../Value/arrayvalue.h"
 #include "../Value/numbervalue.h"
+#include "../Value/functionvalue.h"
+#include "../Value/classmodulevalue.h"
 #include "../Lib/functions.h"
 #include "../Lib/variables.h"
 #include "../Exception/argumentsmismatchexception.h"
 #include "../Exception/mathexception.h"
+#include "../Exception/typeexception.h"
+#include "../Exception/unknownpropertyexception.h"
 #include "../Value/bignumbers/smath.h"
 
 using namespace SlavaScript::lang;
@@ -13,6 +18,105 @@ using namespace SlavaScript::modules::math_f;
 using SlavaScript::modules::Math;
 using SlavaScript::exceptions::ArgumentsMismatchException;
 using SlavaScript::exceptions::MathException;
+using SlavaScript::exceptions::TypeException;
+using SlavaScript::exceptions::UnknownPropertyException;
+
+namespace SlavaScript{ namespace modules{ namespace math_out{
+    class PolynomialValue : public ClassModuleValue{
+    public:
+        std::vector<RationalBig> coefficients;
+        PolynomialValue(std::vector<RationalBig> coefficients = {Bignum(0)}) : coefficients(coefficients){ delete_end_zero(); }
+        std::shared_ptr<Value> copy(){
+            return SHARE(PolynomialValue, coefficients);
+        }
+        int deg() const{
+            if (coefficients.size() == 1 && !coefficients[0]) return -1;
+            return coefficients.size() - 1;
+        }
+        operator std::string(){
+            std::string ans = "<polynomial=";
+            for(int i = coefficients.size() - 1; i > -1; --i){
+                if (coefficients[i]){
+                    std::string c = std::string(coefficients[i].div());
+                    if (c == "-1" && i) ans += "-";
+                    else if (c[0] != '-' && ans.size() > 12) ans += "+";
+                    if (i == 0 || c != "1" && c != "-1") ans += c;
+                    if (i) ans += "x";
+                    if (i > 1){
+                        ans += "^";
+                        int q = i;
+                        while(q){
+                            ans += char('0' + q % 10);
+                            q /= 10;
+                        }
+                    }
+                }
+            }
+            if (ans.size() == 12) ans += '0';
+            return ans + ">";
+        }
+        ~PolynomialValue(){}
+        std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property);
+
+        void delete_end_zero(){
+            for(int i = coefficients.size() - 1; i > 0; --i) if (coefficients[i]) break; else coefficients.pop_back();
+        }
+
+        PolynomialValue& operator-() const{
+            PolynomialValue temp(*this);
+            for(RationalBig &x : temp.coefficients) x = -x;
+            return temp;
+        }
+
+        PolynomialValue& operator+=(PolynomialValue const& tem){
+            std::vector<RationalBig> new_v = tem.coefficients;
+            for(int i = 0; i < coefficients.size(); ++i){
+                if (i >= new_v.size()) new_v.push_back(coefficients[i]);
+                else new_v[i] += coefficients[i];
+            }
+            coefficients = new_v;
+            delete_end_zero();
+            return *this;
+        }
+
+        PolynomialValue& operator-=(PolynomialValue const& tem){
+            return *this += -tem;
+        }
+
+        PolynomialValue& operator*=(PolynomialValue  tem){
+            int d1 = deg(), d2 = tem.deg();
+            if (d1 == -1 || d2 == -1){
+                coefficients = {Bignum(0)};
+                return *this;
+            }
+            std::vector<RationalBig> new_v(d1 + d2 + 1);
+            for(int i = 0; i < coefficients.size(); ++i){
+                for(int j = 0; j < tem.coefficients.size(); ++j){
+                    new_v[i + j] += coefficients[i] * tem.coefficients[j];
+                }
+            }
+            coefficients = new_v;
+            delete_end_zero();
+            return *this;
+        }
+
+        PolynomialValue& operator/=(Bignum const& tem){
+            for(RationalBig &x : coefficients) x /= tem;
+            return *this;
+        }
+    };
+
+    CLASS_MODULE_FUNCTION(Deg, PolynomialValue, polynomial)
+        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        SH_RET(NumberValue, polynomial -> deg());
+    CMFE
+
+    std::shared_ptr<Value> PolynomialValue::accessDot(std::shared_ptr<Value> property){
+        std::string prop = property -> asString();
+        if (prop == "deg") SH_RET(FunctionValue, new Deg(this));
+        throw new UnknownPropertyException(prop);
+    }
+}}}
 
 namespace SlavaScript{ namespace modules{ namespace math_f{
     #define MATH_FUNCTION(name) \
@@ -51,9 +155,35 @@ namespace SlavaScript{ namespace modules{ namespace math_f{
 
     MATH_FUNCTION(floor)
     MATH_BINARY_FUNCTION(hypot)
+
+    CREATE_FUNCTION(interpolate)
+        math_out::PolynomialValue result;
+        for(int i = 0; i < values.size(); ++i) if (values[i] -> type() != Values::ARRAY || CAST(ArrayValue, values[i]) -> size() != 2) throw new TypeException("Expected array with len 2.");
+        for(int i = 0; i < values.size(); ++i){
+            math_out::PolynomialValue t({ CAST(ArrayValue, values[i]) -> get(1) -> asBignum() });
+            for(int j = 0; j < values.size(); ++j){
+                if (i != j){
+                    Bignum xi = CAST(ArrayValue, values[i]) -> get(0) -> asBignum(), xj = CAST(ArrayValue, values[j]) -> get(0) -> asBignum();
+                    if (xi == xj) throw new std::logic_error("Cannot used equals x");
+                    t *= math_out::PolynomialValue({Bignum(-xj), Bignum(1)});
+                    t /= xi - xj;
+                }
+            }
+            result += t;
+        }
+        SH_RET(math_out::PolynomialValue, result.coefficients);
+    FE
+
     MATH_FUNCTION(log)
     MATH_FUNCTION(log10)
     MATH_FUNCTION(log1p)
+
+    CREATE_FUNCTION(polynomial)
+        std::vector<RationalBig> v;
+        for(auto x : values) v.push_back(x -> asBignum());
+        SH_RET(math_out::PolynomialValue, v);
+    FE
+
     MATH_BINARY_FUNCTION(pow)
     MATH_FUNCTION(round)
 
@@ -101,9 +231,11 @@ void Math::initFunctions(){
     UNARY_F_(math_f, factorial)
     UNARY_F_(math_f, floor)
     BINARY_F_(math_f, hypot)
+    INF_F_(math_f, interpolate)
     UNARY_F_(math_f, log)
     UNARY_F_(math_f, log10)
     UNARY_F_(math_f, log1p)
+    INF_F_(math_f, polynomial)
     BINARY_F_(math_f, pow)
     UNARY_F_(math_f, round)
     UNARY_F_(math_f, signum)
@@ -117,10 +249,6 @@ void Math::initFunctions(){
 }
 
 /*
-_CRTIMP double __cdecl ceil (double);
-_CRTIMP double __cdecl floor (double);
-_CRTIMP double __cdecl fabs (double);
-
 _CRTIMP double __cdecl ldexp (double, int);
 _CRTIMP double __cdecl frexp (double, int*);
 _CRTIMP double __cdecl modf (double, double*);

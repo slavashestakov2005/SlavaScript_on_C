@@ -19,12 +19,7 @@ namespace SlavaScript{ namespace lang{
         virtual operator std::string() = 0;
         virtual bool isClassFromModule(){ return false; }
         virtual ~Value(){}
-        friend bool operator==(Value const& a, Value const& b);
-        friend bool operator!=(Value const& a, Value const& b);
-        friend bool operator<(Value const& a, Value const& b);
-        friend bool operator<=(Value const& a, Value const& b);
-        friend bool operator>(Value const& a, Value const& b);
-        friend bool operator>=(Value const& a, Value const& b);
+        DECS_COND(Value)
     };
 }}
 

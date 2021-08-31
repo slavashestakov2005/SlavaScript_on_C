@@ -43,26 +43,14 @@ NumberValue::operator std::string(){
     return asString();
 };
 
-bool SlavaScript::lang::operator==(NumberValue const& a, NumberValue const& b){
-    return a.value == b.value;
-}
+namespace SlavaScript{ namespace lang{
+    bool operator==(NumberValue const& a, NumberValue const& b){
+        return a.value == b.value;
+    }
 
-bool SlavaScript::lang::operator!=(NumberValue const& a, NumberValue const& b){
-    return a.value != b.value;
-}
+    bool operator<(NumberValue const& a, NumberValue const& b){
+        return a.value < b.value;
+    }
 
-bool SlavaScript::lang::operator<(NumberValue const& a, NumberValue const& b){
-    return a.value < b.value;
-}
-
-bool SlavaScript::lang::operator<=(NumberValue const& a, NumberValue const& b){
-    return a.value <= b.value;
-}
-
-bool SlavaScript::lang::operator>(NumberValue const& a, NumberValue const& b){
-    return a.value > b.value;
-}
-
-bool SlavaScript::lang::operator>=(NumberValue const& a, NumberValue const& b){
-    return a.value >= b.value;
-}
+    COND_OPS(NumberValue)
+}}

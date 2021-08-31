@@ -72,26 +72,14 @@ IntegrationValue::operator std::string(){
     return "null";
 }
 
-bool SlavaScript::lang::operator==(IntegrationValue const& a, IntegrationValue const& b){
-    return a.fileNameBegin == b.fileNameBegin;
-}
+namespace SlavaScript{ namespace lang{
+    bool operator==(IntegrationValue const& a, IntegrationValue const& b){
+        return a.fileNameBegin == b.fileNameBegin;
+    }
 
-bool SlavaScript::lang::operator!=(IntegrationValue const& a, IntegrationValue const& b){
-    return !(a == b);
-}
+    bool operator<(IntegrationValue const& a, IntegrationValue const& b){
+        return a.fileNameBegin < b.fileNameBegin;
+    }
 
-bool SlavaScript::lang::operator<(IntegrationValue const& a, IntegrationValue const& b){
-    return a.fileNameBegin < b.fileNameBegin;
-}
-
-bool SlavaScript::lang::operator<=(IntegrationValue const& a, IntegrationValue const& b){
-    return !(a > b);
-}
-
-bool SlavaScript::lang::operator>(IntegrationValue const& a, IntegrationValue const& b){
-    return b < a;
-}
-
-bool SlavaScript::lang::operator>=(IntegrationValue const& a, IntegrationValue const& b){
-    return !(a < b);
-}
+    COND_OPS(IntegrationValue)
+}}
