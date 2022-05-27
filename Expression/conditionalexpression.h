@@ -4,7 +4,7 @@
 #include "conditionaloperator.h"
 #include "expression.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ConditionalExpression : public Expression{
     private:
         Expression* expr1, *expr2;
@@ -21,6 +21,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // CONDITIONALEXPRESSION_H_INCLUDED

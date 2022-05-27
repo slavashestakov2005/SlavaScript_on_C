@@ -5,7 +5,7 @@
 #include "value.h"
 #include "../Lib/macros.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     template<typename T>
     class Container{
     public:
@@ -15,6 +15,6 @@ namespace SlavaScript{ namespace lang{
         virtual typename T::iterator begin() = 0;
         virtual typename T::iterator end() = 0;
     };
-}}
+}
 
 #endif // CONTAINER_H_INCLUDED

@@ -6,7 +6,7 @@
 #include "function.h"
 #include "functions.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     struct NamedValue;
 
     class ArgumentsInfo{
@@ -62,6 +62,6 @@ namespace SlavaScript{ namespace lang{
         static void popScope();
         static void copyScope();
     };
-}}
+}
 
 #endif // FUNCTIONS_H_INCLUDED

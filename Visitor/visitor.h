@@ -1,7 +1,7 @@
 #ifndef VISITOR_H_INCLUDED
 #define VISITOR_H_INCLUDED
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ArrayExpression;
     class AssignmentExpression;
     class BinaryExpression;
@@ -76,6 +76,6 @@ namespace SlavaScript{ namespace lang{
         virtual void visit(VariableExpression* v);
         virtual void visit(WhileStatement* v);
     };
-}}
+}
 
 #endif // VISITOR_H_INCLUDED

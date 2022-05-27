@@ -3,7 +3,7 @@
 
 #include "expression.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ContainerAccessElement {
     private:
         bool dot;
@@ -14,6 +14,6 @@ namespace SlavaScript{ namespace lang{
         bool isDot();
         operator std::string();
     };
-}}
+}
 
 #endif // CONTAINERACCESELEMENT_H_INCLUDED

@@ -4,7 +4,7 @@
 #include <exception>
 #include <string>
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ParseError{
     private:
         int line;
@@ -15,6 +15,6 @@ namespace SlavaScript{ namespace lang{
         std::exception* getException();
         operator std::string();
     };
-}}
+}
 
 #endif // PARSEERROR_H_INCLUDED

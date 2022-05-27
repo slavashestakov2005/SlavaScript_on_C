@@ -4,7 +4,7 @@
 #include "statement.h"
 #include "../Expression/expression.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class TryStatement : public Statement{
     private:
         Statement* body, *catchBlock;
@@ -20,6 +20,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // TRYSTATEMENT_H_INCLUDED

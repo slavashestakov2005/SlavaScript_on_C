@@ -4,7 +4,7 @@
 #include <map>
 #include "expression.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class MapExpression : public Expression{
     private:
         std::map<Expression*, Expression*> elements;
@@ -18,6 +18,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // MAPEXPRESSION_H_INCLUDED

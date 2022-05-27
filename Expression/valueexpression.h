@@ -11,7 +11,7 @@
 #include "../Value/stringvalue.h"
 #include "../Value/value.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ValueExpression : public Expression{
     public:
         std::shared_ptr<Value> value;
@@ -31,6 +31,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // VALUEEXPRESSION_H_INCLUDED

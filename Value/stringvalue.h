@@ -4,7 +4,7 @@
 #include "container.h"
 #include "value.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class StringValue : public Value, Container<std::string>{
     private:
         std::string value;
@@ -30,6 +30,6 @@ namespace SlavaScript{ namespace lang{
 
         DECS_COND(StringValue)
     };
-}}
+}
 
 #endif // STRINGVALUE_H_INCLUDED

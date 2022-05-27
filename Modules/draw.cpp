@@ -14,7 +14,7 @@ using namespace SlavaScript::modules::draw_f;
 using SlavaScript::modules::Draw;
 using SlavaScript::exceptions::ArgumentsMismatchException;
 
-namespace SlavaScript{ namespace modules{ namespace draw_out{
+namespace SlavaScript::modules::draw_out{
     enum class Keys{
         ESCAPE,
         UP,
@@ -38,9 +38,9 @@ namespace SlavaScript{ namespace modules{ namespace draw_out{
         if (alpha > 255) return 255;
         return int(alpha);
     }
-}}}
+}
 
-namespace SlavaScript{ namespace modules{ namespace draw_f{
+namespace SlavaScript::modules::draw_f{
     CREATE_FUNCTION(window)
         int siz = values.size();
         if (siz < 1 || siz > 3) throw new ArgumentsMismatchException("One or two or three arguments expected");
@@ -190,7 +190,7 @@ namespace SlavaScript{ namespace modules{ namespace draw_f{
         draw_out::window.close();
         return NullValue::NULL_;
     FE
-}}}
+}
 
 void Draw::initConstants(){
     Variables::set("KB_ESCAPE", SHARE(NumberValue, int(draw_out::Keys::ESCAPE)));

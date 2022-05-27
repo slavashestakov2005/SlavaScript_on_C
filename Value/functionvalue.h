@@ -4,7 +4,7 @@
 #include "value.h"
 #include "../Lib/function.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class FunctionValue : public Value{
     private:
         std::shared_ptr<Function> value;
@@ -25,6 +25,6 @@ namespace SlavaScript{ namespace lang{
 
         DECS_COND(FunctionValue)
     };
-}}
+}
 
 #endif // FUNCTIONVALUE_H_INCLUDED

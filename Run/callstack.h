@@ -5,7 +5,7 @@
 #include <string>
 #include "../Lib/function.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class CallInfo{
     private:
         std::string name;
@@ -24,6 +24,6 @@ namespace SlavaScript{ namespace lang{
         static void clear();
         static std::string callsToString();
     };
-}}
+}
 
 #endif // CALLSTACK_H_INCLUDED

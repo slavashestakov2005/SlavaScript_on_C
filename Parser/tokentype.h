@@ -1,7 +1,7 @@
 #ifndef TOKENTYPE_H_INCLUDED
 #define TOKENTYPE_H_INCLUDED
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     enum class TokenType{
         NUMBER,
         HEX_NUMBER,
@@ -89,6 +89,6 @@ namespace SlavaScript{ namespace lang{
 
         END_OF_FILE
     };
-}}
+}
 
 #endif // TOKENTYPE_H_INCLUDED

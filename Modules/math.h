@@ -3,7 +3,7 @@
 
 #include "module.h"
 
-namespace SlavaScript{ namespace modules{
+namespace SlavaScript::modules{
     namespace math_f{
         extern std::shared_ptr<SlavaScript::lang::Function> abs, acos, asin, atan, atan2, cbrt, ceil, copy_sign, cos, cosh, exp, expm1,
                                             factorial, floor, hypot, interpolate, log, log10, log1p, polynomial, pow, round, signum, sin,
@@ -15,6 +15,6 @@ namespace SlavaScript{ namespace modules{
         static void initConstants();
         static void initFunctions();
     };
-}};
+}
 
 #endif // MATH_H_INCLUDED

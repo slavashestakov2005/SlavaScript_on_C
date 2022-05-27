@@ -7,7 +7,7 @@
 #include <vector>
 #include "../Value/value.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     struct NamedValue;
 
     class VariablesScope{
@@ -48,6 +48,6 @@ namespace SlavaScript{ namespace lang{
         static void popScope();
         static void copyScope();
     };
-}}
+}
 
 #endif // VARIABLES_H_INCLUDED

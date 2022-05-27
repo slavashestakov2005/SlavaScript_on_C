@@ -5,7 +5,7 @@
 #include "../Lib/functionmodule.h"
 #include "../Lib/macros.h"
 
-namespace SlavaScript{ namespace modules{
+namespace SlavaScript::modules{
     CREATE_TEMPLATE(Constants)
     CREATE_TEMPLATE(Functions)
     CREATE_TEMPLATE(Classes)
@@ -19,6 +19,6 @@ namespace SlavaScript{ namespace modules{
             InitClasses<ModuleName>::init();
         }
     };
-}}
+}
 
 #endif // MODULE_H_INCLUDED

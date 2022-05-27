@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     enum class Values{
         BOOL,
         NUMBER,
@@ -17,6 +17,6 @@ namespace SlavaScript{ namespace lang{
     };
 
     std::string getValueName(Values value);
-}}
+}
 
 #endif // VALUES_H_INCLUDED

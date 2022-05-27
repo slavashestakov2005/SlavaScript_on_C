@@ -3,7 +3,7 @@
 
 #include "classvalue.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class IntegrationValue : public Value{
     private:
         std::string fileNameBegin, fileNameEnd;
@@ -23,6 +23,6 @@ namespace SlavaScript{ namespace lang{
 
         DECS_COND(IntegrationValue)
     };
-}}
+}
 
 #endif // INTEGRATIONVALUE_H_INCLUDED

@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace SlavaScript{ namespace exceptions{
+namespace SlavaScript::exceptions{
     class ParseException : public std::exception{
     private:
         std::string text;
@@ -13,6 +13,6 @@ namespace SlavaScript{ namespace exceptions{
         const char* what() const noexcept{ return text.c_str(); }
         virtual ~ParseException() noexcept {}
     };
-}}
+}
 
 #endif // PARSEEXCEPTION_H_INCLUDED

@@ -36,7 +36,7 @@ FunctionValue::operator std::string(){
     return asString();
 };
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     bool operator==(FunctionValue const& a, FunctionValue const& b){
         throw new TypeException("Conditional operators cannot used for two functions");
     }
@@ -46,4 +46,4 @@ namespace SlavaScript{ namespace lang{
     }
 
     COND_OPS(FunctionValue)
-}}
+}

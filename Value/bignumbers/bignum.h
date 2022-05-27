@@ -5,7 +5,7 @@
 #include <string>
 #include "../../Lib/macros.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class UnsignedBig{
     private:
         std::vector<int> digits;
@@ -106,6 +106,6 @@ namespace SlavaScript{ namespace lang{
     };
 
     DEC_2(RationalBig, +) DEC_2(RationalBig, -) DEC_2(RationalBig, *) DEC_2(RationalBig, /)
-}}
+}
 
 #endif // BIGNUM_H_INCLUDED

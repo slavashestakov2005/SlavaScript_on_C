@@ -7,7 +7,7 @@
 #include "bignumbers/bignum.h"
 #include "../Lib/macros.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class Value{
     public:
         virtual std::shared_ptr<Value> copy() = 0;
@@ -21,6 +21,6 @@ namespace SlavaScript{ namespace lang{
         virtual ~Value(){}
         DECS_COND(Value)
     };
-}}
+}
 
 #endif // VALUE_H_INCLUDED

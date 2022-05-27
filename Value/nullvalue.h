@@ -4,7 +4,7 @@
 #include <memory>
 #include "value.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class NullValue : public Value{
     public:
         static std::shared_ptr<NullValue> NULL_;
@@ -22,6 +22,6 @@ namespace SlavaScript{ namespace lang{
 
         DECS_COND(NullValue)
     };
-}}
+}
 
 #endif // NULLVALUE_H_INCLUDED

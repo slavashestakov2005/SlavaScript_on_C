@@ -8,7 +8,7 @@
 #include "../Value/mapvalue.h"
 #include "../Visitor/assignvalidator.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ContainerAccessExpression : public Expression{
     private:
         Expression* root;
@@ -30,6 +30,6 @@ namespace SlavaScript{ namespace lang{
         friend AssignValidator;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // CONTAINERACCESSEXPRESSION_H_INCLUDED

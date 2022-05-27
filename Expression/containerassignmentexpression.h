@@ -6,7 +6,7 @@
 #include "../Expression/expression.h"
 #include "../Visitor/assignvalidator.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ContainerAssignmentExpression : public Expression{
     private:
         AssignmentOperator operation;
@@ -23,6 +23,6 @@ namespace SlavaScript{ namespace lang{
         friend AssignValidator;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // CONTAINERASSIGNMENTSTATEMENT_H_INCLUDED

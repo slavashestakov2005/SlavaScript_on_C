@@ -20,7 +20,7 @@ using SlavaScript::modules::Files;
 using SlavaScript::exceptions::ArgumentsMismatchException;
 using SlavaScript::exceptions::UnknownPropertyException;
 
-namespace SlavaScript{ namespace modules{ namespace files_out{
+namespace SlavaScript::modules::files_out{
     class FileValue : public ClassModuleValue{
     public:
         std::string name;
@@ -78,16 +78,16 @@ namespace SlavaScript{ namespace modules{ namespace files_out{
         if (prop == "write_line") SH_RET(FunctionValue, new WriteLine(this));
         throw new UnknownPropertyException(prop);
     }
-}}}
+}
 
-namespace SlavaScript{ namespace modules{ namespace files_f{
+namespace SlavaScript::modules::files_f{
     CREATE_FUNCTION(open)
         if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
         std::shared_ptr<files_out::FileValue> file = SHARE(files_out::FileValue, values[0] -> asString());
         if (file -> bad) return NumberValue::M_ONE;
         return CAST(Value, file);
     FE
-}}}
+}
 
 void Files::initFunctions(){
     UNARY_F(open)

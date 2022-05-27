@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     enum class BinaryOperator{
         ADD,        /// +
         SUBSTRACT,  /// -
@@ -20,6 +20,6 @@ namespace SlavaScript{ namespace lang{
     };
 
     std::string getOperator(BinaryOperator);
-}}
+}
 
 #endif // BINARYOPERATOR_H_INCLUDED

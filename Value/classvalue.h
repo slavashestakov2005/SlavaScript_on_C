@@ -4,7 +4,7 @@
 #include "mapvalue.h"
 #include "../Lib/classmethod.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ClassValue : public Value{
     private:
         std::string className;
@@ -32,6 +32,6 @@ namespace SlavaScript{ namespace lang{
 
         DECS_COND(ClassValue)
     };
-}}
+}
 
 #endif // CLASSVALUE_H_INCLUDED

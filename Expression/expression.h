@@ -7,7 +7,7 @@
 #include "../Visitor/node.h"
 #include "../Compiler/compilervisitor.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     enum class Expressions{
         ArrayExpression,
         AssignmentExpression,
@@ -32,6 +32,6 @@ namespace SlavaScript{ namespace lang{
         virtual ~Expression(){}
         virtual Expressions type() = 0;
     };
-}}
+}
 
 #endif // EXPRESSION_H_INCLUDED

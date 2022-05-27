@@ -4,7 +4,7 @@
 #include <vector>
 #include "argument.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class Arguments{
     private:
         std::vector<Argument> arguments;
@@ -21,6 +21,6 @@ namespace SlavaScript{ namespace lang{
         int size();
         operator std::string();
     };
-}}
+}
 
 #endif // ARGUMENTS_H_INCLUDED

@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace SlavaScript{ namespace exceptions{
+namespace SlavaScript::exceptions{
     class UnknownPropertyException  : public std::exception{
     private:
         std::string text;
@@ -12,6 +12,6 @@ namespace SlavaScript{ namespace exceptions{
         const char* what() const noexcept { return ("Unknown property " + text).c_str(); }
         virtual ~UnknownPropertyException () noexcept {}
     };
-}}
+}
 
 #endif // UNKNOWNPROPERTYEXCEPTION_H_INCLUDED

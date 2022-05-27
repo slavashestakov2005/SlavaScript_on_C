@@ -3,7 +3,7 @@
 
 #include "module.h"
 
-namespace SlavaScript{ namespace modules{
+namespace SlavaScript::modules{
     namespace global_f{
         extern std::shared_ptr<SlavaScript::lang::Function> input, max, min, set_color;
     }
@@ -14,6 +14,6 @@ namespace SlavaScript{ namespace modules{
         static void initFunctions();
         static void initClasses(){}
     };
-}}
+}
 
 #endif // GLOBAL_H_INCLUDED

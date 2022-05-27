@@ -8,7 +8,7 @@
 
 using SlavaScript::exceptions::TypeException;
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class Function{
     public:
         bool type = false;
@@ -16,6 +16,6 @@ namespace SlavaScript{ namespace lang{
         virtual operator std::string(){  throw new TypeException("Cannot cast function to string"); }
         virtual std::shared_ptr<Value> operator()(std::vector<std::shared_ptr<Value>> args) final { return execute(args); }
     };
-}}
+}
 
 #endif // FUNCTION_H_INCLUDED

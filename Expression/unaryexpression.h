@@ -4,7 +4,7 @@
 #include "expression.h"
 #include "unaryoperator.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class UnaryExpression : public Expression{
     private:
         Expression* expr;
@@ -21,6 +21,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // UNARYEXPRESSION_H_INCLUDED

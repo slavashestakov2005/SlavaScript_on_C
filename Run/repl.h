@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class Repl{
     private:
         static std::string HELP, VARS, FUNCS, SOURCE, CLEAR, EXIT;
@@ -13,6 +13,6 @@ namespace SlavaScript{ namespace lang{
     public:
         static void start();
     };
-}}
+}
 
 #endif // REPL_H_INCLUDED

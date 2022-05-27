@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace SlavaScript{ namespace exceptions{
+namespace SlavaScript::exceptions{
     class UnknownFunctionException  : public std::exception{
     private:
         std::string text;
@@ -12,6 +12,6 @@ namespace SlavaScript{ namespace exceptions{
         const char* what() const noexcept { return ("Unknown function " + text).c_str(); }
         virtual ~UnknownFunctionException () noexcept {}
     };
-}}
+}
 
 #endif // UNKNOWNFUNCTIONEXCEPTION_H_INCLUDED

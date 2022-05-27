@@ -5,7 +5,7 @@
 #include "container.h"
 #include "value.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ArrayValue : public Value, Container<std::vector<std::shared_ptr<Value>>>{
     private:
         std::vector<std::shared_ptr<Value>> elements;
@@ -38,6 +38,6 @@ namespace SlavaScript{ namespace lang{
 
         DECS_COND(ArrayValue)
     };
-}}
+}
 
 #endif // ARRAYVALUE_H_INCLUDED

@@ -3,7 +3,7 @@
 
 #include "module.h"
 
-namespace SlavaScript{ namespace modules{
+namespace SlavaScript::modules{
     namespace files_f{
         extern std::shared_ptr<SlavaScript::lang::Function> open;
     }
@@ -12,6 +12,6 @@ namespace SlavaScript{ namespace modules{
     public:
         static void initFunctions();
     };
-}}
+}
 
 #endif // FILES_H_INCLUDED

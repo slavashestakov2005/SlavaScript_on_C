@@ -7,7 +7,7 @@
 #include "../Lib/macros.h"
 using SlavaScript::exceptions::TypeException;
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ClassModuleValue : public Value{
     public:
         virtual std::shared_ptr<Value> copy() = 0;
@@ -22,6 +22,6 @@ namespace SlavaScript{ namespace lang{
         bool isClassFromModule(){ return true; }
         virtual ~ClassModuleValue(){}
     };
-}}
+}
 
 #endif // CLASSMODULEVALUE_H_INCLUDED

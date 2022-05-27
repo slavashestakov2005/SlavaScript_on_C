@@ -3,7 +3,7 @@
 
 #include "visitor.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class FunctionDefineStatement;
 
     class FunctionAdder : public Visitor{
@@ -11,6 +11,6 @@ namespace SlavaScript{ namespace lang{
         /** @return  throw: std::logic_error. */
         void visit(FunctionDefineStatement* v);
     };
-}}
+}
 
 #endif // FUNCTIONADDER_H_INCLUDED

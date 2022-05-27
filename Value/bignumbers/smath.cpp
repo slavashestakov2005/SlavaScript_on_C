@@ -10,7 +10,7 @@ namespace{
     Bignum pi("3.14159265358979323846");
 }
 
-namespace SlavaScript{ namespace modules{ namespace math_out{
+namespace SlavaScript::modules::math_out{
     Bignum sin(const Bignum& x){
         return std::sin(double(x));
     }
@@ -117,4 +117,4 @@ namespace SlavaScript{ namespace modules{ namespace math_out{
     Bignum abs(const Bignum& x){
         return x < 0 ? x * -1 : x;
     }
-}}}
+}

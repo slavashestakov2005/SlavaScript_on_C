@@ -4,7 +4,7 @@
 #include "statement.h"
 #include "../Expression/expression.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class DoWhileStatement : public Statement{
     private:
         Expression* condition;
@@ -19,6 +19,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // DOWHILESTATEMENT_H_INCLUDED

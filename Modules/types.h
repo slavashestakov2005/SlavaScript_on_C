@@ -3,7 +3,7 @@
 
 #include "module.h"
 
-namespace SlavaScript{ namespace modules{
+namespace SlavaScript::modules{
     namespace types_f{
         extern std::shared_ptr<SlavaScript::lang::Function> float_, int_, string, type_to_string, typeof;
     }
@@ -13,6 +13,6 @@ namespace SlavaScript{ namespace modules{
         static void initConstants();
         static void initFunctions();
     };
-}};
+}
 
 #endif // TYPES_H_INCLUDED

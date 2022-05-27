@@ -1,10 +1,9 @@
 #include "path.h"
 #include "../Value/stringvalue.h"
 #include "../Lib/names.h"
-#include "../Cpp17/filesystem.h"
+#include "../Lib/filesystem.h"
 
 using namespace SlavaScript::lang;
-using namespace SlavaScript::Cpp17;
 
 std::vector<std::string> Path::pathes = {};
 bool Path::import = true;

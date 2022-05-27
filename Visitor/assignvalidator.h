@@ -3,7 +3,7 @@
 
 #include "visitor.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class AssignValidator : public Visitor{
     public:
         /** @return  throw: std::logic_error. */
@@ -11,6 +11,6 @@ namespace SlavaScript{ namespace lang{
         /** @return  throw: std::logic_error. */
         void visit(ContainerAssignmentExpression* v);
     };
-}}
+}
 
 #endif // ASSIGNVALIDATOR_H_INCLUDED

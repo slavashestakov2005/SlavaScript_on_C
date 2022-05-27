@@ -12,7 +12,7 @@
 #include "../Statement/functiondefinestatement.h"
 #include "../Statement/statement.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class Parser{
     private:
         std::vector<Token*> tokens;
@@ -76,6 +76,6 @@ namespace SlavaScript{ namespace lang{
         Statement* parse();
         ParseErrors getParseErrors();
     };
-}}
+}
 
 #endif // PARSER_H_INCLUDED

@@ -3,11 +3,11 @@
 
 #include "visitor.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ImportAdder : public Visitor{
     public:
         void visit(ImportStatement* v);
     };
-}}
+}
 
 #endif // IMPORTADDER_H_INCLUDED

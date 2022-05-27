@@ -11,7 +11,7 @@
 
 using namespace SlavaScript::lang;
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     bool operator==(Value const& a, Value const& b){
         if (a.type() != b.type()) return false;
         switch(a.type()){
@@ -43,4 +43,4 @@ namespace SlavaScript{ namespace lang{
     }
 
     COND_OPS(Value)
-}}
+}

@@ -3,7 +3,7 @@
 
 #include "module.h"
 
-namespace SlavaScript{ namespace modules{
+namespace SlavaScript::modules{
     namespace std_f{
         extern std::shared_ptr<SlavaScript::lang::Function> array_combine, char_at, echo, find, join, len, map_key_exists, map_keys,
                                             map_values, new_array, parse_number, rand, replace, replace_first, rfind,
@@ -16,6 +16,6 @@ namespace SlavaScript{ namespace modules{
         static void initConstants();
         static void initFunctions();
     };
-}}
+}
 
 #endif // STD_H_INCLUDED

@@ -8,7 +8,7 @@
 #include "../Statement/classdeclarationsstatement.h"
 #include "../Value/value.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     struct NamedValue{
         std::string name;
         std::shared_ptr<Value> variable = nullptr;
@@ -33,6 +33,6 @@ namespace SlavaScript{ namespace lang{
         static void setClass(std::string key, ClassDeclarationsStatement* classDef);
         static void restore(NamedValue named);
     };
-}}
+}
 
 #endif // NAMES_H_INCLUDED

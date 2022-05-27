@@ -4,7 +4,7 @@
 #include <vector>
 #include "parseerror.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ParseErrors{
     private:
         std::vector<ParseError*> errors;
@@ -15,6 +15,6 @@ namespace SlavaScript{ namespace lang{
         bool hasError();
         operator std::string();
     };
-}}
+}
 
 #endif // PARSEERRORS_H_INCLUDED

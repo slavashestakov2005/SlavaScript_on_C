@@ -37,7 +37,7 @@ BoolValue::operator std::string(){
     return asString();
 }
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     bool operator==(BoolValue const& a, BoolValue const& b){
         return a.value == b.value;
     }
@@ -47,4 +47,4 @@ namespace SlavaScript{ namespace lang{
     }
 
     COND_OPS(BoolValue)
-}}
+}

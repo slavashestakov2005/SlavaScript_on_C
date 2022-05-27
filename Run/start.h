@@ -6,7 +6,7 @@
 #include "../Parser/lexer.h"
 #include "../Statement/statement.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class Start{
     private:
         double time = 0;
@@ -22,6 +22,6 @@ namespace SlavaScript{ namespace lang{
         void printTokens();
         void printWorkTime();
     };
-}}
+}
 
 #endif // START_H_INCLUDED

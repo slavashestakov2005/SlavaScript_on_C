@@ -3,7 +3,7 @@
 
 #include "statement.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ContinueStatement : public Statement{
     public:
         Statements type(){ return Statements::ContinueStatement; }
@@ -14,6 +14,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // CONTINUESTATEMENT_H_INCLUDED

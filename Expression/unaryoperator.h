@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     enum class UnaryOperator{
         PLUS,           /// +
         NEGATIVE,       /// -
@@ -14,6 +14,6 @@ namespace SlavaScript{ namespace lang{
     };
 
     std::string getOperator(UnaryOperator);
-}}
+}
 
 #endif // UNARYOPERATOR_H_INCLUDED

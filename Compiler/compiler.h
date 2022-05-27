@@ -4,7 +4,7 @@
 #include <string>
 #include <fstream>
 
-namespace SlavaScript{ namespace compiler{
+namespace SlavaScript::compiler{
     class Compiler{
     private:
         static std::ofstream generated_file;
@@ -24,6 +24,6 @@ namespace SlavaScript{ namespace compiler{
         static void enterLoop();
         static void goOutLoop();
     };
-}}
+}
 
 #endif // COMPILER_H_INCLUDED

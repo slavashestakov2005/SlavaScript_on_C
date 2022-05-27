@@ -7,7 +7,7 @@ using SlavaScript::exceptions::TypeException;
 
 ClassValue::ClassValue(std::string className) : className(className){
     thisMap -> setThisMap(true);
-};
+}
 
 std::shared_ptr<Value> ClassValue::copy(){
     std::shared_ptr<ClassValue> val = SHARE(ClassValue, this -> className);
@@ -74,7 +74,7 @@ ClassValue::operator std::string(){
     return asString();
 }
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     bool operator==(ClassValue const& a, ClassValue const& b){
         return a.className == b.className;
     }
@@ -84,4 +84,4 @@ namespace SlavaScript{ namespace lang{
     }
 
     COND_OPS(ClassValue)
-}}
+}

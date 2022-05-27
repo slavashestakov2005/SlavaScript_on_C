@@ -3,7 +3,7 @@
 
 #include "statement.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class BreakStatement : public Statement{
     public:
         Statements type(){ return Statements::BreakStatement; }
@@ -14,6 +14,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // BREAKSTATEMENT_H_INCLUDED

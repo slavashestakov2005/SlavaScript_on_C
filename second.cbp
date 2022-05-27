@@ -40,7 +40,6 @@
 		<Unit filename="Compiler/compiler.h" />
 		<Unit filename="Compiler/compilervisitor.cpp" />
 		<Unit filename="Compiler/compilervisitor.h" />
-		<Unit filename="Cpp17/filesystem.h" />
 		<Unit filename="Exception/argumentsmismatchexception.h" />
 		<Unit filename="Exception/lexerexception.cpp" />
 		<Unit filename="Exception/lexerexception.h" />
@@ -96,6 +95,8 @@
 		<Unit filename="Lib/classdeclarations.h" />
 		<Unit filename="Lib/classmethod.cpp" />
 		<Unit filename="Lib/classmethod.h" />
+		<Unit filename="Lib/filesystem.cpp" />
+		<Unit filename="Lib/filesystem.h" />
 		<Unit filename="Lib/function.h" />
 		<Unit filename="Lib/functionmodule.cpp" />
 		<Unit filename="Lib/functionmodule.h" />
@@ -230,7 +231,6 @@
 		<Unit filename="Visitor/variableprinter.h" />
 		<Unit filename="Visitor/visitor.cpp" />
 		<Unit filename="Visitor/visitor.h" />
-		<Unit filename="dlls/Cpp17.dll" />
 		<Unit filename="icon.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>

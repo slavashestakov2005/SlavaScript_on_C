@@ -5,7 +5,7 @@
 #include <vector>
 #include "../Value/arrayvalue.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class Path{
     private:
         static std::vector<std::string> pathes;
@@ -21,6 +21,6 @@ namespace SlavaScript{ namespace lang{
         static void setCommandArguments(std::vector<std::string> argv);
         static std::shared_ptr<ArrayValue> getCommandArguments();
     };
-}}
+}
 
 #endif // PATH_H_INCLUDED

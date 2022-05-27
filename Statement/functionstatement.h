@@ -4,7 +4,7 @@
 #include "statement.h"
 #include "../Expression/functionalexpression.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class FunctionStatement : public Statement{
     private:
         FunctionalExpression* function;
@@ -18,6 +18,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // FUNCTIONSTATEMENT_H_INCLUDED

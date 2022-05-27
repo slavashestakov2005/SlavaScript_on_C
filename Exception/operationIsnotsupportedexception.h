@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace SlavaScript{ namespace exceptions{
+namespace SlavaScript::exceptions{
     class OperationIsNotSupportedException  : public std::exception{
     private:
         std::string text;
@@ -12,6 +12,6 @@ namespace SlavaScript{ namespace exceptions{
         const char* what() const noexcept{ return ("Operation " + text + " is not supported").c_str(); }
         virtual ~OperationIsNotSupportedException () noexcept {}
     };
-}}
+}
 
 #endif // OPERATIONISNOTSUPPORTEDEXCEPTION_H_INCLUDED

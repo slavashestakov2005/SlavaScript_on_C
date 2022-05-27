@@ -6,7 +6,7 @@
 #include "../Lib/arguments.h"
 #include "../Visitor/functionadder.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class FunctionDefineStatement : public Statement{
     private:
     public:
@@ -26,6 +26,6 @@ namespace SlavaScript{ namespace lang{
         friend FunctionAdder;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // FUNCTIONDEFINESTATEMENT_H_INCLUDED

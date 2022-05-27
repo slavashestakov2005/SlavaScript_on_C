@@ -3,7 +3,7 @@
 
 #include "module.h"
 
-namespace SlavaScript{ namespace modules{
+namespace SlavaScript::modules{
     namespace functional_f{
         extern std::shared_ptr<SlavaScript::lang::Function> chain, combine, drop_while, filter, flat_map, foreach, map,
                                                             reduce, sortby, take_while;
@@ -13,6 +13,6 @@ namespace SlavaScript{ namespace modules{
     public:
         static void initFunctions();
     };
-}}
+}
 
 #endif // FUNCTIONAL_H_INCLUDED

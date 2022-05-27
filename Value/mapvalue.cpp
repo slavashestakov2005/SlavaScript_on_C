@@ -109,7 +109,7 @@ MapValue::operator std::string(){
     return asString();
 }
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     bool operator==(MapValue const& a, MapValue const& b){
         if (a.size() != b.size()) return false;
         auto nowa = a.map.begin();
@@ -146,4 +146,4 @@ namespace SlavaScript{ namespace lang{
     }
 
     COND_OPS(MapValue)
-}}
+}

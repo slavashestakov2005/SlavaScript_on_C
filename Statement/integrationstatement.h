@@ -3,7 +3,7 @@
 
 #include "statement.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class IntegrationStatement : public Statement{
     private:
         std::string lang, name, code;
@@ -17,6 +17,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // INTEGRATIONSTATEMENT_H_INCLUDED

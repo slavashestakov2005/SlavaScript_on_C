@@ -124,7 +124,7 @@ ArrayValue::operator std::string(){
     return asString();
 }
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     bool operator==(ArrayValue const& a, ArrayValue const& b){
         if (a.size() != b.size()) return false;
         for(int i = 0; i < a.size(); ++i){
@@ -150,4 +150,4 @@ namespace SlavaScript{ namespace lang{
     }
 
     COND_OPS(ArrayValue)
-}}
+}

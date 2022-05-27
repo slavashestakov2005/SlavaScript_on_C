@@ -5,7 +5,7 @@
 #include "statement.h"
 #include "../Expression/expression.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class SwitchStatement : public Statement{
     private:
         Expression* start;
@@ -22,6 +22,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // SWITCHSTATEMENT_H_INCLUDED

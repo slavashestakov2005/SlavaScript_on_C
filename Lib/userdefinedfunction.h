@@ -5,7 +5,7 @@
 #include "function.h"
 #include "../Statement/statement.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class UserDefinedFunction : public Function{
     protected:
         Statement* body;
@@ -18,6 +18,6 @@ namespace SlavaScript{ namespace lang{
         /** @return  throw: ArgumentsMismatchException*. */
         std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values);
     };
-}}
+}
 
 #endif // USERDEFINEDFUNCTION_H_INCLUDED

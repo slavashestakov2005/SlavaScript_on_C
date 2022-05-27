@@ -1,10 +1,9 @@
 #include "integrationstatement.h"
 #include "../Lib/names.h"
 #include "../Value/integrationvalue.h"
-#include "../Cpp17/filesystem.h"
+#include "../Lib/filesystem.h"
 
 using namespace SlavaScript::lang;
-using namespace SlavaScript::Cpp17;
 
 namespace{
     std::string replace_all(std::string str){

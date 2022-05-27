@@ -4,7 +4,7 @@
 #include "value.h"
 #include <memory>
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class BoolValue : public Value{
     private:
         bool value;
@@ -25,6 +25,6 @@ namespace SlavaScript{ namespace lang{
 
         DECS_COND(BoolValue)
     };
-}}
+}
 
 #endif // BOOLVALUE_H_INCLUDED

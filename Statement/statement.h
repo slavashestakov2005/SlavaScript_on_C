@@ -5,7 +5,7 @@
 #include "../Visitor/node.h"
 #include "../Compiler/compilervisitor.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     enum class Statements{
         BlockStatement,
         BreakStatement,
@@ -37,6 +37,6 @@ namespace SlavaScript{ namespace lang{
         virtual ~Statement(){}
         virtual Statements type() = 0;
     };
-}}
+}
 
 #endif // STATEMENT_H_INCLUDED

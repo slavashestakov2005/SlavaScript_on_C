@@ -4,7 +4,7 @@
 #include <vector>
 #include "expression.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ArrayExpression : public Expression{
     private:
         std::vector<Expression*> elements;
@@ -18,6 +18,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // ARRAYEXPRESSION_H_INCLUDED

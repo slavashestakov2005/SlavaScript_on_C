@@ -4,7 +4,7 @@
 #include <vector>
 #include "statement.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class BlockStatement : public Statement{
     private:
         std::vector<Statement*> statements;
@@ -19,6 +19,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // BLOCKSTATEMENT_H_INCLUDED

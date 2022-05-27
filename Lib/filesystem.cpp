@@ -4,13 +4,14 @@
 #include <fstream>
 
 namespace fs = std::filesystem;
-using namespace SlavaScript::Cpp17;
+using namespace SlavaScript::lang;
 
 namespace{
     fs::path appPath;
     std::string strPath;
 
     std::string decode(std::string w){
+        if (w.empty()) return w;
         std::string s;
         int i = 0;
         for(;i < w.size() - 1; ++i){
@@ -69,7 +70,8 @@ std::string FS::read(std::string file){
     std::ifstream f(path);
     std::stringstream ss;
     ss << f.rdbuf();
-    return decode(ss.str());
+    auto val = ss.str();
+    return decode(val);
 }
 
 void FS::cdCacheAndCall(std::string command){

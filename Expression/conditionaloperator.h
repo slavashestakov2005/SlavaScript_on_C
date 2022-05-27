@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     enum class ConditionalOperator{
         EQUALS,     /// ==
         NOT_EQUALS, /// !=
@@ -18,6 +18,6 @@ namespace SlavaScript{ namespace lang{
     };
 
     std::string getOperator(ConditionalOperator);
-}}
+}
 
 #endif // CONDITIONALOPERATOR_H_INCLUDED

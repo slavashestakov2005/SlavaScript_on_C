@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace SlavaScript{ namespace exceptions{
+namespace SlavaScript::exceptions{
     class LexerException : public std::exception{
     private:
         std::string text;
@@ -13,6 +13,6 @@ namespace SlavaScript{ namespace exceptions{
         const char* what() const noexcept;
         virtual ~LexerException() noexcept {}
     };
-}}
+}
 
 #endif // LEXEREXCEPTION_H_INCLUDED

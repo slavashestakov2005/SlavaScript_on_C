@@ -4,7 +4,7 @@
 #include "statement.h"
 #include "../Expression/expression.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ExprStatement : public Statement{
         Expression* expression;
     public:
@@ -17,6 +17,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // EXPRSTATEMENT_H_INCLUDED

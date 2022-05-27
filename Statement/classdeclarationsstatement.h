@@ -5,7 +5,7 @@
 #include "statement.h"
 #include "../Expression/expression.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ClassDeclarationsStatement : public Statement{
     private:
         std::string name;
@@ -24,6 +24,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // CLASSDECLARATIONSSTATEMENT_H_INCLUDED

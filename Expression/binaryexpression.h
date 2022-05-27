@@ -4,7 +4,7 @@
 #include "binaryoperator.h"
 #include "expression.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class BinaryExpression : public Expression{
     private:
         Expression* expr1, *expr2;
@@ -23,6 +23,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // BINARYEXPRESSION_H_INCLUDED

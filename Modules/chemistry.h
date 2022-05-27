@@ -3,7 +3,7 @@
 
 #include "module.h"
 
-namespace SlavaScript{ namespace modules{
+namespace SlavaScript::modules{
     namespace chemistry_f{
         extern std::shared_ptr<SlavaScript::lang::Function> electron, proton, latin_read, mr, neutron, omega, russian_read, write;
     }
@@ -12,6 +12,6 @@ namespace SlavaScript{ namespace modules{
     public:
         static void initFunctions();
     };
-}}
+}
 
 #endif // CHEMISTRY_H_INCLUDED

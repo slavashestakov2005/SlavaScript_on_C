@@ -4,7 +4,7 @@
 #include <string>
 #include "tokentype.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class Token{
     private:
         TokenType type;
@@ -22,9 +22,7 @@ namespace SlavaScript{ namespace lang{
         std::string getText();
         operator std::string();
     };
-
-
-}}
+}
 
 std::ostream& operator<<(std::ostream& os, const SlavaScript::lang::Token& tok);
 std::ostream& operator<<(std::ostream& os, SlavaScript::lang::Token* tok);

@@ -10,10 +10,9 @@
 #include <ctime>
 #include "path.h"
 #include "../Parser/token.h"
-#include "../Cpp17/filesystem.h"
+#include "../Lib/filesystem.h"
 
 using namespace SlavaScript::lang;
-using namespace SlavaScript::Cpp17;
 
 Start::Start(std::string path) : path(path), lexer(Lexer("")) {
     if (this -> path.find(".") == std::string::npos) this -> path += ".s++";
@@ -30,9 +29,9 @@ std::string Start::read(){
 
 void Start::start(){
     double startTime = clock();
-    std::string code = read();
     /** Очищение данных **/
     try{
+        std::string code = read();
         lexer = Lexer(code);
         tokens = lexer.tokenize();
         Parser parser = Parser(tokens);

@@ -4,7 +4,7 @@
 #include <vector>
 #include "expression.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ObjectCreationExpression : public Expression{
     private:
         std::string name;
@@ -19,6 +19,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // OBJECTCREATIONEXPRESSION_H_INCLUDED

@@ -4,7 +4,7 @@
 #include "expression.h"
 #include "../Visitor/variableprinter.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class VariableExpression : public Expression{
     public:
         std::string name;
@@ -18,6 +18,6 @@ namespace SlavaScript{ namespace lang{
         friend VariablePrinter;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // VARIABLEEXPRESSION_H_INCLUDED

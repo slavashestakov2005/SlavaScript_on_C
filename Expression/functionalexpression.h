@@ -5,7 +5,7 @@
 #include "expression.h"
 #include "../Lib/function.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class FunctionalExpression : public Expression{
     private:
         Expression* functionExpr;
@@ -23,6 +23,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // FUNCTIONALEXPRESSION_H_INCLUDED

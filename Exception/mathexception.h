@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace SlavaScript{ namespace exceptions{
+namespace SlavaScript::exceptions{
     class MathException : public std::exception{
     private:
         std::string text;
@@ -12,6 +12,6 @@ namespace SlavaScript{ namespace exceptions{
         const char* what() const noexcept { return ("MathError : " + text).c_str(); }
         virtual ~MathException() noexcept {}
     };
-}}
+}
 
 #endif // MATHEXCEPTION_H_INCLUDED

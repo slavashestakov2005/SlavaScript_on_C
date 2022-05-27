@@ -3,7 +3,7 @@
 
 #include "../Expression/expression.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class Argument{
     private:
         std::string name;
@@ -18,6 +18,6 @@ namespace SlavaScript{ namespace lang{
         bool isArrayArgument();
         operator std::string();
     };
-}}
+}
 
 #endif // ARGUMENT_H_INCLUDED

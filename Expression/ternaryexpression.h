@@ -3,7 +3,7 @@
 
 #include "expression.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class TernaryExpression : public Expression{
     private:
         Expression* condition, *trueExpr, *falseExpr;
@@ -18,6 +18,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // TERNARYEXPRESSION_H_INCLUDED

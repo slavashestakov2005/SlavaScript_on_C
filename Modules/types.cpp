@@ -8,7 +8,7 @@ using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::types_f;
 using SlavaScript::modules::Types;
 
-namespace SlavaScript{ namespace modules{ namespace types_f{
+namespace SlavaScript::modules::types_f{
     CREATE_FUNCTION(float_)
         if (values.size() != 1) throw std::logic_error("One argument expected");
         SH_RET(NumberValue, values[0] -> asBignum());
@@ -38,7 +38,7 @@ namespace SlavaScript{ namespace modules{ namespace types_f{
         if (values.size() != 1) throw std::logic_error("One argument expected");
         SH_RET(NumberValue, int(values[0] -> type()));
     FE
-}}}
+}
 
 void Types::initConstants(){
     Variables::set("BOOL", SHARE(NumberValue, int(Values::BOOL)));

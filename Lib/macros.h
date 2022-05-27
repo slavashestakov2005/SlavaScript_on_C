@@ -1,7 +1,7 @@
 #ifndef MACROS_H_INCLUDED
 #define MACROS_H_INCLUDED
 
-namespace SlavaScript{ namespace modules{
+namespace SlavaScript::modules{
     /** using by module.h **/
     #define CREATE_TEMPLATE(name) \
         template<typename T, typename = void> struct Has##name: std::false_type{}; \
@@ -10,9 +10,9 @@ namespace SlavaScript{ namespace modules{
         template<class T, bool b = Has##name##_v<T>> struct Init##name; \
         template<class T> struct Init##name<T, true>{ static void init(){ T::init##name(); } }; \
         template<class T> struct Init##name<T, false>{ static void init(){} };
-}}
+}
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     /** using by Value **/
     #define COND_OP(cls, op, exp) bool operator op(cls const& a, cls const& b){ return exp; }
     #define COND_OPS(cls) COND_OP(cls, !=, !(a == b)) COND_OP(cls, >, b < a) COND_OP(cls, <=, !(b < a)) COND_OP(cls, >=, !(a < b))
@@ -97,6 +97,6 @@ namespace SlavaScript{ namespace lang{
 
     #define INF1_F_(space, text) INFO_F_(space, text, ArgumentsInfo::inf1)
     #define INF1_F(text) INFO_F(text, ArgumentsInfo::inf1)
-}}
+}
 
 #endif // MACROS_H_INCLUDED

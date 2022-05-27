@@ -25,7 +25,7 @@ using SlavaScript::exceptions::TypeException;
 using SlavaScript::exceptions::ArgumentsMismatchException;
 using SlavaScript::exceptions::MathException;
 
-namespace SlavaScript{ namespace modules{ namespace std_out{
+namespace SlavaScript::modules::std_out{
 
     double modulo(double a, double b){
         if (a < 0) return std::max(b, -b) - modulo(-a, b);
@@ -54,9 +54,9 @@ namespace SlavaScript{ namespace modules{ namespace std_out{
         }
         return arr;
     }
-}}}
+}
 
-namespace SlavaScript{ namespace modules{ namespace std_f{
+namespace SlavaScript::modules::std_f{
     CREATE_FUNCTION(array_combine)
         if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
         if (values[0] -> type() != Values::ARRAY) throw new TypeException("Array expected in first argument");
@@ -204,7 +204,7 @@ namespace SlavaScript{ namespace modules{ namespace std_f{
         reverse(ans.begin(), ans.end());
         SH_RET(StringValue, ans);
     FE
-}}}
+}
 
 void Std::initConstants(){
     Variables::set("ARGS", Path::getCommandArguments());

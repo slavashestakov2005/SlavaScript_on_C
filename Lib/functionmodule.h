@@ -4,7 +4,7 @@
 #include <functional>
 #include "function.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     using function_type = std::function<std::shared_ptr<Value>(std::vector<std::shared_ptr<Value>>)>;
 
     class FunctionModule : public Function{
@@ -15,6 +15,6 @@ namespace SlavaScript{ namespace lang{
         std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values);
         operator std::string();
     };
-}}
+}
 
 #endif // FUNCTIONMODULE_H_INCLUDED

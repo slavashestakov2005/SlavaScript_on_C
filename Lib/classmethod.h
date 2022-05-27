@@ -3,7 +3,7 @@
 
 #include "userdefinedfunction.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ClassValue;
 
     class ClassMethod : public UserDefinedFunction{
@@ -13,6 +13,6 @@ namespace SlavaScript{ namespace lang{
         ClassMethod(Arguments args, Statement* body, std::shared_ptr<ClassValue> classInstance);
         std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values);
     };
-}}
+}
 
 #endif // CLASSMETHOD_H_INCLUDED

@@ -3,12 +3,12 @@
 
 #include "visitor.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class VariablePrinter : public Visitor{
     public:
         void visit(AssignmentExpression* v);
         void visit(VariableExpression* v);
     };
-}}
+}
 
 #endif // VARIABLEPRINTER_H_INCLUDED

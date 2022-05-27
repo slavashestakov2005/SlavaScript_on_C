@@ -19,7 +19,7 @@ using namespace SlavaScript::modules::global_f;
 using SlavaScript::modules::Global;
 using SlavaScript::exceptions::ArgumentsMismatchException;
 
-namespace SlavaScript{ namespace modules{ namespace global_out{
+namespace SlavaScript::modules::global_out{
     bool operator_lt(Value const& a, Value const& b){
         if (a.type() != b.type()) return int(a.type()) < int(b.type());
         switch(a.type()){
@@ -35,9 +35,9 @@ namespace SlavaScript{ namespace modules{ namespace global_out{
     }
 
     HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-}}}
+}
 
-namespace SlavaScript{ namespace modules{ namespace global_f{
+namespace SlavaScript::modules::global_f{
     CREATE_FUNCTION(input)
         for(int i = 0; i < values.size(); ++i) std::cout << std::string(*(values[i]));
         std::string str;
@@ -67,7 +67,7 @@ namespace SlavaScript{ namespace modules{ namespace global_f{
         SetConsoleTextAttribute(global_out::handle, color);
         return NullValue::NULL_;
     FE
-}}}
+}
 
 void Global::initConstants(){
     Variables::set("true", BoolValue::TRUE_);

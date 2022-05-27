@@ -5,7 +5,7 @@
 #include "../Expression/expression.h"
 #include "../Visitor/importadder.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ImportStatement : public Statement{
     private:
         std::vector<std::string> names;
@@ -22,6 +22,6 @@ namespace SlavaScript{ namespace lang{
         friend ImportAdder;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // IMPORTSTATEMENT_H_INCLUDED

@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace SlavaScript{ namespace exceptions{
+namespace SlavaScript::exceptions{
     class VariableDoesNotExistsException : public std::exception{
     private:
         std::string text;
@@ -13,6 +13,6 @@ namespace SlavaScript{ namespace exceptions{
         std::string getVariable(){ return text; }
         virtual ~VariableDoesNotExistsException () noexcept {}
     };
-}}
+}
 
 #endif // VARIABLEDOESNOTEXISTSEXCEPTION_H_INCLUDED

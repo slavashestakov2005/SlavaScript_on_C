@@ -15,7 +15,7 @@ using SlavaScript::modules::Chemistry;
 using SlavaScript::exceptions::ArgumentsMismatchException;
 using SlavaScript::exceptions::TypeException;
 
-namespace SlavaScript{ namespace modules{ namespace chemistry_out{
+namespace SlavaScript::modules::chemistry_out{
     struct Element{
         std::string name, russionRead, latinRead, electrons;
         double massa;
@@ -260,9 +260,9 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_out{
         }
         return -1;
     }
-}}}
+}
 
-namespace SlavaScript{ namespace modules{ namespace chemistry_f{
+namespace SlavaScript::modules::chemistry_f{
     CREATE_FUNCTION(electron)
         if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
         if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
@@ -330,7 +330,7 @@ namespace SlavaScript{ namespace modules{ namespace chemistry_f{
     FE
 
     std::shared_ptr<Function> proton = electron;
-}}}
+}
 
 void Chemistry::initFunctions(){
     UNARY_F(electron)

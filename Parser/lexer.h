@@ -9,7 +9,7 @@
 
 using SlavaScript::exceptions::LexerException;
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class Lexer{
     private:
         static std::map<std::string, TokenType> OPERATORS, KEYWORDS;
@@ -36,6 +36,6 @@ namespace SlavaScript{ namespace lang{
         Lexer(std::string input);
         std::vector<Token*> tokenize();
     };
-}}
+}
 
 #endif // LEXER_H_INCLUDED

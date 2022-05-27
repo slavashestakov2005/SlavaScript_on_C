@@ -315,6 +315,7 @@ Bignum& Bignum::operator=(Bignum const& temp){
     value = temp.value;
     sign = temp.sign;
     dot = temp.dot;
+    return *this;
 }
 
 Bignum& Bignum::operator=(std::string s){ return *this = Bignum(s); }
@@ -386,7 +387,8 @@ Bignum& Bignum::operator+=(Bignum const& temp){
     t.value.shift(dots - t.dot);
     if (sign == t.sign) value += t.value;
     else{
-        sign = (value > t.value ? sign : !sign);
+        if (value == t.value) sign = PLUS;
+        else sign = (value > t.value ? sign : !sign);
         value = std::max(value, t.value) - std::min(value, t.value);
     }
     dot = dots;
@@ -401,7 +403,8 @@ Bignum& Bignum::operator-=(Bignum const& temp){
     t.value.shift(dots - t.dot);
     if (sign != t.sign) value += t.value;
     else{
-        sign = (value > t.value ? sign : !sign);
+        if (value == t.value) sign = PLUS;
+        else sign = (value > t.value ? sign : !sign);
         value = std::max(value, t.value) - std::min(value, t.value);
     }
     dot = dots;
@@ -523,6 +526,6 @@ RationalBig& RationalBig::operator/=(RationalBig const& temp){
     return *this;
 }
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     BINARY_OP(RationalBig, +) BINARY_OP(RationalBig, -) BINARY_OP(RationalBig, *) BINARY_OP(RationalBig, /)
-}}
+}

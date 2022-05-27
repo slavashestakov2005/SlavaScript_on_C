@@ -5,10 +5,9 @@
 #include "nullvalue.h"
 #include "../Exception/argumentsmismatchexception.h"
 #include "../Exception/unknownpropertyexception.h"
-#include "../Cpp17/filesystem.h"
+#include "../Lib/filesystem.h"
 
 using namespace SlavaScript::lang;
-using namespace SlavaScript::Cpp17;
 using SlavaScript::exceptions::TypeException;
 using SlavaScript::exceptions::UnknownPropertyException;
 using SlavaScript::exceptions::ArgumentsMismatchException;
@@ -72,7 +71,7 @@ IntegrationValue::operator std::string(){
     return "null";
 }
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     bool operator==(IntegrationValue const& a, IntegrationValue const& b){
         return a.fileNameBegin == b.fileNameBegin;
     }
@@ -82,4 +81,4 @@ namespace SlavaScript{ namespace lang{
     }
 
     COND_OPS(IntegrationValue)
-}}
+}

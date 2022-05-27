@@ -6,10 +6,10 @@
 #include "container.h"
 #include "../Lib/function.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class Comparator{
     public:
-        bool operator()(std::shared_ptr<Value> a, std::shared_ptr<Value> b){
+        bool operator()(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b) const{
             return (*a) < (*b);
         }
     };
@@ -48,6 +48,6 @@ namespace SlavaScript{ namespace lang{
 
         DECS_COND(MapValue)
     };
-}}
+}
 
 #endif // MAPVALUE_H_INCLUDED

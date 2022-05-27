@@ -15,7 +15,7 @@ using SlavaScript::modules::Functional;
 using SlavaScript::exceptions::ArgumentsMismatchException;
 using SlavaScript::exceptions::TypeException;
 
-namespace SlavaScript{ namespace modules{ namespace functional_out{
+namespace SlavaScript::modules::functional_out{
     bool comparator(std::shared_ptr<Value> a, std::shared_ptr<Value> b){
         return (*a) < (*b);
     }
@@ -77,9 +77,9 @@ namespace SlavaScript{ namespace modules{ namespace functional_out{
         }
         return value;
     }
-}}}
+}
 
-namespace SlavaScript{ namespace modules{ namespace functional_f{
+namespace SlavaScript::modules::functional_f{
     CREATE_FUNCTION(chain)
         if (values.size() < 3) throw new ArgumentsMismatchException("3 and least arguments expected");
         std::shared_ptr<Value> result = values[0];
@@ -255,7 +255,7 @@ namespace SlavaScript{ namespace modules{ namespace functional_f{
         }
         throw new TypeException("Invalid first argument. Array or map expected");
     FE
-}}}
+}
 
 void Functional::initFunctions(){
     INFO_F(chain, ArgumentsInfo(3, 0, 1))

@@ -21,7 +21,7 @@ using SlavaScript::exceptions::MathException;
 using SlavaScript::exceptions::TypeException;
 using SlavaScript::exceptions::UnknownPropertyException;
 
-namespace SlavaScript{ namespace modules{ namespace math_out{
+namespace SlavaScript::modules::math_out{
     class PolynomialValue : public ClassModuleValue{
     public:
         std::vector<RationalBig> coefficients;
@@ -116,9 +116,9 @@ namespace SlavaScript{ namespace modules{ namespace math_out{
         if (prop == "deg") SH_RET(FunctionValue, new Deg(this));
         throw new UnknownPropertyException(prop);
     }
-}}}
+}
 
-namespace SlavaScript{ namespace modules{ namespace math_f{
+namespace SlavaScript::modules::math_f{
     #define MATH_FUNCTION(name) \
         CREATE_FUNCTION(name) \
             if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected"); \
@@ -208,7 +208,7 @@ namespace SlavaScript{ namespace modules{ namespace math_f{
     MATH_FUNCTION(tanh)
     MATH_FUNCTION(to_degrees)
     MATH_FUNCTION(to_radians)
-}}}
+}
 
 void Math::initConstants(){
     Variables::set("PI", SHARE(NumberValue, 3.1415926535));

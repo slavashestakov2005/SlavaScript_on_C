@@ -4,7 +4,7 @@
 #include "statement.h"
 #include "../Expression/expression.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ForeachMapStatement : public Statement{
     private:
         std::string key, value;
@@ -20,6 +20,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // FOREACHMAPSTATEMENT_H_INCLUDED

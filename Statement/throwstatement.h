@@ -5,7 +5,7 @@
 #include "../Expression/expression.h"
 #include "../Value/value.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class ThrowStatement : public Statement{
     private:
         Expression* expression;
@@ -22,6 +22,6 @@ namespace SlavaScript{ namespace lang{
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
-}}
+}
 
 #endif // THROWSTATEMENT_H_INCLUDED

@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     enum class AssignmentOperator{
         ASSIGN,         /// =
         ADD,            /// +=
@@ -26,6 +26,6 @@ namespace SlavaScript{ namespace lang{
     };
 
     std::string getOperator(AssignmentOperator);
-}}
+}
 
 #endif // ASSIGNMENTOPERATOR_H_INCLUDED

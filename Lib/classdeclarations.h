@@ -4,7 +4,7 @@
 #include <map>
 #include "../Statement/classdeclarationsstatement.h"
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     struct NamedValue;
 
     class ClassDeclarationsScope{
@@ -40,6 +40,6 @@ namespace SlavaScript{ namespace lang{
         static void popScope();
         static void copyScope();
     };
-}}
+}
 
 #endif // CLASSDECLARATIONS_H_INCLUDED

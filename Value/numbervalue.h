@@ -6,7 +6,7 @@
 #include <ctime>
 #include <memory>
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     class NumberValue : public Value{
     private:
         Bignum value;
@@ -32,6 +32,6 @@ namespace SlavaScript{ namespace lang{
 
         DECS_COND(NumberValue)
     };
-}}
+}
 
 #endif // NUMBERVALUE_H_INCLUDED

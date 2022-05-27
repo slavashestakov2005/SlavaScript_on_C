@@ -3,7 +3,7 @@
 
 #include "../Visitor/visitor.h"
 
-namespace SlavaScript{ namespace compiler{
+namespace SlavaScript::compiler{
     class CompilerVisitor : public lang::Visitor{
     public:
         void visit(lang::BlockStatement* v);
@@ -43,6 +43,6 @@ namespace SlavaScript{ namespace compiler{
         void visit(lang::ValueExpression* v);
         void visit(lang::VariableExpression* v);
     };
-}}
+}
 
 #endif // COMPILERVISITOR_H_INCLUDED

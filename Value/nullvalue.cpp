@@ -34,7 +34,7 @@ NullValue::operator std::string(){
     return "null";
 }
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     bool operator==(NullValue const& a, NullValue const& b){
         return true;
     }
@@ -44,4 +44,4 @@ namespace SlavaScript{ namespace lang{
     }
 
     COND_OPS(NullValue)
-}}
+}
