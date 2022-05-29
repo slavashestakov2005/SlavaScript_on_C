@@ -6,11 +6,6 @@
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::MathException;
 
-const std::string UnsignedBig::EXAMPLE = "000000000";
-const UnsignedBig UnsignedBig::ONE = UnsignedBig(1);
-const int UnsignedBig::BASE = 1000000000, UnsignedBig::POW = 9, Bignum::EPS = 9;
-const bool Bignum::PLUS = true, Bignum::MINUS = false;
-
 UnsignedBig UnsignedBig::pow_10_to_n(int n){
     UnsignedBig b = UnsignedBig::ONE;
     b.shift(n);
@@ -233,7 +228,7 @@ UnsignedBig& UnsignedBig::operator%=(UnsignedBig const& temp){
 }
 
 
-namespace SlavaScript{ namespace lang{
+namespace SlavaScript::lang{
     std::istream& operator>>(std::istream& is, UnsignedBig& temp){
         std::string s;
         is >> s;
@@ -256,7 +251,8 @@ namespace SlavaScript{ namespace lang{
     }
 
     CLS_OPS(UnsignedBig)
-}}
+}
+
 
 void Bignum::delete_end_zero(){
     std::string s = std::string(value);
@@ -267,7 +263,7 @@ void Bignum::delete_end_zero(){
     dot -= std::min(cnt, dot);
 }
 
-Bignum::Bignum() : value(UnsignedBig()), sign(PLUS), dot(0) {}
+Bignum::Bignum() : value(UnsignedBig::ZERO), sign(PLUS), dot(0) {}
 
 Bignum::Bignum(std::string s){
     std::string r;
@@ -445,7 +441,8 @@ Bignum& Bignum::operator%=(Bignum const& temp){
     return *this;
 }
 
-namespace SlavaScript{ namespace lang{
+
+namespace SlavaScript::lang{
     std::istream& operator>>(std::istream& is, Bignum& temp){
         std::string s;
         is >> s;
@@ -481,20 +478,25 @@ namespace SlavaScript{ namespace lang{
     }
 
     CLS_OPS(Bignum)
-}}
+}
 
 
-Bignum RationalBig::div(){
+Bignum RationalBig::div() const{
     return numerator / denominator;
 }
 
-RationalBig::RationalBig() : numerator(UnsignedBig()), denominator(UnsignedBig::ONE) {}
-RationalBig::RationalBig(Bignum numerator) : numerator(numerator), denominator(UnsignedBig::ONE) {}
+RationalBig::RationalBig() : numerator(Bignum::ZERO), denominator(Bignum::ONE) {}
+RationalBig::RationalBig(RationalBig const& temp) : numerator(temp.numerator), denominator(temp.denominator) {}
+RationalBig::RationalBig(Bignum numerator) : numerator(numerator), denominator(Bignum::ONE) {}
 RationalBig::RationalBig(Bignum numerator, Bignum denominator) : numerator(numerator), denominator(denominator) {
     if (!denominator) throw new MathException("Division by zero");
 }
 
 RationalBig::operator bool() const{ return bool(numerator); }
+RationalBig::operator std::string() const{ return div(); }
+std::string RationalBig::frac() const{ return "(" + std::string(numerator) + "/" + std::string(denominator) + ")"; }
+RationalBig::operator Bignum() const{ return div(); }
+
 RationalBig RationalBig::operator-(){
     RationalBig r(*this);
     r.numerator = -r.numerator;
@@ -526,6 +528,15 @@ RationalBig& RationalBig::operator/=(RationalBig const& temp){
     return *this;
 }
 
+
 namespace SlavaScript::lang{
+    bool operator==(RationalBig const& a, RationalBig const& b){
+        return Bignum(a) == Bignum(b);
+    }
+
+    bool operator<(RationalBig const& a, RationalBig const& b){
+        return Bignum(a) < Bignum(b);
+    }
+
     BINARY_OP(RationalBig, +) BINARY_OP(RationalBig, -) BINARY_OP(RationalBig, *) BINARY_OP(RationalBig, /)
 }

@@ -1,6 +1,5 @@
 #include "containerassignmentexpression.h"
 #include "../Lib/variables.h"
-#include <stdexcept>
 #include "../Expression/binaryexpression.h"
 #include "../Expression/unaryexpression.h"
 #include "../Expression/valueexpression.h"

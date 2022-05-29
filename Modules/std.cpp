@@ -34,10 +34,6 @@ namespace SlavaScript::modules::std_out{
         return res;
     }
 
-    bool comparator(std::shared_ptr<Value> a, std::shared_ptr<Value> b){
-        return (*a) < (*b);
-    }
-
     std::shared_ptr<ArrayValue> createArray(std::vector<std::shared_ptr<Value>> values, int index){
         int size = int(values[index] -> asDouble());
         int last = values.size() - 1;
@@ -170,11 +166,11 @@ namespace SlavaScript::modules::std_f{
         if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
         if (values[0] -> type() != Values::ARRAY) throw new TypeException("Array expected in first argument");
         std::shared_ptr<ArrayValue> arr = CAST(ArrayValue, values[0]);
-        if (values.size() == 1) std::sort(arr -> begin(), arr -> end(), std_out::comparator);
+        if (values.size() == 1) std::sort(arr -> begin(), arr -> end(), comparator);
         if (values.size() == 2){
             if (values[1] -> type() != Values::FUNCTION) throw new TypeException("Function expected in second argument");
             std::shared_ptr<Function> func = CAST(FunctionValue, values[1]) -> getFunction();
-            std::sort(arr -> begin(), arr -> end(), [func](std::shared_ptr<Value> l, std::shared_ptr<Value> r) -> bool { return std_out::comparator(func -> execute({l}), func -> execute({r})); });
+            std::sort(arr -> begin(), arr -> end(), [func](std::shared_ptr<Value> l, std::shared_ptr<Value> r) -> bool { return comparator(func -> execute({l}), func -> execute({r})); });
         }
         return arr;
     FE

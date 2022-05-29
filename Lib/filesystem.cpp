@@ -70,8 +70,7 @@ std::string FS::read(std::string file){
     std::ifstream f(path);
     std::stringstream ss;
     ss << f.rdbuf();
-    auto val = ss.str();
-    return decode(val);
+    return decode(ss.str());
 }
 
 void FS::cdCacheAndCall(std::string command){

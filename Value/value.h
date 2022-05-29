@@ -21,6 +21,14 @@ namespace SlavaScript::lang{
         virtual ~Value(){}
         DECS_COND(Value)
     };
+
+    bool comparator(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b);
+    bool equals(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b);
+
+    class Comparator{
+    public:
+        bool operator()(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b) const;
+    };
 }
 
 #endif // VALUE_H_INCLUDED

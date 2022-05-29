@@ -20,20 +20,6 @@ using SlavaScript::modules::Global;
 using SlavaScript::exceptions::ArgumentsMismatchException;
 
 namespace SlavaScript::modules::global_out{
-    bool operator_lt(Value const& a, Value const& b){
-        if (a.type() != b.type()) return int(a.type()) < int(b.type());
-        switch(a.type()){
-            case Values::ARRAY : return *(ArrayValue*)(&a) < *(ArrayValue*)(&b);
-            case Values::BOOL : return *(BoolValue*)(&a) < *(BoolValue*)(&b);
-            case Values::NUMBER : return *(NumberValue*)(&a) < *(NumberValue*)(&b);
-            case Values::FUNCTION : return *(FunctionValue*)(&a) < *(FunctionValue*)(&b);
-            case Values::MAP : return *(MapValue*)(&a) < *(MapValue*)(&b);
-            case Values::STRING : return *(StringValue*)(&a) < *(StringValue*)(&b);
-            case Values::NULL_ : return *(NullValue*)(&a) < *(NullValue*)(&b);
-            case Values::CLASS : return *(ClassValue*)(&a) < *(ClassValue*)(&b);
-        }
-    }
-
     HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 }
 
@@ -48,14 +34,14 @@ namespace SlavaScript::modules::global_f{
     CREATE_FUNCTION(max)
         if (values.size() == 0) throw new ArgumentsMismatchException("One and least arguments expected");
         std::shared_ptr<Value> ans = values[0];
-        for(int i = 1; i < values.size(); ++i) ans = global_out::operator_lt(*ans, *values[i]) ? values[i] : ans;
+        for(int i = 1; i < values.size(); ++i) ans = comparator(ans, values[i]) ? values[i] : ans;
         return ans;
     FE
 
     CREATE_FUNCTION(min)
         if (values.size() == 0) throw new ArgumentsMismatchException("One and least arguments expected");
         std::shared_ptr<Value> ans = values[0];
-        for(int i = 1; i < values.size(); ++i) ans = global_out::operator_lt(*ans, *values[i]) ? ans : values[i];
+        for(int i = 1; i < values.size(); ++i) ans = comparator(ans, values[i]) ? ans : values[i];
         return ans;
     FE
 

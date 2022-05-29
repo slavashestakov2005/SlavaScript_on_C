@@ -14,7 +14,7 @@ namespace SlavaScript::lang{
         static UnsignedBig pow_10_to_n(int n);
         static const int BASE, POW;
         static const std::string EXAMPLE;
-        static const UnsignedBig ONE;
+        static const UnsignedBig ZERO, ONE;
 
         void shift(int position);
         void shift10(int position);
@@ -43,6 +43,9 @@ namespace SlavaScript::lang{
         DECS_COND(UnsignedBig)
     };
 
+    inline const int UnsignedBig::BASE = 1000000000, UnsignedBig::POW = 9;
+    inline const std::string UnsignedBig::EXAMPLE = "000000000";
+    inline const UnsignedBig UnsignedBig::ZERO = UnsignedBig(0), UnsignedBig::ONE = UnsignedBig(1);
     std::istream& operator>>(std::istream& is, UnsignedBig& temp);
     std::ostream& operator<<(std::ostream& os, const UnsignedBig& temp);
     DECS_2(UnsignedBig)
@@ -56,6 +59,7 @@ namespace SlavaScript::lang{
     public:
         static const bool PLUS, MINUS;
         static const int EPS;
+        static const Bignum ZERO, ONE;
 
         Bignum();
         explicit Bignum(std::string);
@@ -85,6 +89,9 @@ namespace SlavaScript::lang{
         DECS_COND(Bignum)
     };
 
+    inline const bool Bignum::PLUS = true, Bignum::MINUS = false;
+    inline const int Bignum::EPS = 9;
+    inline const Bignum Bignum::ZERO = Bignum(UnsignedBig::ZERO), Bignum::ONE = Bignum(UnsignedBig::ONE);
     std::istream& operator>>(std::istream& is, Bignum& temp);
     std::ostream& operator<<(std::ostream& os, const Bignum& temp);
     DECS_2(Bignum)
@@ -93,16 +100,21 @@ namespace SlavaScript::lang{
     private:
         Bignum numerator, denominator;
     public:
-        Bignum div();
+        Bignum div() const;
 
         RationalBig();
+        RationalBig(RationalBig const&);
         RationalBig(Bignum numerator);
         RationalBig(Bignum numerator, Bignum denominator);
 
         explicit operator bool() const;
+        operator std::string() const;
+        std::string frac() const;
+        operator Bignum() const;
         RationalBig operator-();
 
         DEC_1(RationalBig, +=) DEC_1(RationalBig, -=) DEC_1(RationalBig, *=) DEC_1(RationalBig, /=)
+        DECS_COND(RationalBig)
     };
 
     DEC_2(RationalBig, +) DEC_2(RationalBig, -) DEC_2(RationalBig, *) DEC_2(RationalBig, /)

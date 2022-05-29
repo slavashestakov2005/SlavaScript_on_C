@@ -7,13 +7,6 @@
 #include "../Lib/function.h"
 
 namespace SlavaScript::lang{
-    class Comparator{
-    public:
-        bool operator()(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b) const{
-            return (*a) < (*b);
-        }
-    };
-
     class MapValue : public Value, Container<std::map<std::shared_ptr<Value>, std::shared_ptr<Value>, Comparator>>{
     private:
         std::map<std::shared_ptr<Value>, std::shared_ptr<Value>, Comparator> map;

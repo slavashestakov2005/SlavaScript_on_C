@@ -43,4 +43,16 @@ namespace SlavaScript::lang{
     }
 
     COND_OPS(Value)
+
+    bool comparator(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b){
+        return (*a) < (*b);
+    }
+
+    bool equals(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b){
+        return (*a) == (*b);
+    }
+
+    bool Comparator::operator()(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b) const{
+        return comparator(a, b);
+    }
 }

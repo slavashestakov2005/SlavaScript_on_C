@@ -13,47 +13,15 @@
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::OperationIsNotSupportedException;
 
-namespace{
-    bool operator_gtgt(Value const& a, Value const& b){
-        if (a.type() != b.type()) return false;
-        switch(a.type()){
-            case Values::ARRAY : return *(ArrayValue*)(&a) == *(ArrayValue*)(&b);
-            case Values::BOOL : return *(BoolValue*)(&a) == *(BoolValue*)(&b);
-            case Values::NUMBER : return *(NumberValue*)(&a) == *(NumberValue*)(&b);
-            case Values::FUNCTION : return *(FunctionValue*)(&a) == *(FunctionValue*)(&b);
-            case Values::MAP : return *(MapValue*)(&a) == *(MapValue*)(&b);
-            case Values::STRING : return *(StringValue*)(&a) == *(StringValue*)(&b);
-            case Values::NULL_ : return *(NullValue*)(&a) == *(NullValue*)(&b);
-            case Values::CLASS : return *(ClassValue*)(&a) == *(ClassValue*)(&b);
-            case Values::INTEGRATION : return *(IntegrationValue*)(&a) == *(IntegrationValue*)(&b);
-        }
-    }
-
-    bool operator_lt(Value const& a, Value const& b){
-        if (a.type() != b.type()) return int(a.type()) < int(b.type());
-        switch(a.type()){
-            case Values::ARRAY : return *(ArrayValue*)(&a) < *(ArrayValue*)(&b);
-            case Values::BOOL : return *(BoolValue*)(&a) < *(BoolValue*)(&b);
-            case Values::NUMBER : return *(NumberValue*)(&a) < *(NumberValue*)(&b);
-            case Values::FUNCTION : return *(FunctionValue*)(&a) < *(FunctionValue*)(&b);
-            case Values::MAP : return *(MapValue*)(&a) < *(MapValue*)(&b);
-            case Values::STRING : return *(StringValue*)(&a) < *(StringValue*)(&b);
-            case Values::NULL_ : return *(NullValue*)(&a) < *(NullValue*)(&b);
-            case Values::CLASS : return *(ClassValue*)(&a) < *(ClassValue*)(&b);
-            case Values::INTEGRATION : return *(IntegrationValue*)(&a) < *(IntegrationValue*)(&b);
-        }
-    }
-}
-
 std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
     bool result;
     switch(operation){
-        case ConditionalOperator::EQUALS : result = operator_gtgt(*left, *right); break;
-        case ConditionalOperator::NOT_EQUALS : result = !operator_gtgt(*left, *right); break;
-        case ConditionalOperator::LT : result = operator_lt(*left, *right); break;
-        case ConditionalOperator::LTEQ : result = operator_lt(*left, *right) || operator_gtgt(*left, *right); break;
-        case ConditionalOperator::GT : result = operator_lt(*right, *left); break;
-        case ConditionalOperator::GTEQ : result = operator_lt(*right, *left) || operator_gtgt(*left, *right); break;
+        case ConditionalOperator::EQUALS : result = equals(left, right); break;
+        case ConditionalOperator::NOT_EQUALS : result = !equals(left, right); break;
+        case ConditionalOperator::LT : result = comparator(left, right); break;
+        case ConditionalOperator::LTEQ : result = comparator(left, right) || equals(left, right); break;
+        case ConditionalOperator::GT : result = comparator(right, left); break;
+        case ConditionalOperator::GTEQ : result = comparator(right, left) || equals(left, right); break;
         case ConditionalOperator::AND : result = left -> asBool() && right -> asBool(); break;
         case ConditionalOperator::OR : result = left -> asBool() || right -> asBool(); break;
         default: throw new OperationIsNotSupportedException(getOperator(operation));

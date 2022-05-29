@@ -16,10 +16,6 @@ using SlavaScript::exceptions::ArgumentsMismatchException;
 using SlavaScript::exceptions::TypeException;
 
 namespace SlavaScript::modules::functional_out{
-    bool comparator(std::shared_ptr<Value> a, std::shared_ptr<Value> b){
-        return (*a) < (*b);
-    }
-
     std::shared_ptr<Value> filterArray(std::shared_ptr<ArrayValue> arr, std::shared_ptr<Function> consumer){
         int size = arr -> size();
         std::vector<std::shared_ptr<Value>> result;
@@ -223,7 +219,7 @@ namespace SlavaScript::modules::functional_f{
         if (values[1] -> type() != Values::FUNCTION) throw new TypeException("Function expected in second argument");
         std::shared_ptr<ArrayValue> arr = CAST(ArrayValue, values[0]);
         std::shared_ptr<Function> func = CAST(FunctionValue, values[1]) -> getFunction();
-        std::sort(arr -> begin(), arr -> end(), [func](std::shared_ptr<Value> l, std::shared_ptr<Value> r) -> bool { return functional_out::comparator(func -> execute({l}), func -> execute({r})); });
+        std::sort(arr -> begin(), arr -> end(), [func](std::shared_ptr<Value> l, std::shared_ptr<Value> r) -> bool { return comparator(func -> execute({l}), func -> execute({r})); });
         return arr;
     FE
 
