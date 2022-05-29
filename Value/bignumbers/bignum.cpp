@@ -539,4 +539,5 @@ namespace SlavaScript::lang{
     }
 
     BINARY_OP(RationalBig, +) BINARY_OP(RationalBig, -) BINARY_OP(RationalBig, *) BINARY_OP(RationalBig, /)
+    COND_OPS(RationalBig)
 }

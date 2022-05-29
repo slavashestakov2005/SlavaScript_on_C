@@ -16,6 +16,7 @@ namespace SlavaScript::lang{
         virtual bool asBool() = 0;
         virtual Bignum asBignum() = 0;
         virtual Values type() const = 0;
+        virtual std::string string_type() const;
         virtual operator std::string() = 0;
         virtual bool isClassFromModule(){ return false; }
         virtual ~Value(){}

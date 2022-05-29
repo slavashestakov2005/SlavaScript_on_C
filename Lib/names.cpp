@@ -80,11 +80,9 @@ void Names::setClass(std::string key, ClassDeclarationsStatement* classDef){
     erase(key, 3);
     ClassDeclarations::set(key, classDef);
 }
-#include <iostream>
+
 void Names::restore(NamedValue named){
-    std::cout << "S\n";
     erase(named.name);
-    std::cout << "T\n";
     if (named.variable != nullptr) Variables::restore(named);
     if (named.function.size() != 0) Functions::restore(named);
     if (named.classDec != nullptr) ClassDeclarations::restore(named);

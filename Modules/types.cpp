@@ -31,7 +31,7 @@ namespace SlavaScript::modules::types_f{
 
     CREATE_FUNCTION(type_to_string)
         if (values.size() != 1) throw std::logic_error("One argument expected");
-        SH_RET(StringValue, getValueName(values[0] -> type()));
+        SH_RET(StringValue, values[0] -> string_type());
     FE
 
     CREATE_FUNCTION(typeof)

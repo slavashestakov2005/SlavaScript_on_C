@@ -69,6 +69,9 @@ namespace SlavaScript::lang{
 
     #define CMFE }};
 
+    #define CLASS_IN_MODULE_1(cls) class cls : public ClassModuleValueT<cls> { public: static const std::string __class_name__;
+    #define CLASS_IN_MODULE_2(cls) }; inline const std::string cls::__class_name__ = #cls;
+
     /** using by Modules/... **/
     #define _INFO_F(oldName, newName, info) Functions::set(newName, oldName, info);
     #define INFO_F_(space, text, info) Functions::set(#text, space::text, info);

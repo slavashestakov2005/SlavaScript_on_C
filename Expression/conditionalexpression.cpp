@@ -3,6 +3,7 @@
 #include "../Value/arrayvalue.h"
 #include "../Lib/functions.h"
 #include "../Value/classvalue.h"
+#include "../Value/classmodulevalue.h"
 #include "../Value/integrationvalue.h"
 #include "valueexpression.h"
 #include "../Exception/operationIsnotsupportedexception.h"
@@ -14,6 +15,13 @@ using namespace SlavaScript::lang;
 using SlavaScript::exceptions::OperationIsNotSupportedException;
 
 std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
+    if (left -> type() == Values::CLASS || right -> type() == Values::CLASS){
+        if (left -> isClassFromModule()){
+            std::shared_ptr<Function> func = get_property(left, operation);
+            return func -> execute(std::vector<std::shared_ptr<Value>>{right});
+        }
+        else throw new TypeException("Cannot used conditional operation for class");
+    }
     bool result;
     switch(operation){
         case ConditionalOperator::EQUALS : result = equals(left, right); break;

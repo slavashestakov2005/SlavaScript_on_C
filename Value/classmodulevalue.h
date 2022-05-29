@@ -5,6 +5,9 @@
 #include "value.h"
 #include "../Exception/typeexception.h"
 #include "../Lib/macros.h"
+#include "../Lib/function.h"
+#include "stringvalue.h"
+#include "functionvalue.h"
 using SlavaScript::exceptions::TypeException;
 
 namespace SlavaScript::lang{
@@ -22,6 +25,24 @@ namespace SlavaScript::lang{
         bool isClassFromModule(){ return true; }
         virtual ~ClassModuleValue(){}
     };
+
+    template<typename T>
+    class ClassModuleValueT : public ClassModuleValue{
+    public:
+        static bool is_instance(std::shared_ptr<Value> v){ return v -> string_type() == correct_class_name(); }
+        static std::string correct_class_name() { return "ModuleClass " + T::__class_name__; }
+        virtual std::string string_type() const { return correct_class_name(); }
+        virtual ~ClassModuleValueT(){}
+    };
+
+    template<typename T>
+    std::shared_ptr<Function> get_property(std::shared_ptr<Value> value, T operation){
+        std::string op = getOperator(operation);
+        std::shared_ptr<Value> val = CAST(ClassModuleValue, value) -> accessDot(SHARE(StringValue, op));
+        if (val -> type() != Values::FUNCTION) throw new TypeException("Operation " + op + " is not a function");
+        std::shared_ptr<Function> func = CAST(FunctionValue, val) -> getFunction();
+        return func;
+    }
 }
 
 #endif // CLASSMODULEVALUE_H_INCLUDED

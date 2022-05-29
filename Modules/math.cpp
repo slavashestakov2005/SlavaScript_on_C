@@ -2,6 +2,7 @@
 #include <cmath>
 #include "../Lib/function.h"
 #include "../Value/arrayvalue.h"
+#include "../Value/boolvalue.h"
 #include "../Value/numbervalue.h"
 #include "../Value/functionvalue.h"
 #include "../Value/classmodulevalue.h"
@@ -24,8 +25,7 @@ using SlavaScript::exceptions::UnknownPropertyException;
 namespace SlavaScript::modules::math_out{
     using PolynomialCoeff = RationalBig;
 
-    class PolynomialValue : public ClassModuleValue{
-    public:
+    CLASS_IN_MODULE_1(PolynomialValue)
         std::vector<PolynomialCoeff> coefficients;
         PolynomialValue(PolynomialValue const& temp) : coefficients(temp.coefficients) {}
         PolynomialValue(std::vector<PolynomialCoeff> coefficients = {Bignum::ZERO}) : coefficients(coefficients){ delete_end_zero(); }
@@ -63,6 +63,10 @@ namespace SlavaScript::modules::math_out{
 
         void delete_end_zero(){
             for(int i = coefficients.size() - 1; i > 0; --i) if (coefficients[i]) break; else coefficients.pop_back();
+        }
+
+        PolynomialValue operator+() const{
+            return PolynomialValue(*this);
         }
 
         PolynomialValue operator-() const{
@@ -114,7 +118,7 @@ namespace SlavaScript::modules::math_out{
             return *this;
         }
 
-        std::pair<PolynomialValue, PolynomialValue> div(PolynomialValue temp){
+        std::pair<PolynomialValue, PolynomialValue> operator/(PolynomialValue const& temp){
             PolynomialValue a = *this, ans;
             while(a.deg() >= temp.deg()){
                 std::vector<PolynomialCoeff> coeff(a.deg() - temp.deg());
@@ -126,25 +130,101 @@ namespace SlavaScript::modules::math_out{
             }
             return {ans, a};
         }
-    };
+
+        PolynomialValue& operator%=(PolynomialValue const& tem){
+            std::pair<PolynomialValue, PolynomialValue> divmod = ((*this) / tem);
+            (*this) = divmod.second;
+            return *this;
+        }
+        DECS_COND(PolynomialValue)
+    CLASS_IN_MODULE_2(PolynomialValue)
+
+    BINARY_OP(PolynomialValue, +) BINARY_OP(PolynomialValue, -) BINARY_OP(PolynomialValue, *) BINARY_OP(PolynomialValue, %)
+
+    bool operator==(PolynomialValue const& a, PolynomialValue const& b){
+        if (a.coefficients.size() != b.coefficients.size()) return false;
+        int sz = a.coefficients.size();
+        for(int i = sz - 1; i >= 0; --i) if (a.coefficients[i] != b.coefficients[i]) return false;
+        return true;
+    }
+
+    bool operator<(PolynomialValue const& a, PolynomialValue const& b){
+        if (a.coefficients.size() != b.coefficients.size()) return a.coefficients.size() < b.coefficients.size();
+        int sz = a.coefficients.size();
+        for(int i = sz - 1; i >= 0; --i) if (a.coefficients[i] != b.coefficients[i]) return a.coefficients.size() < b.coefficients.size();
+        return false;
+    }
+
+    COND_OPS(PolynomialValue)
+
 
     CLASS_MODULE_FUNCTION(Deg, PolynomialValue, polynomial)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         SH_RET(NumberValue, polynomial -> deg());
     CMFE
 
-    CLASS_MODULE_FUNCTION(Div, PolynomialValue, polynomial)
-        if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        std::shared_ptr<PolynomialValue> p = CAST(PolynomialValue, values[0]);
-        auto q = polynomial -> div(*p);
-        std::vector<std::shared_ptr<Value>> v = {SHARE(PolynomialValue, q.first), SHARE(PolynomialValue, q.second)};
-        SH_RET(ArrayValue, v);
-    CMFE
+    #define POLYNOMIAL_FUNCTION(cls, op) \
+        if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected"); \
+        std::shared_ptr<PolynomialValue> p; \
+        if (values[0] -> type() == Values::NUMBER) p = SHARE(PolynomialValue, std::vector<PolynomialCoeff>{values[0] -> asBignum()}); \
+        else if (PolynomialValue::is_instance(values[0])) p = CAST(PolynomialValue, values[0]); \
+        else throw new TypeException("Polynomial expected"); \
+        auto q = (*polynomial) op (*p);
+
+    #define POLYNOMIAL_FUNCTION_01(cls, op) \
+        CLASS_MODULE_FUNCTION(cls, PolynomialValue, polynomial) \
+            if (values.empty()) SH_RET(PolynomialValue, op (*polynomial)); \
+            POLYNOMIAL_FUNCTION(cls, op) \
+            SH_RET(PolynomialValue, q); \
+        CMFE
+
+    #define POLYNOMIAL_FUNCTION_1(cls, op) \
+        CLASS_MODULE_FUNCTION(cls, PolynomialValue, polynomial) \
+            POLYNOMIAL_FUNCTION(cls, op) \
+            SH_RET(PolynomialValue, q); \
+        CMFE
+
+    #define POLYNOMIAL_FUNCTION_2(cls, op) \
+        CLASS_MODULE_FUNCTION(cls, PolynomialValue, polynomial) \
+            POLYNOMIAL_FUNCTION(cls, op) \
+            if (values[0] -> type() == Values::NUMBER) SH_RET(PolynomialValue, q.first); \
+            std::vector<std::shared_ptr<Value>> v = {SHARE(PolynomialValue, q.first), SHARE(PolynomialValue, q.second)}; \
+            SH_RET(ArrayValue, v); \
+        CMFE
+
+    #define POLYNOMIAL_FUNCTION_3(cls, op) \
+        CLASS_MODULE_FUNCTION(cls, PolynomialValue, polynomial) \
+            POLYNOMIAL_FUNCTION(cls, op) \
+            return BoolValue::fromBool(q); \
+        CMFE
+
+    POLYNOMIAL_FUNCTION_01(Add, +)  /// x + y   x += y      +x
+    POLYNOMIAL_FUNCTION_01(Sub, -)  /// x - y   x -= y      -x
+    POLYNOMIAL_FUNCTION_1(Mul, *)   /// x * y   x *= y
+    POLYNOMIAL_FUNCTION_2(Div, /)   /// x / y   x /= y
+    POLYNOMIAL_FUNCTION_1(Mod, %)   /// x % y   x %= y
+    POLYNOMIAL_FUNCTION_3(Eq, ==)   /// x == y
+    POLYNOMIAL_FUNCTION_3(Ne, !=)   /// x != y
+    POLYNOMIAL_FUNCTION_3(Lt, <)    /// x < y
+    POLYNOMIAL_FUNCTION_3(Le, <=)   /// x <= y
+    POLYNOMIAL_FUNCTION_3(Gt, >)    /// x > y
+    POLYNOMIAL_FUNCTION_3(Ge, >=)   /// x >= y
+
 
     std::shared_ptr<Value> PolynomialValue::accessDot(std::shared_ptr<Value> property){
         std::string prop = property -> asString();
         if (prop == "deg") SH_RET(FunctionValue, new Deg(this));
-        if (prop == "div") SH_RET(FunctionValue, new Div(this));
+        if (prop == "+") SH_RET(FunctionValue, new Add(this));
+        if (prop == "-") SH_RET(FunctionValue, new Sub(this));
+        if (prop == "*") SH_RET(FunctionValue, new Mul(this));
+        if (prop == "/") SH_RET(FunctionValue, new Div(this));
+        if (prop == "%") SH_RET(FunctionValue, new Mod(this));
+        if (prop == "==") SH_RET(FunctionValue, new Eq(this));
+        if (prop == "!=") SH_RET(FunctionValue, new Ne(this));
+        if (prop == "<") SH_RET(FunctionValue, new Lt(this));
+        if (prop == "<=") SH_RET(FunctionValue, new Le(this));
+        if (prop == ">") SH_RET(FunctionValue, new Gt(this));
+        if (prop == ">=") SH_RET(FunctionValue, new Ge(this));
         throw new UnknownPropertyException(prop);
     }
 }

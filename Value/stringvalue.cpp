@@ -237,7 +237,7 @@ Values StringValue::type() const{
 }
 
 StringValue::operator std::string(){
-    return "\"" + asString() + "\"";
+    return asString();
 };
 
 namespace SlavaScript::lang{

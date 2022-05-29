@@ -21,8 +21,7 @@ using SlavaScript::exceptions::ArgumentsMismatchException;
 using SlavaScript::exceptions::UnknownPropertyException;
 
 namespace SlavaScript::modules::files_out{
-    class FileValue : public ClassModuleValue{
-    public:
+    CLASS_IN_MODULE_1(FileValue)
         std::string name;
         std::fstream file;
         bool bad;
@@ -36,7 +35,7 @@ namespace SlavaScript::modules::files_out{
         operator std::string() { return "<file=\"" + name + "\">"; }
         ~FileValue(){}
         std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property);
-    };
+    CLASS_IN_MODULE_2(FileValue)
 
     CLASS_MODULE_FUNCTION(Close, FileValue, file)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");

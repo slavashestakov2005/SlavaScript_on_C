@@ -42,6 +42,10 @@ namespace SlavaScript::lang{
         }
     }
 
+    std::string Value::string_type() const{
+        return getValueName(type());
+    }
+
     COND_OPS(Value)
 
     bool comparator(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b){
