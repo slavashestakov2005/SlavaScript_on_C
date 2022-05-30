@@ -49,6 +49,7 @@ void Types::initConstants(){
     Variables::set("NULL", SHARE(NumberValue, int(Values::NULL_)));
     Variables::set("FUNCTION", SHARE(NumberValue, int(Values::FUNCTION)));
     Variables::set("CLASS", SHARE(NumberValue, int(Values::CLASS)));
+    Variables::set("INTEGRATION", SHARE(NumberValue, int(Values::INTEGRATION)));
 }
 
 void Types::initFunctions(){

@@ -17,11 +17,8 @@ using SlavaScript::exceptions::OperationIsNotSupportedException;
 std::shared_ptr<Value> UnaryExpression::calculate(UnaryOperator operation, std::shared_ptr<Value> value){
     if (value -> type() == Values::INTEGRATION) throw new TypeException("Cannot used unary operation for integration");
     if (value -> type() == Values::CLASS){
-        if (value -> isClassFromModule()){
-            std::shared_ptr<Function> func = get_property(value, operation);
-            return func -> execute({});
-        }
-        else throw new TypeException("Cannot used unary operation for class");
+        std::shared_ptr<Function> func = get_property(value, operation);
+        return func -> execute({});
     }
     if (value -> type() == Values::NULL_) return NullValue::NULL_;
     switch(operation){

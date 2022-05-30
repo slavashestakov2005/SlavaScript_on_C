@@ -15,7 +15,7 @@ namespace{
     };
 
     std::string conditional_op[int(ConditionalOperator::OR) + 1] = {
-        "==", "!=", "<", "<=", ">", ">=", "&&", "||"
+        "==", "!=", "<", "<=", ">", ">=", "<=>", "&&", "||"
     };
 
     std::string unary_op[int(UnaryOperator::MINUSMINUS) + 1] = {

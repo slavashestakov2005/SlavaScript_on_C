@@ -27,6 +27,7 @@ namespace SlavaScript::lang{
         bool asBool();
         Bignum asBignum();
         Values type() const;
+        std::string string_type() const;
         operator std::string();
         ~ClassValue(){}
 

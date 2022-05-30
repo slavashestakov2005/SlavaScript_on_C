@@ -3,11 +3,18 @@
 #include "../Expression/binaryexpression.h"
 #include "../Expression/valueexpression.h"
 #include "../Exception/operationIsnotsupportedexception.h"
+#include "../Value/classmodulevalue.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::OperationIsNotSupportedException;
 
 std::shared_ptr<Value> AssignmentExpression::calculate(AssignmentOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
+    if (left -> type() == Values::CLASS && operation != AssignmentOperator::ASSIGN){
+        try{
+            std::shared_ptr<Function> func = get_property(left, operation);
+            return func -> execute(std::vector<std::shared_ptr<Value>>{right});
+        } catch (...) {}
+    }
     std::shared_ptr<Value> result;
     switch(operation){
         case AssignmentOperator::ASSIGN : result = right -> copy(); break;

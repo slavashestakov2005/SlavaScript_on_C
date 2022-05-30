@@ -4,6 +4,7 @@
 #include "classdeclarations.h"
 #include "../Value/functionvalue.h"
 #include "../Value/nullvalue.h"
+#include "../Expression/objectcreationexpression.h"
 #include "../Exception/variabledoesnotexistsexception.h"
 
 using namespace SlavaScript::lang;
@@ -12,7 +13,7 @@ using SlavaScript::exceptions::VariableDoesNotExistsException;
 std::shared_ptr<Value> Names::get(std::string name, bool ignore){
     if (Variables::isExists(name)) return Variables::get(name);
     if (Functions::isExists(name)) SH_RET(FunctionValue, Functions::get(name));
-    /** Classes **/
+    if (ClassDeclarations::isExists(name)) return ObjectCreationExpression(name, {}).eval();
     if (ignore) return NullValue::NULL_;
     throw new VariableDoesNotExistsException(name);
 }

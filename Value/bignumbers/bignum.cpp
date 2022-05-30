@@ -2,9 +2,11 @@
 #include <sstream>
 #include <algorithm>
 #include "../../Exception/mathexception.h"
+#include "../../Exception/typeexception.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::MathException;
+using SlavaScript::exceptions::TypeException;
 
 UnsignedBig UnsignedBig::pow_10_to_n(int n){
     UnsignedBig b = UnsignedBig::ONE;
@@ -50,6 +52,10 @@ int UnsignedBig::size() const{
     int cur = digits.back(), cnt = 0;
     while(cur) ++cnt, cur /= 10;
     return UnsignedBig::POW * (digits.size() - 1) + cnt;
+}
+
+int UnsignedBig::get_sign() const{
+    return digits.size() > 1 || digits[0];
 }
 
 UnsignedBig::UnsignedBig(){
@@ -263,6 +269,11 @@ void Bignum::delete_end_zero(){
     dot -= std::min(cnt, dot);
 }
 
+int Bignum::get_sign() const{
+    if (sign == Bignum::MINUS) return -1;
+    return value.get_sign();
+}
+
 Bignum::Bignum() : value(UnsignedBig::ZERO), sign(PLUS), dot(0) {}
 
 Bignum::Bignum(std::string s){
@@ -273,7 +284,10 @@ Bignum::Bignum(std::string s){
     dot = 0;
     for(; pos < s.size(); ++pos){
         if (dot) ++dot;
-        if (s[pos] != '.') r += s[pos];
+        if (s[pos] != '.'){
+            if ('0' <= s[pos] && s[pos] <= '9') r += s[pos];
+            else throw new TypeException(std::string("Cannot cast symbol \"") + s[pos] + "\" to number");
+        }
         else dot = 1;
     }
     dot = std::max(dot - 1, 0);

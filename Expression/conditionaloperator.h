@@ -12,6 +12,7 @@ namespace SlavaScript::lang{
         LTEQ,       /// <=
         GT,         /// >
         GTEQ,       /// >=
+        LTEQGT,     /// <=>
 
         AND,        /// &&
         OR          /// ||

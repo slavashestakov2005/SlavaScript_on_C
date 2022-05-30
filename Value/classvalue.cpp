@@ -70,6 +70,10 @@ Values ClassValue::type() const{
     return Values::CLASS;
 }
 
+std::string ClassValue::string_type() const{
+    return "UserClass " + className;
+}
+
 ClassValue::operator std::string(){
     return asString();
 }

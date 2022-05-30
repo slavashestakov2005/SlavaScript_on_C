@@ -8,6 +8,7 @@
 #include "../Lib/function.h"
 #include "stringvalue.h"
 #include "functionvalue.h"
+#include "classvalue.h"
 using SlavaScript::exceptions::TypeException;
 
 namespace SlavaScript::lang{
@@ -38,7 +39,10 @@ namespace SlavaScript::lang{
     template<typename T>
     std::shared_ptr<Function> get_property(std::shared_ptr<Value> value, T operation){
         std::string op = getOperator(operation);
-        std::shared_ptr<Value> val = CAST(ClassModuleValue, value) -> accessDot(SHARE(StringValue, op));
+        std::shared_ptr<Value> val;
+        if (value -> type() != Values::CLASS) throw new TypeException("Can not use " + op + " for non-class and class values");
+        if (value -> isClassFromModule()) val = CAST(ClassModuleValue, value) -> accessDot(SHARE(StringValue, op));
+        else val = CAST(ClassValue, value) -> get(SHARE(StringValue, op));
         if (val -> type() != Values::FUNCTION) throw new TypeException("Operation " + op + " is not a function");
         std::shared_ptr<Function> func = CAST(FunctionValue, val) -> getFunction();
         return func;

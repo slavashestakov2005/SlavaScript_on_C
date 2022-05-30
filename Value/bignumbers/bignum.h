@@ -19,6 +19,7 @@ namespace SlavaScript::lang{
         void shift(int position);
         void shift10(int position);
         int size() const;
+        int get_sign() const;
 
         UnsignedBig();
         UnsignedBig(UnsignedBig const&);
@@ -60,6 +61,8 @@ namespace SlavaScript::lang{
         static const bool PLUS, MINUS;
         static const int EPS;
         static const Bignum ZERO, ONE;
+
+        int get_sign() const;
 
         Bignum();
         explicit Bignum(std::string);

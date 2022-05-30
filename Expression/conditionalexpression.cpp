@@ -16,11 +16,20 @@ using SlavaScript::exceptions::OperationIsNotSupportedException;
 
 std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
     if (left -> type() == Values::CLASS || right -> type() == Values::CLASS){
-        if (left -> isClassFromModule()){
+        try{
             std::shared_ptr<Function> func = get_property(left, operation);
             return func -> execute(std::vector<std::shared_ptr<Value>>{right});
-        }
-        else throw new TypeException("Cannot used conditional operation for class");
+        } catch(...) {}
+        if (operation == ConditionalOperator::AND || operation == ConditionalOperator::OR) throw new TypeException("Operation " + getOperator(operation) + " undefined");
+        std::shared_ptr<Function> func = get_property(left, ConditionalOperator::LTEQGT);
+        std::shared_ptr<Value> res = func -> execute(std::vector<std::shared_ptr<Value>>{right});
+        if (res -> type() != Values::NUMBER) throw new TypeException("Operation <=> return not a number");
+        int sign_of_res = res -> asBignum().get_sign();
+        bool result = false;
+        if (sign_of_res == -1 && (operation == ConditionalOperator::LT || operation == ConditionalOperator::LTEQ || operation == ConditionalOperator::NOT_EQUALS)) result = true;
+        else if (sign_of_res == 1 && (operation == ConditionalOperator::GT || operation == ConditionalOperator::GTEQ || operation == ConditionalOperator::NOT_EQUALS)) result = true;
+        else if (sign_of_res == 0 && (operation == ConditionalOperator::LTEQ || operation == ConditionalOperator::GTEQ || operation == ConditionalOperator::EQUALS)) result = true;
+        return BoolValue::fromBool(result);
     }
     bool result;
     switch(operation){
