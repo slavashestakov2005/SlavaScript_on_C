@@ -12,6 +12,7 @@ namespace SlavaScript::lang{
         MAP,
         NULL_,
         FUNCTION,
+        OBJECT,
         CLASS,
         INTEGRATION,
     };

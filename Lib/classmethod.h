@@ -4,13 +4,13 @@
 #include "userdefinedfunction.h"
 
 namespace SlavaScript::lang{
-    class ClassValue;
+    class ObjectValue;
 
     class ClassMethod : public UserDefinedFunction{
     private:
-        std::shared_ptr<ClassValue> classInstance;
+        std::shared_ptr<ObjectValue> classInstance;
     public:
-        ClassMethod(Arguments args, Statement* body, std::shared_ptr<ClassValue> classInstance);
+        ClassMethod(Arguments args, Statement* body, std::shared_ptr<ObjectValue> classInstance);
         std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values);
     };
 }

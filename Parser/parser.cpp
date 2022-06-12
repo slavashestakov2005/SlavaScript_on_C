@@ -461,23 +461,14 @@ Expression* Parser::additive(){
 }
 
 Expression* Parser::multiplicative(){
-    Expression* result = objectCreation();
+    Expression* result = unary();
     while(true){
-        if (match(TokenType::STAR)) result = new BinaryExpression(BinaryOperator::MULTIPLY, result, objectCreation());
-        else if (match(TokenType::SLASH)) result = new BinaryExpression(BinaryOperator::DIVIDE, result, objectCreation());
-        else if (match(TokenType::PERCENT)) result = new BinaryExpression(BinaryOperator::REMAINDER, result, objectCreation());
+        if (match(TokenType::STAR)) result = new BinaryExpression(BinaryOperator::MULTIPLY, result, unary());
+        else if (match(TokenType::SLASH)) result = new BinaryExpression(BinaryOperator::DIVIDE, result, unary());
+        else if (match(TokenType::PERCENT)) result = new BinaryExpression(BinaryOperator::REMAINDER, result, unary());
         else break;
     }
     return result;
-}
-
-Expression* Parser::objectCreation(){
-    if (match(TokenType::NEW)){
-        std::string className = consume(TokenType::WORD) -> getText();
-        std::vector<Expression*> args = functionCallArguments();
-        return new ObjectCreationExpression(className, args);
-    }
-    return unary();
 }
 
 Expression* Parser::unary(){

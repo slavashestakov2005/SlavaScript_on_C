@@ -25,7 +25,6 @@ namespace SlavaScript::lang{
     class IntegrationStatement;
     class ImportStatement;
     class MapExpression;
-    class ObjectCreationExpression;
     class PrintlnStatement;
     class PrintStatement;
     class ReturnStatement;
@@ -63,7 +62,6 @@ namespace SlavaScript::lang{
         virtual void visit(IntegrationStatement* v);
         virtual void visit(ImportStatement* v);
         virtual void visit(MapExpression* v);
-        virtual void visit(ObjectCreationExpression* v);
         virtual void visit(PrintlnStatement* v);
         virtual void visit(PrintStatement* v);
         virtual void visit(ReturnStatement* v);

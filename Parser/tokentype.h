@@ -30,7 +30,6 @@ namespace SlavaScript::lang{
         THROW,
         CATCH,
         CLASS,
-        NEW,
 
         PLUS,       /// +
         MINUS,      /// -

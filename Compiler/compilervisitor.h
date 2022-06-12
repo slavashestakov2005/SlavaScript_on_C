@@ -37,7 +37,6 @@ namespace SlavaScript::compiler{
         void visit(lang::FunctionalExpression* v);
         void visit(lang::FunctionReferenceExpression* v);
         void visit(lang::MapExpression* v);
-        void visit(lang::ObjectCreationExpression* v);
         void visit(lang::TernaryExpression* v);
         void visit(lang::UnaryExpression* v);
         void visit(lang::ValueExpression* v);

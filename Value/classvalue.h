@@ -7,20 +7,14 @@
 namespace SlavaScript::lang{
     class ClassValue : public Value{
     private:
-        std::string className;
-        std::shared_ptr<MapValue> thisMap = SHARE(MapValue, 1);
-        std::shared_ptr<ClassMethod> constructor = nullptr;
+        std::string name;
+        ClassDeclarationsStatement* statement;
     public:
-        ClassValue(std::string className);
+        ClassValue(ClassDeclarationsStatement* statement);
         std::shared_ptr<Value> copy();
 
-        std::shared_ptr<MapValue> getThisMap();
-        void addField(std::string name, std::shared_ptr<Value> value);
-        void addMethod(std::string name, std::shared_ptr<ClassMethod> method);
-        void callConstructor(std::vector<std::shared_ptr<Value>> values);
-        std::shared_ptr<Value> access(std::shared_ptr<Value> value);
-        void set(std::shared_ptr<Value> key, std::shared_ptr<Value> value);
-        std::shared_ptr<Value> get(std::shared_ptr<Value> key);
+        std::shared_ptr<Value> construct(std::vector<std::shared_ptr<Value>> values);
+        std::string get_name();
 
         double asDouble();
         std::string asString();

@@ -3,7 +3,7 @@
 #include "../Value/numbervalue.h"
 #include "../Value/stringvalue.h"
 #include "../Value/classmodulevalue.h"
-#include "../Value/classvalue.h"
+#include "../Value/objectvalue.h"
 #include "../Value/integrationvalue.h"
 #include "../Exception/typeexception.h"
 #include "variableexpression.h"
@@ -35,18 +35,18 @@ std::shared_ptr<Value> ContainerAccessExpression::get(){
         case Values::STRING:
             if (dot) return CAST(StringValue, container) -> accessDot(index);
             else return CAST(StringValue, container) -> accessBracket(index);
-        case Values::CLASS:
+        case Values::OBJECT:
             if (container -> isClassFromModule()){
                 if (dot) return CAST(ClassModuleValue, container) -> accessDot(index);
                 else return CAST(ClassModuleValue, container) -> accessBracket(index);
             }
-            if (!dot) throw new std::logic_error("Cannot used [] for class");
-            return CAST(ClassValue, container) -> access(index);
+            if (!dot) throw new std::logic_error("Cannot used [] for object");
+            return CAST(ObjectValue, container) -> access(index);
         case Values::INTEGRATION:
             if (!dot) throw new std::logic_error("Cannot used [] for integration");
             return CAST(IntegrationValue, container) -> accessDot(index);
         default:
-            throw new TypeException("Array, map, string, class or integration expected");
+            throw new TypeException("Array, map, string, object or integration expected");
     }
 }
 
@@ -69,13 +69,13 @@ std::shared_ptr<Value> ContainerAccessExpression::set(std::shared_ptr<Value> val
             CAST(StringValue, container) -> set(stringIndex, value);
             break;
         }
-        case Values::CLASS : {
-            if (container -> isClassFromModule()) throw new std::logic_error("Cannot set property to built-in class");
-            if (!dot) throw new std::logic_error("Cannot used [] for class");
-            CAST(ClassValue, container) -> set(index, value);
+        case Values::OBJECT : {
+            if (container -> isClassFromModule()) throw new std::logic_error("Cannot set property to built-in object");
+            if (!dot) throw new std::logic_error("Cannot used [] for object");
+            CAST(ObjectValue, container) -> set(index, value);
             break;
         }
-        default: throw new TypeException("Array, map, string or class expected");
+        default: throw new TypeException("Array, map, string or object expected");
     }
     return value;
 }

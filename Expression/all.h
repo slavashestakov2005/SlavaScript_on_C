@@ -9,7 +9,6 @@
 #include "containerassignmentexpression.h"
 #include "functionalexpression.h"
 #include "mapexpression.h"
-#include "objectcreationexpression.h"
 #include "ternaryexpression.h"
 #include "unaryexpression.h"
 #include "valueexpression.h"

@@ -8,7 +8,7 @@ namespace{
         "NUMBER", "HEX_NUMBER", "WORD", "TEXT",
         "PRINT", "PRINTLN", "IF", "ELIF", "ELSE", "WHILE", "FOR", "DO",
         "BREAK", "CONTINUE", "DEF", "RETURN", "IMPORT", "AS", "SWITCH", "CASE", "DEFAULT",
-        "TRY", "THROW", "CATCH", "CLASS", "NEW",
+        "TRY", "THROW", "CATCH", "CLASS",
         "PlUS", "MINUS", "STAR", "SLASH", "PERCENT", "STARSTAR",
         "PlUSEQ", "MINUSEQ", "STAREQ", "SLASHEQ", "PERCENTEQ", "STARSTAREQ",
         "LTLT", "LTLTEQ", "GTGT", "GTGTEQ",

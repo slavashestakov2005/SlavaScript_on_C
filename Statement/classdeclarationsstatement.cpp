@@ -17,6 +17,10 @@ void ClassDeclarationsStatement::execute(){
     Names::setClass(name, this);
 }
 
+std::string ClassDeclarationsStatement::get_name(){
+    return name;
+}
+
 ClassDeclarationsStatement::operator std::string(){
     std::string result = "class '" + name + "'{\n ";
     int i = 0;

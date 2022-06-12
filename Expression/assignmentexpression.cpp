@@ -9,7 +9,7 @@ using namespace SlavaScript::lang;
 using SlavaScript::exceptions::OperationIsNotSupportedException;
 
 std::shared_ptr<Value> AssignmentExpression::calculate(AssignmentOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
-    if (left -> type() == Values::CLASS && operation != AssignmentOperator::ASSIGN){
+    if (left -> type() == Values::OBJECT && operation != AssignmentOperator::ASSIGN){
         try{
             std::shared_ptr<Function> func = get_property(left, operation);
             return func -> execute(std::vector<std::shared_ptr<Value>>{right});

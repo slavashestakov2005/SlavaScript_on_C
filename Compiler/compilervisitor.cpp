@@ -251,8 +251,6 @@ void CompilerVisitor::visit(lang::MapExpression* v){
     Compiler::append("})", false);
 }
 
-void CompilerVisitor::visit(lang::ObjectCreationExpression* v){}
-
 void CompilerVisitor::visit(lang::TernaryExpression* v){
     Compiler::append("((", false);
     v -> condition -> accept(this);
@@ -290,6 +288,7 @@ void CompilerVisitor::visit(lang::ValueExpression* v){
             break;
         }
         case lang::Values::FUNCTION: Compiler::append("FUNCTION", false); break;
+        case lang::Values::OBJECT: Compiler::append("OBJECT", false); break;
         case lang::Values::CLASS: Compiler::append("CLASS", false); break;
     }
 }

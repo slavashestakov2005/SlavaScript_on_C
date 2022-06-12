@@ -15,7 +15,7 @@ using namespace SlavaScript::lang;
 using SlavaScript::exceptions::OperationIsNotSupportedException;
 
 std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
-    if (left -> type() == Values::CLASS || right -> type() == Values::CLASS){
+    if (left -> type() == Values::OBJECT || right -> type() == Values::OBJECT){
         try{
             std::shared_ptr<Function> func = get_property(left, operation);
             return func -> execute(std::vector<std::shared_ptr<Value>>{right});

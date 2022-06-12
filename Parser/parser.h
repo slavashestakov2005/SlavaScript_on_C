@@ -57,7 +57,6 @@ namespace SlavaScript::lang{
         Expression* shift();
         Expression* additive();
         Expression* multiplicative();
-        Expression* objectCreation();
         Expression* unary();
         Expression* exponential();
         Expression* primaryWithSuffix();

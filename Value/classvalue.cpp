@@ -1,53 +1,33 @@
 #include "classvalue.h"
-#include "stringvalue.h"
-#include "../Exception/typeexception.h"
+#include "objectvalue.h"
+#include "../Statement/functiondefinestatement.h"
+#include "../Statement/classdeclarationsstatement.h"
 
 using namespace SlavaScript::lang;
-using SlavaScript::exceptions::TypeException;
 
-ClassValue::ClassValue(std::string className) : className(className){
-    thisMap -> setThisMap(true);
+ClassValue::ClassValue(ClassDeclarationsStatement* statement) : statement(statement) {
+    name = statement -> get_name();
 }
 
 std::shared_ptr<Value> ClassValue::copy(){
-    std::shared_ptr<ClassValue> val = SHARE(ClassValue, this -> className);
-    val -> constructor = this -> constructor;
-    val -> thisMap = CAST(MapValue, this -> thisMap -> copy());
-    return val;
+    SH_RET(ClassValue, this -> statement);
 }
 
-std::shared_ptr<MapValue> ClassValue::getThisMap(){
-    return thisMap;
-}
-
-void ClassValue::addField(std::string name, std::shared_ptr<Value> value){
-    thisMap -> set(SHARE(StringValue, name), value);
-}
-
-void ClassValue::addMethod(std::string name, std::shared_ptr<ClassMethod> method){
-    thisMap -> set(SHARE(StringValue, name), method);
-    if (name == className) constructor = method;
-}
-
-void ClassValue::callConstructor(std::vector<std::shared_ptr<Value>> values){
-    if (constructor != nullptr) constructor -> execute(values);
-}
-
-std::shared_ptr<Value> ClassValue::access(std::shared_ptr<Value> value){
-    return thisMap -> get(value);
-}
-
-void ClassValue::set(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
-    if (!thisMap -> containsKey(key)) throw new std::logic_error("Unable to add new field " + key -> asString() + " to class " + className);
-    thisMap -> set(key, value);
-}
-
-std::shared_ptr<Value> ClassValue::get(std::shared_ptr<Value> key){
-    if (!thisMap -> containsKey(key)){
-        std::string s = "Field " + std::string(*key) + " undefined in " + className;
-        throw new std::logic_error(s.c_str());
+std::shared_ptr<Value> ClassValue::construct(std::vector<std::shared_ptr<Value>> values){
+    std::shared_ptr<ObjectValue> instance = SHARE(ObjectValue, name);
+    for(auto now : statement -> fields){
+        auto value = now.second -> eval();
+        for(std::string fieldName : now.first) instance -> addField(fieldName, value);
     }
-    return thisMap -> get(key);
+    for(auto function : statement -> methods){
+        instance -> addMethod(function -> name, SHARE_3(ClassMethod, function -> arguments, function -> body, instance));
+    }
+    instance -> callConstructor(values);
+    return instance;
+}
+
+std::string ClassValue::get_name(){
+    return name;
 }
 
 double ClassValue::asDouble(){
@@ -55,7 +35,7 @@ double ClassValue::asDouble(){
 }
 
 std::string ClassValue::asString(){
-    return "class " + className + "@" + std::string(*thisMap);
+    return "class Value for " + std::string(*statement);
 }
 
 bool ClassValue::asBool(){
@@ -71,7 +51,7 @@ Values ClassValue::type() const{
 }
 
 std::string ClassValue::string_type() const{
-    return "UserClass " + className;
+    return "UserClass " + name;
 }
 
 ClassValue::operator std::string(){
@@ -80,11 +60,11 @@ ClassValue::operator std::string(){
 
 namespace SlavaScript::lang{
     bool operator==(ClassValue const& a, ClassValue const& b){
-        return a.className == b.className;
+        return a.name == b.name;
     }
 
     bool operator<(ClassValue const& a, ClassValue const& b){
-        return a.className < b.className;
+        return a.name < b.name;
     }
 
     COND_OPS(ClassValue)

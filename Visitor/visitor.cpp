@@ -106,10 +106,6 @@ void Visitor::visit(MapExpression* v){
     }
 }
 
-void Visitor::visit(ObjectCreationExpression* v){
-    for(Expression* argument : v -> constructorArguments) argument -> accept(this);
-}
-
 void Visitor::visit(PrintlnStatement* v){
     v -> expression -> accept(this);
 }

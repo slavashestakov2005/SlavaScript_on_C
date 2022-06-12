@@ -89,8 +89,7 @@ equality:		coditional ['==' conditioal | '!=' conditioal]
 conditioal:		shift (cond_op shift)*
 shift:			additive (shift_op additive)*
 additive:		multiplicative (additive_op multiplicative)*
-multiplicative:		object_creation (multiplicative_op object_creation)*
-object_creation:	'new' WORD func_args | unary
+multiplicative:		unary (multiplicative_op unary)*
 unary:			unary_op unary | exponential
 exponential:		primary_suffix [exponential_op unary]
 primary_suffix:		primary suffix* | 'def' func_params func_body

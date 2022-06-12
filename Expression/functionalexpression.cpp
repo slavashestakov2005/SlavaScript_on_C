@@ -3,6 +3,7 @@
 #include "../Lib/userdefinedfunction.h"
 #include "../Lib/variables.h"
 #include "../Value/functionvalue.h"
+#include "../Value/classvalue.h"
 #include "valueexpression.h"
 #include "variableexpression.h"
 #include "../Exception/variabledoesnotexistsexception.h"
@@ -20,18 +21,22 @@ void FunctionalExpression::addArguments(Expression* argument){
 std::shared_ptr<Value> FunctionalExpression::eval(){
     std::vector<std::shared_ptr<Value>> values;
     for(int i = 0; i < arguments.size(); ++i) values.push_back(arguments[i] -> eval());
-    std::shared_ptr<Function> f = consumeFunction(functionExpr);
-    CallStack::push(std::string(*functionExpr), f);
-    std::shared_ptr<Value> result = f -> execute(values);
-    CallStack::pop();
+    std::shared_ptr<Value> value = functionExpr -> eval(), result;
+    if (value -> type() == Values::CLASS) {
+        std::shared_ptr<ClassValue> cls = CAST(ClassValue, value);
+        result = cls -> construct(values);
+    }
+    else {
+        std::shared_ptr<Function> f = consumeFunction(value);
+        CallStack::push(std::string(*functionExpr), f);
+        result = f -> execute(values);
+        CallStack::pop();
+    }
     return result;
 }
 
-std::shared_ptr<Function> FunctionalExpression::consumeFunction(Expression* expr){
+std::shared_ptr<Function> FunctionalExpression::consumeFunction(std::shared_ptr<Value> value){
     std::shared_ptr<Function> f = nullptr;
-    if (expr -> type() == Expressions::VariableExpression) f = Functions::get(((VariableExpression*)expr) -> name, arguments.size());
-    if (f) return f;
-    std::shared_ptr<Value> value = expr -> eval();
     if (value -> type() == Values::FUNCTION) f = CAST(FunctionValue, value) -> getFunction();
     if (f) return f;
     std::string name = value -> asString();

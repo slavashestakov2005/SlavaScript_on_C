@@ -8,7 +8,7 @@
 #include "../Lib/function.h"
 #include "stringvalue.h"
 #include "functionvalue.h"
-#include "classvalue.h"
+#include "objectvalue.h"
 using SlavaScript::exceptions::TypeException;
 
 namespace SlavaScript::lang{
@@ -21,7 +21,7 @@ namespace SlavaScript::lang{
         virtual std::string asString() { throw new TypeException("Cannot cast class to string"); }
         virtual bool asBool() { throw new TypeException("Cannot cast class to bool"); }
         virtual Bignum asBignum() { throw new TypeException("Cannot cast class to number"); }
-        virtual Values type() const { return Values::CLASS; }
+        virtual Values type() const { return Values::OBJECT; }
         virtual operator std::string() { throw new TypeException("Cannot cast class to string"); }
         bool isClassFromModule(){ return true; }
         virtual ~ClassModuleValue(){}
@@ -31,7 +31,7 @@ namespace SlavaScript::lang{
     class ClassModuleValueT : public ClassModuleValue{
     public:
         static bool is_instance(std::shared_ptr<Value> v){ return v -> string_type() == correct_class_name(); }
-        static std::string correct_class_name() { return "ModuleClass " + T::__class_name__; }
+        static std::string correct_class_name() { return "ModuleObject " + T::__class_name__; }
         virtual std::string string_type() const { return correct_class_name(); }
         virtual ~ClassModuleValueT(){}
     };
@@ -40,9 +40,9 @@ namespace SlavaScript::lang{
     std::shared_ptr<Function> get_property(std::shared_ptr<Value> value, T operation){
         std::string op = getOperator(operation);
         std::shared_ptr<Value> val;
-        if (value -> type() != Values::CLASS) throw new TypeException("Can not use " + op + " for non-class and class values");
+        if (value -> type() != Values::OBJECT) throw new TypeException("Can not use " + op + " for non-class and class values");
         if (value -> isClassFromModule()) val = CAST(ClassModuleValue, value) -> accessDot(SHARE(StringValue, op));
-        else val = CAST(ClassValue, value) -> get(SHARE(StringValue, op));
+        else val = CAST(ObjectValue, value) -> get(SHARE(StringValue, op));
         if (val -> type() != Values::FUNCTION) throw new TypeException("Operation " + op + " is not a function");
         std::shared_ptr<Function> func = CAST(FunctionValue, val) -> getFunction();
         return func;

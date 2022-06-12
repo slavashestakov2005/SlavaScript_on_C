@@ -2,6 +2,7 @@
 #include "numbervalue.h"
 #include "boolvalue.h"
 #include "classvalue.h"
+#include "objectvalue.h"
 #include "functionvalue.h"
 #include "integrationvalue.h"
 #include "mapvalue.h"
@@ -22,6 +23,7 @@ namespace SlavaScript::lang{
             case Values::MAP : return *(MapValue*)(&a) == *(MapValue*)(&b);
             case Values::STRING : return *(StringValue*)(&a) == *(StringValue*)(&b);
             case Values::NULL_ : return *(NullValue*)(&a) == *(NullValue*)(&b);
+            case Values::OBJECT : return *(ObjectValue*)(&a) == *(ObjectValue*)(&b);
             case Values::CLASS : return *(ClassValue*)(&a) == *(ClassValue*)(&b);
             case Values::INTEGRATION : return *(IntegrationValue*)(&a) == *(IntegrationValue*)(&b);
         }
@@ -37,6 +39,7 @@ namespace SlavaScript::lang{
             case Values::MAP : return *(MapValue*)(&a) < *(MapValue*)(&b);
             case Values::STRING : return *(StringValue*)(&a) < *(StringValue*)(&b);
             case Values::NULL_ : return *(NullValue*)(&a) < *(NullValue*)(&b);
+            case Values::OBJECT : return *(ObjectValue*)(&a) < *(ObjectValue*)(&b);
             case Values::CLASS : return *(ClassValue*)(&a) < *(ClassValue*)(&b);
             case Values::INTEGRATION : return *(IntegrationValue*)(&a) < *(IntegrationValue*)(&b);
         }

@@ -18,6 +18,7 @@ namespace SlavaScript::lang{
         void addField(std::vector<std::string> v, Expression* expr);
         void addMethod(FunctionDefineStatement* statement);
         void execute();
+        std::string get_name();
         operator std::string();
         ~ClassDeclarationsStatement();
         void accept(Visitor* visitor);

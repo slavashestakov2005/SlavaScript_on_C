@@ -11,7 +11,7 @@ namespace SlavaScript::lang{
         Expression* functionExpr;
         std::vector<Expression*> arguments;
         /** @return  throw: UnknownFunctionException*. */
-        std::shared_ptr<Function> consumeFunction(Expression* expr);
+        std::shared_ptr<Function> consumeFunction(std::shared_ptr<Value> value);
     public:
         FunctionalExpression(Expression* functionExpr) : functionExpr(functionExpr) {}
         Expressions type(){ return Expressions::FunctionalExpression; }

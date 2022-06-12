@@ -83,7 +83,6 @@ std::map<std::string, TokenType> Lexer::KEYWORDS = {
     std::make_pair("throw", TokenType::THROW),
     std::make_pair("catch", TokenType::CATCH),
     std::make_pair("class", TokenType::CLASS),
-    std::make_pair("new", TokenType::NEW),
 };
 
 std::string Lexer::OPERATOR_CHARS = "+-*/%(){}[]=<>!&|.,?:^~";
