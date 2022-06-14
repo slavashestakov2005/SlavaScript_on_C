@@ -2,19 +2,20 @@
 #define CLASSVALUE_H_INCLUDED
 
 #include "mapvalue.h"
-#include "../Lib/classmethod.h"
+#include "../Lib/class.h"
 
 namespace SlavaScript::lang{
     class ClassValue : public Value{
     private:
-        std::string name;
-        ClassDeclarationsStatement* statement;
+        std::shared_ptr<Class> cls;
     public:
-        ClassValue(ClassDeclarationsStatement* statement);
+        ClassValue(std::shared_ptr<Class> cls);
         std::shared_ptr<Value> copy();
 
         std::shared_ptr<Value> construct(std::vector<std::shared_ptr<Value>> values);
-        std::string get_name();
+        std::string get_name() const;
+        std::shared_ptr<ClassMethod> get_function(std::string func);
+        bool isExists(std::string name);
 
         double asDouble();
         std::string asString();

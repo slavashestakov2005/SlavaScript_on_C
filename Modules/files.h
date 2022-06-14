@@ -11,6 +11,7 @@ namespace SlavaScript::modules{
     class Files : public Module<Files> {
     public:
         static void initFunctions();
+        static void initClasses();
     };
 }
 

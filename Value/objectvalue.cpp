@@ -1,5 +1,7 @@
 #include "objectvalue.h"
 #include "stringvalue.h"
+#include "functionvalue.h"
+#include "../Lib/classes.h"
 #include "../Exception/typeexception.h"
 
 using namespace SlavaScript::lang;
@@ -11,7 +13,6 @@ ObjectValue::ObjectValue(std::string className) : className(className){
 
 std::shared_ptr<Value> ObjectValue::copy(){
     std::shared_ptr<ObjectValue> val = SHARE(ObjectValue, this -> className);
-    val -> constructor = this -> constructor;
     val -> thisMap = CAST(MapValue, this -> thisMap -> copy());
     return val;
 }
@@ -24,17 +25,19 @@ void ObjectValue::addField(std::string name, std::shared_ptr<Value> value){
     thisMap -> set(SHARE(StringValue, name), value);
 }
 
-void ObjectValue::addMethod(std::string name, std::shared_ptr<ClassMethod> method){
-    thisMap -> set(SHARE(StringValue, name), method);
-    if (name == className) constructor = method;
-}
-
-void ObjectValue::callConstructor(std::vector<std::shared_ptr<Value>> values){
-    if (constructor != nullptr) constructor -> execute(values);
-}
-
 std::shared_ptr<Value> ObjectValue::access(std::shared_ptr<Value> value){
-    return thisMap -> get(value);
+    if (thisMap -> containsKey(value)) return thisMap -> get(value);
+    std::shared_ptr<ClassMethod> method = Classes::get(className) -> get_function(value -> asString());
+    return SHARE(FunctionValue, CAST(Function, method));
+}
+
+std::shared_ptr<Value> ObjectValue::getConstructor(){
+    std::shared_ptr<Value> value = SHARE(StringValue, className);
+    if (thisMap -> containsKey(value)) return thisMap -> get(value);
+    std::shared_ptr<ClassValue> cls = Classes::get(className);
+    if (!cls -> isExists(className)) return nullptr;
+    std::shared_ptr<ClassMethod> method = cls -> get_function(className);
+    return SHARE(FunctionValue, CAST(Function, method));
 }
 
 void ObjectValue::set(std::shared_ptr<Value> key, std::shared_ptr<Value> value){

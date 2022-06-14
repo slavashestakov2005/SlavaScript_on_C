@@ -1,7 +1,7 @@
 #ifndef INTEGRATIONVALUE_H_INCLUDED
 #define INTEGRATIONVALUE_H_INCLUDED
 
-#include "objectvalue.h"
+#include "value.h"
 
 namespace SlavaScript::lang{
     class IntegrationValue : public Value{

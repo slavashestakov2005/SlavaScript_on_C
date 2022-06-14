@@ -1,5 +1,5 @@
-#ifndef FUNCTIONMODULE_H_INCLUDED
-#define FUNCTIONMODULE_H_INCLUDED
+#ifndef MODULEFUNCTION_H_INCLUDED
+#define MODULEFUNCTION_H_INCLUDED
 
 #include <functional>
 #include "function.h"
@@ -7,14 +7,14 @@
 namespace SlavaScript::lang{
     using function_type = std::function<std::shared_ptr<Value>(std::vector<std::shared_ptr<Value>>)>;
 
-    class FunctionModule : public Function{
+    class ModuleFunction : public Function{
     private:
         function_type f;
     public:
-        FunctionModule(function_type f) : f(f) {}
+        ModuleFunction(function_type f) : f(f) {}
         std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values);
         operator std::string();
     };
 }
 
-#endif // FUNCTIONMODULE_H_INCLUDED
+#endif // MODULEFUNCTION_H_INCLUDED

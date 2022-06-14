@@ -5,8 +5,10 @@
 #include "../Value/boolvalue.h"
 #include "../Value/numbervalue.h"
 #include "../Value/functionvalue.h"
-#include "../Value/classmodulevalue.h"
+#include "../Lib/classes.h"
 #include "../Lib/functions.h"
+#include "../Lib/moduleclass.h"
+#include "../Lib/moduleobject.h"
 #include "../Lib/variables.h"
 #include "../Exception/argumentsmismatchexception.h"
 #include "../Exception/mathexception.h"
@@ -25,12 +27,15 @@ using SlavaScript::exceptions::UnknownPropertyException;
 namespace SlavaScript::modules::math_out{
     using PolynomialCoeff = RationalBig;
 
-    CLASS_IN_MODULE_1(PolynomialValue)
+    CLASS_IN_MODULE_1(Polynomial)
         std::vector<PolynomialCoeff> coefficients;
-        PolynomialValue(PolynomialValue const& temp) : coefficients(temp.coefficients) {}
-        PolynomialValue(std::vector<PolynomialCoeff> coefficients = {Bignum::ZERO}) : coefficients(coefficients){ delete_end_zero(); }
+        Polynomial(std::vector<std::shared_ptr<Value>> values){
+            for(auto x : values) coefficients.push_back(x -> asBignum());
+        }
+        Polynomial(Polynomial const& temp) : coefficients(temp.coefficients) {}
+        Polynomial(std::vector<PolynomialCoeff> coefficients = {Bignum::ZERO}) : coefficients(coefficients){ delete_end_zero(); }
         std::shared_ptr<Value> copy(){
-            return SHARE(PolynomialValue, coefficients);
+            return SHARE(Polynomial, coefficients);
         }
         int deg() const{
             if (coefficients.size() == 1 && !coefficients[0]) return -1;
@@ -58,25 +63,25 @@ namespace SlavaScript::modules::math_out{
             if (ans.size() == 12) ans += '0';
             return ans + ">";
         }
-        ~PolynomialValue(){}
+        ~Polynomial(){}
         std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property);
 
         void delete_end_zero(){
             for(int i = coefficients.size() - 1; i > 0; --i) if (coefficients[i]) break; else coefficients.pop_back();
         }
 
-        PolynomialValue operator+() const{
-            return PolynomialValue(*this);
+        Polynomial operator+() const{
+            return Polynomial(*this);
         }
 
-        PolynomialValue operator-() const{
+        Polynomial operator-() const{
             int sz = coefficients.size();
             std::vector<PolynomialCoeff> new_v(sz);
             for(int i = 0; i < sz; ++i) new_v[i] -= coefficients[i];
-            return PolynomialValue(new_v);
+            return Polynomial(new_v);
         }
 
-        PolynomialValue& operator+=(PolynomialValue const& tem){
+        Polynomial& operator+=(Polynomial const& tem){
             int d1 = deg(), d2 = tem.deg();
             if (d1 == -1 && d2 == -1){
                 coefficients = {Bignum::ZERO};
@@ -92,11 +97,11 @@ namespace SlavaScript::modules::math_out{
             return *this;
         }
 
-        PolynomialValue& operator-=(PolynomialValue const& tem){
+        Polynomial& operator-=(Polynomial const& tem){
             return *this += -tem;
         }
 
-        PolynomialValue& operator*=(PolynomialValue const& tem){
+        Polynomial& operator*=(Polynomial const& tem){
             int d1 = deg(), d2 = tem.deg();
             if (d1 == -1 || d2 == -1){
                 coefficients = {Bignum::ZERO};
@@ -113,17 +118,17 @@ namespace SlavaScript::modules::math_out{
             return *this;
         }
 
-        PolynomialValue& operator/=(PolynomialCoeff const& tem){
+        Polynomial& operator/=(PolynomialCoeff const& tem){
             for(PolynomialCoeff &x : coefficients) x /= tem;
             return *this;
         }
 
-        std::pair<PolynomialValue, PolynomialValue> operator/(PolynomialValue const& temp){
-            PolynomialValue a = *this, ans;
+        std::pair<Polynomial, Polynomial> operator/(Polynomial const& temp){
+            Polynomial a = *this, ans;
             while(a.deg() >= temp.deg()){
                 std::vector<PolynomialCoeff> coeff(a.deg() - temp.deg());
                 coeff.push_back(a.coefficients.back() / temp.coefficients.back());
-                PolynomialValue p(coeff);
+                Polynomial p(coeff);
                 ans += p;
                 p *= temp;
                 a -= p;
@@ -131,69 +136,69 @@ namespace SlavaScript::modules::math_out{
             return {ans, a};
         }
 
-        PolynomialValue& operator%=(PolynomialValue const& tem){
-            std::pair<PolynomialValue, PolynomialValue> divmod = ((*this) / tem);
+        Polynomial& operator%=(Polynomial const& tem){
+            std::pair<Polynomial, Polynomial> divmod = ((*this) / tem);
             (*this) = divmod.second;
             return *this;
         }
-        DECS_COND(PolynomialValue)
-    CLASS_IN_MODULE_2(PolynomialValue)
+        DECS_COND(Polynomial)
+    CLASS_IN_MODULE_2(Polynomial)
 
-    BINARY_OP(PolynomialValue, +) BINARY_OP(PolynomialValue, -) BINARY_OP(PolynomialValue, *) BINARY_OP(PolynomialValue, %)
+    BINARY_OP(Polynomial, +) BINARY_OP(Polynomial, -) BINARY_OP(Polynomial, *) BINARY_OP(Polynomial, %)
 
-    bool operator==(PolynomialValue const& a, PolynomialValue const& b){
+    bool operator==(Polynomial const& a, Polynomial const& b){
         if (a.coefficients.size() != b.coefficients.size()) return false;
         int sz = a.coefficients.size();
         for(int i = sz - 1; i >= 0; --i) if (a.coefficients[i] != b.coefficients[i]) return false;
         return true;
     }
 
-    bool operator<(PolynomialValue const& a, PolynomialValue const& b){
+    bool operator<(Polynomial const& a, Polynomial const& b){
         if (a.coefficients.size() != b.coefficients.size()) return a.coefficients.size() < b.coefficients.size();
         int sz = a.coefficients.size();
         for(int i = sz - 1; i >= 0; --i) if (a.coefficients[i] != b.coefficients[i]) return a.coefficients.size() < b.coefficients.size();
         return false;
     }
 
-    COND_OPS(PolynomialValue)
+    COND_OPS(Polynomial)
 
 
-    CLASS_MODULE_FUNCTION(Deg, PolynomialValue, polynomial)
+    CLASS_MODULE_FUNCTION(Deg, Polynomial, polynomial)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         SH_RET(NumberValue, polynomial -> deg());
     CMFE
 
     #define POLYNOMIAL_FUNCTION(cls, op) \
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected"); \
-        std::shared_ptr<PolynomialValue> p; \
-        if (values[0] -> type() == Values::NUMBER) p = SHARE(PolynomialValue, std::vector<PolynomialCoeff>{values[0] -> asBignum()}); \
-        else if (PolynomialValue::is_instance(values[0])) p = CAST(PolynomialValue, values[0]); \
+        std::shared_ptr<Polynomial> p; \
+        if (values[0] -> type() == Values::NUMBER) p = SHARE(Polynomial, std::vector<PolynomialCoeff>{values[0] -> asBignum()}); \
+        else if (Polynomial::is_instance(values[0])) p = CAST(Polynomial, values[0]); \
         else throw new TypeException("Polynomial expected"); \
         auto q = (*polynomial) op (*p);
 
     #define POLYNOMIAL_FUNCTION_01(cls, op) \
-        CLASS_MODULE_FUNCTION(cls, PolynomialValue, polynomial) \
-            if (values.empty()) SH_RET(PolynomialValue, op (*polynomial)); \
+        CLASS_MODULE_FUNCTION(cls, Polynomial, polynomial) \
+            if (values.empty()) SH_RET(Polynomial, op (*polynomial)); \
             POLYNOMIAL_FUNCTION(cls, op) \
-            SH_RET(PolynomialValue, q); \
+            SH_RET(Polynomial, q); \
         CMFE
 
     #define POLYNOMIAL_FUNCTION_1(cls, op) \
-        CLASS_MODULE_FUNCTION(cls, PolynomialValue, polynomial) \
+        CLASS_MODULE_FUNCTION(cls, Polynomial, polynomial) \
             POLYNOMIAL_FUNCTION(cls, op) \
-            SH_RET(PolynomialValue, q); \
+            SH_RET(Polynomial, q); \
         CMFE
 
     #define POLYNOMIAL_FUNCTION_2(cls, op) \
-        CLASS_MODULE_FUNCTION(cls, PolynomialValue, polynomial) \
+        CLASS_MODULE_FUNCTION(cls, Polynomial, polynomial) \
             POLYNOMIAL_FUNCTION(cls, op) \
-            if (values[0] -> type() == Values::NUMBER) SH_RET(PolynomialValue, q.first); \
-            std::vector<std::shared_ptr<Value>> v = {SHARE(PolynomialValue, q.first), SHARE(PolynomialValue, q.second)}; \
+            if (values[0] -> type() == Values::NUMBER) SH_RET(Polynomial, q.first); \
+            std::vector<std::shared_ptr<Value>> v = {SHARE(Polynomial, q.first), SHARE(Polynomial, q.second)}; \
             SH_RET(ArrayValue, v); \
         CMFE
 
     #define POLYNOMIAL_FUNCTION_3(cls, op) \
-        CLASS_MODULE_FUNCTION(cls, PolynomialValue, polynomial) \
+        CLASS_MODULE_FUNCTION(cls, Polynomial, polynomial) \
             POLYNOMIAL_FUNCTION(cls, op) \
             return BoolValue::fromBool(q); \
         CMFE
@@ -211,7 +216,7 @@ namespace SlavaScript::modules::math_out{
     POLYNOMIAL_FUNCTION_3(Ge, >=)   /// x >= y
 
 
-    std::shared_ptr<Value> PolynomialValue::accessDot(std::shared_ptr<Value> property){
+    std::shared_ptr<Value> Polynomial::accessDot(std::shared_ptr<Value> property){
         std::string prop = property -> asString();
         if (prop == "deg") SH_RET(FunctionValue, new Deg(this));
         if (prop == "+") SH_RET(FunctionValue, new Add(this));
@@ -268,32 +273,26 @@ namespace SlavaScript::modules::math_f{
     MATH_BINARY_FUNCTION(hypot)
 
     CREATE_FUNCTION(interpolate)
-        math_out::PolynomialValue result;
+        math_out::Polynomial result;
         for(int i = 0; i < values.size(); ++i) if (values[i] -> type() != Values::ARRAY || CAST(ArrayValue, values[i]) -> size() != 2) throw new TypeException("Expected array with len 2.");
         for(int i = 0; i < values.size(); ++i){
-            math_out::PolynomialValue t({ CAST(ArrayValue, values[i]) -> get(1) -> asBignum() });
+            math_out::Polynomial t({ CAST(ArrayValue, values[i]) -> get(1) -> asBignum() });
             for(int j = 0; j < values.size(); ++j){
                 if (i != j){
                     Bignum xi = CAST(ArrayValue, values[i]) -> get(0) -> asBignum(), xj = CAST(ArrayValue, values[j]) -> get(0) -> asBignum();
                     if (xi == xj) throw new std::logic_error("Cannot used equals x");
-                    t *= math_out::PolynomialValue({Bignum(-xj), Bignum(1)});
+                    t *= math_out::Polynomial({Bignum(-xj), Bignum(1)});
                     t /= xi - xj;
                 }
             }
             result += t;
         }
-        SH_RET(math_out::PolynomialValue, result.coefficients);
+        SH_RET(math_out::Polynomial, result.coefficients);
     FE
 
     MATH_FUNCTION(log)
     MATH_FUNCTION(log10)
     MATH_FUNCTION(log1p)
-
-    CREATE_FUNCTION(polynomial)
-        std::vector<math_out::PolynomialCoeff> v;
-        for(auto x : values) v.push_back(x -> asBignum());
-        SH_RET(math_out::PolynomialValue, v);
-    FE
 
     MATH_BINARY_FUNCTION(pow)
     MATH_FUNCTION(round)
@@ -319,7 +318,10 @@ namespace SlavaScript::modules::math_f{
     MATH_FUNCTION(tanh)
     MATH_FUNCTION(to_degrees)
     MATH_FUNCTION(to_radians)
+
+    DEF_CLASS_(math_out, Polynomial)
 }
+
 
 void Math::initConstants(){
     Variables::set("PI", SHARE(NumberValue, 3.1415926535));
@@ -346,7 +348,6 @@ void Math::initFunctions(){
     UNARY_F_(math_f, log)
     UNARY_F_(math_f, log10)
     UNARY_F_(math_f, log1p)
-    INF_F_(math_f, polynomial)
     BINARY_F_(math_f, pow)
     UNARY_F_(math_f, round)
     UNARY_F_(math_f, signum)
@@ -357,6 +358,10 @@ void Math::initFunctions(){
     UNARY_F_(math_f, tanh)
     UNARY_F_(math_f, to_degrees)
     UNARY_F_(math_f, to_radians)
+}
+
+void Math::initClasses(){
+    SET_CLASS_(math_f, Polynomial)
 }
 
 /*

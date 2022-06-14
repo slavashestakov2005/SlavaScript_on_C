@@ -4,12 +4,11 @@
 
 using namespace SlavaScript::lang;
 
-ClassMethod::ClassMethod(Arguments args, Statement* body, std::shared_ptr<ObjectValue> classInstance)
-    : UserDefinedFunction(args, body), classInstance(classInstance) { }
+ClassMethod::ClassMethod(Arguments args, Statement* body) : UserDefinedFunction(args, body) { }
 
-std::shared_ptr<Value> ClassMethod::execute(std::vector<std::shared_ptr<Value>> values){
+std::shared_ptr<Value> ClassMethod::execute(std::vector<std::shared_ptr<Value>> values, std::shared_ptr<ObjectValue> classInstance){
     Variables::push();
-    Variables::set("this", classInstance -> getThisMap());
+    Variables::set("this", classInstance);
     std::shared_ptr<Value> result = nullptr;
     try{
         result = UserDefinedFunction::execute(values);

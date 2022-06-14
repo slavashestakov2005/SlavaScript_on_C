@@ -1,6 +1,5 @@
 #include <iostream>
 #include "printstatement.h"
-#include "../Lib/functions.h"
 
 using namespace SlavaScript::lang;
 

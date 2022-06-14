@@ -26,7 +26,7 @@ namespace SlavaScript::lang{
 
     /** using by value.h **/
     #define CREATE_FUNCTION(name) \
-        std::shared_ptr<Function> name = std::make_shared<FunctionModule>([](std::vector<std::shared_ptr<Value>> values) -> std::shared_ptr<Value>{
+        std::shared_ptr<Function> name = std::make_shared<ModuleFunction>([](std::vector<std::shared_ptr<Value>> values) -> std::shared_ptr<Value>{
 
     #define FE });
 
@@ -69,7 +69,7 @@ namespace SlavaScript::lang{
 
     #define CMFE }};
 
-    #define CLASS_IN_MODULE_1(cls) class cls : public ClassModuleValueT<cls> { public: static const std::string __class_name__;
+    #define CLASS_IN_MODULE_1(cls) class cls : public ModuleObjectT<cls> { public: static const std::string __class_name__;
     #define CLASS_IN_MODULE_2(cls) }; inline const std::string cls::__class_name__ = #cls;
 
     /** using by Modules/... **/
@@ -97,6 +97,12 @@ namespace SlavaScript::lang{
 
     #define INF1_F_(space, text) INFO_F_(space, text, ArgumentsInfo::inf1)
     #define INF1_F(text) INFO_F(text, ArgumentsInfo::inf1)
+
+    /** using by Modules/... **/
+    #define DEF_CLASS_(space, cls) class cls##Class : public ModuleClass<space::cls> {};
+    #define DEF_CLASS(space, cls) class cls##Class : public ModuleClass<cls> {};
+    #define SET_CLASS_(space, cls) Classes::set(#cls, SHARE(ClassValue, std::make_shared<space::cls##Class>()));
+    #define SET_CLASS(cls) Classes::set(#cls, SHARE(ClassValue, std::make_shared<cls##Class>()));
 }
 
 #endif // MACROS_H_INCLUDED

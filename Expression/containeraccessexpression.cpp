@@ -2,7 +2,7 @@
 #include "../Lib/variables.h"
 #include "../Value/numbervalue.h"
 #include "../Value/stringvalue.h"
-#include "../Value/classmodulevalue.h"
+#include "../Lib/moduleobject.h"
 #include "../Value/objectvalue.h"
 #include "../Value/integrationvalue.h"
 #include "../Exception/typeexception.h"
@@ -37,8 +37,8 @@ std::shared_ptr<Value> ContainerAccessExpression::get(){
             else return CAST(StringValue, container) -> accessBracket(index);
         case Values::OBJECT:
             if (container -> isClassFromModule()){
-                if (dot) return CAST(ClassModuleValue, container) -> accessDot(index);
-                else return CAST(ClassModuleValue, container) -> accessBracket(index);
+                if (dot) return CAST(ModuleObject, container) -> accessDot(index);
+                else return CAST(ModuleObject, container) -> accessBracket(index);
             }
             if (!dot) throw new std::logic_error("Cannot used [] for object");
             return CAST(ObjectValue, container) -> access(index);

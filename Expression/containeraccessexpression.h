@@ -11,12 +11,13 @@
 namespace SlavaScript::lang{
     class ContainerAccessExpression : public Expression{
     private:
-        Expression* root;
-        ContainerAccessElement* access;
-        std::shared_ptr<Value> container;
-        std::shared_ptr<Value> index;
-        bool dot;
+
     public:
+        Expression* root = nullptr;
+        ContainerAccessElement* access = nullptr;
+        std::shared_ptr<Value> container = nullptr;
+        std::shared_ptr<Value> index = nullptr;
+        bool dot;
         ContainerAccessExpression(std::string variable, ContainerAccessElement* access);
         ContainerAccessExpression(Expression* root, ContainerAccessElement* access);
         Expressions type(){ return Expressions::ContainerAccessExpression; }

@@ -2,6 +2,7 @@
 #include "functiondefinestatement.h"
 #include "../Expression/assignmentexpression.h"
 #include "../Lib/names.h"
+#include "../Lib/userdefinedclass.h"
 
 using namespace SlavaScript::lang;
 
@@ -14,7 +15,7 @@ void ClassDeclarationsStatement::addMethod(FunctionDefineStatement* statement){
 }
 
 void ClassDeclarationsStatement::execute(){
-    Names::setClass(name, this);
+    Names::setClass(name, SHARE(ClassValue, SHARE(UserDefinedClass, this)));
 }
 
 std::string ClassDeclarationsStatement::get_name(){

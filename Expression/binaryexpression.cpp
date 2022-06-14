@@ -1,5 +1,5 @@
 #include "binaryexpression.h"
-#include "../Value/classmodulevalue.h"
+#include "../Lib/moduleobject.h"
 #include "../Value/numbervalue.h"
 #include "../Value/stringvalue.h"
 #include "../Value/arrayvalue.h"
@@ -21,7 +21,7 @@ std::shared_ptr<Value> BinaryExpression::calculate(BinaryOperator operation, std
     if (left -> type() == Values::INTEGRATION || right -> type() == Values::INTEGRATION) throw new TypeException("Cannot used binary operation for integration");
     if (left -> type() == Values::OBJECT || right -> type() == Values::OBJECT){
         std::shared_ptr<Function> func = get_property(left, operation);
-        return func -> execute(std::vector<std::shared_ptr<Value>>{right});
+        return CAST(ClassMethod, func) -> execute(std::vector<std::shared_ptr<Value>>{right}, CAST(ObjectValue, left));
     }
     if (left -> type() == Values::FUNCTION || right -> type() == Values::FUNCTION) throw new TypeException("Cannot used binary operation for function");
     if (left -> type() == Values::NULL_ || right -> type() == Values::NULL_) return NullValue::NULL_;

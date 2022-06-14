@@ -5,37 +5,27 @@
 
 using namespace SlavaScript::lang;
 
-ClassValue::ClassValue(ClassDeclarationsStatement* statement) : statement(statement) {
-    name = statement -> get_name();
-}
+
+ClassValue::ClassValue(std::shared_ptr<Class> cls) : cls(cls) {}
 
 std::shared_ptr<Value> ClassValue::copy(){
-    SH_RET(ClassValue, this -> statement);
+    SH_RET(ClassValue, cls);
 }
 
-std::shared_ptr<Value> ClassValue::construct(std::vector<std::shared_ptr<Value>> values){
-    std::shared_ptr<ObjectValue> instance = SHARE(ObjectValue, name);
-    for(auto now : statement -> fields){
-        auto value = now.second -> eval();
-        for(std::string fieldName : now.first) instance -> addField(fieldName, value);
-    }
-    for(auto function : statement -> methods){
-        instance -> addMethod(function -> name, SHARE_3(ClassMethod, function -> arguments, function -> body, instance));
-    }
-    instance -> callConstructor(values);
-    return instance;
-}
+std::shared_ptr<Value> ClassValue::construct(std::vector<std::shared_ptr<Value>> values){ return cls -> construct(values); }
 
-std::string ClassValue::get_name(){
-    return name;
-}
+std::string ClassValue::get_name() const { return cls -> get_name(); }
+
+std::shared_ptr<ClassMethod> ClassValue::get_function(std::string func){ return cls -> get_function(func); }
+
+bool ClassValue::isExists(std::string name){ return cls -> isExists(name); }
 
 double ClassValue::asDouble(){
     throw new TypeException("Cannot cast class to double");
 }
 
 std::string ClassValue::asString(){
-    return "class Value for " + std::string(*statement);
+    throw new TypeException("Cannot cast class to string");
 }
 
 bool ClassValue::asBool(){
@@ -50,21 +40,17 @@ Values ClassValue::type() const{
     return Values::CLASS;
 }
 
-std::string ClassValue::string_type() const{
-    return "UserClass " + name;
-}
+std::string ClassValue::string_type() const{ return cls -> string_type(); }
 
-ClassValue::operator std::string(){
-    return asString();
-}
+ClassValue::operator std::string(){ return std::string(*cls); }
 
 namespace SlavaScript::lang{
     bool operator==(ClassValue const& a, ClassValue const& b){
-        return a.name == b.name;
+        return a.get_name() == b.get_name();
     }
 
     bool operator<(ClassValue const& a, ClassValue const& b){
-        return a.name < b.name;
+        return a.get_name() < b.get_name();
     }
 
     COND_OPS(ClassValue)

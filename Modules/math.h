@@ -6,7 +6,7 @@
 namespace SlavaScript::modules{
     namespace math_f{
         extern std::shared_ptr<SlavaScript::lang::Function> abs, acos, asin, atan, atan2, cbrt, ceil, copy_sign, cos, cosh, exp, expm1,
-                                            factorial, floor, hypot, interpolate, log, log10, log1p, polynomial, pow, round, signum, sin,
+                                            factorial, floor, hypot, interpolate, log, log10, log1p, pow, round, signum, sin,
                                             sinh, sqrt, tan, tanh, to_degress, to_radians;
     }
 
@@ -14,6 +14,7 @@ namespace SlavaScript::modules{
     public:
         static void initConstants();
         static void initFunctions();
+        static void initClasses();
     };
 }
 

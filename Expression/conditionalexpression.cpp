@@ -3,7 +3,7 @@
 #include "../Value/arrayvalue.h"
 #include "../Lib/functions.h"
 #include "../Value/classvalue.h"
-#include "../Value/classmodulevalue.h"
+#include "../Lib/moduleobject.h"
 #include "../Value/integrationvalue.h"
 #include "valueexpression.h"
 #include "../Exception/operationIsnotsupportedexception.h"
@@ -18,11 +18,13 @@ std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator oper
     if (left -> type() == Values::OBJECT || right -> type() == Values::OBJECT){
         try{
             std::shared_ptr<Function> func = get_property(left, operation);
-            return func -> execute(std::vector<std::shared_ptr<Value>>{right});
+            return CAST(ClassMethod, func) -> execute(std::vector<std::shared_ptr<Value>>{right}, CAST(ObjectValue, left));
         } catch(...) {}
         if (operation == ConditionalOperator::AND || operation == ConditionalOperator::OR) throw new TypeException("Operation " + getOperator(operation) + " undefined");
         std::shared_ptr<Function> func = get_property(left, ConditionalOperator::LTEQGT);
-        std::shared_ptr<Value> res = func -> execute(std::vector<std::shared_ptr<Value>>{right});
+        std::shared_ptr<Value> res;
+        if (func -> isClassMethod()) res = CAST(ClassMethod, func) -> execute(std::vector<std::shared_ptr<Value>>{right}, CAST(ObjectValue, left));
+        else res = func -> execute(std::vector<std::shared_ptr<Value>>{right});
         if (res -> type() != Values::NUMBER) throw new TypeException("Operation <=> return not a number");
         int sign_of_res = res -> asBignum().get_sign();
         bool result = false;

@@ -2,7 +2,7 @@
 #define MODULE_H_INCLUDED
 
 #include "../Lib/function.h"
-#include "../Lib/functionmodule.h"
+#include "../Lib/modulefunction.h"
 #include "../Lib/macros.h"
 
 namespace SlavaScript::modules{

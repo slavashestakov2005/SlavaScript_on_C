@@ -15,6 +15,7 @@ namespace SlavaScript::lang{
         virtual std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>>) = 0;
         virtual operator std::string(){  throw new TypeException("Cannot cast function to string"); }
         virtual std::shared_ptr<Value> operator()(std::vector<std::shared_ptr<Value>> args) final { return execute(args); }
+        virtual bool isClassMethod() const { return false; }
     };
 }
 

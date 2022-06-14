@@ -3,7 +3,7 @@
 #include "../Expression/binaryexpression.h"
 #include "../Expression/valueexpression.h"
 #include "../Exception/operationIsnotsupportedexception.h"
-#include "../Value/classmodulevalue.h"
+#include "../Lib/moduleobject.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::OperationIsNotSupportedException;
@@ -12,7 +12,7 @@ std::shared_ptr<Value> AssignmentExpression::calculate(AssignmentOperator operat
     if (left -> type() == Values::OBJECT && operation != AssignmentOperator::ASSIGN){
         try{
             std::shared_ptr<Function> func = get_property(left, operation);
-            return func -> execute(std::vector<std::shared_ptr<Value>>{right});
+            return CAST(ClassMethod, func) -> execute(std::vector<std::shared_ptr<Value>>{right}, CAST(ObjectValue, left));
         } catch (...) {}
     }
     std::shared_ptr<Value> result;

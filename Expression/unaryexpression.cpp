@@ -9,7 +9,7 @@
 #include "variableexpression.h"
 #include "../Exception/typeexception.h"
 #include "../Exception/operationIsnotsupportedexception.h"
-#include "../Value/classmodulevalue.h"
+#include "../Lib/moduleobject.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::OperationIsNotSupportedException;
@@ -18,7 +18,7 @@ std::shared_ptr<Value> UnaryExpression::calculate(UnaryOperator operation, std::
     if (value -> type() == Values::INTEGRATION) throw new TypeException("Cannot used unary operation for integration");
     if (value -> type() == Values::OBJECT){
         std::shared_ptr<Function> func = get_property(value, operation);
-        return func -> execute({});
+        return CAST(ClassMethod, func) -> execute({}, CAST(ObjectValue, value));
     }
     if (value -> type() == Values::NULL_) return NullValue::NULL_;
     switch(operation){

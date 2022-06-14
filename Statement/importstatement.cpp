@@ -4,7 +4,6 @@
 #include "../Exception/unknownmoduleexception.h"
 #include "../Lib/functions.h"
 #include "../Lib/variables.h"
-#include "../Lib/classdeclarations.h"
 #include "../Lib/names.h"
 #include "../Modules/all.h"
 #include "../Value/mapvalue.h"
@@ -34,7 +33,7 @@ void ImportStatement::execute(){
     if (named){
         std::map<std::string, std::shared_ptr<Value>> variables = Variables::getScope();
         std::map<std::string, std::vector<std::pair<ArgumentsInfo, std::shared_ptr<Function>>>> functions = Functions::getScope();
-        // ClassDeclarations::getScope();
+        // Classes::getScope();
         std::shared_ptr<MapValue> map = SHARE(MapValue, 1);
         for(auto x : variables) map -> set(SHARE(StringValue, x.first), x.second);
         for(auto x : functions){

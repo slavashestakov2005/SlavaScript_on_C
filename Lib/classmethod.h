@@ -7,11 +7,10 @@ namespace SlavaScript::lang{
     class ObjectValue;
 
     class ClassMethod : public UserDefinedFunction{
-    private:
-        std::shared_ptr<ObjectValue> classInstance;
     public:
-        ClassMethod(Arguments args, Statement* body, std::shared_ptr<ObjectValue> classInstance);
-        std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values);
+        ClassMethod(Arguments args, Statement* body);
+        std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values, std::shared_ptr<ObjectValue> classInstance);
+        virtual bool isClassMethod() const { return true; }
     };
 }
 

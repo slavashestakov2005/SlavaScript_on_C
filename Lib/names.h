@@ -5,15 +5,15 @@
 #include <string>
 #include "function.h"
 #include "functions.h"
-#include "../Statement/classdeclarationsstatement.h"
 #include "../Value/value.h"
+#include "../Value/classvalue.h"
 
 namespace SlavaScript::lang{
     struct NamedValue{
         std::string name;
         std::shared_ptr<Value> variable = nullptr;
         std::vector<std::pair<ArgumentsInfo, std::shared_ptr<Function>>> function;
-        ClassDeclarationsStatement* classDec = nullptr;
+        std::shared_ptr<ClassValue> classDec = nullptr;
     };
 
     class Names{
@@ -30,7 +30,7 @@ namespace SlavaScript::lang{
         static bool isExists(std::string name);
         static void setVariable(std::string key, std::shared_ptr<Value> value);
         static void setFunction(std::string key, std::shared_ptr<Function> function, ArgumentsInfo info);
-        static void setClass(std::string key, ClassDeclarationsStatement* classDef);
+        static void setClass(std::string key, std::shared_ptr<ClassValue> classDef);
         static void restore(NamedValue named);
     };
 }

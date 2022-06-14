@@ -96,7 +96,7 @@ namespace SlavaScript::modules::functional_f{
             }
             std::shared_ptr<Function> current = result;
             std::shared_ptr<Function> next = CAST(FunctionValue, arg) -> getFunction();
-            result = std::make_shared<FunctionModule>([current, next](std::vector<std::shared_ptr<Value>> values) -> std::shared_ptr<Value>{
+            result = std::make_shared<ModuleFunction>([current, next](std::vector<std::shared_ptr<Value>> values) -> std::shared_ptr<Value>{
                 if (current == nullptr) return next -> execute(values);
                 return next -> execute({current -> execute(values)});
             });

@@ -1,9 +1,12 @@
 #include "functionalexpression.h"
+#include "containeraccessexpression.h"
+#include "../Lib/classmethod.h"
 #include "../Lib/functions.h"
 #include "../Lib/userdefinedfunction.h"
 #include "../Lib/variables.h"
 #include "../Value/functionvalue.h"
 #include "../Value/classvalue.h"
+#include "../Value/objectvalue.h"
 #include "valueexpression.h"
 #include "variableexpression.h"
 #include "../Exception/variabledoesnotexistsexception.h"
@@ -29,7 +32,10 @@ std::shared_ptr<Value> FunctionalExpression::eval(){
     else {
         std::shared_ptr<Function> f = consumeFunction(value);
         CallStack::push(std::string(*functionExpr), f);
-        result = f -> execute(values);
+        if (f -> isClassMethod() && functionExpr -> type() == Expressions::ContainerAccessExpression &&
+            ((ContainerAccessExpression*)functionExpr) -> container -> type() == Values::OBJECT)
+                result = (CAST(ClassMethod, f)) -> execute(values, CAST(ObjectValue, ((ContainerAccessExpression*)functionExpr) -> container));
+        else result = f -> execute(values);
         CallStack::pop();
     }
     return result;
