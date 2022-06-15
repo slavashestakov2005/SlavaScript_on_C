@@ -34,16 +34,6 @@ void Visitor::visit(ConditionalExpression* v){
     v -> expr2 -> accept(this);
 }
 
-void Visitor::visit(ContainerAccessExpression* v){
-    v -> root -> accept(this);
-    v -> access -> expression -> accept(this);
-}
-
-void Visitor::visit(ContainerAssignmentExpression* v){
-    v -> containerExpr -> accept(this);
-    v -> expression -> accept(this);
-}
-
 void Visitor::visit(ContinueStatement* v){}
 
 void Visitor::visit(DoWhileStatement* v){
@@ -76,19 +66,6 @@ void Visitor::visit(FunctionDefineStatement* v){
     v -> body -> accept(this);
 }
 
-void Visitor::visit(FunctionStatement* v){
-    v -> function -> accept(this);
-}
-
-void Visitor::visit(FunctionalExpression* v){
-    v -> functionExpr -> accept(this);
-    for (auto now : v -> arguments){
-        now -> accept(this);
-    }
-}
-
-void Visitor::visit(FunctionReferenceExpression* v){ }
-
 void Visitor::visit(IfStatement* v){
     v -> expression -> accept(this);
     v -> ifStatement -> accept(this);
@@ -115,6 +92,16 @@ void Visitor::visit(PrintStatement* v){
 }
 
 void Visitor::visit(ReturnStatement* v){ }
+
+void Visitor::visit(SuffixExpression* v){
+    v -> root -> accept(this);
+    for(SuffixElement* element : v -> access) element -> accept(this);
+}
+
+void Visitor::visit(SuffixAssignmentExpression* v){
+    v -> containerExpr -> accept(this);
+    v -> expression -> accept(this);
+}
 
 void Visitor::visit(SwitchStatement* v){
     v -> start -> accept(this);

@@ -87,10 +87,6 @@ void CompilerVisitor::visit(lang::ForStatement* v){
 
 void CompilerVisitor::visit(lang::FunctionDefineStatement* v){}
 
-void CompilerVisitor::visit(lang::FunctionStatement* v){
-    v -> function -> accept(this);
-}
-
 void CompilerVisitor::visit(lang::IfStatement* v){
     Compiler::write("if (", false);
     v -> expression -> accept(this);
@@ -219,26 +215,6 @@ void CompilerVisitor::visit(lang::ConditionalExpression* v){
     Compiler::append(")", false);
 }
 
-void CompilerVisitor::visit(lang::ContainerAccessExpression* v){}
-
-void CompilerVisitor::visit(lang::ContainerAssignmentExpression* v){}
-
-void CompilerVisitor::visit(lang::FunctionalExpression* v){
-    Compiler::append("(*", false);
-    if (v -> functionExpr -> type() == lang::Expressions::ValueExpression && ((lang::ValueExpression*) v -> functionExpr) -> value -> type() == lang::Values::STRING){
-        Compiler::append(((lang::ValueExpression*) v -> functionExpr) -> value -> asString(), false);
-    }
-    else v -> functionExpr -> accept(this);
-    Compiler::append(")({", false);
-    for(int i = 0; i < v -> arguments.size(); ++i){
-        v -> arguments[i] -> accept(this);
-        Compiler::append(", ", false);
-    }
-    Compiler::append("})", false);
-}
-
-void CompilerVisitor::visit(lang::FunctionReferenceExpression* v){}
-
 void CompilerVisitor::visit(lang::MapExpression* v){
     Compiler::append("new SlavaScript::lang::MapyValue({", false);
     for (auto now : v -> elements){
@@ -250,6 +226,10 @@ void CompilerVisitor::visit(lang::MapExpression* v){
     }
     Compiler::append("})", false);
 }
+
+void CompilerVisitor::visit(lang::SuffixExpression* v){}
+
+void CompilerVisitor::visit(lang::SuffixAssignmentExpression* v){}
 
 void CompilerVisitor::visit(lang::TernaryExpression* v){
     Compiler::append("((", false);

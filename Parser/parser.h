@@ -4,9 +4,8 @@
 #include <vector>
 #include "parseerrors.h"
 #include "token.h"
-#include "../Expression/containeracceselement.h"
+#include "../Expression/suffixelement.h"
 #include "../Expression/expression.h"
-#include "../Expression/functionalexpression.h"
 #include "../Statement/foreacharraystatement.h"
 #include "../Statement/foreachmapstatement.h"
 #include "../Statement/functiondefinestatement.h"
@@ -41,7 +40,6 @@ namespace SlavaScript::lang{
         Statement* functionBody();
         FunctionDefineStatement* functionDefine();
         std::vector<Expression*> functionCallArguments();
-        FunctionalExpression* function(Expression* nameExpression);
         Statement* exprStatement();
 
         Expression* expression();

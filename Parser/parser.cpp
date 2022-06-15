@@ -19,7 +19,7 @@ namespace{
         }
 
     #define ASSIGN_TO_CONTAINER(start, end) \
-        if (match(TokenType::start)) return new ContainerAssignmentExpression(AssignmentOperator::end, (ContainerAccessExpression*)nameExpression, expression());
+        if (match(TokenType::start)) return new SuffixAssignmentExpression(AssignmentOperator::end, (SuffixExpression*)nameExpression, expression());
 }
 
 ParseErrors Parser::getParseErrors(){
@@ -290,13 +290,6 @@ std::vector<Expression*> Parser::functionCallArguments(){
     return args;
 }
 
-FunctionalExpression* Parser::function(Expression* nameExpression){
-    FunctionalExpression* function = new FunctionalExpression(nameExpression);
-    std::vector<Expression*> args = functionCallArguments();
-    for(Expression* now : args) function -> addArguments(now);
-    return function;
-}
-
 Statement* Parser::exprStatement(){
     Expression* expr = expression();
     if (expr != nullptr) return new ExprStatement(expr);
@@ -333,7 +326,7 @@ Expression* Parser::assignment(){
         }
     }
     Expression* nameExpression = ternary();
-    if (nameExpression != nullptr && nameExpression -> type() == Expressions::ContainerAccessExpression){
+    if (nameExpression != nullptr && nameExpression -> type() == Expressions::SuffixExpression){
         ASSIGN_TO_CONTAINER(EQ, ASSIGN)
         ASSIGN_TO_CONTAINER(PLUSEQ, ADD)
         ASSIGN_TO_CONTAINER(MINUSEQ, SUBSTRACT)
@@ -346,8 +339,8 @@ Expression* Parser::assignment(){
         ASSIGN_TO_CONTAINER(BAREQ, OR)
         ASSIGN_TO_CONTAINER(AMPEQ, AND)
         ASSIGN_TO_CONTAINER(CARETEQ, XOR)
-        if (match(TokenType::PLUSPLUS)) return new ContainerAssignmentExpression(AssignmentOperator::_PLUSPLUS, (ContainerAccessExpression*)nameExpression, new ValueExpression(Bignum(1)));
-        if (match(TokenType::MINUSMINUS)) return new ContainerAssignmentExpression(AssignmentOperator::_MINUSMINUS, (ContainerAccessExpression*)nameExpression, new ValueExpression(Bignum(1)));
+        if (match(TokenType::PLUSPLUS)) return new SuffixAssignmentExpression(AssignmentOperator::_PLUSPLUS, (SuffixExpression*)nameExpression, new ValueExpression(Bignum(1)));
+        if (match(TokenType::MINUSMINUS)) return new SuffixAssignmentExpression(AssignmentOperator::_MINUSMINUS, (SuffixExpression*)nameExpression, new ValueExpression(Bignum(1)));
     }
     return nameExpression;
 }
@@ -478,13 +471,13 @@ Expression* Parser::unary(){
     if (match(TokenType::TILDE)) return new UnaryExpression(UnaryOperator::COMPLEMENT, unary());
     if (match(TokenType::PLUSPLUS)){
         Expression* prim = unary();
-        if (prim -> type() == Expressions::ContainerAccessExpression) return new ContainerAssignmentExpression(AssignmentOperator::PLUSPLUS_, (ContainerAccessExpression*)prim, new ValueExpression(Bignum(1)));
+        if (prim -> type() == Expressions::SuffixExpression) return new SuffixAssignmentExpression(AssignmentOperator::PLUSPLUS_, (SuffixExpression*)prim, new ValueExpression(Bignum(1)));
         else if (prim -> type() == Expressions::VariableExpression) return new AssignmentExpression(AssignmentOperator::PLUSPLUS_, ((VariableExpression*) prim) -> name, new ValueExpression(Bignum(1)));
         return new UnaryExpression(UnaryOperator::PLUSPLUS, prim);
     }
     if (match(TokenType::MINUSMINUS)){
         Expression* prim = unary();
-        if (prim -> type() == Expressions::ContainerAccessExpression) return new ContainerAssignmentExpression(AssignmentOperator::MINUSMINUS_, (ContainerAccessExpression*)prim, new ValueExpression(Bignum(1)));
+        if (prim -> type() == Expressions::SuffixExpression) return new SuffixAssignmentExpression(AssignmentOperator::MINUSMINUS_, (SuffixExpression*)prim, new ValueExpression(Bignum(1)));
         else if (prim -> type() == Expressions::VariableExpression) return new AssignmentExpression(AssignmentOperator::MINUSMINUS_, ((VariableExpression*) prim) -> name, new ValueExpression(Bignum(1)));
         return new UnaryExpression(UnaryOperator::MINUSMINUS, prim);
     }
@@ -566,21 +559,18 @@ Expression* Parser::map(){
 }
 
 Expression* Parser::suffix(Expression* root){
+    std::vector<SuffixElement*> access;
     while(true){
-        if (match(TokenType::DOT)){
-            root = new ContainerAccessExpression(root,
-                        new ContainerAccessElement(new ValueExpression(consume(TokenType::WORD) -> getText()), true) );
-        }
+        if (match(TokenType::DOT)) access.push_back(new DotSuffixElement(new ValueExpression(consume(TokenType::WORD) -> getText())));
         else if (match(TokenType::LBRACKET)){
-            root = new ContainerAccessExpression(root, new ContainerAccessElement(expression(), false) );
+            access.push_back(new BracketSuffixElement(expression()));
             consume(TokenType::RBRACKET);
         }
-        else if (lookMatch(0, TokenType::LPAREN)){
-            root = function(root);
-        }
+        else if (lookMatch(0, TokenType::LPAREN)) access.push_back(new ParenSuffixElement(functionCallArguments()));
         else break;
     }
-    return root;
+    if (access.empty()) return root;
+    return new SuffixExpression(root, access);
 }
 
 Token* Parser::get(int position){

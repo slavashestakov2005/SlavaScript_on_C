@@ -1,18 +1,116 @@
-class Point{
-	map = 0
-	arr = 0
-	func = 0
-	def Point(map, arr, func){
-		this.map = map
-		this.arr = arr
-		this.func = func
+import [std, types]
+
+
+class Vector{
+	x = y = 0
+	
+	def Vector(x = 0, y = 0){
+		this.x = x
+		this.y = y
+	}
+	
+	def show(s){
+		println s + " (" + this.x + "; " + this.y + ")"
+	}
+	
+	def '+='(*args){
+		println "Вызван +="
+		if len(args) != 1 throw "Ожидался 1 аргумент для +="
+		this = this.'+'(args[0])
+		return this
+	}
+	
+	def '+'(*args){
+		println "Вызван +"
+		if len(args) == 0 return Vector(this.x, this.y)
+		if len(args) > 1 throw "Слишком много аргументов"
+		if !isinstance(args[0], Vector) throw "Аргумент для + должен быть Vector"
+		return Vector(this.x + args[0].x, this.y + args[0].y)
+	}
+	
+	def '-'(*args){
+		println "Вызван -"
+		if len(args) == 0 return Vector(-this.x, -this.y)
+		if len(args) > 1 throw "Слишком много аргументов"
+		if !isinstance(args[0], Vector) throw "Аргумент для - должен быть Vector"
+		return Vector(this.x - args[0].x, this.y - args[0].y)
+	}
+	
+	def '<=>'(other){
+		println "Вызван <=>"
+		if !isinstance(other, Vector) throw "Можно сравнивать только два Vector'а"
+		if this.x < other.x return -1
+		if this.x > other.x return 1
+		if this.y < other.y return -1
+		if this.y > other.y return 1
+		return 0
+	}
+	
+	def '<'(other){
+		println "Вызван <"
+		return this.'<=>'(other) < 0
 	}
 }
 
-a = new Point({"two" : 2}, [0, 1, [2, 3]], def(x) = -x)
-b = new Point({2 : "two"}, [[3, 2], 1, 0], def(x) = x)
 
-println "Объекты созданы: " + a.map
-println b
-b.map = a.map
-println b.map
+a = Vector(2, 3)
+b = Vector(4, 5)
+a.show("a")						// a (2; 3)
+b.show("b")						// b (4; 5)
+
+
+c = a + b						// Вызван +
+c.show("a + b")					// a + b (6; 8)
+c = a
+c += b							// Вызван +=	Вызван +
+c.show("a += b")				// a += b (6; 8)
+
+d = a - b						// Вызван -
+d.show("a - b")					// a - b (-2; -2)
+d = a
+d -= b							// Вызван -
+d.show("a -= b")				// a -= b (-2; -2)
+
+println "=" * 100
+a.show("a")						// a (2; 3)
+b.show("b")						// b (4; 5)
+
+try {
+	println a < b				// Вызван <	Вызван <=>	true
+	println a <= b				// Вызван <=>	true
+	println a > b				// Вызван <=>	false
+	println a >= b				// Вызван <=>	false
+	println a == b				// Вызван <=>	false
+	println a != b				// Вызван <=>	true
+	println a.'<=>'(b)			// Вызван <=>	-1
+	println b.'<=>'(a)			// Вызван <=>	1
+	println a < 5				// Вызван < Вызван <=> Вызван <=>
+} catch ex {
+	println "Ошибка: " + ex		// Ошибка: Можно сравнивать только два Vector'а
+}
+
+
+class Cout{
+	def '<<'(value){
+		print value
+		return this
+	}
+}
+
+
+cout = Cout()
+space = " "
+cout << "Привет" << space << "мир!\n"	// Привет мир!
+cout << 5 << "\n"						// 5
+cout << input() << "\n"					// <введённая строка>
+cout << cout << " <- Это cout :)\n"		// class Cout@{} <- Это cout :)
+
+
+println type_to_string(a)			// UserObject Vector
+println type_to_string(Vector)		// UserClass Vector
+println isinstance(a, Vector)		// true
+println type_to_string(cout)		// UserObject Cout
+println type_to_string(Cout)		// UserClass Cout
+println isinstance(cout, Cout)		// true
+println isinstance(cout, Vector)	// false
+println isinstance(a, Cout)			// false

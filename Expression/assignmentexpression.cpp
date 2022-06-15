@@ -12,7 +12,7 @@ std::shared_ptr<Value> AssignmentExpression::calculate(AssignmentOperator operat
     if (left -> type() == Values::OBJECT && operation != AssignmentOperator::ASSIGN){
         try{
             std::shared_ptr<Function> func = get_property(left, operation);
-            return CAST(ClassMethod, func) -> execute(std::vector<std::shared_ptr<Value>>{right}, CAST(ObjectValue, left));
+            return ClassMethod::execute(func, {right}, left);
         } catch (...) {}
     }
     std::shared_ptr<Value> result;

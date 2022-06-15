@@ -9,8 +9,6 @@ namespace SlavaScript::lang{
     class BreakStatement;
     class ClassDeclarationsStatement;
     class ConditionalExpression;
-    class ContainerAccessExpression;
-    class ContainerAssignmentExpression;
     class ContinueStatement;
     class DoWhileStatement;
     class ExprStatement;
@@ -18,9 +16,6 @@ namespace SlavaScript::lang{
     class ForeachMapStatement;
     class ForStatement;
     class FunctionDefineStatement;
-    class FunctionStatement;
-    class FunctionalExpression;
-    class FunctionReferenceExpression;
     class IfStatement;
     class IntegrationStatement;
     class ImportStatement;
@@ -28,6 +23,8 @@ namespace SlavaScript::lang{
     class PrintlnStatement;
     class PrintStatement;
     class ReturnStatement;
+    class SuffixExpression;
+    class SuffixAssignmentExpression;
     class SwitchStatement;
     class TernaryExpression;
     class ThrowStatement;
@@ -46,8 +43,6 @@ namespace SlavaScript::lang{
         virtual void visit(BreakStatement* v);
         virtual void visit(ClassDeclarationsStatement* v);
         virtual void visit(ConditionalExpression* v);
-        virtual void visit(ContainerAccessExpression* v);
-        virtual void visit(ContainerAssignmentExpression* v);
         virtual void visit(ContinueStatement* v);
         virtual void visit(DoWhileStatement* v);
         virtual void visit(ExprStatement* v);
@@ -55,9 +50,6 @@ namespace SlavaScript::lang{
         virtual void visit(ForeachMapStatement* v);
         virtual void visit(ForStatement* v);
         virtual void visit(FunctionDefineStatement* v);
-        virtual void visit(FunctionStatement* v);
-        virtual void visit(FunctionalExpression* v);
-        virtual void visit(FunctionReferenceExpression* v);
         virtual void visit(IfStatement* v);
         virtual void visit(IntegrationStatement* v);
         virtual void visit(ImportStatement* v);
@@ -65,6 +57,8 @@ namespace SlavaScript::lang{
         virtual void visit(PrintlnStatement* v);
         virtual void visit(PrintStatement* v);
         virtual void visit(ReturnStatement* v);
+        virtual void visit(SuffixExpression* v);
+        virtual void visit(SuffixAssignmentExpression* v);
         virtual void visit(SwitchStatement* v);
         virtual void visit(TernaryExpression* v);
         virtual void visit(ThrowStatement* v);

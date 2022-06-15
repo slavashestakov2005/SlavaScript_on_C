@@ -18,13 +18,13 @@ std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator oper
     if (left -> type() == Values::OBJECT || right -> type() == Values::OBJECT){
         try{
             std::shared_ptr<Function> func = get_property(left, operation);
-            return CAST(ClassMethod, func) -> execute(std::vector<std::shared_ptr<Value>>{right}, CAST(ObjectValue, left));
+            return ClassMethod::execute(func, {right}, left);
         } catch(...) {}
         if (operation == ConditionalOperator::AND || operation == ConditionalOperator::OR) throw new TypeException("Operation " + getOperator(operation) + " undefined");
         std::shared_ptr<Function> func = get_property(left, ConditionalOperator::LTEQGT);
         std::shared_ptr<Value> res;
-        if (func -> isClassMethod()) res = CAST(ClassMethod, func) -> execute(std::vector<std::shared_ptr<Value>>{right}, CAST(ObjectValue, left));
-        else res = func -> execute(std::vector<std::shared_ptr<Value>>{right});
+        if (func -> isClassMethod()) res = ClassMethod::execute(func, {right}, left);
+        else res = func -> execute({right});
         if (res -> type() != Values::NUMBER) throw new TypeException("Operation <=> return not a number");
         int sign_of_res = res -> asBignum().get_sign();
         bool result = false;

@@ -9,8 +9,8 @@ namespace SlavaScript::lang{
     class UserDefinedFunction : public Function{
     protected:
         Statement* body;
-    public:
         Arguments arguments;
+    public:
         UserDefinedFunction(Arguments arguments, Statement* body) : arguments(arguments), body(body) { type = true; }
         int getArgsCount();
         std::string getArgsName(int index);

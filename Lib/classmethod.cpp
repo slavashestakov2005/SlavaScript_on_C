@@ -4,6 +4,10 @@
 
 using namespace SlavaScript::lang;
 
+std::shared_ptr<Value> ClassMethod::execute(std::shared_ptr<Function> func, std::vector<std::shared_ptr<Value>> values, std::shared_ptr<Value> classInstance){
+    return CAST(ClassMethod, func) -> execute(values, CAST(ObjectValue, classInstance));
+}
+
 ClassMethod::ClassMethod(Arguments args, Statement* body) : UserDefinedFunction(args, body) { }
 
 std::shared_ptr<Value> ClassMethod::execute(std::vector<std::shared_ptr<Value>> values, std::shared_ptr<ObjectValue> classInstance){

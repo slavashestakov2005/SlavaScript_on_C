@@ -18,7 +18,7 @@ std::shared_ptr<Value> UnaryExpression::calculate(UnaryOperator operation, std::
     if (value -> type() == Values::INTEGRATION) throw new TypeException("Cannot used unary operation for integration");
     if (value -> type() == Values::OBJECT){
         std::shared_ptr<Function> func = get_property(value, operation);
-        return CAST(ClassMethod, func) -> execute({}, CAST(ObjectValue, value));
+        return ClassMethod::execute(func, {}, value);
     }
     if (value -> type() == Values::NULL_) return NullValue::NULL_;
     switch(operation){

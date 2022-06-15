@@ -25,8 +25,7 @@ std::shared_ptr<Value> UserDefinedClass::construct(std::vector<std::shared_ptr<V
     if (value -> type() != Values::FUNCTION) throw new TypeException("Constructor need be a function");
     std::shared_ptr<Function> function = CAST(FunctionValue, value) -> getFunction();
     if (!function -> isClassMethod()) throw new TypeException("Constructor need be a member function");
-    std::shared_ptr<ClassMethod> method = CAST(ClassMethod, function);
-    auto res = method -> execute(values, instance);
+    ClassMethod::execute(function, values, instance);
     return instance;
 }
 

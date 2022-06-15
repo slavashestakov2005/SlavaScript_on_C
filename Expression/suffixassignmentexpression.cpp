@@ -1,4 +1,4 @@
-#include "containerassignmentexpression.h"
+#include "suffixassignmentexpression.h"
 #include "../Lib/variables.h"
 #include "../Expression/binaryexpression.h"
 #include "../Expression/unaryexpression.h"
@@ -7,25 +7,25 @@
 
 using namespace SlavaScript::lang;
 
-std::shared_ptr<Value> ContainerAssignmentExpression::eval(){
-    std::shared_ptr<Value> result = containerExpr -> eval();
-    containerExpr -> set(AssignmentExpression::calculate(operation, result, expression -> eval()));
-    if (operation != AssignmentOperator::_PLUSPLUS && operation != AssignmentOperator::_MINUSMINUS) result = containerExpr -> get();
-    return result;
+std::shared_ptr<Value> SuffixAssignmentExpression::eval(){
+    std::shared_ptr<Value> left = containerExpr -> eval(), right = expression -> eval();
+    containerExpr -> set(AssignmentExpression::calculate(operation, left, right));
+    if (operation != AssignmentOperator::_PLUSPLUS && operation != AssignmentOperator::_MINUSMINUS) return right;
+    return left;
 }
 
-ContainerAssignmentExpression::operator std::string(){
+SuffixAssignmentExpression::operator std::string(){
     if (operation == AssignmentOperator::MINUSMINUS_ || operation == AssignmentOperator::PLUSPLUS_){
         return getOperator(operation) + " " + std::string(*containerExpr);
     }
     return std::string(*containerExpr) + " " + getOperator(operation) + " " + std::string(*expression);
 }
 
-ContainerAssignmentExpression::~ContainerAssignmentExpression(){
+SuffixAssignmentExpression::~SuffixAssignmentExpression(){
     delete expression;
     expression = nullptr;
 }
 
-void ContainerAssignmentExpression::accept(Visitor* visitor){
+void SuffixAssignmentExpression::accept(Visitor* visitor){
     visitor -> visit(this);
 }

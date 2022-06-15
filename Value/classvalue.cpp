@@ -5,7 +5,6 @@
 
 using namespace SlavaScript::lang;
 
-
 ClassValue::ClassValue(std::shared_ptr<Class> cls) : cls(cls) {}
 
 std::shared_ptr<Value> ClassValue::copy(){

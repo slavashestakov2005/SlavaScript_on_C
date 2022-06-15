@@ -16,7 +16,6 @@ namespace SlavaScript::compiler{
         void visit(lang::ForeachMapStatement* v);
         void visit(lang::ForStatement* v);
         void visit(lang::FunctionDefineStatement* v);
-        void visit(lang::FunctionStatement* v);
         void visit(lang::IfStatement* v);
         void visit(lang::IntegrationStatement* v);
         void visit(lang::ImportStatement* v);
@@ -32,11 +31,9 @@ namespace SlavaScript::compiler{
         void visit(lang::AssignmentExpression* v);
         void visit(lang::BinaryExpression* v);
         void visit(lang::ConditionalExpression* v);
-        void visit(lang::ContainerAccessExpression* v);
-        void visit(lang::ContainerAssignmentExpression* v);
-        void visit(lang::FunctionalExpression* v);
-        void visit(lang::FunctionReferenceExpression* v);
         void visit(lang::MapExpression* v);
+        void visit(lang::SuffixExpression* v);
+        void visit(lang::SuffixAssignmentExpression* v);
         void visit(lang::TernaryExpression* v);
         void visit(lang::UnaryExpression* v);
         void visit(lang::ValueExpression* v);
