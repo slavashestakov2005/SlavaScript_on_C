@@ -20,8 +20,7 @@ using SlavaScript::exceptions::OperationIsNotSupportedException;
 std::shared_ptr<Value> BinaryExpression::calculate(BinaryOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
     if (left -> type() == Values::INTEGRATION || right -> type() == Values::INTEGRATION) throw new TypeException("Cannot used binary operation for integration");
     if (left -> type() == Values::OBJECT || right -> type() == Values::OBJECT){
-        std::shared_ptr<Function> func = get_property(left, operation);
-        return ClassMethod::execute(func, {right}, left);
+        return get_property(left, operation) -> execute({right});
     }
     if (left -> type() == Values::FUNCTION || right -> type() == Values::FUNCTION) throw new TypeException("Cannot used binary operation for function");
     if (left -> type() == Values::NULL_ || right -> type() == Values::NULL_) return NullValue::NULL_;

@@ -12,44 +12,30 @@
 
 using namespace SlavaScript::lang;
 
+#define RCHECK_CAST(cs, type) case Values::cs : RCHECK(*(type*)(&a), *(type*)(&b))
+
 namespace SlavaScript::lang{
-    bool operator==(Value const& a, Value const& b){
-        if (a.type() != b.type()) return false;
+    CMP(Value){
+        CHECK(a.type(), b.type());
         switch(a.type()){
-            case Values::ARRAY : return *(ArrayValue*)(&a) == *(ArrayValue*)(&b);
-            case Values::BOOL : return *(BoolValue*)(&a) == *(BoolValue*)(&b);
-            case Values::NUMBER : return *(NumberValue*)(&a) == *(NumberValue*)(&b);
-            case Values::FUNCTION : return *(FunctionValue*)(&a) == *(FunctionValue*)(&b);
-            case Values::MAP : return *(MapValue*)(&a) == *(MapValue*)(&b);
-            case Values::STRING : return *(StringValue*)(&a) == *(StringValue*)(&b);
-            case Values::NULL_ : return *(NullValue*)(&a) == *(NullValue*)(&b);
-            case Values::OBJECT : return *(ObjectValue*)(&a) == *(ObjectValue*)(&b);
-            case Values::CLASS : return *(ClassValue*)(&a) == *(ClassValue*)(&b);
-            case Values::INTEGRATION : return *(IntegrationValue*)(&a) == *(IntegrationValue*)(&b);
+            RCHECK_CAST(ARRAY, ArrayValue);
+            RCHECK_CAST(BOOL, BoolValue);
+            RCHECK_CAST(NUMBER, NumberValue);
+            RCHECK_CAST(FUNCTION, FunctionValue);
+            RCHECK_CAST(MAP, MapValue);
+            RCHECK_CAST(STRING, StringValue);
+            RCHECK_CAST(NULL_, NullValue);
+            RCHECK_CAST(OBJECT, ObjectValue);
+            RCHECK_CAST(CLASS, ClassValue);
+            RCHECK_CAST(INTEGRATION, IntegrationValue);
         }
     }
 
-    bool operator<(Value const& a, Value const& b){
-        if (a.type() != b.type()) return int(a.type()) < int(b.type());
-        switch(a.type()){
-            case Values::ARRAY : return *(ArrayValue*)(&a) < *(ArrayValue*)(&b);
-            case Values::BOOL : return *(BoolValue*)(&a) < *(BoolValue*)(&b);
-            case Values::NUMBER : return *(NumberValue*)(&a) < *(NumberValue*)(&b);
-            case Values::FUNCTION : return *(FunctionValue*)(&a) < *(FunctionValue*)(&b);
-            case Values::MAP : return *(MapValue*)(&a) < *(MapValue*)(&b);
-            case Values::STRING : return *(StringValue*)(&a) < *(StringValue*)(&b);
-            case Values::NULL_ : return *(NullValue*)(&a) < *(NullValue*)(&b);
-            case Values::OBJECT : return *(ObjectValue*)(&a) < *(ObjectValue*)(&b);
-            case Values::CLASS : return *(ClassValue*)(&a) < *(ClassValue*)(&b);
-            case Values::INTEGRATION : return *(IntegrationValue*)(&a) < *(IntegrationValue*)(&b);
-        }
-    }
+    DEF_CMP(Value)
 
-    std::string Value::string_type() const{
+    std::string Value::stringType() const{
         return getValueName(type());
     }
-
-    COND_OPS(Value)
 
     bool comparator(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b){
         return (*a) < (*b);

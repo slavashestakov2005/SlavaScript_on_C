@@ -8,8 +8,6 @@
 #include "valueexpression.h"
 #include "../Exception/operationIsnotsupportedexception.h"
 #include "../Exception/typeexception.h"
-#include <string>
-#include <stdexcept>
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::OperationIsNotSupportedException;
@@ -17,14 +15,11 @@ using SlavaScript::exceptions::OperationIsNotSupportedException;
 std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
     if (left -> type() == Values::OBJECT || right -> type() == Values::OBJECT){
         try{
-            std::shared_ptr<Function> func = get_property(left, operation);
-            return ClassMethod::execute(func, {right}, left);
+            return get_property(left, operation) -> execute({right});
         } catch(...) {}
         if (operation == ConditionalOperator::AND || operation == ConditionalOperator::OR) throw new TypeException("Operation " + getOperator(operation) + " undefined");
         std::shared_ptr<Function> func = get_property(left, ConditionalOperator::LTEQGT);
-        std::shared_ptr<Value> res;
-        if (func -> isClassMethod()) res = ClassMethod::execute(func, {right}, left);
-        else res = func -> execute({right});
+        std::shared_ptr<Value> res = func -> execute({right});
         if (res -> type() != Values::NUMBER) throw new TypeException("Operation <=> return not a number");
         int sign_of_res = res -> asBignum().get_sign();
         bool result = false;

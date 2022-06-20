@@ -17,12 +17,12 @@ namespace SlavaScript::lang{
         virtual std::shared_ptr<Value> copy() = 0;
         virtual std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property){}
         virtual std::shared_ptr<Value> accessBracket(std::shared_ptr<Value> property){}
-        virtual double asDouble() { throw new TypeException("Cannot cast class to double"); }
-        virtual std::string asString() { throw new TypeException("Cannot cast class to string"); }
-        virtual bool asBool() { throw new TypeException("Cannot cast class to bool"); }
-        virtual Bignum asBignum() { throw new TypeException("Cannot cast class to number"); }
+        virtual double asDouble() { throw new TypeException("Cannot cast object to double"); }
+        virtual std::string asString() { throw new TypeException("Cannot cast object to string"); }
+        virtual bool asBool() { throw new TypeException("Cannot cast object to bool"); }
+        virtual Bignum asBignum() { throw new TypeException("Cannot cast object to number"); }
         virtual Values type() const { return Values::OBJECT; }
-        virtual operator std::string() { throw new TypeException("Cannot cast class to string"); }
+        virtual operator std::string() { throw new TypeException("Cannot cast object to string"); }
         bool isClassFromModule(){ return true; }
         virtual ~ModuleObject(){}
     };
@@ -30,9 +30,9 @@ namespace SlavaScript::lang{
     template<typename T>
     class ModuleObjectT : public ModuleObject{
     public:
-        static bool is_instance(std::shared_ptr<Value> v){ return v -> string_type() == correct_class_name(); }
+        static bool is_instance(std::shared_ptr<Value> v){ return v -> stringType() == correct_class_name(); }
         static std::string correct_class_name() { return "ModuleObject " + T::__class_name__; }
-        virtual std::string string_type() const { return correct_class_name(); }
+        virtual std::string stringType() const override { return correct_class_name(); }
         virtual ~ModuleObjectT(){}
     };
 

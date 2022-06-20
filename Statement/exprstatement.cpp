@@ -1,5 +1,4 @@
 #include "exprstatement.h"
-
 using namespace SlavaScript::lang;
 
 void ExprStatement::execute(){

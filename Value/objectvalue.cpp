@@ -25,19 +25,25 @@ void ObjectValue::addField(std::string name, std::shared_ptr<Value> value){
     thisMap -> set(SHARE(StringValue, name), value);
 }
 
-std::shared_ptr<Value> ObjectValue::access(std::shared_ptr<Value> value){
+std::shared_ptr<Value> ObjectValue::get(std::shared_ptr<Value> value){
     if (thisMap -> containsKey(value)) return thisMap -> get(value);
-    std::shared_ptr<ClassMethod> method = Classes::get(className) -> get_function(value -> asString());
+    if (value -> type() != Values::STRING) throw new TypeException("Cannot get non string member from class");
+    std::string key = value -> asString();
+    std::shared_ptr<ClassValue> cls = Classes::get(className);
+    if (!cls -> isExists(key)) return nullptr;
+    std::shared_ptr<Function> func = Classes::get(className) -> getFunction(key);
+    std::shared_ptr<ClassMethodObject> method = SHARE_2(ClassMethodObject, func, SHARE_PTR(ObjectValue, this));
     return SHARE(FunctionValue, CAST(Function, method));
 }
 
 std::shared_ptr<Value> ObjectValue::getConstructor(){
-    std::shared_ptr<Value> value = SHARE(StringValue, className);
-    if (thisMap -> containsKey(value)) return thisMap -> get(value);
-    std::shared_ptr<ClassValue> cls = Classes::get(className);
-    if (!cls -> isExists(className)) return nullptr;
-    std::shared_ptr<ClassMethod> method = cls -> get_function(className);
-    return SHARE(FunctionValue, CAST(Function, method));
+    return get(SHARE(StringValue, className));
+}
+
+std::shared_ptr<Value> ObjectValue::access(std::shared_ptr<Value> value){
+    std::shared_ptr<Value> result = get(value);
+    if (result) return result;
+    throw new TypeException("Cannot get " + value -> asString() + " from " + className);
 }
 
 void ObjectValue::set(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
@@ -45,15 +51,7 @@ void ObjectValue::set(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
     thisMap -> set(key, value);
 }
 
-std::shared_ptr<Value> ObjectValue::get(std::shared_ptr<Value> key){
-    if (!thisMap -> containsKey(key)){
-        std::string s = "Field " + std::string(*key) + " undefined in " + className;
-        throw new std::logic_error(s.c_str());
-    }
-    return thisMap -> get(key);
-}
-
-std::string ObjectValue::get_name(){
+std::string ObjectValue::getName(){
     return className;
 }
 
@@ -77,7 +75,7 @@ Values ObjectValue::type() const{
     return Values::OBJECT;
 }
 
-std::string ObjectValue::string_type() const{
+std::string ObjectValue::stringType() const{
     return "UserObject " + className;
 }
 
@@ -86,13 +84,9 @@ ObjectValue::operator std::string(){
 }
 
 namespace SlavaScript::lang{
-    bool operator==(ObjectValue const& a, ObjectValue const& b){
-        return a.className == b.className;
+    CMP(ObjectValue){
+        RCHECK(a.className, b.className);
     }
 
-    bool operator<(ObjectValue const& a, ObjectValue const& b){
-        return a.className < b.className;
-    }
-
-    COND_OPS(ObjectValue)
+    DEF_CMP(ObjectValue)
 }

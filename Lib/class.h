@@ -12,22 +12,21 @@ namespace SlavaScript::lang{
     class Class{
     protected:
         std::string name;
-        std::map<std::string, std::shared_ptr<ClassMethod>> methods;
+        std::map<std::string, std::shared_ptr<Function>> methods;
     public:
-        virtual std::shared_ptr<Value> construct(std::vector<std::shared_ptr<Value>> values) = 0;
-        virtual std::string get_name() const { return name; }
-        virtual void addMethod(std::string name, std::shared_ptr<ClassMethod> method){
+        virtual std::string getName() const final{ return name; }
+        virtual void addMethod(std::string name, std::shared_ptr<Function> method) final{
             methods[name] = method;
         }
-        virtual std::shared_ptr<ClassMethod> get_function(std::string name) {
+        virtual std::shared_ptr<Function> getFunction(std::string name) final{
             if (!isExists(name)) throw new exceptions::TypeException("Cannot get method " + name + " from class");
             return methods[name];
         };
-
-        virtual bool isExists(std::string name){
+        virtual bool isExists(std::string name) final{
             return methods.find(name) != methods.end();
         }
-        virtual std::string string_type() const = 0;
+        virtual std::shared_ptr<Value> construct(std::vector<std::shared_ptr<Value>> values) = 0;
+        virtual std::string stringType() const = 0;
         virtual operator std::string() = 0;
     };
 }

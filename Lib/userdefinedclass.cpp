@@ -10,7 +10,7 @@ using namespace SlavaScript::lang;
 UserDefinedClass::UserDefinedClass(ClassDeclarationsStatement* statement) : statement(statement) {
     name = statement -> get_name();
     for(auto function : statement -> methods){
-        addMethod(function -> name, SHARE_2(ClassMethod, function -> arguments, function -> body));
+        addMethod(function -> name, SHARE_2(UserDefinedFunction, function -> arguments, function -> body));
     }
 }
 
@@ -24,12 +24,11 @@ std::shared_ptr<Value> UserDefinedClass::construct(std::vector<std::shared_ptr<V
     if (!value) return instance;
     if (value -> type() != Values::FUNCTION) throw new TypeException("Constructor need be a function");
     std::shared_ptr<Function> function = CAST(FunctionValue, value) -> getFunction();
-    if (!function -> isClassMethod()) throw new TypeException("Constructor need be a member function");
-    ClassMethod::execute(function, values, instance);
+    function -> execute(values);
     return instance;
 }
 
-std::string UserDefinedClass::string_type() const{
+std::string UserDefinedClass::stringType() const{
     return "UserClass " + name;
 }
 

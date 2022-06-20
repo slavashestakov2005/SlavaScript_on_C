@@ -21,7 +21,7 @@ namespace{
         std::string start, finish;
     public:
         Get(std::string start, std::string finish) : start(start), finish(finish) {}
-        CREATE_MEMBER_FUNCTION
+        std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values){
             if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
             if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
             std::string filename = start + "_" + mas[COUNT++] + "." + finish;
@@ -31,7 +31,7 @@ namespace{
             FS::cdCacheAndCall("py \"" + filename + "\"");
             std::string answer = FS::readFromCache("out.txt");
             SH_RET(StringValue, answer);
-        MFE
+        }
     };
 }
 
@@ -72,13 +72,9 @@ IntegrationValue::operator std::string(){
 }
 
 namespace SlavaScript::lang{
-    bool operator==(IntegrationValue const& a, IntegrationValue const& b){
-        return a.fileNameBegin == b.fileNameBegin;
+    CMP(IntegrationValue){
+        RCHECK(a.fileNameBegin, b.fileNameBegin);
     }
 
-    bool operator<(IntegrationValue const& a, IntegrationValue const& b){
-        return a.fileNameBegin < b.fileNameBegin;
-    }
-
-    COND_OPS(IntegrationValue)
+    DEF_CMP(IntegrationValue)
 }

@@ -37,13 +37,9 @@ FunctionValue::operator std::string(){
 };
 
 namespace SlavaScript::lang{
-    bool operator==(FunctionValue const& a, FunctionValue const& b){
+    CMP(FunctionValue){
         throw new TypeException("Conditional operators cannot used for two functions");
     }
 
-    bool operator<(FunctionValue const& a, FunctionValue const& b){
-        throw new TypeException("Conditional operators cannot used for two functions");
-    }
-
-    COND_OPS(FunctionValue)
+    DEF_CMP(FunctionValue)
 }

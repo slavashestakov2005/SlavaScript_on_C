@@ -23,8 +23,10 @@ namespace SlavaScript::lang{
         operator std::string();
         ~BoolValue(){}
 
-        DECS_COND(BoolValue)
+        friend CMP(BoolValue);
     };
+
+    DEC_CMP(BoolValue)
 }
 
 #endif // BOOLVALUE_H_INCLUDED

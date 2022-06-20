@@ -23,8 +23,10 @@ namespace SlavaScript::lang{
         operator std::string();
         ~FunctionValue(){}
 
-        DECS_COND(FunctionValue)
+        friend CMP(FunctionValue);
     };
+
+    DEC_CMP(FunctionValue)
 }
 
 #endif // FUNCTIONVALUE_H_INCLUDED

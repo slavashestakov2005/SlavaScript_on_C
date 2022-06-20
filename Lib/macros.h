@@ -11,18 +11,21 @@ namespace SlavaScript::modules{
 
 namespace SlavaScript::lang{
     /** using by Value **/
-    #define COND_OP(cls, op, exp) bool operator op(cls const& a, cls const& b){ return exp; }
-    #define COND_OPS(cls) COND_OP(cls, !=, !(a == b)) COND_OP(cls, >, b < a) COND_OP(cls, <=, !(b < a)) COND_OP(cls, >=, !(a < b))
     #define BINARY_OP(cls, op) cls& operator op(cls a, cls const& b){ return a op##= b; }
     #define BINARY_OPS(cls) BINARY_OP(cls, +) BINARY_OP(cls, -) BINARY_OP(cls, *) BINARY_OP(cls, /) BINARY_OP(cls, %)
-    #define CLS_OPS(cls) BINARY_OPS(cls) COND_OPS(cls)
+    #define CLS_OPS(cls) BINARY_OPS(cls) DEF_CMP(cls)
 
     #define DEC_1(cls, op) cls& operator op(cls const& temp);
     #define DECS_1(cls) DEC_1(cls, +=) DEC_1(cls, -=) DEC_1(cls, *=) DEC_1(cls, /=) DEC_1(cls, %=)
     #define DEC_2(cls, op) cls& operator op(cls a, cls const& b);
     #define DECS_2(cls) DEC_2(cls, +) DEC_2(cls, -) DEC_2(cls, *) DEC_2(cls, /) DEC_2(cls, %)
-    #define DEC_COND(cls, op) friend bool operator op(cls const& a, cls const& b);
-    #define DECS_COND(cls) DEC_COND(cls, ==) DEC_COND(cls, !=) DEC_COND(cls, <) DEC_COND(cls, >) DEC_COND(cls, <=) DEC_COND(cls, >=)
+    #define CMP(cls) int compare(cls const& a, cls const& b)
+    #define DEC_CMP_(cls, op) bool operator op(cls const& a, cls const& b);
+    #define DEC_CMP(cls) DEC_CMP_(cls, ==) DEC_CMP_(cls, !=) DEC_CMP_(cls, <) DEC_CMP_(cls, >) DEC_CMP_(cls, <=) DEC_CMP_(cls, >=)
+    #define DEF_CMP_(cls, op) bool operator op(cls const& a, cls const& b){ return compare(a, b) op 0; }
+    #define DEF_CMP(cls) DEF_CMP_(cls, ==) DEF_CMP_(cls, !=) DEF_CMP_(cls, <) DEF_CMP_(cls, >) DEF_CMP_(cls, <=) DEF_CMP_(cls, >=)
+    #define CHECK(x, y) {int r = compare(x, y); if(r) return r; }
+    #define RCHECK(x, y) return compare(x, y)
 
     /** using by value.h **/
     #define CREATE_FUNCTION(name) \
@@ -30,13 +33,11 @@ namespace SlavaScript::lang{
 
     #define FE });
 
-    #define CREATE_MEMBER_FUNCTION \
-        std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values){
-
-    #define MFE }
-
     #define CAST(type, value) \
         (std::static_pointer_cast<type>(value))
+
+    #define SHARE_PTR(type, value) \
+        std::shared_ptr<type>(value)
 
     #define SHARE(type, value) \
         std::make_shared<type>(value)
@@ -57,17 +58,14 @@ namespace SlavaScript::lang{
         return SHARE_3(type, arg1, arg2, arg3)
 
     /** using by classmodulevalue.h and container.h **/
-    #define CLASS_MODULE_FUNCTION_(className, fieldType, fieldName) \
-        class className : public Function { \
-        private: \
-            fieldType fieldName; \
+    #define CLASS_METHOD(className, fieldType) \
+        class className : public ModuleClassMethod<fieldType>{ \
         public: \
-            className(fieldType fieldName) : fieldName(fieldName) {} \
-            CREATE_MEMBER_FUNCTION
+            className(fieldType instance) : ModuleClassMethod<fieldType>(instance) {} \
+        private: \
+            virtual std::shared_ptr<Value> eval(std::vector<std::shared_ptr<Value>> values){
 
-    #define CLASS_MODULE_FUNCTION(className, fieldType, fieldName) CLASS_MODULE_FUNCTION_(className, fieldType*, fieldName)
-
-    #define CMFE }};
+    #define CME }};
 
     #define CLASS_IN_MODULE_1(cls) class cls : public ModuleObjectT<cls> { public: static const std::string __class_name__;
     #define CLASS_IN_MODULE_2(cls) }; inline const std::string cls::__class_name__ = #cls;

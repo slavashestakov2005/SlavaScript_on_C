@@ -21,8 +21,10 @@ namespace SlavaScript::lang{
         operator std::string();
         ~IntegrationValue(){}
 
-        DECS_COND(IntegrationValue)
+        friend CMP(IntegrationValue);
     };
+
+    DEC_CMP(IntegrationValue)
 }
 
 #endif // INTEGRATIONVALUE_H_INCLUDED

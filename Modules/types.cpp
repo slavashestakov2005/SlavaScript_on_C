@@ -31,7 +31,7 @@ namespace SlavaScript::modules::types_f{
         if (values.size() != 2) throw std::logic_error("Two argument expected");
         if (values[0] -> type() != Values::OBJECT) return BoolValue::fromBool(false);
         if (values[1] -> type() != Values::CLASS) return BoolValue::fromBool(false);
-        return BoolValue::fromBool(CAST(ObjectValue, values[0]) -> get_name() == CAST(ClassValue, values[1]) -> get_name());
+        return BoolValue::fromBool(CAST(ObjectValue, values[0]) -> getName() == CAST(ClassValue, values[1]) -> getName());
     FE
 
     CREATE_FUNCTION(string)
@@ -41,7 +41,7 @@ namespace SlavaScript::modules::types_f{
 
     CREATE_FUNCTION(type_to_string)
         if (values.size() != 1) throw std::logic_error("One argument expected");
-        SH_RET(StringValue, values[0] -> string_type());
+        SH_RET(StringValue, values[0] -> stringType());
     FE
 
     CREATE_FUNCTION(typeof)

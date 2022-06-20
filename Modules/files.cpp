@@ -39,36 +39,36 @@ namespace SlavaScript::modules::files_out{
         std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property);
     CLASS_IN_MODULE_2(File)
 
-    CLASS_MODULE_FUNCTION(Close, File, file)
+    CLASS_METHOD(Close, File*)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-        file -> file.close();
+        instance -> file.close();
         return NullValue::NULL_;
-    CMFE
+    CME
 
-    CLASS_MODULE_FUNCTION(Read, File, file)
-        file -> file.seekg(0, file -> file.beg);
+    CLASS_METHOD(Read, File*)
+        instance -> file.seekg(0, instance -> file.beg);
         std::stringstream str;
-        str << file -> file.rdbuf();
+        str << instance -> file.rdbuf();
         SH_RET(StringValue, str.str());
-    CMFE
+    CME
 
-    CLASS_MODULE_FUNCTION(ReadLine, File, file)
+    CLASS_METHOD(ReadLine, File*)
         if (values.size() != 0) throw new ArgumentsMismatchException("Zero arguments expected");
         std::string line;
-        if (file -> file) std::getline(file -> file, line);
+        if (instance -> file) std::getline(instance -> file, line);
         SH_RET(StringValue, line);
-    CMFE
+    CME
 
-    CLASS_MODULE_FUNCTION(WriteLine, File, file)
+    CLASS_METHOD(WriteLine, File*)
         if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
-        if (file -> file && file -> file.tellg() < file -> file.end) file -> file << values[0] -> asString();
-        else if (!file -> bad){
-            file -> file.seekg(0, file -> file.beg);
-            file -> file << values[0] -> asString();
+        if (instance -> file && instance -> file.tellg() < instance -> file.end) instance -> file << values[0] -> asString();
+        else if (!instance -> bad){
+            instance -> file.seekg(0, instance -> file.beg);
+            instance -> file << values[0] -> asString();
         }
         else return NumberValue::M_ONE;
         return NumberValue::ZERO;
-    CMFE
+    CME
 
     std::shared_ptr<Value> File::accessDot(std::shared_ptr<Value> property){
         std::string prop = property -> asString();

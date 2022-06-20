@@ -20,8 +20,10 @@ namespace SlavaScript::lang{
         operator std::string();
         ~NullValue(){}
 
-        DECS_COND(NullValue)
+        friend CMP(NullValue);
     };
+
+    DEC_CMP(NullValue)
 }
 
 #endif // NULLVALUE_H_INCLUDED

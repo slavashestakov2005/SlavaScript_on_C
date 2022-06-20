@@ -14,7 +14,7 @@ namespace SlavaScript::lang{
 
     class SuffixElement : public Node{
     public:
-        virtual std::shared_ptr<Value> get(std::shared_ptr<Value> lastContainer, std::shared_ptr<Value> container) = 0;
+        virtual std::shared_ptr<Value> get(std::shared_ptr<Value> container) = 0;
         virtual std::shared_ptr<Value> set(std::shared_ptr<Value> container, std::shared_ptr<Value> value) = 0;
         virtual operator std::string() = 0;
         virtual SuffixType type() const = 0;
@@ -26,10 +26,10 @@ namespace SlavaScript::lang{
         Expression* expression;
     public:
         BracketSuffixElement(Expression* expression) : expression(expression) { }
-        std::shared_ptr<Value> get(std::shared_ptr<Value> lastContainer, std::shared_ptr<Value> container);
-        std::shared_ptr<Value> set(std::shared_ptr<Value> container, std::shared_ptr<Value> value);
-        operator std::string();
-        SuffixType type() const;
+        std::shared_ptr<Value> get(std::shared_ptr<Value> container) override;
+        std::shared_ptr<Value> set(std::shared_ptr<Value> container, std::shared_ptr<Value> value) override;
+        operator std::string() override;
+        SuffixType type() const override;
         ~BracketSuffixElement();
         void accept(Visitor* visitor);
         friend Visitor;
@@ -42,10 +42,10 @@ namespace SlavaScript::lang{
         Expression* expression;
     public:
         DotSuffixElement(Expression* expression) : expression(expression) { }
-        std::shared_ptr<Value> get(std::shared_ptr<Value> lastContainer, std::shared_ptr<Value> container);
-        std::shared_ptr<Value> set(std::shared_ptr<Value> container, std::shared_ptr<Value> value);
-        operator std::string();
-        SuffixType type() const;
+        std::shared_ptr<Value> get(std::shared_ptr<Value> container) override;
+        std::shared_ptr<Value> set(std::shared_ptr<Value> container, std::shared_ptr<Value> value) override;
+        operator std::string() override;
+        SuffixType type() const override;
         ~DotSuffixElement();
         void accept(Visitor* visitor);
         friend Visitor;
@@ -58,10 +58,10 @@ namespace SlavaScript::lang{
         std::vector<Expression*> arguments;
     public:
         ParenSuffixElement(std::vector<Expression*> arguments) : arguments(arguments) { }
-        std::shared_ptr<Value> get(std::shared_ptr<Value> lastContainer, std::shared_ptr<Value> container);
-        std::shared_ptr<Value> set(std::shared_ptr<Value> container, std::shared_ptr<Value> value);
-        operator std::string();
-        SuffixType type() const;
+        std::shared_ptr<Value> get(std::shared_ptr<Value> container) override;
+        std::shared_ptr<Value> set(std::shared_ptr<Value> container, std::shared_ptr<Value> value) override;
+        operator std::string() override;
+        SuffixType type() const override;
         ~ParenSuffixElement();
         void accept(Visitor* visitor);
         friend Visitor;

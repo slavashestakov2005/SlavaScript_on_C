@@ -13,15 +13,15 @@ using SlavaScript::exceptions::UnknownPropertyException;
 using SlavaScript::exceptions::TypeException;
 
 namespace {
-    CLASS_MODULE_FUNCTION_(IsEmpty, std::vector<std::shared_ptr<Value>>, elements)
+    CLASS_METHOD(IsEmpty, std::vector<std::shared_ptr<Value>>)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-        return BoolValue::fromBool(elements.empty());
-    CMFE
+        return BoolValue::fromBool(instance.empty());
+    CME
 
-    CLASS_MODULE_FUNCTION_(Length, std::vector<std::shared_ptr<Value>>, elements)
+    CLASS_METHOD(Length, std::vector<std::shared_ptr<Value>>)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-        SH_RET(NumberValue, elements.size());
-    CMFE
+        SH_RET(NumberValue, instance.size());
+    CME
 }
 
 ArrayValue::ArrayValue(int size){
@@ -125,29 +125,16 @@ ArrayValue::operator std::string(){
 }
 
 namespace SlavaScript::lang{
-    bool operator==(ArrayValue const& a, ArrayValue const& b){
-        if (a.size() != b.size()) return false;
+    CMP(ArrayValue){
+        CHECK(a.size(), b.size());
         for(int i = 0; i < a.size(); ++i){
             std::shared_ptr<Value> val1 = a.get(i);
             std::shared_ptr<Value> val2 = b.get(i);
-            if (val1 -> type() != val2 -> type()) return false;
-            if (*val1 != *val2) return false;
+            CHECK(val1 -> type(), val2 -> type());
+            CHECK(*val1, *val2);
         }
-        return true;
+        return 0;
     }
 
-    bool operator<(ArrayValue const& a, ArrayValue const& b){
-        if (a.size() > b.size()) return false;
-        if (a.size() < b.size()) return true;
-        for(int i = 0; i < a.size(); ++i){
-            std::shared_ptr<Value> val1 = a.get(i);
-            std::shared_ptr<Value> val2 = b.get(i);
-            if (val1 -> type() != val2 -> type()) return (int) val1 -> type() < (int) val2 -> type();
-            if (*val1 > *val2) return false;
-            if (*val1 < *val2) return true;
-        }
-        return false;
-    }
-
-    COND_OPS(ArrayValue)
+    DEF_CMP(ArrayValue)
 }

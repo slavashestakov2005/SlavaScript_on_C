@@ -5,15 +5,14 @@
 using namespace SlavaScript::lang;
 
 void TryStatement::execute(){
-    std::shared_ptr<Value> start = Names::isExists(name) ? Names::get(name) : nullptr;
+    NamedValue start = Names::getNamed(name);
     try{
         body -> execute();
     } catch(ThrowStatement* ex){
         Names::setVariable(name, ex -> getResult());
         catchBlock -> execute();
     }
-    if (start != nullptr) Names::setVariable(name, start);
-    else Names::erase(name);
+    Names::restore(start);
 }
 
 TryStatement::operator std::string(){

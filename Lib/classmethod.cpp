@@ -4,18 +4,16 @@
 
 using namespace SlavaScript::lang;
 
-std::shared_ptr<Value> ClassMethod::execute(std::shared_ptr<Function> func, std::vector<std::shared_ptr<Value>> values, std::shared_ptr<Value> classInstance){
-    return CAST(ClassMethod, func) -> execute(values, CAST(ObjectValue, classInstance));
-}
+template<typename T>
+ClassMethod<T>::ClassMethod(std::shared_ptr<Function> function, T instance) : function(function), instance(instance) {}
 
-ClassMethod::ClassMethod(Arguments args, Statement* body) : UserDefinedFunction(args, body) { }
-
-std::shared_ptr<Value> ClassMethod::execute(std::vector<std::shared_ptr<Value>> values, std::shared_ptr<ObjectValue> classInstance){
+template<typename T>
+std::shared_ptr<Value> ClassMethod<T>::execute(std::vector<std::shared_ptr<Value>> values){
     Variables::push();
-    Variables::set("this", classInstance);
+    Variables::set("this", instance);
     std::shared_ptr<Value> result = nullptr;
     try{
-        result = UserDefinedFunction::execute(values);
+        result = function -> execute(values);
     } catch(std::exception* ex){
         Variables::pop();
         throw ex;
@@ -26,3 +24,5 @@ std::shared_ptr<Value> ClassMethod::execute(std::vector<std::shared_ptr<Value>> 
     Variables::pop();
     return result;
 }
+
+template class ClassMethod<std::shared_ptr<ObjectValue>>;

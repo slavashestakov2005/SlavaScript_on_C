@@ -14,7 +14,7 @@
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::UnknownFunctionException;
 
-std::shared_ptr<Value> BracketSuffixElement::get(std::shared_ptr<Value> lastContainer, std::shared_ptr<Value> container){
+std::shared_ptr<Value> BracketSuffixElement::get(std::shared_ptr<Value> container){
     std::shared_ptr<Value> index = expression -> eval();
     switch(container -> type()){
         case Values::ARRAY: return CAST(ArrayValue, container) -> accessBracket(index);
@@ -61,7 +61,7 @@ BracketSuffixElement::~BracketSuffixElement(){ delete expression; }
 void BracketSuffixElement::accept(Visitor* visitor){ expression -> accept(visitor); }
 
 
-std::shared_ptr<Value> DotSuffixElement::get(std::shared_ptr<Value> lastContainer, std::shared_ptr<Value> container){
+std::shared_ptr<Value> DotSuffixElement::get(std::shared_ptr<Value> container){
     std::shared_ptr<Value> index = expression -> eval();
     switch(container -> type()){
         case Values::ARRAY: return CAST(ArrayValue, container) -> accessDot(index);
@@ -102,7 +102,7 @@ DotSuffixElement::~DotSuffixElement(){ delete expression; }
 void DotSuffixElement::accept(Visitor* visitor){ expression -> accept(visitor); }
 
 
-std::shared_ptr<Value> ParenSuffixElement::get(std::shared_ptr<Value> lastContainer, std::shared_ptr<Value> container){
+std::shared_ptr<Value> ParenSuffixElement::get(std::shared_ptr<Value> container){
     std::vector<std::shared_ptr<Value>> values;
     for(int i = 0; i < arguments.size(); ++i) values.push_back(arguments[i] -> eval());
     std::shared_ptr<Value> result;
@@ -114,8 +114,7 @@ std::shared_ptr<Value> ParenSuffixElement::get(std::shared_ptr<Value> lastContai
     else{
         std::shared_ptr<Function> f = CAST(FunctionValue, container) -> getFunction();;
         CallStack::push(std::string(*this), f);
-        if (f -> isClassMethod()) result = ClassMethod::execute(f, values, lastContainer);
-        else result = f -> execute(values);
+        result = f -> execute(values);
         CallStack::pop();
     }
     return result;

@@ -17,7 +17,7 @@ namespace SlavaScript::lang{
         Expressions type(){ return Expressions::AssignmentExpression; }
         /** @return  throw: OperationIsNotSupportedException*. */
         static std::shared_ptr<Value> calculate(AssignmentOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right);
-        std::shared_ptr<Value> eval();
+        std::shared_ptr<Value> eval() override;
         operator std::string();
         ~AssignmentExpression();
         void accept(Visitor* visitor);

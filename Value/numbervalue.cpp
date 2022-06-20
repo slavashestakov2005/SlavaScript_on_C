@@ -44,13 +44,9 @@ NumberValue::operator std::string(){
 };
 
 namespace SlavaScript::lang{
-    bool operator==(NumberValue const& a, NumberValue const& b){
-        return a.value == b.value;
+    CMP(NumberValue){
+        RCHECK(a.value, b.value);
     }
 
-    bool operator<(NumberValue const& a, NumberValue const& b){
-        return a.value < b.value;
-    }
-
-    COND_OPS(NumberValue)
+    DEF_CMP(NumberValue)
 }

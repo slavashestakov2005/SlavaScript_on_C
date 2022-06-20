@@ -77,11 +77,6 @@ namespace SlavaScript::modules::std_f{
             case Values::ARRAY : length = CAST(ArrayValue, values[0]) -> size(); break;
             case Values::MAP : length = CAST(MapValue, values[0]) -> size(); break;
             case Values::STRING : length = CAST(StringValue, values[0]) -> size(); break;
-            case Values::FUNCTION :{
-                if (CAST(FunctionValue, values[0]) -> getFunction() -> type) length = CAST(UserDefinedFunction, CAST(FunctionValue, values[0]) -> getFunction()) -> getArgsCount();
-                else length = 0;
-                break;
-            }
             default : length = 0; break;
         }
         SH_RET(NumberValue, length);
@@ -165,7 +160,7 @@ namespace SlavaScript::modules::std_f{
     CREATE_FUNCTION(sort)
         if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
         if (values[0] -> type() != Values::ARRAY) throw new TypeException("Array expected in first argument");
-        std::shared_ptr<ArrayValue> arr = CAST(ArrayValue, values[0]);
+        std::shared_ptr<ArrayValue> arr = CAST(ArrayValue, values[0] -> copy());
         if (values.size() == 1) std::sort(arr -> begin(), arr -> end(), comparator);
         if (values.size() == 2){
             if (values[1] -> type() != Values::FUNCTION) throw new TypeException("Function expected in second argument");

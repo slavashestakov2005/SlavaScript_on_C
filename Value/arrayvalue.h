@@ -36,8 +36,10 @@ namespace SlavaScript::lang{
         operator std::string();
         ~ArrayValue(){}
 
-        DECS_COND(ArrayValue)
+        friend CMP(ArrayValue);
     };
+
+    DEC_CMP(ArrayValue)
 }
 
 #endif // ARRAYVALUE_H_INCLUDED

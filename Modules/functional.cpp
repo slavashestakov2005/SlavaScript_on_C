@@ -217,7 +217,7 @@ namespace SlavaScript::modules::functional_f{
         if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments excepted");
         if (values[0] -> type() != Values::ARRAY) throw new TypeException("Array expected in first argument");
         if (values[1] -> type() != Values::FUNCTION) throw new TypeException("Function expected in second argument");
-        std::shared_ptr<ArrayValue> arr = CAST(ArrayValue, values[0]);
+        std::shared_ptr<ArrayValue> arr = CAST(ArrayValue, values[0] -> copy());
         std::shared_ptr<Function> func = CAST(FunctionValue, values[1]) -> getFunction();
         std::sort(arr -> begin(), arr -> end(), [func](std::shared_ptr<Value> l, std::shared_ptr<Value> r) -> bool { return comparator(func -> execute({l}), func -> execute({r})); });
         return arr;

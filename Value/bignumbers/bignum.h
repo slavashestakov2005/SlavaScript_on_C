@@ -41,7 +41,7 @@ namespace SlavaScript::lang{
         UnsignedBig operator--(int);
 
         DECS_1(UnsignedBig)
-        DECS_COND(UnsignedBig)
+        friend CMP(UnsignedBig);
     };
 
     inline const int UnsignedBig::BASE = 1000000000, UnsignedBig::POW = 9;
@@ -50,6 +50,7 @@ namespace SlavaScript::lang{
     std::istream& operator>>(std::istream& is, UnsignedBig& temp);
     std::ostream& operator<<(std::ostream& os, const UnsignedBig& temp);
     DECS_2(UnsignedBig)
+    DEC_CMP(UnsignedBig)
 
     class Bignum{
     private:
@@ -89,7 +90,7 @@ namespace SlavaScript::lang{
         Bignum operator--(int);
 
         DECS_1(Bignum)
-        DECS_COND(Bignum)
+        friend CMP(Bignum);
     };
 
     inline const bool Bignum::PLUS = true, Bignum::MINUS = false;
@@ -98,6 +99,7 @@ namespace SlavaScript::lang{
     std::istream& operator>>(std::istream& is, Bignum& temp);
     std::ostream& operator<<(std::ostream& os, const Bignum& temp);
     DECS_2(Bignum)
+    DEC_CMP(Bignum)
 
     class RationalBig{
     private:
@@ -117,10 +119,11 @@ namespace SlavaScript::lang{
         RationalBig operator-();
 
         DEC_1(RationalBig, +=) DEC_1(RationalBig, -=) DEC_1(RationalBig, *=) DEC_1(RationalBig, /=)
-        DECS_COND(RationalBig)
+        friend CMP(RationalBig);
     };
 
     DEC_2(RationalBig, +) DEC_2(RationalBig, -) DEC_2(RationalBig, *) DEC_2(RationalBig, /)
+    DEC_CMP(RationalBig)
 }
 
 #endif // BIGNUM_H_INCLUDED

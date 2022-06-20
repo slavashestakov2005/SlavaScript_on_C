@@ -39,8 +39,10 @@ namespace SlavaScript::lang{
         operator std::string();
         ~MapValue(){}
 
-        DECS_COND(MapValue)
+        friend CMP(MapValue);
     };
+
+    DEC_CMP(MapValue)
 }
 
 #endif // MAPVALUE_H_INCLUDED

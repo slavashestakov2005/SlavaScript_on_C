@@ -1,6 +1,7 @@
 #include "bignum.h"
 #include <sstream>
 #include <algorithm>
+#include "../values.h"
 #include "../../Exception/mathexception.h"
 #include "../../Exception/typeexception.h"
 
@@ -247,13 +248,9 @@ namespace SlavaScript::lang{
         return os;
     }
 
-    bool operator==(UnsignedBig const& a, UnsignedBig const& b){
-        return a.size() == b.size() && std::string(a) == std::string(b);
-    }
-
-    bool operator<(UnsignedBig const& a, UnsignedBig const& b){
-        if (a.size() != b.size()) return a.size() < b.size();
-        return std::string(a) < std::string(b);
+    CMP(UnsignedBig){
+        CHECK(a.size(), b.size());
+        RCHECK(std::string(a), std::string(b));
     }
 
     CLS_OPS(UnsignedBig)
@@ -469,26 +466,20 @@ namespace SlavaScript::lang{
         return os;
     }
 
-    bool operator==(Bignum const& a, Bignum const& b){
-        return a.sign == b.sign && a.dot == b.dot && a.value == b.value;
-    }
-
-    bool operator<(Bignum const& a, Bignum const& b){
+    CMP(Bignum){
         std::string s = std::string(a), t = std::string(b);
         int n = s.find('.'), m = t.find('.');
         n = (n == std::string::npos ? s.size() : n);
         m = (m == std::string::npos ? t.size() : m);
         std::string s1 = s.substr(0, n), s2 = s.substr(n), t1 = t.substr(0, m), t2 = t.substr(m);
-        if (s[0] == '-' && t[0] != '-') return true;
-        if (t[0] == '-' && s[0] != '-') return false;
+        if (s[0] == '-' && t[0] != '-') return -1;
+        if (t[0] == '-' && s[0] != '-') return 1;
         if (s[0] == '-'){
-            if (s1.size() != t1.size()) return s1.size() > t1.size();
-            if (s1 != t1) return s1 > t1;
-            return s2 > t2;
+            CHECK(t1, s1);
+            RCHECK(s2, t2);
         }
-        if (s1.size() != t1.size()) return s1.size() < t1.size();
-        if (s1 != t1) return s1 < t1;
-        return s2 < t2;
+        CHECK(s1, t1);
+        RCHECK(s2, t2);
     }
 
     CLS_OPS(Bignum)
@@ -544,14 +535,10 @@ RationalBig& RationalBig::operator/=(RationalBig const& temp){
 
 
 namespace SlavaScript::lang{
-    bool operator==(RationalBig const& a, RationalBig const& b){
-        return Bignum(a) == Bignum(b);
-    }
-
-    bool operator<(RationalBig const& a, RationalBig const& b){
-        return Bignum(a) < Bignum(b);
+    CMP(RationalBig){
+        RCHECK(Bignum(a), Bignum(b));
     }
 
     BINARY_OP(RationalBig, +) BINARY_OP(RationalBig, -) BINARY_OP(RationalBig, *) BINARY_OP(RationalBig, /)
-    COND_OPS(RationalBig)
+    DEF_CMP(RationalBig)
 }

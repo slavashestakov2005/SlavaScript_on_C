@@ -13,9 +13,9 @@ std::shared_ptr<Value> ClassValue::copy(){
 
 std::shared_ptr<Value> ClassValue::construct(std::vector<std::shared_ptr<Value>> values){ return cls -> construct(values); }
 
-std::string ClassValue::get_name() const { return cls -> get_name(); }
+std::string ClassValue::getName() const { return cls -> getName(); }
 
-std::shared_ptr<ClassMethod> ClassValue::get_function(std::string func){ return cls -> get_function(func); }
+std::shared_ptr<Function> ClassValue::getFunction(std::string func){ return cls -> getFunction(func); }
 
 bool ClassValue::isExists(std::string name){ return cls -> isExists(name); }
 
@@ -39,18 +39,14 @@ Values ClassValue::type() const{
     return Values::CLASS;
 }
 
-std::string ClassValue::string_type() const{ return cls -> string_type(); }
+std::string ClassValue::stringType() const{ return cls -> stringType(); }
 
 ClassValue::operator std::string(){ return std::string(*cls); }
 
 namespace SlavaScript::lang{
-    bool operator==(ClassValue const& a, ClassValue const& b){
-        return a.get_name() == b.get_name();
+    CMP(ClassValue){
+        RCHECK(a.getName(), b.getName());
     }
 
-    bool operator<(ClassValue const& a, ClassValue const& b){
-        return a.get_name() < b.get_name();
-    }
-
-    COND_OPS(ClassValue)
+    DEF_CMP(ClassValue)
 }

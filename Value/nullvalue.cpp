@@ -35,13 +35,9 @@ NullValue::operator std::string(){
 }
 
 namespace SlavaScript::lang{
-    bool operator==(NullValue const& a, NullValue const& b){
-        return true;
+    CMP(NullValue){
+        return 0;
     }
 
-    bool operator<(NullValue const& a, NullValue const& b){
-        return false;
-    }
-
-    COND_OPS(NullValue)
+    DEF_CMP(NullValue)
 }

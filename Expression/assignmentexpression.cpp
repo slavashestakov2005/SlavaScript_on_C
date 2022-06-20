@@ -11,8 +11,7 @@ using SlavaScript::exceptions::OperationIsNotSupportedException;
 std::shared_ptr<Value> AssignmentExpression::calculate(AssignmentOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
     if (left -> type() == Values::OBJECT && operation != AssignmentOperator::ASSIGN){
         try{
-            std::shared_ptr<Function> func = get_property(left, operation);
-            return ClassMethod::execute(func, {right}, left);
+            return get_property(left, operation) -> execute({right});
         } catch (...) {}
     }
     std::shared_ptr<Value> result;

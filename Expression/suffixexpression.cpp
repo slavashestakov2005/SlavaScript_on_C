@@ -24,8 +24,8 @@ std::shared_ptr<Value> SuffixExpression::eval(){
 
 std::shared_ptr<Value> SuffixExpression::get(){
     for(SuffixElement* element : access) {
-        lastContainer = element -> get(lastContainer, container);
-        container.swap(lastContainer);
+        lastContainer = container;
+        container = element -> get(container);
     }
     return container;
 }

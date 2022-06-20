@@ -13,8 +13,8 @@ namespace SlavaScript::lang{
         std::shared_ptr<Value> copy();
 
         std::shared_ptr<Value> construct(std::vector<std::shared_ptr<Value>> values);
-        std::string get_name() const;
-        std::shared_ptr<ClassMethod> get_function(std::string func);
+        std::string getName() const;
+        std::shared_ptr<Function> getFunction(std::string func);
         bool isExists(std::string name);
 
         double asDouble();
@@ -22,12 +22,14 @@ namespace SlavaScript::lang{
         bool asBool();
         Bignum asBignum();
         Values type() const;
-        std::string string_type() const;
+        std::string stringType() const;
         operator std::string();
         ~ClassValue(){}
 
-        DECS_COND(ClassValue)
+        friend CMP(ClassValue);
     };
+
+    DEC_CMP(ClassValue)
 }
 
 #endif // CLASSVALUE_H_INCLUDED

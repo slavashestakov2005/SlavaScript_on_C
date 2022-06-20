@@ -5,16 +5,15 @@
 #include "../Statement/classdeclarationsstatement.h"
 
 namespace SlavaScript::lang{
-    class UserDefinedClass : public Class{
+    class UserDefinedClass final : public Class{
     private:
         ClassDeclarationsStatement* statement;
     public:
         UserDefinedClass(ClassDeclarationsStatement* statement);
 
-        std::shared_ptr<Value> construct(std::vector<std::shared_ptr<Value>> values);
-
-        std::string string_type() const;
-        operator std::string();
+        virtual std::shared_ptr<Value> construct(std::vector<std::shared_ptr<Value>> values) override;
+        virtual std::string stringType() const override;
+        virtual operator std::string() override;
         ~UserDefinedClass(){}
     };
 }

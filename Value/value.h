@@ -5,7 +5,6 @@
 #include <memory>
 #include "values.h"
 #include "bignumbers/bignum.h"
-#include "../Lib/macros.h"
 
 namespace SlavaScript::lang{
     class Value{
@@ -16,12 +15,14 @@ namespace SlavaScript::lang{
         virtual bool asBool() = 0;
         virtual Bignum asBignum() = 0;
         virtual Values type() const = 0;
-        virtual std::string string_type() const;
+        virtual std::string stringType() const;
         virtual operator std::string() = 0;
         virtual bool isClassFromModule(){ return false; }
         virtual ~Value(){}
-        DECS_COND(Value)
+        friend CMP(Value);
     };
+
+    DEC_CMP(Value)
 
     bool comparator(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b);
     bool equals(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b);

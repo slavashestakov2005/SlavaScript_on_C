@@ -25,6 +25,7 @@ using SlavaScript::exceptions::TypeException;
 using SlavaScript::exceptions::UnknownPropertyException;
 
 namespace SlavaScript::modules::math_out{
+    using SlavaScript::lang::compare;
     using PolynomialCoeff = RationalBig;
 
     CLASS_IN_MODULE_1(Polynomial)
@@ -141,32 +142,34 @@ namespace SlavaScript::modules::math_out{
             (*this) = divmod.second;
             return *this;
         }
-        DECS_COND(Polynomial)
+        friend CMP(Polynomial);
     CLASS_IN_MODULE_2(Polynomial)
 
     BINARY_OP(Polynomial, +) BINARY_OP(Polynomial, -) BINARY_OP(Polynomial, *) BINARY_OP(Polynomial, %)
+    DEF_CMP(Polynomial)
 
-    bool operator==(Polynomial const& a, Polynomial const& b){
-        if (a.coefficients.size() != b.coefficients.size()) return false;
+    CMP(Polynomial){
+        CHECK(a.coefficients.size(), b.coefficients.size());
         int sz = a.coefficients.size();
-        for(int i = sz - 1; i >= 0; --i) if (a.coefficients[i] != b.coefficients[i]) return false;
-        return true;
+        for(int i = sz - 1; i >= 0; --i){
+            CHECK(a.coefficients[i], b.coefficients[i]);
+        }
+        return 0;
     }
 
-    bool operator<(Polynomial const& a, Polynomial const& b){
-        if (a.coefficients.size() != b.coefficients.size()) return a.coefficients.size() < b.coefficients.size();
-        int sz = a.coefficients.size();
-        for(int i = sz - 1; i >= 0; --i) if (a.coefficients[i] != b.coefficients[i]) return a.coefficients.size() < b.coefficients.size();
-        return false;
-    }
-
-    COND_OPS(Polynomial)
-
-
-    CLASS_MODULE_FUNCTION(Deg, Polynomial, polynomial)
+    CLASS_METHOD(Deg, Polynomial*)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
-        SH_RET(NumberValue, polynomial -> deg());
-    CMFE
+        SH_RET(NumberValue, instance -> deg());
+    CME
+
+    CLASS_METHOD(Compare, Polynomial*)
+        if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
+        std::shared_ptr<Polynomial> p;
+        if (values[0] -> type() == Values::NUMBER) p = SHARE(Polynomial, std::vector<PolynomialCoeff>{values[0] -> asBignum()});
+        else if (Polynomial::is_instance(values[0])) p = CAST(Polynomial, values[0]);
+        else throw new TypeException("Polynomial expected");
+        return SHARE(NumberValue, compare(*instance, *p));
+    CME
 
     #define POLYNOMIAL_FUNCTION(cls, op) \
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected"); \
@@ -174,34 +177,34 @@ namespace SlavaScript::modules::math_out{
         if (values[0] -> type() == Values::NUMBER) p = SHARE(Polynomial, std::vector<PolynomialCoeff>{values[0] -> asBignum()}); \
         else if (Polynomial::is_instance(values[0])) p = CAST(Polynomial, values[0]); \
         else throw new TypeException("Polynomial expected"); \
-        auto q = (*polynomial) op (*p);
+        auto q = (*instance) op (*p);
 
     #define POLYNOMIAL_FUNCTION_01(cls, op) \
-        CLASS_MODULE_FUNCTION(cls, Polynomial, polynomial) \
-            if (values.empty()) SH_RET(Polynomial, op (*polynomial)); \
+        CLASS_METHOD(cls, Polynomial*) \
+            if (values.empty()) SH_RET(Polynomial, op (*instance)); \
             POLYNOMIAL_FUNCTION(cls, op) \
             SH_RET(Polynomial, q); \
-        CMFE
+        CME
 
     #define POLYNOMIAL_FUNCTION_1(cls, op) \
-        CLASS_MODULE_FUNCTION(cls, Polynomial, polynomial) \
+        CLASS_METHOD(cls, Polynomial*) \
             POLYNOMIAL_FUNCTION(cls, op) \
             SH_RET(Polynomial, q); \
-        CMFE
+        CME
 
     #define POLYNOMIAL_FUNCTION_2(cls, op) \
-        CLASS_MODULE_FUNCTION(cls, Polynomial, polynomial) \
+        CLASS_METHOD(cls, Polynomial*) \
             POLYNOMIAL_FUNCTION(cls, op) \
             if (values[0] -> type() == Values::NUMBER) SH_RET(Polynomial, q.first); \
             std::vector<std::shared_ptr<Value>> v = {SHARE(Polynomial, q.first), SHARE(Polynomial, q.second)}; \
             SH_RET(ArrayValue, v); \
-        CMFE
+        CME
 
     #define POLYNOMIAL_FUNCTION_3(cls, op) \
-        CLASS_MODULE_FUNCTION(cls, Polynomial, polynomial) \
+        CLASS_METHOD(cls, Polynomial*) \
             POLYNOMIAL_FUNCTION(cls, op) \
             return BoolValue::fromBool(q); \
-        CMFE
+        CME
 
     POLYNOMIAL_FUNCTION_01(Add, +)  /// x + y   x += y      +x
     POLYNOMIAL_FUNCTION_01(Sub, -)  /// x - y   x -= y      -x
@@ -224,6 +227,7 @@ namespace SlavaScript::modules::math_out{
         if (prop == "*") SH_RET(FunctionValue, new Mul(this));
         if (prop == "/") SH_RET(FunctionValue, new Div(this));
         if (prop == "%") SH_RET(FunctionValue, new Mod(this));
+        if (prop == "<=>") SH_RET(FunctionValue, new Compare(this));
         if (prop == "==") SH_RET(FunctionValue, new Eq(this));
         if (prop == "!=") SH_RET(FunctionValue, new Ne(this));
         if (prop == "<") SH_RET(FunctionValue, new Lt(this));

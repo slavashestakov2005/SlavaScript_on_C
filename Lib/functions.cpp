@@ -65,7 +65,7 @@ std::shared_ptr<Function> FunctionsScope::get(std::string key, int count){
 
 void FunctionsScope::print(){
     for (auto now : functions){
-        for(auto now2 : now.second) std::cout << now.first << "\t\t" << now2.second -> type << std::endl;
+        for(auto now2 : now.second) std::cout << now.first << std::endl;
     }
 }
 

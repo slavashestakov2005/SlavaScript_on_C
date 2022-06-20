@@ -38,13 +38,9 @@ BoolValue::operator std::string(){
 }
 
 namespace SlavaScript::lang{
-    bool operator==(BoolValue const& a, BoolValue const& b){
-        return a.value == b.value;
+    CMP(BoolValue){
+        RCHECK(a.value, b.value);
     }
 
-    bool operator<(BoolValue const& a, BoolValue const& b){
-        return a.value < b.value;
-    }
-
-    COND_OPS(BoolValue)
+    DEF_CMP(BoolValue)
 }
