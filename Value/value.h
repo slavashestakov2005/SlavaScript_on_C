@@ -15,10 +15,14 @@ namespace SlavaScript::lang{
         virtual bool asBool() = 0;
         virtual Bignum asBignum() = 0;
         virtual Values type() const = 0;
-        virtual std::string stringType() const;
         virtual operator std::string() = 0;
-        virtual bool isClassFromModule(){ return false; }
-        virtual ~Value(){}
+        virtual std::shared_ptr<Value> getDot(std::shared_ptr<Value> property);
+        virtual std::shared_ptr<Value> getBracket(std::shared_ptr<Value> property);
+        virtual void setDot(std::shared_ptr<Value> key, std::shared_ptr<Value> value);
+        virtual void setBracket(std::shared_ptr<Value> key, std::shared_ptr<Value> value);
+        virtual std::string stringType() const;
+
+        virtual ~Value();
         friend CMP(Value);
     };
 

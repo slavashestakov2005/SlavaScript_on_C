@@ -7,11 +7,17 @@
 
 using namespace SlavaScript::lang;
 
+SuffixAssignmentExpression::SuffixAssignmentExpression(AssignmentOperator operation, SuffixExpression* containerExpr, Expression* expression) : operation(operation), containerExpr(containerExpr), expression(expression) {}
+
 std::shared_ptr<Value> SuffixAssignmentExpression::eval(){
     std::shared_ptr<Value> left = containerExpr -> eval(), right = expression -> eval();
     containerExpr -> set(AssignmentExpression::calculate(operation, left, right));
     if (operation != AssignmentOperator::_PLUSPLUS && operation != AssignmentOperator::_MINUSMINUS) return right;
     return left;
+}
+
+Expressions SuffixAssignmentExpression::type() const{
+    return Expressions::SuffixAssignmentExpression;
 }
 
 SuffixAssignmentExpression::operator std::string(){

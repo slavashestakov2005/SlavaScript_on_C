@@ -59,7 +59,7 @@ namespace SlavaScript::modules::std_f{
         if (values[1] -> type() != Values::ARRAY) throw new TypeException("Array expected in second argument");
         std::shared_ptr<ArrayValue> keys = CAST(ArrayValue, values[0]), value = CAST(ArrayValue, values[1]);
         int len = std::min(keys -> size(), value -> size());
-        std::shared_ptr<MapValue> map = SHARE(MapValue, len);
+        std::shared_ptr<MapValue> map = SHARE(MapValue, );
         for(int i = 0; i < len; ++i) map -> set(keys -> get(i), value -> get(i));
         return map;
     FE

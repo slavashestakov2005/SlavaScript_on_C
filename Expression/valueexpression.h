@@ -13,8 +13,9 @@
 
 namespace SlavaScript::lang{
     class ValueExpression : public Expression{
-    public:
+    private:
         std::shared_ptr<Value> value;
+    public:
         ValueExpression(std::string val){ value = SHARE(StringValue, val); }
         ValueExpression(ArrayValue val){ value = SHARE(ArrayValue, val); }
         ValueExpression(bool val){ value = BoolValue::fromBool(val); }
@@ -23,10 +24,12 @@ namespace SlavaScript::lang{
         ValueExpression(Bignum val){ value = SHARE(NumberValue, val); }
         ValueExpression(NullValue null){ value = SHARE(NullValue, ); }
         ValueExpression(Value* val);
-        Expressions type(){ return Expressions::ValueExpression; }
-        std::shared_ptr<Value> eval();
-        operator std::string();
-        ~ValueExpression(){}
+
+        std::shared_ptr<Value> eval() override;
+        Expressions type() const override;
+        operator std::string() override;
+
+        ~ValueExpression();
         void accept(Visitor* visitor);
         friend Visitor;
         friend compiler::CompilerVisitor;

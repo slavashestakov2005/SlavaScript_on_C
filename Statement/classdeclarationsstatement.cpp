@@ -6,6 +6,10 @@
 
 using namespace SlavaScript::lang;
 
+ClassDeclarationsStatement::ClassDeclarationsStatement() : name("") {}
+
+ClassDeclarationsStatement::ClassDeclarationsStatement(std::string name) : name(name) {}
+
 void ClassDeclarationsStatement::addField(std::vector<std::string> v, Expression* expr){
     fields.push_back({v, expr});
 }
@@ -14,12 +18,16 @@ void ClassDeclarationsStatement::addMethod(FunctionDefineStatement* statement){
     methods.push_back(statement);
 }
 
+std::string ClassDeclarationsStatement::get_name(){
+    return name;
+}
+
 void ClassDeclarationsStatement::execute(){
     Names::setClass(name, SHARE(ClassValue, SHARE(UserDefinedClass, this)));
 }
 
-std::string ClassDeclarationsStatement::get_name(){
-    return name;
+Statements ClassDeclarationsStatement::type() const{
+    return Statements::ClassDeclarationsStatement;
 }
 
 ClassDeclarationsStatement::operator std::string(){

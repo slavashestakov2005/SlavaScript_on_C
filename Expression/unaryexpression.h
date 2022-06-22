@@ -10,14 +10,17 @@ namespace SlavaScript::lang{
         Expression* expr;
         UnaryOperator operation;
     public:
-        UnaryExpression(UnaryOperator operation, Expression* expr) : operation(operation), expr(expr) {}
-        Expressions type(){ return Expressions::UnaryExpression; }
         /** @return  throw: OperationIsNotSupportedException*. */
         static std::shared_ptr<Value> calculate(UnaryOperator operation, std::shared_ptr<Value> value);
-        std::shared_ptr<Value> eval();
-        operator std::string();
+
+        UnaryExpression(UnaryOperator operation, Expression* expr);
+
+        std::shared_ptr<Value> eval() override;
+        Expressions type() const override;
+        operator std::string() override;
+
         ~UnaryExpression();
-        void accept(Visitor* visitor);
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend compiler::CompilerVisitor;
     };

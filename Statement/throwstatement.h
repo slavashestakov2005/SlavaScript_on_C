@@ -11,14 +11,17 @@ namespace SlavaScript::lang{
         Expression* expression;
         std::shared_ptr<Value> result;
     public:
-        ThrowStatement(Expression* expression) : expression(expression) {}
-        Statements type(){ return Statements::ThrowStatement; }
+        ThrowStatement(Expression* expression);
+
         std::shared_ptr<Value> getResult();
+
         /** @return  throw: ThrowStatement*. */
-        void execute();
-        operator std::string();
+        void execute() override;
+        Statements type() const override;
+        operator std::string() override;
+
         ~ThrowStatement();
-        void accept(Visitor* visitor);
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend compiler::CompilerVisitor;
     };

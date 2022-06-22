@@ -10,12 +10,14 @@ namespace SlavaScript::lang{
         Expression* condition;
         Statement* body;
     public:
-        WhileStatement(Expression* condition, Statement* body) : condition(condition), body(body) {}
-        Statements type(){ return Statements::WhileStatement; }
-        void execute();
-        operator std::string();
+        WhileStatement(Expression* condition, Statement* body);
+
+        void execute() override;
+        Statements type() const override;
+        operator std::string() override;
+
         ~WhileStatement();
-        void accept(Visitor* visitor);
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend compiler::CompilerVisitor;
     };

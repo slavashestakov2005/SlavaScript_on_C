@@ -10,21 +10,20 @@ namespace SlavaScript::lang{
         std::shared_ptr<Class> cls;
     public:
         ClassValue(std::shared_ptr<Class> cls);
-        std::shared_ptr<Value> copy();
 
         std::shared_ptr<Value> construct(std::vector<std::shared_ptr<Value>> values);
         std::string getName() const;
         std::shared_ptr<Function> getFunction(std::string func);
         bool isExists(std::string name);
 
-        double asDouble();
-        std::string asString();
-        bool asBool();
-        Bignum asBignum();
-        Values type() const;
-        std::string stringType() const;
-        operator std::string();
-        ~ClassValue(){}
+        std::shared_ptr<Value> copy() override;
+        double asDouble() override;
+        std::string asString() override;
+        bool asBool() override;
+        Bignum asBignum() override;
+        Values type() const override;
+        operator std::string() override;
+        std::string stringType() const override;
 
         friend CMP(ClassValue);
     };

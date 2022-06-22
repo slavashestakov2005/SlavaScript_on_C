@@ -11,12 +11,14 @@ namespace SlavaScript::lang{
         Expression* container;
         Statement* body;
     public:
-        ForeachArrayStatement(std::string variable, Expression* container, Statement* body) : variable(variable), container(container), body(body) {}
-        Statements type(){ return Statements::ForeachArrayStatement; }
-        void execute();
-        operator std::string();
+        ForeachArrayStatement(std::string variable, Expression* container, Statement* body);
+
+        void execute() override;
+        Statements type() const override;
+        operator std::string() override;
+
         ~ForeachArrayStatement();
-        void accept(Visitor* visitor);
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend compiler::CompilerVisitor;
     };

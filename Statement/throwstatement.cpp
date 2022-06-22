@@ -2,6 +2,8 @@
 
 using namespace SlavaScript::lang;
 
+ThrowStatement::ThrowStatement(Expression* expression) : expression(expression) {}
+
 std::shared_ptr<Value> ThrowStatement::getResult(){
     return result;
 }
@@ -9,6 +11,10 @@ std::shared_ptr<Value> ThrowStatement::getResult(){
 void ThrowStatement::execute(){
     result = expression -> eval();
     throw this;
+}
+
+Statements ThrowStatement::type() const{
+    return Statements::ThrowStatement;
 }
 
 ThrowStatement::operator std::string(){

@@ -4,6 +4,8 @@
 
 using namespace SlavaScript::lang;
 
+WhileStatement::WhileStatement(Expression* condition, Statement* body) : condition(condition), body(body) {}
+
 void WhileStatement::execute(){
     while(condition -> eval() -> asBool()){
         try{
@@ -16,6 +18,10 @@ void WhileStatement::execute(){
             //continue;
         }
     }
+}
+
+Statements WhileStatement::type() const{
+    return Statements::WhileStatement;
 }
 
 WhileStatement::operator std::string(){

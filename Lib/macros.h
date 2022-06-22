@@ -67,8 +67,16 @@ namespace SlavaScript::lang{
 
     #define CME }};
 
-    #define CLASS_IN_MODULE_1(cls) class cls : public ModuleObjectT<cls> { public: static const std::string __class_name__;
+    #define CLASS_METHOD_(className, fieldType) CLASS_METHOD(className, std::shared_ptr<fieldType>)
+
+    #define CLASS_IN_MODULE_1(cls) \
+        class cls : public ModuleObjectT<cls>, public std::enable_shared_from_this<cls>{ \
+        public: \
+            static const std::string __class_name__;
+
     #define CLASS_IN_MODULE_2(cls) }; inline const std::string cls::__class_name__ = #cls;
+
+    #define CHECK_PROP(str, cls) if (prop == str) SH_RET(FunctionValue, new cls(shared_from_this()))
 
     /** using by Modules/... **/
     #define _INFO_F(oldName, newName, info) Functions::set(newName, oldName, info);

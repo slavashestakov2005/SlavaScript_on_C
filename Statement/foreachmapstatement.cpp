@@ -8,6 +8,8 @@
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::TypeException;
 
+ForeachMapStatement::ForeachMapStatement(std::string key, std::string value, Expression* container, Statement* body) : key(key), value(value), container(container), body(body) {}
+
 void ForeachMapStatement::execute(){
     NamedValue startKey = Names::getNamed(key), startValue = Names::getNamed(value);
     std::shared_ptr<Value> containerValue = container -> eval();
@@ -27,6 +29,10 @@ void ForeachMapStatement::execute(){
     }
     Names::restore(startKey);
     Names::restore(startValue);
+}
+
+Statements ForeachMapStatement::type() const{
+    return Statements::ForeachMapStatement;
 }
 
 ForeachMapStatement::operator std::string(){

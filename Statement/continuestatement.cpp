@@ -6,6 +6,10 @@ void ContinueStatement::execute(){
     throw this;
 }
 
+Statements ContinueStatement::type() const{
+    return Statements::ContinueStatement;
+}
+
 ContinueStatement::operator std::string(){
     return "continue";
 }

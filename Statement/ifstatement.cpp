@@ -2,9 +2,15 @@
 
 using namespace SlavaScript::lang;
 
+IfStatement::IfStatement(Expression* expression, Statement* ifStatement, Statement* elseStatement) : expression(expression), ifStatement(ifStatement), elseStatement(elseStatement) {}
+
 void IfStatement::execute(){
     if (expression -> eval() -> asBool()) ifStatement -> execute();
     else if (elseStatement != nullptr) elseStatement -> execute();
+}
+
+Statements IfStatement::type() const{
+    return Statements::IfStatement;
 }
 
 IfStatement::operator std::string(){

@@ -12,7 +12,32 @@
 
 using namespace SlavaScript::lang;
 
+
 #define RCHECK_CAST(cs, type) case Values::cs : RCHECK(*(type*)(&a), *(type*)(&b))
+
+
+std::shared_ptr<Value> Value::getDot(std::shared_ptr<Value> property){
+    throw new TypeException("Cannot get property using . for " + stringType());
+}
+
+std::shared_ptr<Value> Value::getBracket(std::shared_ptr<Value> property){
+    throw new TypeException("Cannot get property using [] for " + stringType());
+}
+
+void Value::setDot(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
+    throw new TypeException("Cannot set property using . for " + stringType());
+}
+
+void Value::setBracket(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
+    throw new TypeException("Cannot set property using [] for " + stringType());
+}
+
+std::string Value::stringType() const{
+    return getValueName(type());
+}
+
+Value::~Value() {}
+
 
 namespace SlavaScript::lang{
     CMP(Value){
@@ -32,10 +57,6 @@ namespace SlavaScript::lang{
     }
 
     DEF_CMP(Value)
-
-    std::string Value::stringType() const{
-        return getValueName(type());
-    }
 
     bool comparator(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b){
         return (*a) < (*b);

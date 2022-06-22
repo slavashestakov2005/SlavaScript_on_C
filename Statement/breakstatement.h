@@ -6,11 +6,12 @@
 namespace SlavaScript::lang{
     class BreakStatement : public Statement{
     public:
-        Statements type(){ return Statements::BreakStatement; }
         /** @return  throw: BreakStatement*. */
-        void execute();
-        operator std::string();
-        void accept(Visitor* visitor);
+        void execute() override;
+        Statements type() const override;
+        operator std::string() override;
+
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend compiler::CompilerVisitor;
     };

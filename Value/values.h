@@ -1,8 +1,8 @@
 #ifndef VALUES_H_INCLUDED
 #define VALUES_H_INCLUDED
 
-#include <string>
 #include "../Lib/macros.h"
+#include <string>
 
 namespace SlavaScript::lang{
     enum class Values{
@@ -20,8 +20,6 @@ namespace SlavaScript::lang{
 
     std::string getValueName(Values value);
 
-    CMP(int);
-    CMP(std::string);
     CMP(Values);
 }
 

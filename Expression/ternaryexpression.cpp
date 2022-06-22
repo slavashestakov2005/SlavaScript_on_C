@@ -2,9 +2,15 @@
 
 using namespace SlavaScript::lang;
 
+TernaryExpression::TernaryExpression(Expression* condition, Expression* trueExpr, Expression* falseExpr) : condition(condition), trueExpr(trueExpr), falseExpr(falseExpr) {}
+
 std::shared_ptr<Value> TernaryExpression::eval(){
     if (condition -> eval() -> asBool()) return trueExpr -> eval();
     else return falseExpr -> eval();
+}
+
+Expressions TernaryExpression::type() const{
+    return Expressions::TernaryExpression;
 }
 
 TernaryExpression::operator std::string(){

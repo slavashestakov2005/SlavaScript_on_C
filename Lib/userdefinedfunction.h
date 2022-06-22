@@ -11,7 +11,7 @@ namespace SlavaScript::lang{
         Statement* body;
         Arguments arguments;
     public:
-        UserDefinedFunction(Arguments arguments, Statement* body) : arguments(arguments), body(body) {}
+        UserDefinedFunction(Arguments arguments, Statement* body);
         int getArgsCount();
         std::string getArgsName(int index);
         operator std::string();

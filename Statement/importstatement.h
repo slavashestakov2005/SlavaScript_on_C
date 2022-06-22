@@ -11,13 +11,14 @@ namespace SlavaScript::lang{
         std::vector<std::string> names;
         std::string moduleName;
     public:
-        ImportStatement(std::vector<std::string> names, std::string moduleName) : names(names), moduleName(moduleName) {}
-        Statements type(){ return Statements::ImportStatement; }
+        ImportStatement(std::vector<std::string> names, std::string moduleName);
+
         /** @return  throw: UnknownModuleException*. */
-        void execute();
-        operator std::string();
-        ~ImportStatement();
-        void accept(Visitor* visitor);
+        void execute() override;
+        Statements type() const override;
+        operator std::string() override;
+
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend ImportAdder;
         friend compiler::CompilerVisitor;

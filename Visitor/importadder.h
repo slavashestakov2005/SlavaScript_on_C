@@ -6,7 +6,7 @@
 namespace SlavaScript::lang{
     class ImportAdder : public Visitor{
     public:
-        void visit(ImportStatement* v);
+        void visit(ImportStatement* v) override;
     };
 }
 

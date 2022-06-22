@@ -4,6 +4,7 @@
 #include "../Expression/valueexpression.h"
 #include "../Exception/operationIsnotsupportedexception.h"
 #include "../Lib/moduleobject.h"
+#include "../Lib/utils.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::OperationIsNotSupportedException;
@@ -37,6 +38,8 @@ std::shared_ptr<Value> AssignmentExpression::calculate(AssignmentOperator operat
     return result;
 }
 
+AssignmentExpression::AssignmentExpression(AssignmentOperator operation, std::string variable, Expression* expression) : operation(operation), variable(variable), expression(expression) {}
+
 std::shared_ptr<Value> AssignmentExpression::eval(){
     std::shared_ptr<Value> left = Names::get(variable, true);
     std::shared_ptr<Value> right = expression == nullptr ? nullptr : expression -> eval();
@@ -44,6 +47,10 @@ std::shared_ptr<Value> AssignmentExpression::eval(){
     Names::setVariable(variable, result);
     if (operation == AssignmentOperator::_PLUSPLUS || operation == AssignmentOperator::_MINUSMINUS) result = left;
     return result;
+}
+
+Expressions AssignmentExpression::type() const{
+    return Expressions::AssignmentExpression;
 }
 
 AssignmentExpression::operator std::string(){

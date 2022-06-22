@@ -10,15 +10,14 @@ namespace SlavaScript::lang{
         static std::shared_ptr<NullValue> NULL_;
 
         NullValue(){}
-        std::shared_ptr<Value> copy();
 
-        double asDouble();
-        std::string asString();
-        bool asBool();
-        Bignum asBignum();
-        Values type() const;
-        operator std::string();
-        ~NullValue(){}
+        std::shared_ptr<Value> copy() override;
+        double asDouble() override;
+        std::string asString() override;
+        bool asBool() override;
+        Bignum asBignum() override;
+        Values type() const override;
+        operator std::string() override;
 
         friend CMP(NullValue);
     };

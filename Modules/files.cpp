@@ -27,16 +27,18 @@ namespace SlavaScript::modules::files_out{
         std::string name;
         std::fstream file;
         bool bad;
+
         File(std::string name) : name(name){
             file.open(Path::getPath() + name);
             bad = !file;
         }
-        std::shared_ptr<Value> copy(){
+
+        std::shared_ptr<Value> copy() override{
             return SHARE(File, name);
         }
-        operator std::string() { return "<file=\"" + name + "\">"; }
+        operator std::string() override{ return "<file=\"" + name + "\">"; }
+        std::shared_ptr<Value> getDot(std::shared_ptr<Value> property) override;
         ~File(){}
-        std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property);
     CLASS_IN_MODULE_2(File)
 
     CLASS_METHOD(Close, File*)
@@ -70,7 +72,7 @@ namespace SlavaScript::modules::files_out{
         return NumberValue::ZERO;
     CME
 
-    std::shared_ptr<Value> File::accessDot(std::shared_ptr<Value> property){
+    std::shared_ptr<Value> File::getDot(std::shared_ptr<Value> property){
         std::string prop = property -> asString();
         if (bad) throw new TypeException("Cannot use DOT for not opened file");
         if (prop == "close") SH_RET(FunctionValue, new Close(this));

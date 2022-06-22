@@ -3,8 +3,14 @@
 
 using namespace SlavaScript::lang;
 
+PrintlnStatement::PrintlnStatement(Expression* expression) : expression(expression) {}
+
 void PrintlnStatement::execute(){
     std::cout << std::string(*(expression -> eval())) << std::endl;
+}
+
+Statements PrintlnStatement::type() const{
+    return Statements::PrintlnStatement;
 }
 
 PrintlnStatement::operator std::string(){

@@ -2,6 +2,8 @@
 
 using namespace SlavaScript::lang;
 
+ParseErrors::ParseErrors() {}
+
 void ParseErrors::clear(){
     errors.clear();
 }

@@ -4,6 +4,8 @@
 
 using namespace SlavaScript::lang;
 
+SwitchStatement::SwitchStatement(Expression* start, std::vector<std::pair<Expression*, Statement*>> body, Statement* defaultCase) : start(start), body(body), defaultCase(defaultCase) {}
+
 void SwitchStatement::execute(){
     bool trueCase = false;
     try{
@@ -21,6 +23,10 @@ void SwitchStatement::execute(){
     } catch(BreakStatement* bs){
         // break;
     }
+}
+
+Statements SwitchStatement::type() const{
+    return Statements::SwitchStatement;
 }
 
 SwitchStatement::operator std::string(){

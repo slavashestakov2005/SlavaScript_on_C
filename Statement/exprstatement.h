@@ -8,12 +8,14 @@ namespace SlavaScript::lang{
     class ExprStatement : public Statement{
         Expression* expression;
     public:
-        ExprStatement(Expression* expression) : expression(expression) {}
-        Statements type(){ return Statements::ExprStatement; }
-        void execute();
-        operator std::string();
+        ExprStatement(Expression* expression);
+
+        void execute() override;
+        Statements type() const override;
+        operator std::string() override;
+
         ~ExprStatement();
-        void accept(Visitor* visitor);
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend compiler::CompilerVisitor;
     };

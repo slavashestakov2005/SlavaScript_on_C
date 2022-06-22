@@ -10,6 +10,7 @@
 #include "../Lib/functions.h"
 #include "../Value/nullvalue.h"
 #include "../Value/bignumbers/smath.h"
+#include "../Lib/utils.h"
 #include <vector>
 
 using namespace SlavaScript::lang;
@@ -76,6 +77,9 @@ std::shared_ptr<Value> BinaryExpression::calculate(BinaryOperator operation, std
     return SHARE(NumberValue, num1);
 }
 
+BinaryExpression::BinaryExpression(BinaryOperator operation) : operation(operation), expr1(nullptr), expr2(nullptr) {}
+BinaryExpression::BinaryExpression(BinaryOperator operation, Expression* expr1, Expression* expr2) : operation(operation), expr1(expr1), expr2(expr2) {}
+
 std::shared_ptr<Value> BinaryExpression::eval(){
     std::shared_ptr<Value> value1 = expr1 -> eval();
     std::shared_ptr<Value> value2 = expr2 -> eval();
@@ -86,12 +90,12 @@ std::shared_ptr<Value> BinaryExpression::eval(){
     return calculate(operation, value1, value2);
 }
 
-BinaryExpression::operator std::string(){
-    return "[" + std::string(*expr1) + " " + getOperator(operation) + " " + std::string(*expr2) + "]";
+Expressions BinaryExpression::type() const{
+    return Expressions::BinaryExpression;
 }
 
-void BinaryExpression::accept(Visitor* visitor){
-    visitor -> visit(this);
+BinaryExpression::operator std::string(){
+    return "[" + std::string(*expr1) + " " + getOperator(operation) + " " + std::string(*expr2) + "]";
 }
 
 BinaryExpression::~BinaryExpression(){
@@ -99,4 +103,8 @@ BinaryExpression::~BinaryExpression(){
     expr1 = nullptr;
     delete expr2;
     expr2 = nullptr;
+}
+
+void BinaryExpression::accept(Visitor* visitor){
+    visitor -> visit(this);
 }

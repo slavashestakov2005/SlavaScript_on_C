@@ -11,9 +11,10 @@ namespace SlavaScript::lang{
     private:
         function_type f;
     public:
-        ModuleFunction(function_type f) : f(f) {}
-        std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values);
-        operator std::string();
+        ModuleFunction(function_type f);
+
+        std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values) override;
+        operator std::string() override;
     };
 }
 

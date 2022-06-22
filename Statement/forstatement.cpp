@@ -4,6 +4,8 @@
 
 using namespace SlavaScript::lang;
 
+ForStatement::ForStatement(Statement* initialization, Expression* termination, Statement* increment, Statement* body) : initialization(initialization), termination(termination), increment(increment), body(body) {}
+
 void ForStatement::execute(){
     for(initialization -> execute(); termination -> eval() -> asBool(); increment -> execute()){
         try{
@@ -16,6 +18,10 @@ void ForStatement::execute(){
             //continue;
         }
      }
+}
+
+Statements ForStatement::type() const{
+    return Statements::ForStatement;
 }
 
 ForStatement::operator std::string(){

@@ -3,12 +3,18 @@
 
 using namespace SlavaScript::lang;
 
+ArrayExpression::ArrayExpression(std::vector<Expression*> elements) : elements(elements) {}
+
 std::shared_ptr<Value> ArrayExpression::eval(){
     ArrayValue arr(elements.size());
     for(int i = 0; i < elements.size(); ++i){
         arr.set(i, elements[i] -> eval());
     }
     SH_RET(ArrayValue, arr);
+}
+
+Expressions ArrayExpression::type() const{
+    return Expressions::ArrayExpression;
 }
 
 ArrayExpression::operator std::string(){

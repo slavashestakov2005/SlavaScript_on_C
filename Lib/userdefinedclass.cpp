@@ -4,6 +4,7 @@
 #include "../Value/stringvalue.h"
 #include "../Statement/functiondefinestatement.h"
 #include "../Statement/classdeclarationsstatement.h"
+#include "userdefinedfunction.h"
 
 using namespace SlavaScript::lang;
 

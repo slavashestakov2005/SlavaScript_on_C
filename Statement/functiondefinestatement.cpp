@@ -5,9 +5,7 @@
 
 using namespace SlavaScript::lang;
 
-void FunctionDefineStatement::execute(){
-    execute(false); /// because FunctionAdder was doing execute(true)
-}
+FunctionDefineStatement::FunctionDefineStatement(std::string name, Arguments arguments, Statement* body) : name(name), arguments(arguments), body(body) {}
 
 void FunctionDefineStatement::execute(bool set){
     if (set) Names::setFunction(name, SHARE_2(UserDefinedFunction, arguments, body),
@@ -17,6 +15,14 @@ void FunctionDefineStatement::execute(bool set){
 
 std::string FunctionDefineStatement::getName(){
     return name;
+}
+
+void FunctionDefineStatement::execute(){
+    execute(false); /// because FunctionAdder was doing execute(true)
+}
+
+Statements FunctionDefineStatement::type() const{
+    return Statements::FunctionDefineStatement;
 }
 
 FunctionDefineStatement::operator std::string(){

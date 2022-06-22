@@ -22,6 +22,11 @@ namespace{
     };
 }
 
+
+Token::Token(){}
+Token::Token(TokenType type, std::string text, int row, int col) : type(type), text(text), row(row), col(col) {}
+
+
 int Token::getRow(){
     return row;
 }

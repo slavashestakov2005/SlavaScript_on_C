@@ -8,18 +8,16 @@ namespace SlavaScript::lang{
     private:
         std::string fileNameBegin, fileNameEnd;
     public:
-        IntegrationValue(std::string fileNameBegin, std::string fileNameEnd) : fileNameBegin(fileNameBegin), fileNameEnd(fileNameEnd) {}
-        std::shared_ptr<Value> copy();
+        IntegrationValue(std::string fileNameBegin, std::string fileNameEnd);
 
-        std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property);
-
-        double asDouble();
-        std::string asString();
-        bool asBool();
-        Bignum asBignum();
-        Values type() const;
-        operator std::string();
-        ~IntegrationValue(){}
+        std::shared_ptr<Value> copy() override;
+        double asDouble() override;
+        std::string asString() override;
+        bool asBool() override;
+        Bignum asBignum() override;
+        Values type() const override;
+        operator std::string() override;
+        std::shared_ptr<Value> getDot(std::shared_ptr<Value> property) override;
 
         friend CMP(IntegrationValue);
     };

@@ -4,6 +4,8 @@
 
 using namespace SlavaScript::lang;
 
+TryStatement::TryStatement(Statement* body, std::string name, Statement* catchBlock) : body(body), name(name), catchBlock(catchBlock) {}
+
 void TryStatement::execute(){
     NamedValue start = Names::getNamed(name);
     try{
@@ -13,6 +15,10 @@ void TryStatement::execute(){
         catchBlock -> execute();
     }
     Names::restore(start);
+}
+
+Statements TryStatement::type() const{
+    return Statements::TryStatement;
 }
 
 TryStatement::operator std::string(){

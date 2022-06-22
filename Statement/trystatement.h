@@ -10,13 +10,14 @@ namespace SlavaScript::lang{
         Statement* body, *catchBlock;
         std::string name;
     public:
-        TryStatement(Statement* body, std::string name, Statement* catchBlock)
-        : body(body), name(name), catchBlock(catchBlock) {}
-        Statements type(){ return Statements::TryStatement; }
-        void execute();
-        operator std::string();
+        TryStatement(Statement* body, std::string name, Statement* catchBlock);
+
+        void execute() override;
+        Statements type() const override;
+        operator std::string() override;
+
         ~TryStatement();
-        void accept(Visitor* visitor);
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend compiler::CompilerVisitor;
     };

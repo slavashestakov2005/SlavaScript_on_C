@@ -9,12 +9,14 @@ namespace SlavaScript::lang{
     private:
         Expression* expression;
     public:
-        PrintlnStatement(Expression* expression) : expression(expression) {}
-        Statements type(){ return Statements::PrintlnStatement; }
-        void execute();
-        operator std::string();
+        PrintlnStatement(Expression* expression);
+
+        void execute() override;
+        Statements type() const override;
+        operator std::string() override;
+
         ~PrintlnStatement();
-        void accept(Visitor* visitor);
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend compiler::CompilerVisitor;
     };

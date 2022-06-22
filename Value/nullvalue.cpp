@@ -4,7 +4,9 @@
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::TypeException;
 
+
 std::shared_ptr<NullValue> NullValue::NULL_ = SHARE(NullValue, );
+
 
 std::shared_ptr<Value> NullValue::copy(){
     return NULL_;
@@ -33,6 +35,7 @@ Values NullValue::type() const{
 NullValue::operator std::string(){
     return "null";
 }
+
 
 namespace SlavaScript::lang{
     CMP(NullValue){

@@ -6,6 +6,10 @@ void BreakStatement::execute(){
     throw this;
 }
 
+Statements BreakStatement::type() const{
+    return Statements::BreakStatement;
+}
+
 BreakStatement::operator std::string(){
     return "break";
 }

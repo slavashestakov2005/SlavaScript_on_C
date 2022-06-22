@@ -8,6 +8,7 @@
 #include "valueexpression.h"
 #include "../Exception/operationIsnotsupportedexception.h"
 #include "../Exception/typeexception.h"
+#include "../Lib/utils.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::OperationIsNotSupportedException;
@@ -43,6 +44,8 @@ std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator oper
     return BoolValue::fromBool(result);
 }
 
+ConditionalExpression::ConditionalExpression(ConditionalOperator operation, Expression* expr1, Expression* expr2) : operation(operation), expr1(expr1), expr2(expr2) {}
+
 std::shared_ptr<Value> ConditionalExpression::eval(){
     std::shared_ptr<Value> value1 = expr1 -> eval();
     std::shared_ptr<Value> value2 = expr2 -> eval();
@@ -51,6 +54,10 @@ std::shared_ptr<Value> ConditionalExpression::eval(){
         return Functions::get(getOperator(operation), 2) -> execute(vec);
     }
     return calculate(operation, value1, value2);
+}
+
+Expressions ConditionalExpression::type() const{
+    return Expressions::ConditionalExpression;
 }
 
 ConditionalExpression::operator std::string(){

@@ -4,6 +4,16 @@
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::TypeException;
 
+
+FunctionValue::FunctionValue(std::shared_ptr<Function> value) : value(value) {}
+FunctionValue::FunctionValue(Function* value) : value(std::shared_ptr<Function>(value)) {}
+
+
+std::shared_ptr<Function> FunctionValue::getFunction(){
+    return value;
+}
+
+
 std::shared_ptr<Value> FunctionValue::copy(){
     return SHARE(FunctionValue, value);
 }
@@ -28,13 +38,9 @@ Values FunctionValue::type() const{
     return Values::FUNCTION;
 }
 
-std::shared_ptr<Function> FunctionValue::getFunction(){
-    return value;
-}
-
 FunctionValue::operator std::string(){
     return asString();
-};
+}
 
 namespace SlavaScript::lang{
     CMP(FunctionValue){

@@ -3,13 +3,19 @@
 
 using namespace SlavaScript::lang;
 
+MapExpression::MapExpression(std::map<Expression*, Expression*> elements) : elements(elements) {}
+
 std::shared_ptr<Value> MapExpression::eval(){
     int siz = elements.size();
-    std::shared_ptr<MapValue> map = SHARE(MapValue, siz);
+    std::shared_ptr<MapValue> map = SHARE(MapValue, );
     for (auto now : elements){
         map -> set(now.first -> eval(), now.second -> eval());
     }
     return map;
+}
+
+Expressions MapExpression::type() const{
+    return Expressions::MapExpression;
 }
 
 MapExpression::operator std::string(){
@@ -25,6 +31,8 @@ MapExpression::operator std::string(){
     result += "}";
     return result;
 }
+
+MapExpression::~MapExpression(){}
 
 void MapExpression::accept(Visitor* visitor){
     visitor -> visit(this);

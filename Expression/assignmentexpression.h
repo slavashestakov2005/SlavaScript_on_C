@@ -11,16 +11,19 @@ namespace SlavaScript::lang{
     private:
         AssignmentOperator operation;
         Expression* expression;
-    public:
         std::string variable;
-        AssignmentExpression(AssignmentOperator operation, std::string variable, Expression* expression) : operation(operation), variable(variable), expression(expression) {}
-        Expressions type(){ return Expressions::AssignmentExpression; }
+    public:
         /** @return  throw: OperationIsNotSupportedException*. */
         static std::shared_ptr<Value> calculate(AssignmentOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right);
+
+        AssignmentExpression(AssignmentOperator operation, std::string variable, Expression* expression);
+
         std::shared_ptr<Value> eval() override;
-        operator std::string();
+        Expressions type() const override;
+        operator std::string() override;
+
         ~AssignmentExpression();
-        void accept(Visitor* visitor);
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend VariablePrinter;
         friend AssignValidator;

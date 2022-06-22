@@ -8,12 +8,13 @@ namespace SlavaScript::lang{
     private:
         std::string lang, name, code;
     public:
-        IntegrationStatement(std::string lang, std::string name, std::string code) : lang(lang), name(name), code(code) {}
-        Statements type(){ return Statements::IntegrationStatement; }
-        void execute();
-        operator std::string();
-        ~IntegrationStatement(){}
-        void accept(Visitor* visitor);
+        IntegrationStatement(std::string lang, std::string name, std::string code);
+
+        void execute() override;
+        Statements type() const override;
+        operator std::string() override;
+
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend compiler::CompilerVisitor;
     };

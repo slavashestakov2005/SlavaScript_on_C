@@ -240,7 +240,7 @@ namespace SlavaScript::modules::functional_f{
         }
         if (container -> type() == Values::MAP) {
             std::shared_ptr<MapValue> map = CAST(MapValue, container);
-            std::shared_ptr<MapValue> result = SHARE(MapValue, map -> size());
+            std::shared_ptr<MapValue> result = SHARE(MapValue, );
             for (auto x = map -> begin(); x != map -> end(); ++x) {
                 std::vector<std::shared_ptr<Value>> vals = {x -> first, x -> second};
                 if (function -> execute(vals) -> asBool()){

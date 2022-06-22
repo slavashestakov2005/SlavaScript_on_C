@@ -22,12 +22,18 @@ namespace{
     }
 }
 
+IntegrationStatement::IntegrationStatement(std::string lang, std::string name, std::string code) : lang(lang), name(name), code(code) {}
+
 void IntegrationStatement::execute(){
     std::string fileBegin = "example_code";
     std::string fileEnd = "py";
     std::string filename = fileBegin + "." + fileEnd;
     FS::writeToCache(filename, replace_all(code));
     Names::setVariable(name, SHARE_2(IntegrationValue, fileBegin, fileEnd));
+}
+
+Statements IntegrationStatement::type() const{
+    return Statements::IntegrationStatement;
 }
 
 IntegrationStatement::operator std::string(){

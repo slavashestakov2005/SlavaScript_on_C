@@ -11,8 +11,8 @@ namespace SlavaScript::lang{
         std::string text;
         int row, col;
     public:
-        Token(){}
-        Token(TokenType type, std::string text, int row = 0, int col = 0) : type(type), text(text), row(row), col(col) {}
+        Token();
+        Token(TokenType type, std::string text, int row = 0, int col = 0);
         int getRow();
         int getCol();
         std::string position();

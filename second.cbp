@@ -84,11 +84,12 @@
 		<Unit filename="Lib/argument.h" />
 		<Unit filename="Lib/arguments.cpp" />
 		<Unit filename="Lib/arguments.h" />
+		<Unit filename="Lib/class.cpp" />
 		<Unit filename="Lib/class.h" />
 		<Unit filename="Lib/classes.cpp" />
 		<Unit filename="Lib/classes.h" />
-		<Unit filename="Lib/classmethod.cpp" />
 		<Unit filename="Lib/classmethod.h" />
+		<Unit filename="Lib/classmethod_impl.h" />
 		<Unit filename="Lib/filesystem.cpp" />
 		<Unit filename="Lib/filesystem.h" />
 		<Unit filename="Lib/function.h" />
@@ -96,6 +97,7 @@
 		<Unit filename="Lib/functions.h" />
 		<Unit filename="Lib/macros.h" />
 		<Unit filename="Lib/moduleclass.h" />
+		<Unit filename="Lib/moduleclass_impl.h" />
 		<Unit filename="Lib/modulefunction.cpp" />
 		<Unit filename="Lib/modulefunction.h" />
 		<Unit filename="Lib/moduleobject.h" />
@@ -105,6 +107,9 @@
 		<Unit filename="Lib/userdefinedclass.h" />
 		<Unit filename="Lib/userdefinedfunction.cpp" />
 		<Unit filename="Lib/userdefinedfunction.h" />
+		<Unit filename="Lib/utils.cpp" />
+		<Unit filename="Lib/utils.h" />
+		<Unit filename="Lib/utils_impl.h" />
 		<Unit filename="Lib/variables.cpp" />
 		<Unit filename="Lib/variables.h" />
 		<Unit filename="Modules/all.h" />

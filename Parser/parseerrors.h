@@ -9,7 +9,7 @@ namespace SlavaScript::lang{
     private:
         std::vector<ParseError*> errors;
     public:
-        ParseErrors(){}
+        ParseErrors();
         void clear();
         void add(std::exception* ex, int line);
         bool hasError();

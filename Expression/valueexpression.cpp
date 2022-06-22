@@ -15,10 +15,15 @@ ValueExpression::ValueExpression(Value* val){
 std::shared_ptr<Value> ValueExpression::eval(){
     return value;
 }
+Expressions ValueExpression::type() const{
+    return Expressions::ValueExpression;
+}
 
 ValueExpression::operator std::string(){
     return std::string(*value);
 }
+
+ValueExpression::~ValueExpression() {}
 
 void ValueExpression::accept(Visitor* visitor){
     visitor -> visit(this);

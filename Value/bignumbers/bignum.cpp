@@ -4,6 +4,7 @@
 #include "../values.h"
 #include "../../Exception/mathexception.h"
 #include "../../Exception/typeexception.h"
+#include "../../Lib/utils.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::MathException;

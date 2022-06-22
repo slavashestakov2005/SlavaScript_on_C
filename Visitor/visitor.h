@@ -57,8 +57,8 @@ namespace SlavaScript::lang{
         virtual void visit(PrintlnStatement* v);
         virtual void visit(PrintStatement* v);
         virtual void visit(ReturnStatement* v);
-        virtual void visit(SuffixExpression* v);
         virtual void visit(SuffixAssignmentExpression* v);
+        virtual void visit(SuffixExpression* v);
         virtual void visit(SwitchStatement* v);
         virtual void visit(TernaryExpression* v);
         virtual void visit(ThrowStatement* v);

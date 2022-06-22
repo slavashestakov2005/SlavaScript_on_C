@@ -9,13 +9,16 @@ namespace SlavaScript::lang{
     private:
         std::vector<Statement*> statements;
     public:
-        BlockStatement(){}
-        Statements type(){ return Statements::BlockStatement; }
+        BlockStatement();
+
         void add(Statement* statement);
-        void execute();
-        operator std::string();
+
+        void execute() override;
+        Statements type() const override;
+        operator std::string() override;
+
         ~BlockStatement();
-        void accept(Visitor* visitor);
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend compiler::CompilerVisitor;
     };

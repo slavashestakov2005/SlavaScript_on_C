@@ -33,9 +33,10 @@ namespace SlavaScript::lang{
     class Statement : public Node{
     public:
         virtual void execute() = 0;
+        virtual Statements type() const = 0;
         virtual operator std::string() = 0;
+
         virtual ~Statement(){}
-        virtual Statements type() = 0;
     };
 }
 

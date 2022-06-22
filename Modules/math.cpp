@@ -15,6 +15,7 @@
 #include "../Exception/typeexception.h"
 #include "../Exception/unknownpropertyexception.h"
 #include "../Value/bignumbers/smath.h"
+#include "../Lib/utils.h"
 
 using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::math_f;
@@ -30,19 +31,22 @@ namespace SlavaScript::modules::math_out{
 
     CLASS_IN_MODULE_1(Polynomial)
         std::vector<PolynomialCoeff> coefficients;
+
         Polynomial(std::vector<std::shared_ptr<Value>> values){
             for(auto x : values) coefficients.push_back(x -> asBignum());
         }
         Polynomial(Polynomial const& temp) : coefficients(temp.coefficients) {}
         Polynomial(std::vector<PolynomialCoeff> coefficients = {Bignum::ZERO}) : coefficients(coefficients){ delete_end_zero(); }
-        std::shared_ptr<Value> copy(){
-            return SHARE(Polynomial, coefficients);
-        }
+
         int deg() const{
             if (coefficients.size() == 1 && !coefficients[0]) return -1;
             return coefficients.size() - 1;
         }
-        operator std::string(){
+
+        std::shared_ptr<Value> copy() override{
+            return SHARE(Polynomial, coefficients);
+        }
+        operator std::string() override{
             std::string ans = "<polynomial=";
             for(int i = coefficients.size() - 1; i > -1; --i){
                 if (coefficients[i]){
@@ -64,8 +68,10 @@ namespace SlavaScript::modules::math_out{
             if (ans.size() == 12) ans += '0';
             return ans + ">";
         }
+
+        std::shared_ptr<Value> getDot(std::shared_ptr<Value> property) override;
+
         ~Polynomial(){}
-        std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property);
 
         void delete_end_zero(){
             for(int i = coefficients.size() - 1; i > 0; --i) if (coefficients[i]) break; else coefficients.pop_back();
@@ -157,12 +163,12 @@ namespace SlavaScript::modules::math_out{
         return 0;
     }
 
-    CLASS_METHOD(Deg, Polynomial*)
+    CLASS_METHOD_(Deg, Polynomial)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         SH_RET(NumberValue, instance -> deg());
     CME
 
-    CLASS_METHOD(Compare, Polynomial*)
+    CLASS_METHOD_(Compare, Polynomial)
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
         std::shared_ptr<Polynomial> p;
         if (values[0] -> type() == Values::NUMBER) p = SHARE(Polynomial, std::vector<PolynomialCoeff>{values[0] -> asBignum()});
@@ -180,20 +186,20 @@ namespace SlavaScript::modules::math_out{
         auto q = (*instance) op (*p);
 
     #define POLYNOMIAL_FUNCTION_01(cls, op) \
-        CLASS_METHOD(cls, Polynomial*) \
+        CLASS_METHOD_(cls, Polynomial) \
             if (values.empty()) SH_RET(Polynomial, op (*instance)); \
             POLYNOMIAL_FUNCTION(cls, op) \
             SH_RET(Polynomial, q); \
         CME
 
     #define POLYNOMIAL_FUNCTION_1(cls, op) \
-        CLASS_METHOD(cls, Polynomial*) \
+        CLASS_METHOD_(cls, Polynomial) \
             POLYNOMIAL_FUNCTION(cls, op) \
             SH_RET(Polynomial, q); \
         CME
 
     #define POLYNOMIAL_FUNCTION_2(cls, op) \
-        CLASS_METHOD(cls, Polynomial*) \
+        CLASS_METHOD_(cls, Polynomial) \
             POLYNOMIAL_FUNCTION(cls, op) \
             if (values[0] -> type() == Values::NUMBER) SH_RET(Polynomial, q.first); \
             std::vector<std::shared_ptr<Value>> v = {SHARE(Polynomial, q.first), SHARE(Polynomial, q.second)}; \
@@ -201,7 +207,7 @@ namespace SlavaScript::modules::math_out{
         CME
 
     #define POLYNOMIAL_FUNCTION_3(cls, op) \
-        CLASS_METHOD(cls, Polynomial*) \
+        CLASS_METHOD_(cls, Polynomial) \
             POLYNOMIAL_FUNCTION(cls, op) \
             return BoolValue::fromBool(q); \
         CME
@@ -219,21 +225,21 @@ namespace SlavaScript::modules::math_out{
     POLYNOMIAL_FUNCTION_3(Ge, >=)   /// x >= y
 
 
-    std::shared_ptr<Value> Polynomial::accessDot(std::shared_ptr<Value> property){
+    std::shared_ptr<Value> Polynomial::getDot(std::shared_ptr<Value> property){
         std::string prop = property -> asString();
-        if (prop == "deg") SH_RET(FunctionValue, new Deg(this));
-        if (prop == "+") SH_RET(FunctionValue, new Add(this));
-        if (prop == "-") SH_RET(FunctionValue, new Sub(this));
-        if (prop == "*") SH_RET(FunctionValue, new Mul(this));
-        if (prop == "/") SH_RET(FunctionValue, new Div(this));
-        if (prop == "%") SH_RET(FunctionValue, new Mod(this));
-        if (prop == "<=>") SH_RET(FunctionValue, new Compare(this));
-        if (prop == "==") SH_RET(FunctionValue, new Eq(this));
-        if (prop == "!=") SH_RET(FunctionValue, new Ne(this));
-        if (prop == "<") SH_RET(FunctionValue, new Lt(this));
-        if (prop == "<=") SH_RET(FunctionValue, new Le(this));
-        if (prop == ">") SH_RET(FunctionValue, new Gt(this));
-        if (prop == ">=") SH_RET(FunctionValue, new Ge(this));
+        CHECK_PROP("deg", Deg);
+        CHECK_PROP("+", Add);
+        CHECK_PROP("-", Sub);
+        CHECK_PROP("*", Mul);
+        CHECK_PROP("/", Div);
+        CHECK_PROP("%", Mod);
+        CHECK_PROP("<=>", Compare);
+        CHECK_PROP("==", Eq);
+        CHECK_PROP("!=", Ne);
+        CHECK_PROP("<", Lt);
+        CHECK_PROP("<=", Le);
+        CHECK_PROP(">", Gt);
+        CHECK_PROP(">=", Ge);
         throw new UnknownPropertyException(prop);
     }
 }

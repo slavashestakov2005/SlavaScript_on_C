@@ -10,6 +10,7 @@
 #include "../Exception/typeexception.h"
 #include "../Exception/operationIsnotsupportedexception.h"
 #include "../Lib/moduleobject.h"
+#include "../Lib/utils.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::OperationIsNotSupportedException;
@@ -31,6 +32,8 @@ std::shared_ptr<Value> UnaryExpression::calculate(UnaryOperator operation, std::
     }
 }
 
+UnaryExpression::UnaryExpression(UnaryOperator operation, Expression* expr) : operation(operation), expr(expr) {}
+
 std::shared_ptr<Value> UnaryExpression::eval(){
     std::shared_ptr<Value> val = expr -> eval();
     if (Functions::find(getOperator(operation), 1)){
@@ -39,6 +42,10 @@ std::shared_ptr<Value> UnaryExpression::eval(){
         return Functions::get(getOperator(operation), 1) -> execute(value);
     }
     return calculate(operation, val);
+}
+
+Expressions UnaryExpression::type() const{
+    return Expressions::UnaryExpression;
 }
 
 UnaryExpression::operator std::string(){

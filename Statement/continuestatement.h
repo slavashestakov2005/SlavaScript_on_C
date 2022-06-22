@@ -6,11 +6,12 @@
 namespace SlavaScript::lang{
     class ContinueStatement : public Statement{
     public:
-        Statements type(){ return Statements::ContinueStatement; }
         /** @return  throw: ContinueStatement*. */
-        void execute();
-        operator std::string();
-        void accept(Visitor* visitor);
+        void execute() override;
+        Statements type() const override;
+        operator std::string() override;
+
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend compiler::CompilerVisitor;
     };

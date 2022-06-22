@@ -10,12 +10,14 @@ namespace SlavaScript::lang{
         Expression* condition;
         Statement* body;
     public:
-        DoWhileStatement(Expression* condition, Statement* body) : condition(condition), body(body) {}
-        Statements type(){ return Statements::DoWhileStatement; }
-        void execute();
-        operator std::string();
+        DoWhileStatement(Expression* condition, Statement* body);
+
+        void execute() override;
+        Statements type() const override;
+        operator std::string() override;
+
         ~DoWhileStatement();
-        void accept(Visitor* visitor);
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend compiler::CompilerVisitor;
     };

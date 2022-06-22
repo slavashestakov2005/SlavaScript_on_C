@@ -2,6 +2,8 @@
 
 using namespace SlavaScript::lang;
 
+ReturnStatement::ReturnStatement(Expression* expression) : expression(expression) {}
+
 std::shared_ptr<Value> ReturnStatement::getResult(){
     return result;
 }
@@ -9,6 +11,10 @@ std::shared_ptr<Value> ReturnStatement::getResult(){
 void ReturnStatement::execute(){
     result = expression -> eval();
     throw this;
+}
+
+Statements ReturnStatement::type() const{
+    return Statements::ReturnStatement;
 }
 
 ReturnStatement::operator std::string(){

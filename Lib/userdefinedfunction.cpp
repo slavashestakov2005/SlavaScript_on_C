@@ -9,6 +9,8 @@
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::ArgumentsMismatchException;
 
+UserDefinedFunction::UserDefinedFunction(Arguments arguments, Statement* body) : arguments(arguments), body(body) {}
+
 int UserDefinedFunction::getArgsCount(){
     return arguments.size();
 }

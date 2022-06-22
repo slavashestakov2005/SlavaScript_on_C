@@ -93,14 +93,14 @@ void Visitor::visit(PrintStatement* v){
 
 void Visitor::visit(ReturnStatement* v){ }
 
-void Visitor::visit(SuffixExpression* v){
-    v -> root -> accept(this);
-    for(SuffixElement* element : v -> access) element -> accept(this);
-}
-
 void Visitor::visit(SuffixAssignmentExpression* v){
     v -> containerExpr -> accept(this);
     v -> expression -> accept(this);
+}
+
+void Visitor::visit(SuffixExpression* v){
+    v -> root -> accept(this);
+    for(SuffixElement* element : v -> access) element -> accept(this);
 }
 
 void Visitor::visit(SwitchStatement* v){

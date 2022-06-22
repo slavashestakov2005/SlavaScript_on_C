@@ -13,28 +13,28 @@ namespace SlavaScript::lang{
         static std::shared_ptr<ArrayValue> add(std::shared_ptr<ArrayValue> array, std::shared_ptr<Value> value);
         static std::shared_ptr<ArrayValue> add(std::shared_ptr<ArrayValue> array1, std::shared_ptr<ArrayValue> array2);
 
-        ArrayValue(){}
+        ArrayValue();
         ArrayValue(int size);
         ArrayValue(std::vector<std::shared_ptr<Value>> elem);
         ArrayValue(const ArrayValue& arra);
-        std::shared_ptr<Value> copy();
 
         std::shared_ptr<Value> get(int index) const;
         void set(int index, std::shared_ptr<Value> value);
 
-        int size() const;
-        std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property);
-        std::shared_ptr<Value> accessBracket(std::shared_ptr<Value> property);
-        std::vector<std::shared_ptr<Value>>::iterator begin();
-        std::vector<std::shared_ptr<Value>>::iterator end();
+        std::shared_ptr<Value> copy() override;
+        double asDouble() override;
+        std::string asString() override;
+        bool asBool() override;
+        Bignum asBignum() override;
+        Values type() const override;
+        operator std::string() override;
+        std::shared_ptr<Value> getDot(std::shared_ptr<Value> property) override;
+        std::shared_ptr<Value> getBracket(std::shared_ptr<Value> property) override;
+        void setBracket(std::shared_ptr<Value> key, std::shared_ptr<Value> value) override;
 
-        double asDouble();
-        std::string asString();
-        bool asBool();
-        Bignum asBignum();
-        Values type() const;
-        operator std::string();
-        ~ArrayValue(){}
+        int size() const override;
+        std::vector<std::shared_ptr<Value>>::iterator begin() override;
+        std::vector<std::shared_ptr<Value>>::iterator end() override;
 
         friend CMP(ArrayValue);
     };

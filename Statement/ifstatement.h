@@ -10,13 +10,14 @@ namespace SlavaScript::lang{
         Expression* expression;
         Statement* ifStatement, *elseStatement;
     public:
-        IfStatement(Expression* expression, Statement* ifStatement, Statement* elseStatement)
-        : expression(expression), ifStatement(ifStatement), elseStatement(elseStatement) {}
-        Statements type(){ return Statements::IfStatement; }
-        void execute();
-        operator std::string();
+        IfStatement(Expression* expression, Statement* ifStatement, Statement* elseStatement);
+
+        void execute() override;
+        Statements type() const override;
+        operator std::string() override;
+
         ~IfStatement();
-        void accept(Visitor* visitor);
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend compiler::CompilerVisitor;
     };

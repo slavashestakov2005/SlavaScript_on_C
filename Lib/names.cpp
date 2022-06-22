@@ -6,7 +6,6 @@
 #include "../Value/nullvalue.h"
 #include "../Value/classvalue.h"
 #include "../Exception/variabledoesnotexistsexception.h"
-
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::VariableDoesNotExistsException;
 

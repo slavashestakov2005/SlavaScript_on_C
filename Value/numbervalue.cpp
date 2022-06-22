@@ -4,9 +4,20 @@
 
 using namespace SlavaScript::lang;
 
+
 std::shared_ptr<NumberValue> NumberValue::M_ONE = SHARE(NumberValue, -1);
 std::shared_ptr<NumberValue> NumberValue::ZERO = SHARE(NumberValue, 0);
 std::shared_ptr<NumberValue> NumberValue::ONE = SHARE(NumberValue, 1);
+
+
+NumberValue::NumberValue(Bignum value) : value(value) {}
+NumberValue::NumberValue(std::string value) : value(Bignum(value)) {}
+NumberValue::NumberValue(int value) : value(Bignum(value)) {}
+NumberValue::NumberValue(long long value) : value(Bignum(value)) {}
+NumberValue::NumberValue(size_t value) : value(Bignum((long long) value)) {}
+NumberValue::NumberValue(clock_t value) : value(Bignum((long long) value)) {}
+NumberValue::NumberValue(double value) : value(Bignum(value)) {}
+
 
 std::shared_ptr<Value> NumberValue::copy(){
     return SHARE(NumberValue, value);
@@ -42,6 +53,7 @@ Values NumberValue::type() const{
 NumberValue::operator std::string(){
     return asString();
 };
+
 
 namespace SlavaScript::lang{
     CMP(NumberValue){

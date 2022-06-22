@@ -12,13 +12,14 @@ namespace SlavaScript::lang{
         std::vector<std::pair<Expression*, Statement*>> body;
         Statement* defaultCase;
     public:
-        SwitchStatement(Expression* start, std::vector<std::pair<Expression*, Statement*>> body, Statement* defaultCase)
-        : start(start), body(body), defaultCase(defaultCase) {}
-        Statements type(){ return Statements::SwitchStatement; }
-        void execute();
-        operator std::string();
+        SwitchStatement(Expression* start, std::vector<std::pair<Expression*, Statement*>> body, Statement* defaultCase);
+
+        void execute() override;
+        Statements type() const override;
+        operator std::string() override;
+
         ~SwitchStatement();
-        void accept(Visitor* visitor);
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend compiler::CompilerVisitor;
     };

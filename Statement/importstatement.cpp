@@ -14,6 +14,8 @@ using namespace SlavaScript::lang;
 using SlavaScript::modules::try_import_module;
 using SlavaScript::exceptions::UnknownModuleException;
 
+ImportStatement::ImportStatement(std::vector<std::string> names, std::string moduleName) : names(names), moduleName(moduleName) {}
+
 void ImportStatement::execute(){
     if (!Path::getImpoted()) return;
     bool named = moduleName != "";
@@ -34,7 +36,7 @@ void ImportStatement::execute(){
         std::map<std::string, std::shared_ptr<Value>> variables = Variables::getScope();
         std::map<std::string, std::vector<std::pair<ArgumentsInfo, std::shared_ptr<Function>>>> functions = Functions::getScope();
         // Classes::getScope();
-        std::shared_ptr<MapValue> map = SHARE(MapValue, 1);
+        std::shared_ptr<MapValue> map = SHARE(MapValue, );
         for(auto x : variables) map -> set(SHARE(StringValue, x.first), x.second);
         for(auto x : functions){
             if (x.second.size() > 1) throw std::logic_error("Cannot import overloaded function");
@@ -48,6 +50,10 @@ void ImportStatement::execute(){
     else Names::copyScope();
 }
 
+Statements ImportStatement::type() const{
+    return Statements::ImportStatement;
+}
+
 ImportStatement::operator std::string(){
     std::string result = "import [";
     for(int i = 0; i < names.size(); ++i){
@@ -57,8 +63,6 @@ ImportStatement::operator std::string(){
     result += "]" + (moduleName == "" ? "" : " as '" + moduleName + "'");
     return result;
 }
-
-ImportStatement::~ImportStatement(){}
 
 void ImportStatement::accept(Visitor* visitor){
     visitor -> visit(this);

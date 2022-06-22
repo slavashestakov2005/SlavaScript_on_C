@@ -10,7 +10,7 @@ namespace SlavaScript::lang{
         int line;
         std::exception* exception;
     public:
-        ParseError(int line, std::exception* exception) : line(line), exception(exception) {}
+        ParseError(int line, std::exception* exception);
         int getLine();
         std::exception* getException();
         operator std::string();

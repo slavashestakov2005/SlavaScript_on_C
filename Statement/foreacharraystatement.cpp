@@ -9,6 +9,8 @@
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::TypeException;
 
+ForeachArrayStatement::ForeachArrayStatement(std::string variable, Expression* container, Statement* body) : variable(variable), container(container), body(body) {}
+
 void ForeachArrayStatement::execute(){
     NamedValue start = Names::getNamed(variable);
     std::shared_ptr<Value> containerValue = container -> eval();
@@ -26,6 +28,11 @@ void ForeachArrayStatement::execute(){
         }
     }
     Names::restore(start);
+}
+
+
+Statements ForeachArrayStatement::type() const{
+    return Statements::ForeachArrayStatement;
 }
 
 ForeachArrayStatement::operator std::string(){

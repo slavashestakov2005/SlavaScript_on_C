@@ -14,17 +14,14 @@ using SlavaScript::exceptions::TypeException;
 namespace SlavaScript::lang{
     class ModuleObject : public Value{
     public:
-        virtual std::shared_ptr<Value> copy() = 0;
-        virtual std::shared_ptr<Value> accessDot(std::shared_ptr<Value> property){}
-        virtual std::shared_ptr<Value> accessBracket(std::shared_ptr<Value> property){}
-        virtual double asDouble() { throw new TypeException("Cannot cast object to double"); }
-        virtual std::string asString() { throw new TypeException("Cannot cast object to string"); }
-        virtual bool asBool() { throw new TypeException("Cannot cast object to bool"); }
-        virtual Bignum asBignum() { throw new TypeException("Cannot cast object to number"); }
-        virtual Values type() const { return Values::OBJECT; }
-        virtual operator std::string() { throw new TypeException("Cannot cast object to string"); }
-        bool isClassFromModule(){ return true; }
-        virtual ~ModuleObject(){}
+        double asDouble() override{ throw new TypeException("Cannot cast object to double"); }
+        std::string asString() override{ throw new TypeException("Cannot cast object to string"); }
+        bool asBool() override{ throw new TypeException("Cannot cast object to bool"); }
+        Bignum asBignum() override{ throw new TypeException("Cannot cast object to number"); }
+        Values type() const override{ return Values::OBJECT; }
+        operator std::string() override{ throw new TypeException("Cannot cast object to string"); }
+
+        ~ModuleObject(){}
     };
 
     template<typename T>
@@ -32,21 +29,11 @@ namespace SlavaScript::lang{
     public:
         static bool is_instance(std::shared_ptr<Value> v){ return v -> stringType() == correct_class_name(); }
         static std::string correct_class_name() { return "ModuleObject " + T::__class_name__; }
-        virtual std::string stringType() const override { return correct_class_name(); }
-        virtual ~ModuleObjectT(){}
-    };
 
-    template<typename T>
-    std::shared_ptr<Function> get_property(std::shared_ptr<Value> value, T operation){
-        std::string op = getOperator(operation);
-        std::shared_ptr<Value> val;
-        if (value -> type() != Values::OBJECT) throw new TypeException("Can not use " + op + " for non-class and class values");
-        if (value -> isClassFromModule()) val = CAST(ModuleObject, value) -> accessDot(SHARE(StringValue, op));
-        else val = CAST(ObjectValue, value) -> access(SHARE(StringValue, op));
-        if (val -> type() != Values::FUNCTION) throw new TypeException("Operation " + op + " is not a function");
-        std::shared_ptr<Function> func = CAST(FunctionValue, val) -> getFunction();
-        return func;
-    }
+        std::string stringType() const override { return correct_class_name(); }
+
+        ~ModuleObjectT(){}
+    };
 }
 
 #endif // MODULEOBJECT_H_INCLUDED

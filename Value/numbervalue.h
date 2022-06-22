@@ -13,22 +13,21 @@ namespace SlavaScript::lang{
     public:
         static std::shared_ptr<NumberValue> M_ONE, ZERO, ONE;
 
-        NumberValue(Bignum value) : value(value) {}
-        NumberValue(std::string value) : value(Bignum(value)) {}
-        NumberValue(int value) : value(Bignum(value)) {}
-        NumberValue(long long value) : value(Bignum(value)) {}
-        NumberValue(size_t value) : value(Bignum((long long) value)) {}
-        NumberValue(clock_t value) : value(Bignum((long long) value)) {}
-        NumberValue(double value) : value(Bignum(value)) {}
-        std::shared_ptr<Value> copy();
+        NumberValue(Bignum value);
+        NumberValue(std::string value);
+        NumberValue(int value);
+        NumberValue(long long value);
+        NumberValue(size_t value);
+        NumberValue(clock_t value);
+        NumberValue(double value);
 
-        double asDouble();
-        std::string asString();
-        bool asBool();
-        Bignum asBignum();
-        Values type() const;
-        operator std::string();
-        ~NumberValue(){}
+        std::shared_ptr<Value> copy() override;
+        double asDouble() override;
+        std::string asString() override;
+        bool asBool() override;
+        Bignum asBignum() override;
+        Values type() const override;
+        operator std::string() override;
 
         friend CMP(NumberValue);
     };

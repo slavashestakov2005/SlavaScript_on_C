@@ -12,16 +12,20 @@ namespace SlavaScript::lang{
     public:
         std::vector<FunctionDefineStatement*> methods;
         std::vector<std::pair<std::vector<std::string>, Expression*>> fields;
-        ClassDeclarationsStatement() : name("") { }
-        ClassDeclarationsStatement(std::string name) : name(name) { }
-        Statements type(){ return Statements::ClassDeclarationsStatement; }
+
+        ClassDeclarationsStatement();
+        ClassDeclarationsStatement(std::string name);
+
         void addField(std::vector<std::string> v, Expression* expr);
         void addMethod(FunctionDefineStatement* statement);
-        void execute();
         std::string get_name();
-        operator std::string();
+
+        void execute() override;
+        Statements type() const override;
+        operator std::string() override;
+
         ~ClassDeclarationsStatement();
-        void accept(Visitor* visitor);
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend compiler::CompilerVisitor;
     };

@@ -25,9 +25,10 @@ namespace SlavaScript::lang{
     class Expression : public Node{
     public:
         virtual std::shared_ptr<Value> eval() = 0;
+        virtual Expressions type() const = 0;
         virtual operator std::string() = 0;
+
         virtual ~Expression(){}
-        virtual Expressions type() = 0;
     };
 }
 

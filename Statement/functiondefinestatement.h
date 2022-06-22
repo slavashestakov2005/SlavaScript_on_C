@@ -8,20 +8,22 @@
 
 namespace SlavaScript::lang{
     class FunctionDefineStatement : public Statement{
-    private:
     public:
         Arguments arguments;
         Statement* body;
         std::string name;
-        FunctionDefineStatement(std::string name, Arguments arguments, Statement* body)
-        : name(name), arguments(arguments), body(body) {}
-        Statements type(){ return Statements::FunctionDefineStatement; }
-        void execute();
+
+        FunctionDefineStatement(std::string name, Arguments arguments, Statement* body);
+
         void execute(bool set);
         std::string getName();
-        operator std::string();
+
+        void execute() override;
+        Statements type() const override;
+        operator std::string() override;
+
         ~FunctionDefineStatement();
-        void accept(Visitor* visitor);
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend FunctionAdder;
         friend compiler::CompilerVisitor;

@@ -6,6 +6,7 @@
 #include "../Exception/argumentsmismatchexception.h"
 #include "../Exception/unknownpropertyexception.h"
 #include "../Lib/filesystem.h"
+#include "../Lib/utils.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::TypeException;
@@ -36,15 +37,11 @@ namespace{
 }
 
 
+IntegrationValue::IntegrationValue(std::string fileNameBegin, std::string fileNameEnd) : fileNameBegin(fileNameBegin), fileNameEnd(fileNameEnd) {}
+
+
 std::shared_ptr<Value> IntegrationValue::copy(){
     return SHARE_2(IntegrationValue, fileNameBegin, fileNameEnd);
-}
-
-
-std::shared_ptr<Value> IntegrationValue::accessDot(std::shared_ptr<Value> property){
-    std::string prop = property -> asString();
-    if (prop == "get") SH_RET(FunctionValue, SHARE_2(Get, fileNameBegin, fileNameEnd));
-    throw new UnknownPropertyException(prop);
 }
 
 double IntegrationValue::asDouble(){
@@ -70,6 +67,13 @@ Values IntegrationValue::type() const{
 IntegrationValue::operator std::string(){
     return "null";
 }
+
+std::shared_ptr<Value> IntegrationValue::getDot(std::shared_ptr<Value> property){
+    std::string prop = property -> asString();
+    if (prop == "get") SH_RET(FunctionValue, SHARE_2(Get, fileNameBegin, fileNameEnd));
+    throw new UnknownPropertyException(prop);
+}
+
 
 namespace SlavaScript::lang{
     CMP(IntegrationValue){

@@ -9,11 +9,13 @@
 #include "../Value/numbervalue.h"
 #include "../Value/functionvalue.h"
 #include <algorithm>
+#include "../Lib/utils.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::ArgumentsMismatchException;
 using SlavaScript::exceptions::UnknownPropertyException;
 using SlavaScript::exceptions::TypeException;
+
 
 namespace{
     CLASS_METHOD(Trim, std::string)
@@ -163,47 +165,17 @@ namespace{
     CME
 }
 
-std::shared_ptr<Value> StringValue::copy(){
-    return SHARE(StringValue, value);
-}
 
-int StringValue::size() const{
-    return value.size();
-}
+StringValue::StringValue(std::string value) : value(value) {}
 
-std::string::iterator StringValue::begin(){
-    return value.begin();
-}
-
-std::string::iterator StringValue::end(){
-    return value.end();
-}
 
 void StringValue::set(int index, std::shared_ptr<Value> val){
     value = value.substr(0, index) + val -> asString() + value.substr(index + 1);
 }
 
-std::shared_ptr<Value> StringValue::accessDot(std::shared_ptr<Value> property){
-    std::string prop = property -> asString();
-    if (prop == "length") SH_RET(NumberValue, size());
-    if (prop == "trim") SH_RET(FunctionValue, new Trim(value));
-    if (prop == "to_upper") SH_RET(FunctionValue, new To_upper(value));
-    if (prop == "to_lower") SH_RET(FunctionValue, new To_lower(value));
-    if (prop == "chars") SH_RET(FunctionValue, new Chars(value));
-    if (prop == "find") SH_RET(FunctionValue, new Find(value));
-    if (prop == "join") SH_RET(FunctionValue, new Join(value));
-    if (prop == "replace") SH_RET(FunctionValue, new Replace(value));
-    if (prop == "replace_first") SH_RET(FunctionValue, new ReplaceFirst(value));
-    if (prop == "rfind") SH_RET(FunctionValue, new Rfind(value));
-    if (prop == "split") SH_RET(FunctionValue, new Split(value));
-    if (prop == "substring") SH_RET(FunctionValue, new Substring(value));
-    throw new UnknownPropertyException(prop);
-}
 
-std::shared_ptr<Value> StringValue::accessBracket(std::shared_ptr<Value> property){
-    std::string s;
-    s += value[(int) property -> asDouble()];
-    return SHARE(StringValue, s);
+std::shared_ptr<Value> StringValue::copy(){
+    return SHARE(StringValue, value);
 }
 
 double StringValue::asDouble(){
@@ -240,6 +212,48 @@ Values StringValue::type() const{
 StringValue::operator std::string(){
     return asString();
 };
+
+std::shared_ptr<Value> StringValue::getDot(std::shared_ptr<Value> property){
+    std::string prop = property -> asString();
+    if (prop == "length") SH_RET(NumberValue, size());
+    if (prop == "trim") SH_RET(FunctionValue, new Trim(value));
+    if (prop == "to_upper") SH_RET(FunctionValue, new To_upper(value));
+    if (prop == "to_lower") SH_RET(FunctionValue, new To_lower(value));
+    if (prop == "chars") SH_RET(FunctionValue, new Chars(value));
+    if (prop == "find") SH_RET(FunctionValue, new Find(value));
+    if (prop == "join") SH_RET(FunctionValue, new Join(value));
+    if (prop == "replace") SH_RET(FunctionValue, new Replace(value));
+    if (prop == "replace_first") SH_RET(FunctionValue, new ReplaceFirst(value));
+    if (prop == "rfind") SH_RET(FunctionValue, new Rfind(value));
+    if (prop == "split") SH_RET(FunctionValue, new Split(value));
+    if (prop == "substring") SH_RET(FunctionValue, new Substring(value));
+    throw new UnknownPropertyException(prop);
+}
+
+std::shared_ptr<Value> StringValue::getBracket(std::shared_ptr<Value> property){
+    std::string s;
+    s += value[(int) property -> asDouble()];
+    return SHARE(StringValue, s);
+}
+
+void StringValue::setBracket(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
+    int stringIndex = (int) key -> asDouble();
+    set(stringIndex, value);
+}
+
+
+int StringValue::size() const{
+    return value.size();
+}
+
+std::string::iterator StringValue::begin(){
+    return value.begin();
+}
+
+std::string::iterator StringValue::end(){
+    return value.end();
+}
+
 
 namespace SlavaScript::lang{
     CMP(StringValue){

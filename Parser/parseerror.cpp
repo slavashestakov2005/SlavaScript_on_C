@@ -3,6 +3,8 @@
 
 using namespace SlavaScript::lang;
 
+ParseError::ParseError(int line, std::exception* exception) : line(line), exception(exception) {}
+
 int ParseError::getLine(){
     return line;
 }

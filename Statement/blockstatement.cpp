@@ -2,6 +2,8 @@
 
 using namespace SlavaScript::lang;
 
+BlockStatement::BlockStatement() {}
+
 void BlockStatement::add(Statement* statement){
     statements.push_back(statement);
 }
@@ -10,6 +12,10 @@ void BlockStatement::execute(){
     for(int i = 0; i < statements.size(); ++i){
         statements[i] -> execute();
     }
+}
+
+Statements BlockStatement::type() const{
+    return Statements::BlockStatement;
 }
 
 BlockStatement::operator std::string(){

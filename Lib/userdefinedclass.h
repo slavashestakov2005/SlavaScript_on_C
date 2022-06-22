@@ -11,9 +11,10 @@ namespace SlavaScript::lang{
     public:
         UserDefinedClass(ClassDeclarationsStatement* statement);
 
-        virtual std::shared_ptr<Value> construct(std::vector<std::shared_ptr<Value>> values) override;
-        virtual std::string stringType() const override;
-        virtual operator std::string() override;
+        std::shared_ptr<Value> construct(std::vector<std::shared_ptr<Value>> values) override;
+        std::string stringType() const override;
+        operator std::string() override;
+
         ~UserDefinedClass(){}
     };
 }

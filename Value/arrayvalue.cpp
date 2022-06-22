@@ -6,11 +6,14 @@
 #include "../Exception/typeexception.h"
 #include "../Exception/unknownpropertyexception.h"
 #include "../Expression/valueexpression.h"
+#include "../Lib/classmethod.h"
+#include "../Lib/utils.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::ArgumentsMismatchException;
 using SlavaScript::exceptions::UnknownPropertyException;
 using SlavaScript::exceptions::TypeException;
+
 
 namespace {
     CLASS_METHOD(IsEmpty, std::vector<std::shared_ptr<Value>>)
@@ -24,35 +27,6 @@ namespace {
     CME
 }
 
-ArrayValue::ArrayValue(int size){
-    elements = std::vector<std::shared_ptr<Value>>(size);
-}
-
-ArrayValue::ArrayValue(std::vector<std::shared_ptr<Value>> elem){
-    elements = std::vector<std::shared_ptr<Value>>(elem.size());
-    for(int i = 0; i < elem.size(); ++i){
-        elements[i] = elem[i];
-    }
-}
-
-ArrayValue::ArrayValue(const ArrayValue& arra){
-    (*this) = ArrayValue(arra.elements);
-}
-
-std::shared_ptr<Value> ArrayValue::copy(){
-    int size = elements.size();
-    std::shared_ptr<ArrayValue> arr = SHARE(ArrayValue, size);
-    for(int i = 0; i < size; ++i) arr -> set(i, get(i) -> copy());
-    return arr;
-}
-
-std::shared_ptr<Value> ArrayValue::get(int index) const{
-    return elements[index];
-}
-
-void ArrayValue::set(int index, std::shared_ptr<Value> value){
-    elements[index] = value;
-}
 
 std::shared_ptr<ArrayValue> ArrayValue::add(std::shared_ptr<ArrayValue> array, std::shared_ptr<Value> value){
     std::vector<std::shared_ptr<Value>> vec;
@@ -71,27 +45,39 @@ std::shared_ptr<ArrayValue> ArrayValue::add(std::shared_ptr<ArrayValue> array1, 
     SH_RET(ArrayValue, vec);
 }
 
-int ArrayValue::size() const{
-    return elements.size();
+
+ArrayValue::ArrayValue() {}
+
+ArrayValue::ArrayValue(int size){
+    elements = std::vector<std::shared_ptr<Value>>(size);
 }
 
-std::vector<std::shared_ptr<Value>>::iterator ArrayValue::begin(){
-    return elements.begin();
+ArrayValue::ArrayValue(std::vector<std::shared_ptr<Value>> elem){
+    elements = std::vector<std::shared_ptr<Value>>(elem.size());
+    for(int i = 0; i < elem.size(); ++i){
+        elements[i] = elem[i];
+    }
 }
 
-std::vector<std::shared_ptr<Value>>::iterator ArrayValue::end(){
-    return elements.end();
+ArrayValue::ArrayValue(const ArrayValue& arra){
+    (*this) = ArrayValue(arra.elements);
 }
 
-std::shared_ptr<Value> ArrayValue::accessDot(std::shared_ptr<Value> property){
-    std::string prop = property -> asString();
-    if (prop == "length") SH_RET(FunctionValue, new Length(elements));
-    if (prop == "is_empty") SH_RET(FunctionValue, new IsEmpty(elements));
-    throw new UnknownPropertyException(prop);
+
+std::shared_ptr<Value> ArrayValue::get(int index) const{
+    return elements[index];
 }
 
-std::shared_ptr<Value> ArrayValue::accessBracket(std::shared_ptr<Value> property){
-    return get((int)property -> asDouble());
+void ArrayValue::set(int index, std::shared_ptr<Value> value){
+    elements[index] = value;
+}
+
+
+std::shared_ptr<Value> ArrayValue::copy(){
+    int size = elements.size();
+    std::shared_ptr<ArrayValue> arr = SHARE(ArrayValue, size);
+    for(int i = 0; i < size; ++i) arr -> set(i, get(i) -> copy());
+    return arr;
 }
 
 double ArrayValue::asDouble(){
@@ -123,6 +109,36 @@ Values ArrayValue::type() const{
 ArrayValue::operator std::string(){
     return asString();
 }
+
+std::shared_ptr<Value> ArrayValue::getDot(std::shared_ptr<Value> property){
+    std::string prop = property -> asString();
+    if (prop == "length") SH_RET(FunctionValue, new Length(elements));
+    if (prop == "is_empty") SH_RET(FunctionValue, new IsEmpty(elements));
+    throw new UnknownPropertyException(prop);
+}
+
+std::shared_ptr<Value> ArrayValue::getBracket(std::shared_ptr<Value> property){
+    return get((int)property -> asDouble());
+}
+
+void ArrayValue::setBracket(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
+    int arrayIndex = (int) key -> asDouble();
+    set(arrayIndex, value);
+}
+
+
+int ArrayValue::size() const{
+    return elements.size();
+}
+
+std::vector<std::shared_ptr<Value>>::iterator ArrayValue::begin(){
+    return elements.begin();
+}
+
+std::vector<std::shared_ptr<Value>>::iterator ArrayValue::end(){
+    return elements.end();
+}
+
 
 namespace SlavaScript::lang{
     CMP(ArrayValue){

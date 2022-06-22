@@ -9,19 +9,18 @@ namespace SlavaScript::lang{
     private:
         std::shared_ptr<Function> value;
     public:
-        FunctionValue(std::shared_ptr<Function> value) : value(value) {}
-        FunctionValue(Function* value) : value(std::shared_ptr<Function>(value)) {}
-        std::shared_ptr<Value> copy();
+        FunctionValue(std::shared_ptr<Function> value);
+        FunctionValue(Function* value);
 
         std::shared_ptr<Function> getFunction();
 
-        double asDouble();
-        std::string asString();
-        bool asBool();
-        Bignum asBignum();
-        Values type() const;
-        operator std::string();
-        ~FunctionValue(){}
+        std::shared_ptr<Value> copy() override;
+        double asDouble() override;
+        std::string asString() override;
+        bool asBool() override;
+        Bignum asBignum() override;
+        Values type() const override;
+        operator std::string() override;
 
         friend CMP(FunctionValue);
     };

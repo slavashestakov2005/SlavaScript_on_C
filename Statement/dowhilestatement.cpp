@@ -4,6 +4,8 @@
 
 using namespace SlavaScript::lang;
 
+DoWhileStatement::DoWhileStatement(Expression* condition, Statement* body) : condition(condition), body(body) {}
+
 void DoWhileStatement::execute(){
     do{
         try{
@@ -16,6 +18,10 @@ void DoWhileStatement::execute(){
             //continue;
         }
     }while(condition -> eval() -> asBool());
+}
+
+Statements DoWhileStatement::type() const{
+    return Statements::DoWhileStatement;
 }
 
 DoWhileStatement::operator std::string(){

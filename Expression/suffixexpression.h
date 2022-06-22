@@ -17,13 +17,16 @@ namespace SlavaScript::lang{
     public:
         SuffixExpression(std::string variable, std::vector<SuffixElement*> access);
         SuffixExpression(Expression* root, std::vector<SuffixElement*> access);
-        Expressions type(){ return Expressions::SuffixExpression; }
-        std::shared_ptr<Value> eval();
+
         std::shared_ptr<Value> get();
         std::shared_ptr<Value> set(std::shared_ptr<Value> value);
-        operator std::string();
-        ~SuffixExpression(){}
-        void accept(Visitor* visitor);
+
+        std::shared_ptr<Value> eval() override;
+        Expressions type() const override;
+        operator std::string() override;
+
+        ~SuffixExpression();
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend AssignValidator;
         friend compiler::CompilerVisitor;

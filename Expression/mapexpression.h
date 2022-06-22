@@ -9,12 +9,14 @@ namespace SlavaScript::lang{
     private:
         std::map<Expression*, Expression*> elements;
     public:
-        MapExpression(std::map<Expression*, Expression*> elements) : elements(elements) {}
-        Expressions type(){ return Expressions::MapExpression; }
-        std::shared_ptr<Value> eval();
-        operator std::string();
-        ~MapExpression(){}
-        void accept(Visitor* visitor);
+        MapExpression(std::map<Expression*, Expression*> elements);
+
+        std::shared_ptr<Value> eval() override;
+        Expressions type() const override;
+        operator std::string() override;
+
+        ~MapExpression();
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend compiler::CompilerVisitor;
     };

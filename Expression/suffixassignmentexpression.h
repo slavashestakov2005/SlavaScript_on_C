@@ -13,12 +13,14 @@ namespace SlavaScript::lang{
         SuffixExpression* containerExpr;
         Expression* expression;
     public:
-        SuffixAssignmentExpression(AssignmentOperator operation, SuffixExpression* containerExpr, Expression* expression) : operation(operation), containerExpr(containerExpr), expression(expression) {}
-        Expressions type(){ return Expressions::SuffixAssignmentExpression; }
-        std::shared_ptr<Value> eval();
-        operator std::string();
+        SuffixAssignmentExpression(AssignmentOperator operation, SuffixExpression* containerExpr, Expression* expression);
+
+        std::shared_ptr<Value> eval() override;
+        Expressions type() const override;
+        operator std::string() override;
+
         ~SuffixAssignmentExpression();
-        void accept(Visitor* visitor);
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend AssignValidator;
         friend compiler::CompilerVisitor;

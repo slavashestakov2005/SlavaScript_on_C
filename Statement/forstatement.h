@@ -12,13 +12,14 @@ namespace SlavaScript::lang{
         Statement* increment;
         Statement* body;
     public:
-        ForStatement(Statement* initialization, Expression* termination, Statement* increment, Statement* body)
-        : initialization(initialization), termination(termination), increment(increment), body(body) {}
-        Statements type(){ return Statements::ForStatement; }
-        void execute();
-        operator std::string();
+        ForStatement(Statement* initialization, Expression* termination, Statement* increment, Statement* body);
+
+        void execute() override;
+        Statements type() const override;
+        operator std::string() override;
+
         ~ForStatement();
-        void accept(Visitor* visitor);
+        void accept(Visitor* visitor) override;
         friend Visitor;
         friend compiler::CompilerVisitor;
     };
