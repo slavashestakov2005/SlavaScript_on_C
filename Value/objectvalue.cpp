@@ -20,14 +20,8 @@ std::shared_ptr<Value> ObjectValue::get(std::shared_ptr<Value> value){
 }
 
 
-ObjectValue::ObjectValue(std::string className) : className(className){
-    thisMap -> setThisMap(true);
-}
+ObjectValue::ObjectValue(std::string className) : className(className) {}
 
-
-std::shared_ptr<MapValue> ObjectValue::getThisMap(){
-    return thisMap;
-}
 
 void ObjectValue::addField(std::string name, std::shared_ptr<Value> value){
     thisMap -> set(SHARE(StringValue, name), value);

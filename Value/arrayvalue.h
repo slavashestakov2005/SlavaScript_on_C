@@ -6,16 +6,16 @@
 #include "value.h"
 
 namespace SlavaScript::lang{
-    class ArrayValue : public Value, Container<std::vector<std::shared_ptr<Value>>>{
+    class ArrayValue : public Value, public Container<std::vector<std::shared_ptr<Value>>>{
     private:
-        std::vector<std::shared_ptr<Value>> elements;
+        container_type elements;
     public:
         static std::shared_ptr<ArrayValue> add(std::shared_ptr<ArrayValue> array, std::shared_ptr<Value> value);
         static std::shared_ptr<ArrayValue> add(std::shared_ptr<ArrayValue> array1, std::shared_ptr<ArrayValue> array2);
 
         ArrayValue();
         ArrayValue(int size);
-        ArrayValue(std::vector<std::shared_ptr<Value>> elem);
+        ArrayValue(container_type elem);
         ArrayValue(const ArrayValue& arra);
 
         std::shared_ptr<Value> get(int index) const;
@@ -33,8 +33,8 @@ namespace SlavaScript::lang{
         void setBracket(std::shared_ptr<Value> key, std::shared_ptr<Value> value) override;
 
         int size() const override;
-        std::vector<std::shared_ptr<Value>>::iterator begin() override;
-        std::vector<std::shared_ptr<Value>>::iterator end() override;
+        container_type::iterator begin() override;
+        container_type::iterator end() override;
 
         friend CMP(ArrayValue);
     };

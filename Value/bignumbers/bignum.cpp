@@ -254,7 +254,12 @@ namespace SlavaScript::lang{
         RCHECK(std::string(a), std::string(b));
     }
 
-    CLS_OPS(UnsignedBig)
+    DEF_OP_OUT(UnsignedBig, +)
+    DEF_OP_OUT(UnsignedBig, -)
+    DEF_OP_OUT(UnsignedBig, *)
+    DEF_OP_OUT(UnsignedBig, /)
+    DEF_OP_OUT(UnsignedBig, %)
+    DEF_CMP(UnsignedBig)
 }
 
 
@@ -483,7 +488,12 @@ namespace SlavaScript::lang{
         RCHECK(s2, t2);
     }
 
-    CLS_OPS(Bignum)
+    DEF_OP_OUT(Bignum, +)
+    DEF_OP_OUT(Bignum, -)
+    DEF_OP_OUT(Bignum, *)
+    DEF_OP_OUT(Bignum, /)
+    DEF_OP_OUT(Bignum, %)
+    DEF_CMP(Bignum)
 }
 
 
@@ -540,6 +550,9 @@ namespace SlavaScript::lang{
         RCHECK(Bignum(a), Bignum(b));
     }
 
-    BINARY_OP(RationalBig, +) BINARY_OP(RationalBig, -) BINARY_OP(RationalBig, *) BINARY_OP(RationalBig, /)
+    DEF_OP_OUT(RationalBig, +)
+    DEF_OP_OUT(RationalBig, -)
+    DEF_OP_OUT(RationalBig, *)
+    DEF_OP_OUT(RationalBig, /)
     DEF_CMP(RationalBig)
 }

@@ -8,6 +8,7 @@
 #include "../Expression/valueexpression.h"
 #include "../Lib/classmethod.h"
 #include "../Lib/utils.h"
+#include <algorithm>
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::ArgumentsMismatchException;
@@ -16,20 +17,34 @@ using SlavaScript::exceptions::TypeException;
 
 
 namespace {
-    CLASS_METHOD(IsEmpty, std::vector<std::shared_ptr<Value>>)
+    CLASS_METHOD(IsEmpty, ArrayValue::container_type)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         return BoolValue::fromBool(instance.empty());
     CME
 
-    CLASS_METHOD(Length, std::vector<std::shared_ptr<Value>>)
+    CLASS_METHOD(Length, ArrayValue::container_type)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         SH_RET(NumberValue, instance.size());
+    CME
+
+    CLASS_METHOD(Sort, ArrayValue::container_type)
+        if (values.size() > 2) throw new ArgumentsMismatchException("Zero, one or two arguments expected");
+        if (values.size() == 0) std::sort(instance.begin(), instance.end(), comparator);
+        else {
+            if (values[0] -> type() != Values::FUNCTION) throw new TypeException("Function expected in first argument");
+            std::shared_ptr<Function> func = CAST(FunctionValue, values[0]) -> getFunction();
+            bool binary = false;
+            if (values.size() == 2) binary = values[1] -> asBool();
+            if (!binary) std::sort(instance.begin(), instance.end(), [func](std::shared_ptr<Value> l, std::shared_ptr<Value> r) -> bool { return comparator(func -> execute({l}), func -> execute({r})); });
+            else std::sort(instance.begin(), instance.end(), [func](std::shared_ptr<Value> l, std::shared_ptr<Value> r) -> bool { return func -> execute({l, r}) -> asBool(); });
+        }
+        return SHARE(ArrayValue, instance);
     CME
 }
 
 
 std::shared_ptr<ArrayValue> ArrayValue::add(std::shared_ptr<ArrayValue> array, std::shared_ptr<Value> value){
-    std::vector<std::shared_ptr<Value>> vec;
+    container_type vec;
     int size = array -> elements.size() + 1;
     for(int i = 0; i < size - 1; ++i) vec.push_back(array -> get(i));
     vec.push_back(value);
@@ -37,7 +52,7 @@ std::shared_ptr<ArrayValue> ArrayValue::add(std::shared_ptr<ArrayValue> array, s
 }
 
 std::shared_ptr<ArrayValue> ArrayValue::add(std::shared_ptr<ArrayValue> array1, std::shared_ptr<ArrayValue> array2){
-    std::vector<std::shared_ptr<Value>> vec;
+    container_type vec;
     int size = array1 -> elements.size();
     for(int i = 0; i < size; ++i) vec.push_back(array1 -> get(i));
     size = array2 -> elements.size();
@@ -49,11 +64,11 @@ std::shared_ptr<ArrayValue> ArrayValue::add(std::shared_ptr<ArrayValue> array1, 
 ArrayValue::ArrayValue() {}
 
 ArrayValue::ArrayValue(int size){
-    elements = std::vector<std::shared_ptr<Value>>(size);
+    elements = container_type(size);
 }
 
-ArrayValue::ArrayValue(std::vector<std::shared_ptr<Value>> elem){
-    elements = std::vector<std::shared_ptr<Value>>(elem.size());
+ArrayValue::ArrayValue(ArrayValue::container_type elem){
+    elements = container_type(elem.size());
     for(int i = 0; i < elem.size(); ++i){
         elements[i] = elem[i];
     }
@@ -112,8 +127,9 @@ ArrayValue::operator std::string(){
 
 std::shared_ptr<Value> ArrayValue::getDot(std::shared_ptr<Value> property){
     std::string prop = property -> asString();
-    if (prop == "length") SH_RET(FunctionValue, new Length(elements));
-    if (prop == "is_empty") SH_RET(FunctionValue, new IsEmpty(elements));
+    ADD_METHOD("length", Length, elements);
+    ADD_METHOD("is_empty", IsEmpty, elements);
+    ADD_METHOD("sort", Sort, elements);
     throw new UnknownPropertyException(prop);
 }
 
@@ -131,11 +147,11 @@ int ArrayValue::size() const{
     return elements.size();
 }
 
-std::vector<std::shared_ptr<Value>>::iterator ArrayValue::begin(){
+ArrayValue::container_type::iterator ArrayValue::begin(){
     return elements.begin();
 }
 
-std::vector<std::shared_ptr<Value>>::iterator ArrayValue::end(){
+ArrayValue::container_type::iterator ArrayValue::end(){
     return elements.end();
 }
 

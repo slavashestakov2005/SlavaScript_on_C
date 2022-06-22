@@ -5,6 +5,7 @@
 #include "../Lib/functions.h"
 #include "../Lib/variables.h"
 #include "../Lib/names.h"
+#include "../Lib/moduleobject.h"
 #include "../Modules/all.h"
 #include "../Value/mapvalue.h"
 #include "../Value/stringvalue.h"
@@ -13,6 +14,24 @@
 using namespace SlavaScript::lang;
 using SlavaScript::modules::try_import_module;
 using SlavaScript::exceptions::UnknownModuleException;
+
+namespace{
+    CLASS_IN_MODULE_1(Import)
+        std::shared_ptr<MapValue> map;
+
+        Import(std::shared_ptr<MapValue> map) : map(map) {}
+
+        std::shared_ptr<Value> copy() override{
+            return SHARE(Import, CAST(MapValue, map -> copy()));
+        }
+
+        std::shared_ptr<Value> getDot(std::shared_ptr<Value> property) override{
+            return map -> getBracket(property);
+        }
+
+        ~Import(){}
+    CLASS_IN_MODULE_2(Import)
+}
 
 ImportStatement::ImportStatement(std::vector<std::string> names, std::string moduleName) : names(names), moduleName(moduleName) {}
 
@@ -43,9 +62,8 @@ void ImportStatement::execute(){
             map -> set(SHARE(StringValue, x.first), x.second[0].second);
         }
         // for each
-        map -> setThisMap(true);
         Names::popScope();
-        Names::setVariable(moduleName, map);
+        Names::setVariable(moduleName, SHARE(Import, map));
     }
     else Names::copyScope();
 }

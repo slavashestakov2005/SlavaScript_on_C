@@ -1,15 +1,15 @@
 import std
 a = {1 : "1", 2 : "2", "three" : 3, "5" : 0}
-println a							/* {1: "1", 2: "2", "5": 0, "three": 3} */
-println map_key_exists(a, 1)					/* true */
-println map_key_exists(a, 5)					/* false */
-println map_keys(a)						/* [1, 2, "5", "three"] */
-println map_values(a)						/* ["1", "2", 0, 3] */
-println parse_number("1010", 2)					/* 10 */
-println parse_number("234", 5)					/* 69 */
-println to_char(100)						/* "d" */
-println to_hex_string(256 + 16 * 2)				/* "120" */
+println a								/* {1: "1", 2: "2", "5": 0, "three": 3} */
+println a.exists(1)						/* true */
+println a.exists(5)						/* false */
+println a.keys()						/* [1, 2, "5", "three"] */
+println a.values()						/* ["1", "2", 0, 3] */
+println parse_number("1010", 2)			/* 10 */
+println parse_number("234", 5)			/* 69 */
+println to_char(100)					/* "d" */
+println to_hex_string(256 + 16 * 2)		/* "120" */
 println len(5)							/* 0 */
-println len("Hello world")					/* 11 */
-println len([0, 1, [2, 3], 4])					/* 4 */
-println len({0: "0", "zero" : 0})				/* 2 */
+println len("Hello world")				/* 11 */
+println len([0, 1, [2, 3], 4])			/* 4 */
+println len({0: "0", "zero" : 0})		/* 2 */

@@ -5,11 +5,11 @@
 #include "value.h"
 
 namespace SlavaScript::lang{
-    class StringValue : public Value, Container<std::string>{
+    class StringValue : public Value, public Container<std::string>{
     private:
-        std::string value;
+        container_type value;
     public:
-        StringValue(std::string value);
+        StringValue(container_type value);
 
         void set(int index, std::shared_ptr<Value> val);
 
@@ -25,8 +25,8 @@ namespace SlavaScript::lang{
         void setBracket(std::shared_ptr<Value> key, std::shared_ptr<Value> value) override;
 
         int size() const override;
-        std::string::iterator begin() override;
-        std::string::iterator end() override;
+        container_type::iterator begin() override;
+        container_type::iterator end() override;
 
         friend CMP(StringValue);
     };

@@ -13,7 +13,6 @@ namespace SlavaScript::lang{
     public:
         ObjectValue(std::string className);
 
-        std::shared_ptr<MapValue> getThisMap();
         void addField(std::string name, std::shared_ptr<Value> value);
         std::shared_ptr<Value> getConstructor();
         std::string getName();

@@ -40,7 +40,11 @@ namespace SlavaScript::lang{
         UnsignedBig& operator--();
         UnsignedBig operator--(int);
 
-        DECS_1(UnsignedBig)
+        DEC_OP_IN(UnsignedBig, +=);
+        DEC_OP_IN(UnsignedBig, -=);
+        DEC_OP_IN(UnsignedBig, *=);
+        DEC_OP_IN(UnsignedBig, /=);
+        DEC_OP_IN(UnsignedBig, %=);
         friend CMP(UnsignedBig);
     };
 
@@ -49,7 +53,11 @@ namespace SlavaScript::lang{
     inline const UnsignedBig UnsignedBig::ZERO = UnsignedBig(0), UnsignedBig::ONE = UnsignedBig(1);
     std::istream& operator>>(std::istream& is, UnsignedBig& temp);
     std::ostream& operator<<(std::ostream& os, const UnsignedBig& temp);
-    DECS_2(UnsignedBig)
+    DEC_OP_OUT(UnsignedBig, +);
+    DEC_OP_OUT(UnsignedBig, -);
+    DEC_OP_OUT(UnsignedBig, *);
+    DEC_OP_OUT(UnsignedBig, /);
+    DEC_OP_OUT(UnsignedBig, %);
     DEC_CMP(UnsignedBig)
 
     class Bignum{
@@ -89,7 +97,11 @@ namespace SlavaScript::lang{
         Bignum& operator--();
         Bignum operator--(int);
 
-        DECS_1(Bignum)
+        DEC_OP_IN(Bignum, +=);
+        DEC_OP_IN(Bignum, -=);
+        DEC_OP_IN(Bignum, *=);
+        DEC_OP_IN(Bignum, /=);
+        DEC_OP_IN(Bignum, %=);
         friend CMP(Bignum);
     };
 
@@ -98,7 +110,11 @@ namespace SlavaScript::lang{
     inline const Bignum Bignum::ZERO = Bignum(UnsignedBig::ZERO), Bignum::ONE = Bignum(UnsignedBig::ONE);
     std::istream& operator>>(std::istream& is, Bignum& temp);
     std::ostream& operator<<(std::ostream& os, const Bignum& temp);
-    DECS_2(Bignum)
+    DEC_OP_OUT(Bignum, +);
+    DEC_OP_OUT(Bignum, -);
+    DEC_OP_OUT(Bignum, *);
+    DEC_OP_OUT(Bignum, /);
+    DEC_OP_OUT(Bignum, %);
     DEC_CMP(Bignum)
 
     class RationalBig{
@@ -118,11 +134,18 @@ namespace SlavaScript::lang{
         operator Bignum() const;
         RationalBig operator-();
 
-        DEC_1(RationalBig, +=) DEC_1(RationalBig, -=) DEC_1(RationalBig, *=) DEC_1(RationalBig, /=)
+        DEC_OP_IN(RationalBig, +=);
+        DEC_OP_IN(RationalBig, -=);
+        DEC_OP_IN(RationalBig, *=);
+        DEC_OP_IN(RationalBig, /=);
         friend CMP(RationalBig);
     };
 
-    DEC_2(RationalBig, +) DEC_2(RationalBig, -) DEC_2(RationalBig, *) DEC_2(RationalBig, /)
+    DEC_OP_OUT(RationalBig, +);
+    DEC_OP_OUT(RationalBig, -);
+    DEC_OP_OUT(RationalBig, *);
+    DEC_OP_OUT(RationalBig, /);
+    DEC_OP_OUT(RationalBig, %);
     DEC_CMP(RationalBig)
 }
 

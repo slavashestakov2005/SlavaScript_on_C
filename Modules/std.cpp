@@ -82,35 +82,6 @@ namespace SlavaScript::modules::std_f{
         SH_RET(NumberValue, length);
     FE
 
-    CREATE_FUNCTION(map_key_exists)
-        if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
-        if (values[0] -> type() != Values::MAP) throw new TypeException("Map expected in first argument");
-        std::shared_ptr<MapValue> map = CAST(MapValue, values[0]);
-        return BoolValue::fromBool(map -> containsKey(values[1]));
-    FE
-
-    CREATE_FUNCTION(map_keys)
-        if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
-        if (values[0] -> type() != Values::MAP) throw new TypeException("Map expected in first argument");
-        std::shared_ptr<MapValue> map = CAST(MapValue, values[0]);
-        std::vector<std::shared_ptr<Value>> keys;
-        int siz = map -> size();
-        auto iter = map -> begin();
-        for(int i = 0; i < siz; ++i, ++iter) keys.push_back(iter -> first);
-        SH_RET(ArrayValue, keys);
-    FE
-
-    CREATE_FUNCTION(map_values)
-        if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
-        if (values[0] -> type() != Values::MAP) throw new TypeException("Map expected in first argument");
-        std::shared_ptr<MapValue> map = CAST(MapValue, values[0]);
-        std::vector<std::shared_ptr<Value>> keys;
-        int siz = map -> size();
-        auto iter = map -> begin();
-        for(int i = 0; i < siz; ++i, ++iter) keys.push_back(iter -> second);
-        SH_RET(ArrayValue, keys);
-    FE
-
     CREATE_FUNCTION(new_array)
         return std_out::createArray(values, 0);
     FE
@@ -157,19 +128,6 @@ namespace SlavaScript::modules::std_f{
         return NullValue::NULL_;
     FE
 
-    CREATE_FUNCTION(sort)
-        if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
-        if (values[0] -> type() != Values::ARRAY) throw new TypeException("Array expected in first argument");
-        std::shared_ptr<ArrayValue> arr = CAST(ArrayValue, values[0] -> copy());
-        if (values.size() == 1) std::sort(arr -> begin(), arr -> end(), comparator);
-        if (values.size() == 2){
-            if (values[1] -> type() != Values::FUNCTION) throw new TypeException("Function expected in second argument");
-            std::shared_ptr<Function> func = CAST(FunctionValue, values[1]) -> getFunction();
-            std::sort(arr -> begin(), arr -> end(), [func](std::shared_ptr<Value> l, std::shared_ptr<Value> r) -> bool { return comparator(func -> execute({l}), func -> execute({r})); });
-        }
-        return arr;
-    FE
-
     CREATE_FUNCTION(time)
         if (values.size() != 0) throw new ArgumentsMismatchException("Zero arguments expected");
         SH_RET(NumberValue, clock());
@@ -207,14 +165,10 @@ void Std::initFunctions(){
     BINARY_F(array_combine)
     INF_F(echo)
     UNARY_F(len)
-    BINARY_F(map_key_exists)
-    UNARY_F(map_keys)
-    UNARY_F(map_values)
     INF_F(new_array)
     INFO_F(parse_number, ArgumentsInfo(1, 1))
     INFO_F_(std_f, rand, ArgumentsInfo(0, 2))
     UNARY_F(sleep)
-    INFO_F(sort, ArgumentsInfo(1, 1))
     WITHOUT_F_(std_f, time)
     UNARY_F(to_char)
     UNARY_F(to_hex_string)

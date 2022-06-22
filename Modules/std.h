@@ -5,10 +5,8 @@
 
 namespace SlavaScript::modules{
     namespace std_f{
-        extern std::shared_ptr<SlavaScript::lang::Function> array_combine, char_at, echo, find, join, len, map_key_exists, map_keys,
-                                            map_values, new_array, parse_number, rand, replace, replace_first, rfind,
-                                            sleep, sort, split, substring, time, to_char, to_hex_string, to_lower,
-                                            to_upper, trim;
+        extern std::shared_ptr<SlavaScript::lang::Function> array_combine, echo, len, new_array, parse_number, rand,
+                                            sleep, time, to_char, to_hex_string;
     }
 
     class Std : public Module<Std> {

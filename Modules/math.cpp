@@ -151,7 +151,10 @@ namespace SlavaScript::modules::math_out{
         friend CMP(Polynomial);
     CLASS_IN_MODULE_2(Polynomial)
 
-    BINARY_OP(Polynomial, +) BINARY_OP(Polynomial, -) BINARY_OP(Polynomial, *) BINARY_OP(Polynomial, %)
+    DEF_OP_OUT(Polynomial, +)
+    DEF_OP_OUT(Polynomial, -)
+    DEF_OP_OUT(Polynomial, *)
+    DEF_OP_OUT(Polynomial, %)
     DEF_CMP(Polynomial)
 
     CMP(Polynomial){
@@ -163,12 +166,12 @@ namespace SlavaScript::modules::math_out{
         return 0;
     }
 
-    CLASS_METHOD_(Deg, Polynomial)
+    CLASS_METHOD_PTR(Deg, Polynomial)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         SH_RET(NumberValue, instance -> deg());
     CME
 
-    CLASS_METHOD_(Compare, Polynomial)
+    CLASS_METHOD_PTR(Compare, Polynomial)
         if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
         std::shared_ptr<Polynomial> p;
         if (values[0] -> type() == Values::NUMBER) p = SHARE(Polynomial, std::vector<PolynomialCoeff>{values[0] -> asBignum()});
@@ -186,20 +189,20 @@ namespace SlavaScript::modules::math_out{
         auto q = (*instance) op (*p);
 
     #define POLYNOMIAL_FUNCTION_01(cls, op) \
-        CLASS_METHOD_(cls, Polynomial) \
+        CLASS_METHOD_PTR(cls, Polynomial) \
             if (values.empty()) SH_RET(Polynomial, op (*instance)); \
             POLYNOMIAL_FUNCTION(cls, op) \
             SH_RET(Polynomial, q); \
         CME
 
     #define POLYNOMIAL_FUNCTION_1(cls, op) \
-        CLASS_METHOD_(cls, Polynomial) \
+        CLASS_METHOD_PTR(cls, Polynomial) \
             POLYNOMIAL_FUNCTION(cls, op) \
             SH_RET(Polynomial, q); \
         CME
 
     #define POLYNOMIAL_FUNCTION_2(cls, op) \
-        CLASS_METHOD_(cls, Polynomial) \
+        CLASS_METHOD_PTR(cls, Polynomial) \
             POLYNOMIAL_FUNCTION(cls, op) \
             if (values[0] -> type() == Values::NUMBER) SH_RET(Polynomial, q.first); \
             std::vector<std::shared_ptr<Value>> v = {SHARE(Polynomial, q.first), SHARE(Polynomial, q.second)}; \
@@ -207,7 +210,7 @@ namespace SlavaScript::modules::math_out{
         CME
 
     #define POLYNOMIAL_FUNCTION_3(cls, op) \
-        CLASS_METHOD_(cls, Polynomial) \
+        CLASS_METHOD_PTR(cls, Polynomial) \
             POLYNOMIAL_FUNCTION(cls, op) \
             return BoolValue::fromBool(q); \
         CME
@@ -227,19 +230,19 @@ namespace SlavaScript::modules::math_out{
 
     std::shared_ptr<Value> Polynomial::getDot(std::shared_ptr<Value> property){
         std::string prop = property -> asString();
-        CHECK_PROP("deg", Deg);
-        CHECK_PROP("+", Add);
-        CHECK_PROP("-", Sub);
-        CHECK_PROP("*", Mul);
-        CHECK_PROP("/", Div);
-        CHECK_PROP("%", Mod);
-        CHECK_PROP("<=>", Compare);
-        CHECK_PROP("==", Eq);
-        CHECK_PROP("!=", Ne);
-        CHECK_PROP("<", Lt);
-        CHECK_PROP("<=", Le);
-        CHECK_PROP(">", Gt);
-        CHECK_PROP(">=", Ge);
+        ADD_METHOD_PTR("deg", Deg);
+        ADD_METHOD_PTR("+", Add);
+        ADD_METHOD_PTR("-", Sub);
+        ADD_METHOD_PTR("*", Mul);
+        ADD_METHOD_PTR("/", Div);
+        ADD_METHOD_PTR("%", Mod);
+        ADD_METHOD_PTR("<=>", Compare);
+        ADD_METHOD_PTR("==", Eq);
+        ADD_METHOD_PTR("!=", Ne);
+        ADD_METHOD_PTR("<", Lt);
+        ADD_METHOD_PTR("<=", Le);
+        ADD_METHOD_PTR(">", Gt);
+        ADD_METHOD_PTR(">=", Ge);
         throw new UnknownPropertyException(prop);
     }
 }
@@ -329,7 +332,7 @@ namespace SlavaScript::modules::math_f{
     MATH_FUNCTION(to_degrees)
     MATH_FUNCTION(to_radians)
 
-    DEF_CLASS_(math_out, Polynomial)
+    DEF_CLASS(math_out, Polynomial)
 }
 
 
@@ -371,7 +374,7 @@ void Math::initFunctions(){
 }
 
 void Math::initClasses(){
-    SET_CLASS_(math_f, Polynomial)
+    SET_CLASS(math_f, Polynomial)
 }
 
 /*

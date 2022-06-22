@@ -41,27 +41,27 @@ namespace SlavaScript::modules::files_out{
         ~File(){}
     CLASS_IN_MODULE_2(File)
 
-    CLASS_METHOD(Close, File*)
+    CLASS_METHOD_PTR(Close, File)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         instance -> file.close();
         return NullValue::NULL_;
     CME
 
-    CLASS_METHOD(Read, File*)
+    CLASS_METHOD_PTR(Read, File)
         instance -> file.seekg(0, instance -> file.beg);
         std::stringstream str;
         str << instance -> file.rdbuf();
         SH_RET(StringValue, str.str());
     CME
 
-    CLASS_METHOD(ReadLine, File*)
+    CLASS_METHOD_PTR(ReadLine, File)
         if (values.size() != 0) throw new ArgumentsMismatchException("Zero arguments expected");
         std::string line;
         if (instance -> file) std::getline(instance -> file, line);
         SH_RET(StringValue, line);
     CME
 
-    CLASS_METHOD(WriteLine, File*)
+    CLASS_METHOD_PTR(WriteLine, File)
         if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
         if (instance -> file && instance -> file.tellg() < instance -> file.end) instance -> file << values[0] -> asString();
         else if (!instance -> bad){
@@ -75,10 +75,10 @@ namespace SlavaScript::modules::files_out{
     std::shared_ptr<Value> File::getDot(std::shared_ptr<Value> property){
         std::string prop = property -> asString();
         if (bad) throw new TypeException("Cannot use DOT for not opened file");
-        if (prop == "close") SH_RET(FunctionValue, new Close(this));
-        if (prop == "read") SH_RET(FunctionValue, new Read(this));
-        if (prop == "read_line") SH_RET(FunctionValue, new ReadLine(this));
-        if (prop == "write_line") SH_RET(FunctionValue, new WriteLine(this));
+        ADD_METHOD_PTR("close", Close);
+        ADD_METHOD_PTR("read", Read);
+        ADD_METHOD_PTR("read_line", ReadLine);
+        ADD_METHOD_PTR("write_line", WriteLine);
         throw new UnknownPropertyException(prop);
     }
 }
@@ -91,7 +91,7 @@ namespace SlavaScript::modules::files_f{
         return CAST(Value, file);
     FE
 
-    DEF_CLASS_(files_out, File)
+    DEF_CLASS(files_out, File)
 }
 
 void Files::initFunctions(){
@@ -99,5 +99,5 @@ void Files::initFunctions(){
 }
 
 void Files::initClasses(){
-    SET_CLASS_(files_f, File)
+    SET_CLASS(files_f, File)
 }

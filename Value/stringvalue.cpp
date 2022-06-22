@@ -18,7 +18,7 @@ using SlavaScript::exceptions::TypeException;
 
 
 namespace{
-    CLASS_METHOD(Trim, std::string)
+    CLASS_METHOD(Trim, StringValue::container_type)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         std::string ans;
         for(int i = 0; i < instance.size(); ++i){
@@ -32,19 +32,19 @@ namespace{
         SH_RET(StringValue, instance);
     CME
 
-    CLASS_METHOD(To_upper, std::string)
+    CLASS_METHOD(To_upper, StringValue::container_type)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         for(char& x : instance) x = toupper(x);
         SH_RET(StringValue, instance);
     CME
 
-    CLASS_METHOD(To_lower, std::string)
+    CLASS_METHOD(To_lower, StringValue::container_type)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         for(char& x : instance) x = tolower(x);
         SH_RET(StringValue, instance);
     CME
 
-    CLASS_METHOD(Chars, std::string)
+    CLASS_METHOD(Chars, StringValue::container_type)
         if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
         std::vector<std::shared_ptr<Value>> vec;
         for(auto x : instance){
@@ -55,7 +55,7 @@ namespace{
         SH_RET(ArrayValue, vec);
     CME
 
-    CLASS_METHOD(Find, std::string)
+    CLASS_METHOD(Find, StringValue::container_type)
         if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
         if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
         if (values.size() == 2 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
@@ -66,7 +66,7 @@ namespace{
         SH_RET(NumberValue, x);
     CME
 
-    CLASS_METHOD(Join, std::string)
+    CLASS_METHOD(Join, StringValue::container_type)
         if (values.size() < 1) throw new ArgumentsMismatchException("At least one argument expected");
         std::string ans;
         if (values.size() == 1 && values[0] -> type() == Values::ARRAY){
@@ -85,7 +85,7 @@ namespace{
         SH_RET(StringValue, ans);
     CME
 
-    CLASS_METHOD(Replace, std::string)
+    CLASS_METHOD(Replace, StringValue::container_type)
         if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
         if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
         if (values[1] -> type() != Values::STRING) throw new TypeException("String expected in second argument");
@@ -105,7 +105,7 @@ namespace{
         SH_RET(StringValue, result);
     CME
 
-    CLASS_METHOD(ReplaceFirst, std::string)
+    CLASS_METHOD(ReplaceFirst, StringValue::container_type)
         if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
         if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
         if (values[1] -> type() != Values::STRING) throw new TypeException("String expected in second argument");
@@ -116,7 +116,7 @@ namespace{
         SH_RET(StringValue, result);
     CME
 
-    CLASS_METHOD(Rfind, std::string)
+    CLASS_METHOD(Rfind, StringValue::container_type)
         if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
         if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
         if (values.size() == 2 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
@@ -127,7 +127,7 @@ namespace{
         SH_RET(NumberValue, x);
     CME
 
-    CLASS_METHOD(Split, std::string)
+    CLASS_METHOD(Split, StringValue::container_type)
         if (values.size() > 2) throw new ArgumentsMismatchException("Two and less arguments expected");
         if (values.size() > 0 && values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
         if (values.size() > 1 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
@@ -150,7 +150,7 @@ namespace{
         SH_RET(ArrayValue, val);
     CME
 
-    CLASS_METHOD(Substring, std::string)
+    CLASS_METHOD(Substring, StringValue::container_type)
         if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
         if (values[0] -> type() != Values::NUMBER) throw new TypeException("Number expected in first argument");
         if (values.size() == 2 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
@@ -166,7 +166,7 @@ namespace{
 }
 
 
-StringValue::StringValue(std::string value) : value(value) {}
+StringValue::StringValue(StringValue::container_type value) : value(value) {}
 
 
 void StringValue::set(int index, std::shared_ptr<Value> val){
@@ -216,17 +216,17 @@ StringValue::operator std::string(){
 std::shared_ptr<Value> StringValue::getDot(std::shared_ptr<Value> property){
     std::string prop = property -> asString();
     if (prop == "length") SH_RET(NumberValue, size());
-    if (prop == "trim") SH_RET(FunctionValue, new Trim(value));
-    if (prop == "to_upper") SH_RET(FunctionValue, new To_upper(value));
-    if (prop == "to_lower") SH_RET(FunctionValue, new To_lower(value));
-    if (prop == "chars") SH_RET(FunctionValue, new Chars(value));
-    if (prop == "find") SH_RET(FunctionValue, new Find(value));
-    if (prop == "join") SH_RET(FunctionValue, new Join(value));
-    if (prop == "replace") SH_RET(FunctionValue, new Replace(value));
-    if (prop == "replace_first") SH_RET(FunctionValue, new ReplaceFirst(value));
-    if (prop == "rfind") SH_RET(FunctionValue, new Rfind(value));
-    if (prop == "split") SH_RET(FunctionValue, new Split(value));
-    if (prop == "substring") SH_RET(FunctionValue, new Substring(value));
+    ADD_METHOD("trim", Trim, value);
+    ADD_METHOD("to_upper", To_upper, value);
+    ADD_METHOD("to_lower", To_lower, value);
+    ADD_METHOD("chars", Chars, value);
+    ADD_METHOD("find", Find, value);
+    ADD_METHOD("join", Join, value);
+    ADD_METHOD("replace", Replace, value);
+    ADD_METHOD("replace_first", ReplaceFirst, value);
+    ADD_METHOD("rfind", Rfind, value);
+    ADD_METHOD("split", Split, value);
+    ADD_METHOD("substring", Substring, value);
     throw new UnknownPropertyException(prop);
 }
 

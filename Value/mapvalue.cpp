@@ -1,13 +1,39 @@
 #include "mapvalue.h"
+#include "arrayvalue.h"
+#include "boolvalue.h"
 #include "nullvalue.h"
 #include "functionvalue.h"
+#include "../Exception/argumentsmismatchexception.h"
 #include "../Exception/typeexception.h"
 #include "../Exception/unknownpropertyexception.h"
+#include "../Lib/classmethod.h"
 #include "../Lib/utils.h"
 
 using namespace SlavaScript::lang;
+using SlavaScript::exceptions::ArgumentsMismatchException;
 using SlavaScript::exceptions::TypeException;
 using SlavaScript::exceptions::UnknownPropertyException;
+
+namespace {
+    CLASS_METHOD(Exists, MapValue::container_type)
+        if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
+        return BoolValue::fromBool(instance.find(values[0]) != instance.end());
+    CME
+
+    CLASS_METHOD(Keys, MapValue::container_type)
+        if (values.size() != 0) throw new ArgumentsMismatchException("Zero arguments expected");
+        std::vector<std::shared_ptr<Value>> keys;
+        for(auto p : instance) keys.push_back(p.first);
+        SH_RET(ArrayValue, keys);
+    CME
+
+    CLASS_METHOD(ValuesMap, MapValue::container_type)
+        if (values.size() != 0) throw new ArgumentsMismatchException("Zero arguments expected");
+        std::vector<std::shared_ptr<Value>> keys;
+        for(auto p : instance) keys.push_back(p.second);
+        SH_RET(ArrayValue, keys);
+    CME
+}
 
 
 std::shared_ptr<MapValue> MapValue::add(std::shared_ptr<MapValue> map1, std::shared_ptr<MapValue> map2){
@@ -32,14 +58,6 @@ void MapValue::set(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
 
 void MapValue::set(std::shared_ptr<Value> key, std::shared_ptr<Function> value){
     map[key] = SHARE(FunctionValue, value);
-}
-
-bool MapValue::isThisMap(){
-    return thisMap;
-}
-
-void MapValue::setThisMap(bool thisMap){
-    this -> thisMap = thisMap;
 }
 
 bool MapValue::containsKey(std::shared_ptr<Value> key){
@@ -91,24 +109,19 @@ MapValue::operator std::string(){
     return asString();
 }
 
-std::shared_ptr<Value> MapValue::getDot(std::shared_ptr<Value> prop){
-    if (!thisMap) throw new UnknownPropertyException(prop -> asString());
-    if (containsKey(prop)) return map[prop];
-    throw new std::logic_error("Cannot add property to 'this'");
+std::shared_ptr<Value> MapValue::getDot(std::shared_ptr<Value> property){
+    std::string prop = property -> asString();
+    ADD_METHOD("exists", Exists, map);
+    ADD_METHOD("keys", Keys, map);
+    ADD_METHOD("values", ValuesMap, map);
+    throw new UnknownPropertyException(prop);
 }
 
 std::shared_ptr<Value> MapValue::getBracket(std::shared_ptr<Value> prop){
-    if (thisMap) throw new std::logic_error("Cannot used [] for 'this'");
     return get(prop);
 }
 
-void MapValue::setDot(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
-    if (!thisMap) throw new std::logic_error("Cannot used DOT for map");
-    set(key, value);
-}
-
 void MapValue::setBracket(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
-    if (thisMap) throw new std::logic_error("Cannot used [] for 'this'");
     set(key, value);
 }
 
@@ -117,11 +130,11 @@ int MapValue::size() const{
     return map.size();
 }
 
-std::map<std::shared_ptr<Value>, std::shared_ptr<Value>>::iterator MapValue::begin(){
+MapValue::container_type::iterator MapValue::begin(){
     return map.begin();
 }
 
-std::map<std::shared_ptr<Value>, std::shared_ptr<Value>>::iterator MapValue::end(){
+MapValue::container_type::iterator MapValue::end(){
     return map.end();
 }
 
