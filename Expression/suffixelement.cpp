@@ -1,19 +1,13 @@
 #include "suffixelement.h"
-#include "../Exception/unknownfunctionexception.h"
-#include "../Lib/functions.h"
-#include "../Lib/moduleobject.h"
-#include "../Lib/variables.h"
+#include "../Exception/exceptions.h"
+#include "../Lib/utils.h"
 #include "../Run/callstack.h"
-#include "../Value/arrayvalue.h"
 #include "../Value/classvalue.h"
-#include "../Value/functionvalue.h"
-#include "../Value/integrationvalue.h"
 #include "../Value/nullvalue.h"
-#include "../Value/objectvalue.h"
-#include "../Value/stringvalue.h"
 
 using namespace SlavaScript::lang;
-using SlavaScript::exceptions::UnknownFunctionException;
+using SlavaScript::exceptions::LogicException;
+
 
 SuffixElement::~SuffixElement(){}
 
@@ -61,11 +55,11 @@ std::shared_ptr<Value> ParenSuffixElement::get(std::shared_ptr<Value> container)
     std::vector<std::shared_ptr<Value>> values;
     for(int i = 0; i < arguments.size(); ++i) values.push_back(arguments[i] -> eval());
     std::shared_ptr<Value> result = NullValue::NULL_;
+    argType(Values::CLASS, Values::FUNCTION, container);
     if (container -> type() == Values::CLASS) {
         std::shared_ptr<ClassValue> cls = CAST(ClassValue, container);
         result = cls -> construct(values);
     }
-    else if (container -> type() != Values::FUNCTION) throw new TypeException("Class or function expected for call");
     else{
         std::shared_ptr<Function> f = CAST(FunctionValue, container) -> getFunction();
         CallStack::push(std::string(*this), f);
@@ -76,7 +70,7 @@ std::shared_ptr<Value> ParenSuffixElement::get(std::shared_ptr<Value> container)
 }
 
 std::shared_ptr<Value> ParenSuffixElement::set(std::shared_ptr<Value> container, std::shared_ptr<Value> value){
-    throw new TypeException("Cannot set value to function");
+    throw LogicException("Cannot set value to function result");
 }
 
 SuffixType ParenSuffixElement::type() const { return SuffixType::PAREN; }

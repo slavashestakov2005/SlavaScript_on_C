@@ -1,17 +1,24 @@
-#include <iostream>
-#include <sstream>
-#include "function.h"
 #include "functions.h"
-#include "../Exception/unknownfunctionexception.h"
-#include "../Modules/global.h"
+#include "../Exception/exceptions.h"
 #include "names.h"
+#include "../Modules/global.h"
+#include <iostream>
 
 using namespace SlavaScript::lang;
 using SlavaScript::modules::Global;
 using SlavaScript::exceptions::UnknownFunctionException;
 
+
 ArgumentsInfo ArgumentsInfo::without(0), ArgumentsInfo::unary(1), ArgumentsInfo::binary(2), ArgumentsInfo::ternary(3), ArgumentsInfo::quaternary(4),
             ArgumentsInfo::inf(0, 0, 1), ArgumentsInfo::inf1(1, 0, 1);
+
+
+ArgumentsInfo::ArgumentsInfo(int required, int optional, int array) : required(required), optional(optional), array(array) {}
+int ArgumentsInfo::getRequired() const { return required; }
+int ArgumentsInfo::getOptional() const { return optional; }
+int ArgumentsInfo::getArray() const { return array; }
+bool ArgumentsInfo::canCalled(int argsCount) const { return required <= argsCount && (array || argsCount <= required + optional); }
+
 
 std::vector<FunctionsScope> Functions::scope = {};
 
@@ -51,8 +58,8 @@ bool FunctionsScope::find(std::string key, int count){
 }
 
 std::shared_ptr<Function> FunctionsScope::get(std::string key){
-    if (!isExists(key)) throw std::logic_error("Function " + key + " undefined");
-    if (functions[key].size() > 1) throw std::logic_error("Cannot get overloaded function " + key);
+    if (!isExists(key)) throw UnknownFunctionException(key);
+    if (functions[key].size() > 1) throw UnknownFunctionException("overloaded " + key);
     return functions[key][0].second;
 }
 

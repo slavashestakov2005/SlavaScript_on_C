@@ -1,8 +1,8 @@
 #ifndef IMPORTSTATEMENT_H_INCLUDED
 #define IMPORTSTATEMENT_H_INCLUDED
 
-#include "statement.h"
 #include "../Expression/expression.h"
+#include "statement.h"
 #include "../Visitor/importadder.h"
 
 namespace SlavaScript::lang{

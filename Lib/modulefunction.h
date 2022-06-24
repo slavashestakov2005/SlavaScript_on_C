@@ -1,8 +1,8 @@
 #ifndef MODULEFUNCTION_H_INCLUDED
 #define MODULEFUNCTION_H_INCLUDED
 
-#include <functional>
 #include "function.h"
+#include <functional>
 
 namespace SlavaScript::lang{
     using function_type = std::function<std::shared_ptr<Value>(std::vector<std::shared_ptr<Value>>)>;

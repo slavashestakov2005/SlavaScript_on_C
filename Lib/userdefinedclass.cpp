@@ -1,12 +1,11 @@
 #include "userdefinedclass.h"
-#include "../Value/functionvalue.h"
-#include "../Value/objectvalue.h"
-#include "../Value/stringvalue.h"
-#include "../Statement/functiondefinestatement.h"
-#include "../Statement/classdeclarationsstatement.h"
 #include "userdefinedfunction.h"
+#include "utils.h"
+#include "../Statement/functiondefinestatement.h"
+#include "../Value/objectvalue.h"
 
 using namespace SlavaScript::lang;
+
 
 UserDefinedClass::UserDefinedClass(ClassDeclarationsStatement* statement) : statement(statement) {
     name = statement -> get_name();
@@ -23,7 +22,7 @@ std::shared_ptr<Value> UserDefinedClass::construct(std::vector<std::shared_ptr<V
     }
     std::shared_ptr<Value> value = instance -> getConstructor();
     if (!value) return instance;
-    if (value -> type() != Values::FUNCTION) throw new TypeException("Constructor need be a function");
+    argType(Values::FUNCTION, value);
     std::shared_ptr<Function> function = CAST(FunctionValue, value) -> getFunction();
     function -> execute(values);
     return instance;

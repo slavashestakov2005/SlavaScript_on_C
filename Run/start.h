@@ -1,10 +1,10 @@
 #ifndef START_H_INCLUDED
 #define START_H_INCLUDED
 
-#include <string>
-#include <vector>
 #include "../Parser/lexer.h"
 #include "../Statement/statement.h"
+#include <string>
+#include <vector>
 
 namespace SlavaScript::lang{
     class Start{

@@ -1,25 +1,20 @@
 #include "stringvalue.h"
-#include <sstream>
-#include "../Exception/argumentsmismatchexception.h"
-#include "../Exception/typeexception.h"
-#include "../Exception/unknownpropertyexception.h"
-#include "../Value/arrayvalue.h"
-#include "../Lib/function.h"
+#include "../Exception/exceptions.h"
 #include "../Lib/classmethod.h"
-#include "../Value/numbervalue.h"
-#include "../Value/functionvalue.h"
-#include <algorithm>
 #include "../Lib/utils.h"
+#include "arrayvalue.h"
+#include "numbervalue.h"
+#include <algorithm>
+#include <sstream>
 
 using namespace SlavaScript::lang;
-using SlavaScript::exceptions::ArgumentsMismatchException;
+using SlavaScript::exceptions::CastException;
 using SlavaScript::exceptions::UnknownPropertyException;
-using SlavaScript::exceptions::TypeException;
 
 
 namespace{
     CLASS_METHOD(Trim, StringValue::container_type)
-        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        argsCount(0, values.size());
         std::string ans;
         for(int i = 0; i < instance.size(); ++i){
             if (instance[i] != ' ' && instance[i] != '\t' && instance[i] != '\n' || ans.size()) ans += instance[i];
@@ -33,19 +28,19 @@ namespace{
     CME
 
     CLASS_METHOD(To_upper, StringValue::container_type)
-        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        argsCount(0, values.size());
         for(char& x : instance) x = toupper(x);
         SH_RET(StringValue, instance);
     CME
 
     CLASS_METHOD(To_lower, StringValue::container_type)
-        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        argsCount(0, values.size());
         for(char& x : instance) x = tolower(x);
         SH_RET(StringValue, instance);
     CME
 
     CLASS_METHOD(Chars, StringValue::container_type)
-        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        argsCount(0, values.size());
         std::vector<std::shared_ptr<Value>> vec;
         for(auto x : instance){
             std::string s;
@@ -56,9 +51,9 @@ namespace{
     CME
 
     CLASS_METHOD(Find, StringValue::container_type)
-        if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
-        if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
-        if (values.size() == 2 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
+        argsCount(1, 2, values.size());
+        argType(Values::STRING, values[0]);
+        if (values.size() == 2) argType(Values::NUMBER, values[1]);
         std::string str2 = values[0] -> asString();
         int position = ((values.size() == 2) ? (int)values[1] -> asDouble() : 0);
         size_t x = instance.find(str2, position);
@@ -67,7 +62,7 @@ namespace{
     CME
 
     CLASS_METHOD(Join, StringValue::container_type)
-        if (values.size() < 1) throw new ArgumentsMismatchException("At least one argument expected");
+        argsCountLtEq(1, values.size());
         std::string ans;
         if (values.size() == 1 && values[0] -> type() == Values::ARRAY){
             std::shared_ptr<ArrayValue> arr = CAST(ArrayValue, values[0]);
@@ -86,9 +81,9 @@ namespace{
     CME
 
     CLASS_METHOD(Replace, StringValue::container_type)
-        if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
-        if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
-        if (values[1] -> type() != Values::STRING) throw new TypeException("String expected in second argument");
+        argsCount(2, values.size());
+        argType(Values::STRING, values[0]);
+        argType(Values::STRING, values[1]);
         std::string start = values[0] -> asString(), finish = values[1] -> asString(), result;
         /// using regex
         //std::regex rx(start.c_str());
@@ -106,9 +101,9 @@ namespace{
     CME
 
     CLASS_METHOD(ReplaceFirst, StringValue::container_type)
-        if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
-        if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
-        if (values[1] -> type() != Values::STRING) throw new TypeException("String expected in second argument");
+        argsCount(2, values.size());
+        argType(Values::STRING, values[0]);
+        argType(Values::STRING, values[1]);
         std::string start = values[0] -> asString(), finish = values[1] -> asString(), result;
         size_t pos = instance.find(start);
         if (pos != std::string::npos) result = instance.substr(0, pos) + finish + instance.substr(pos + start.size());
@@ -117,9 +112,9 @@ namespace{
     CME
 
     CLASS_METHOD(Rfind, StringValue::container_type)
-        if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
-        if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
-        if (values.size() == 2 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
+        argsCount(1, 2, values.size());
+        argType(Values::STRING, values[0]);
+        if (values.size() == 2) argType(Values::NUMBER, values[1]);
         std::string str2 = values[0] -> asString();
         int position = ((values.size() == 2) ? (int)values[1] -> asDouble() : 0);
         size_t x = instance.rfind(str2, position);
@@ -128,9 +123,9 @@ namespace{
     CME
 
     CLASS_METHOD(Split, StringValue::container_type)
-        if (values.size() > 2) throw new ArgumentsMismatchException("Two and less arguments expected");
-        if (values.size() > 0 && values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
-        if (values.size() > 1 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
+        argsCount({0, 1, 2}, values.size());
+        if (values.size() > 0) argType(Values::STRING, values[0]);
+        if (values.size() > 1) argType(Values::NUMBER, values[1]);
         std::string reg = values.size() ? values[0] -> asString() : " ";
         int limit = (values.size() > 1) ? (int)values[1] -> asDouble() - 1 : -1;
         if (limit <= 0) limit = -1;
@@ -151,9 +146,9 @@ namespace{
     CME
 
     CLASS_METHOD(Substring, StringValue::container_type)
-        if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
-        if (values[0] -> type() != Values::NUMBER) throw new TypeException("Number expected in first argument");
-        if (values.size() == 2 && values[1] -> type() != Values::NUMBER) throw new TypeException("Number expected in second argument");
+        argsCount(1, 2, values.size());
+        argType(Values::NUMBER, values[0]);
+        if (values.size() == 2) argType(Values::NUMBER, values[1]);
         std::string ans;
         int start = values[0] -> asDouble();
         if (values.size() == 1) ans = instance.substr(start);
@@ -185,7 +180,7 @@ double StringValue::asDouble(){
         is >> val;
         return val;
     }catch(...) {
-        throw new TypeException("Cannot cast string to number");
+        throw CastException(Values::STRING, Values::NUMBER);
     }
 }
 
@@ -194,14 +189,14 @@ std::string StringValue::asString(){
 }
 
 bool StringValue::asBool(){
-    throw new TypeException("Cannot cast string to bool");
+    throw CastException(Values::STRING, Values::BOOL);
 }
 
 Bignum StringValue::asBignum(){
     try{
         return Bignum(value);
     }catch(...){
-        throw new TypeException("Cannot cast string to number");
+        throw CastException(Values::STRING, Values::NUMBER);
     }
 }
 
@@ -227,7 +222,7 @@ std::shared_ptr<Value> StringValue::getDot(std::shared_ptr<Value> property){
     ADD_METHOD("rfind", Rfind, value);
     ADD_METHOD("split", Split, value);
     ADD_METHOD("substring", Substring, value);
-    throw new UnknownPropertyException(prop);
+    throw UnknownPropertyException(prop);
 }
 
 std::shared_ptr<Value> StringValue::getBracket(std::shared_ptr<Value> property){

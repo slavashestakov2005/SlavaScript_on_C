@@ -1,8 +1,8 @@
 #ifndef TOKEN_H_INCLUDED
 #define TOKEN_H_INCLUDED
 
-#include <string>
 #include "tokentype.h"
+#include <string>
 
 namespace SlavaScript::lang{
     class Token{

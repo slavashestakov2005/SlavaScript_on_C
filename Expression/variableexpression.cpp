@@ -3,6 +3,7 @@
 
 using namespace SlavaScript::lang;
 
+
 VariableExpression::VariableExpression(std::string name) : name(name) {}
 
 std::shared_ptr<Value> VariableExpression::eval(){

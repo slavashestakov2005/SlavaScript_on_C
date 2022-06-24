@@ -1,9 +1,9 @@
 #ifndef PATH_H_INCLUDED
 #define PATH_H_INCLUDED
 
+#include "../Value/arrayvalue.h"
 #include <string>
 #include <vector>
-#include "../Value/arrayvalue.h"
 
 namespace SlavaScript::lang{
     class Path{

@@ -1,15 +1,14 @@
 #ifndef PARSER_H_INCLUDED
 #define PARSER_H_INCLUDED
 
-#include <vector>
 #include "parseerrors.h"
 #include "token.h"
-#include "../Expression/suffixelement.h"
 #include "../Expression/expression.h"
 #include "../Statement/foreacharraystatement.h"
 #include "../Statement/foreachmapstatement.h"
 #include "../Statement/functiondefinestatement.h"
 #include "../Statement/statement.h"
+#include <vector>
 
 namespace SlavaScript::lang{
     class Parser{

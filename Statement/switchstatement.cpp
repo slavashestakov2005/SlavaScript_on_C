@@ -1,6 +1,6 @@
+#include "switchstatement.h"
 #include "breakstatement.h"
 #include "continuestatement.h"
-#include "switchstatement.h"
 
 using namespace SlavaScript::lang;
 
@@ -14,13 +14,13 @@ void SwitchStatement::execute(){
                 trueCase = true;
                 try{
                     body[i].second -> execute();
-                } catch(ContinueStatement* cs){
+                } catch(ContinueStatement& cs){
                     // continue;
                 }
             }
         }
         if (!trueCase && defaultCase != nullptr) defaultCase -> execute();
-    } catch(BreakStatement* bs){
+    } catch(BreakStatement& bs){
         // break;
     }
 }

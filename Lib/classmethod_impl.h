@@ -1,10 +1,9 @@
 #ifndef CLASSMETHOD_IMPL_H_INCLUDED
 #define CLASSMETHOD_IMPL_H_INCLUDED
 
-#include "variables.h"
 #include "names.h"
+#include "variables.h"
 #include "../Value/nullvalue.h"
-#include "../Value/objectvalue.h"
 
 namespace SlavaScript::lang{
     template<typename T>
@@ -18,14 +17,10 @@ namespace SlavaScript::lang{
         std::shared_ptr<Value> result = NullValue::NULL_;
         try{
             result = function -> execute(values);
-        } catch(std::exception* ex){
+        } catch(...){
             Variables::pop();
             Names::restore(name);
-            throw ex;
-        } catch(std::exception& ex){
-            Variables::pop();
-            Names::restore(name);
-            throw ex;
+            throw;
         }
         Variables::pop();
         Names::restore(name);
@@ -41,12 +36,9 @@ namespace SlavaScript::lang{
         std::shared_ptr<Value> result = nullptr;
         try{
             result = eval(values);
-        } catch(std::exception* ex){
+        } catch(...){
             Variables::pop();
-            throw ex;
-        } catch(std::exception& ex){
-            Variables::pop();
-            throw ex;
+            throw;
         }
         Variables::pop();
         return result;

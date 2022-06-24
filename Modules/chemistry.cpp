@@ -1,19 +1,16 @@
 #include "chemistry.h"
-#include "../Lib/function.h"
+#include "../Exception/exceptions.h"
 #include "../Lib/functions.h"
-#include "../Value/stringvalue.h"
+#include "../Lib/utils.h"
 #include "../Value/numbervalue.h"
-#include "../Exception/argumentsmismatchexception.h"
-#include "../Exception/typeexception.h"
 #include <cmath>
 #include <map>
-#include <vector>
 
 using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::chemistry_f;
 using SlavaScript::modules::Chemistry;
-using SlavaScript::exceptions::ArgumentsMismatchException;
-using SlavaScript::exceptions::TypeException;
+using SlavaScript::exceptions::LogicException;
+
 
 namespace SlavaScript::modules::chemistry_out{
     struct Element{
@@ -173,17 +170,17 @@ namespace SlavaScript::modules::chemistry_out{
             ++pos;
         }
         if (!koeff) koeff = 1;
-        if (koeff < 0) throw std::logic_error("Minus koefficient");
+        if (koeff < 0) throw LogicException("Minus koefficient");
         el["_"] = koeff;
         while(pos < str.size()){
             if (str[pos] >= '0' && str[pos] <= '9'){
-                if (element == "") throw std::logic_error("Empty element");
+                if (element == "") throw LogicException("Empty element");
                 index *= 10;
                 index += str[pos] - '0';
             }else if (str[pos] >= 'A' && str[pos] <= 'Z'){
                 if (element != ""){
                     int finded = get_element(element);
-                    if (finded == -1) throw std::logic_error("Bad element");
+                    if (finded == -1) throw LogicException("Bad element");
                     if (index == 0) index = 1;
                     el[element] += index;
                     if (openParen) inBracket.push_back(element);
@@ -192,23 +189,23 @@ namespace SlavaScript::modules::chemistry_out{
                 }
                 element += str[pos];
             }else if (str[pos] >= 'a' && str[pos] <= 'z'){
-                if (element == "") throw std::logic_error("Bad element");
+                if (element == "") throw LogicException("Bad element");
                 element += str[pos];
             }else if (str[pos] == '('){
-                if (openParen) throw std::logic_error("Two open paren");
+                if (openParen) throw LogicException("Two open paren");
                 openParen = true;
                 if (element != ""){
                     int finded = get_element(element);
-                    if (finded == -1) throw std::logic_error("Bad element");
+                    if (finded == -1) throw LogicException("Bad element");
                     if (index == 0) index = 1;
                     el[element] += index;
                     index = 0;
                     element = "";
                 }
             }else if (str[pos] == ')'){
-                if (!openParen) throw std::logic_error("Missing open paren");
+                if (!openParen) throw LogicException("Missing open paren");
                 int finded = get_element(element);
-                if (finded == -1) throw std::logic_error("Bad element");
+                if (finded == -1) throw LogicException("Bad element");
                 if (index == 0) index = 1;
                 el[element] += index;
                 inBracket.push_back(element);
@@ -223,12 +220,12 @@ namespace SlavaScript::modules::chemistry_out{
                 index = 0;
                 inBracket.clear();
             }
-            else throw std::logic_error("Bad symbol");
+            else throw LogicException("Bad symbol");
             ++pos;
         }
         if (element != ""){
             int finded = get_element(element);
-            if (finded == -1) throw std::logic_error("Bad element");
+            if (finded == -1) throw LogicException("Bad element");
             if (index == 0) index = 1;
             el[element] += index;
         }
@@ -254,7 +251,7 @@ namespace SlavaScript::modules::chemistry_out{
                 break;
             }
         }
-        if (!index) throw std::logic_error(substance + " not contain a " + el);
+        if (!index) throw LogicException(substance + " not contain a " + el);
         for(int i = 0; i < SizeOfTabel; ++i){
             if (elements[i].name == el) return index * elements[i].massa / mr(substance);
         }
@@ -264,68 +261,68 @@ namespace SlavaScript::modules::chemistry_out{
 
 namespace SlavaScript::modules::chemistry_f{
     CREATE_FUNCTION(electron)
-        if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
-        if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
+        argsCount(1, values.size());
+        argType(Values::STRING, values[0]);
         std::string str1 = CAST(StringValue, values[0]) -> asString();
         int finded = chemistry_out::get_element(str1);
-        if (finded == -1) throw std::logic_error("First argument not element");
+        if (finded == -1) throw LogicException("First argument not element");
         SH_RET(NumberValue, chemistry_out::elements[finded].number);
     FE
 
     CREATE_FUNCTION(latin_read)
-        if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
-        if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
+        argsCount(1, values.size());
+        argType(Values::STRING, values[0]);
         std::string str1 = CAST(StringValue, values[0]) -> asString();
         int finded = chemistry_out::get_element(str1);
-        if (finded == -1) throw std::logic_error("First argument not element");
+        if (finded == -1) throw LogicException("First argument not element");
         SH_RET(StringValue, chemistry_out::elements[finded].latinRead);
     FE
 
     CREATE_FUNCTION(mr)
-        if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
-        if (values[0] -> type() != Values::STRING) throw TypeException("String expected in first argument");
+        argsCount(1, values.size());
+        argType(Values::STRING, values[0]);
         std::string str = CAST(StringValue, values[0]) -> asString();
         SH_RET(NumberValue, chemistry_out::mr(str));
     FE
 
     CREATE_FUNCTION(neutron)
-        if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
-        if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
+        argsCount(1, values.size());
+        argType(Values::STRING, values[0]);
         std::string str1 = CAST(StringValue, values[0]) -> asString();
         int finded = chemistry_out::get_element(str1);
-        if (finded == -1) throw std::logic_error("First argument not element");
+        if (finded == -1) throw LogicException("First argument not element");
         SH_RET(NumberValue, round(chemistry_out::elements[finded].massa) - chemistry_out::elements[finded].number);
     FE
 
     CREATE_FUNCTION(omega)
-        if (values.size() != 2) throw ArgumentsMismatchException("Two argument excepted");
-        if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
-        if (values[1] -> type() != Values::STRING) throw TypeException("String excepted in second argument");
+        argsCount(2, values.size());
+        argType(Values::STRING, values[0]);
+        argType(Values::STRING, values[1]);
         std::string str1 = CAST(StringValue, values[0]) -> asString(), str2 = CAST(StringValue, values[1]) -> asString();
         int finded = chemistry_out::get_element(str1);
-        if (finded == -1) throw std::logic_error("First argument not element");
-        if (chemistry_out::mr(str2) == 0) throw std::logic_error("Bad second argument");
+        if (finded == -1) throw LogicException("First argument not element");
+        if (chemistry_out::mr(str2) == 0) throw LogicException("Bad second argument");
         SH_RET(NumberValue, chemistry_out::omega(str2, str1));
     FE
 
     CREATE_FUNCTION(russian_read)
-        if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
-        if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
+        argsCount(1, values.size());
+        argType(Values::STRING, values[0]);
         std::string str1 = CAST(StringValue, values[0]) -> asString();
         int finded = chemistry_out::get_element(str1);
-        if (finded == -1) throw std::logic_error("First argument not element");
+        if (finded == -1) throw LogicException("First argument not element");
         SH_RET(StringValue, chemistry_out::elements[finded].russionRead);
     FE
 
     CREATE_FUNCTION(write)
-        if (values.size() != 1) throw ArgumentsMismatchException("One argument excepted");
-        if (values[0] -> type() != Values::STRING) throw TypeException("String excepted in first argument");
+        argsCount(1, values.size());
+        argType(Values::STRING, values[0]);
         std::string str = CAST(StringValue, values[0]) -> asString();
         int finded = -1;
         for(int i = 0; i < chemistry_out::SizeOfTabel; ++i){
             if (chemistry_out::elements[i].russionRead == str) finded = i;
         }
-        if (finded == -1) throw std::logic_error("First argument not element");
+        if (finded == -1) throw LogicException("First argument not element");
         SH_RET(StringValue, chemistry_out::elements[finded].name);
     FE
 

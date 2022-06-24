@@ -1,29 +1,20 @@
 #include "std.h"
-#include "../Lib/function.h"
-#include "../Lib/variables.h"
+#include "../Exception/exceptions.h"
 #include "../Lib/functions.h"
-#include "../Value/arrayvalue.h"
-#include "../Value/functionvalue.h"
-#include "../Value/mapvalue.h"
-#include "../Value/stringvalue.h"
-#include "../Lib/userdefinedfunction.h"
-#include "../Expression/valueexpression.h"
-#include <iostream>
-#include <vector>
-#include "../Exception/argumentsmismatchexception.h"
-#include "../Exception/mathexception.h"
-#include "../Exception/typeexception.h"
+#include "../Lib/utils.h"
+#include "../Lib/variables.h"
 #include "../Run/path.h"
-#include <ctime>
-#include <algorithm>
+#include "../Value/arrayvalue.h"
+#include "../Value/mapvalue.h"
+#include "../Value/nullvalue.h"
+#include "../Value/numbervalue.h"
 #include <iostream>
 
 using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::std_f;
 using SlavaScript::modules::Std;
-using SlavaScript::exceptions::TypeException;
-using SlavaScript::exceptions::ArgumentsMismatchException;
 using SlavaScript::exceptions::MathException;
+
 
 namespace SlavaScript::modules::std_out{
 
@@ -52,11 +43,12 @@ namespace SlavaScript::modules::std_out{
     }
 }
 
+
 namespace SlavaScript::modules::std_f{
     CREATE_FUNCTION(array_combine)
-        if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
-        if (values[0] -> type() != Values::ARRAY) throw new TypeException("Array expected in first argument");
-        if (values[1] -> type() != Values::ARRAY) throw new TypeException("Array expected in second argument");
+        argsCount(2, values.size());
+        argType(Values::ARRAY, values[0]);
+        argType(Values::ARRAY, values[1]);
         std::shared_ptr<ArrayValue> keys = CAST(ArrayValue, values[0]), value = CAST(ArrayValue, values[1]);
         int len = std::min(keys -> size(), value -> size());
         std::shared_ptr<MapValue> map = SHARE(MapValue, );
@@ -71,7 +63,7 @@ namespace SlavaScript::modules::std_f{
     FE
 
     CREATE_FUNCTION(len)
-        if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
+        argsCount(1, values.size());
         int length;
         switch(values[0] -> type()){
             case Values::ARRAY : length = CAST(ArrayValue, values[0]) -> size(); break;
@@ -87,7 +79,7 @@ namespace SlavaScript::modules::std_f{
     FE
 
     CREATE_FUNCTION(parse_number)
-        if (values.size() < 1 || values.size() > 2) throw new ArgumentsMismatchException("One or two arguments expected");
+        argsCount(1, 2, values.size());
         int radix = values.size() == 2 ? values[1] -> asDouble() : 10;
         Bignum power = 1, ans = 0;
         std::string parsed = values[0] -> asString();
@@ -95,7 +87,7 @@ namespace SlavaScript::modules::std_f{
             int current;
             if (parsed[i] >= '0' && parsed[i] <= '9') current = parsed[i] - '0';
             else current = tolower(parsed[i]) - 'a';
-            if (current < 0 || current >= radix) throw new MathException("Bad radix for parse string");
+            if (current < 0 || current >= radix) throw MathException("Bad radix for parse string");
             ans += current * power;
             power *= radix;
         }
@@ -103,6 +95,7 @@ namespace SlavaScript::modules::std_f{
     FE
 
     CREATE_FUNCTION(rand)
+        argsCount({0, 1, 2}, values.size());
         int siz = values.size();
         double random = 1. * std::rand() / (RAND_MAX + 1), result;
         switch(siz){
@@ -114,14 +107,13 @@ namespace SlavaScript::modules::std_f{
                 result = start + (finish - start) * random;
                 break;
             }
-            default : throw new ArgumentsMismatchException("Fewer arguments expected");
         }
         SH_RET(NumberValue, result);
     FE
 
     CREATE_FUNCTION(sleep)
-        if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        if (values[0] -> type() != Values::NUMBER) throw new TypeException("Number expected in first argument");
+        argsCount(1, values.size());
+        argType(Values::NUMBER, values[0]);
         long long start = clock(), finish = clock();
         double tim = values[0] -> asDouble();
         while(finish - start < tim) finish = clock();
@@ -129,20 +121,20 @@ namespace SlavaScript::modules::std_f{
     FE
 
     CREATE_FUNCTION(time)
-        if (values.size() != 0) throw new ArgumentsMismatchException("Zero arguments expected");
+        argsCount(0, values.size());
         SH_RET(NumberValue, clock());
     FE
 
     CREATE_FUNCTION(to_char)
-        if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
+        argsCount(1, values.size());
         std::string str;
         str += char(values[0] -> asDouble());
         SH_RET(StringValue, str);
     FE
 
     CREATE_FUNCTION(to_hex_string)
-        if (values.size() != 1) throw new ArgumentsMismatchException("One arguments expected");
-        if (values[0] -> type() != Values::NUMBER) throw new TypeException("Number expected in first argument");
+        argsCount(1, values.size());
+        argType(Values::NUMBER, values[0]);
         long long value = values[0] -> asDouble();
         std::string ans;
         while(value){

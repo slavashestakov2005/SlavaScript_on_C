@@ -1,7 +1,8 @@
-#include <stdexcept>
+#include "../Exception/exceptions.h"
 #include "lexer.h"
 
 using namespace SlavaScript::lang;
+using SlavaScript::exceptions::LexerException;
 
 std::map<std::string, TokenType> Lexer::OPERATORS = {
     std::make_pair("+", TokenType::PLUS),
@@ -126,7 +127,7 @@ void Lexer::tokenizeNumber(){
     char current = peek(0);
     while(true){
         if (current == '.'){
-            if (str.find(current) != std::string::npos) throw error("Invalid float number");
+            if (str.find(current) != std::string::npos) error("Invalid float number");
         } else if(!isdigit(current)) break;
         str += current;
         current = next();
@@ -149,7 +150,7 @@ void Lexer::tokenizeText(){
     std::string str;
     char current = peek(0);
     while(true){
-        if (current == '\0') throw error("Reached end of file while parsing text string");
+        if (current == '\0') error("Reached end of file while parsing text string");
         if (current == '\\'){
             current = next();
             switch(current){
@@ -175,8 +176,8 @@ void Lexer::tokenizeExtendedWord(){
     std::string str;
     char current = peek(0);
     while(true){
-        if (current == '\0') throw error("Reached end of file while parsing extended word");
-        if (current == '\n' || current == '\r') throw error("Reached end of line while parsing extended word");
+        if (current == '\0') error("Reached end of file while parsing extended word");
+        if (current == '\n' || current == '\r') error("Reached end of line while parsing extended word");
         if (current == '\'') break;
         str += current;
         current = next();
@@ -236,7 +237,7 @@ void Lexer::tokenizeComment(){
 void Lexer::tokenizeMultilineComment(){
     char current = peek(0);
     while(true){
-        if (current == '\0') throw error("Reached end of file while parsing multiline comment");
+        if (current == '\0') error("Reached end of file while parsing multiline comment");
         if (current == '*' && peek(1) == '/') break;
         current = next();
     }
@@ -249,7 +250,7 @@ void Lexer::tokenizeIntegration(){
     int start = pos;
     char current = peek(0);
     while(true){
-        if (current == '\0') throw error("Reached end of file while parsing code integration");
+        if (current == '\0') error("Reached end of file while parsing code integration");
         if (current == '\n' && peek(1) == '}') break;
         current = next();
     }
@@ -285,6 +286,6 @@ char Lexer::peek(int position){
     else return input[now];
 }
 
-LexerException* Lexer::error(std::string text){
-    return new LexerException(text, last_row, last_col);
+void Lexer::error(std::string text){
+    throw LexerException(text, last_row, last_col);
 }

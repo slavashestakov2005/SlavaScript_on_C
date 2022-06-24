@@ -1,16 +1,19 @@
 #include "objectvalue.h"
-#include "stringvalue.h"
-#include "functionvalue.h"
+#include "../Exception/exceptions.h"
+#include "../Lib/classmethod.h"
 #include "../Lib/classes.h"
-#include "../Exception/typeexception.h"
+#include "../Lib/utils.h"
+#include "classvalue.h"
 
 using namespace SlavaScript::lang;
-using SlavaScript::exceptions::TypeException;
+using SlavaScript::exceptions::CastException;
+using SlavaScript::exceptions::LogicException;
+using SlavaScript::exceptions::UnknownPropertyException;
 
 
 std::shared_ptr<Value> ObjectValue::get(std::shared_ptr<Value> value){
     if (thisMap -> containsKey(value)) return thisMap -> get(value);
-    if (value -> type() != Values::STRING) throw new TypeException("Cannot get non string member from class");
+    argType(Values::STRING, value);
     std::string key = value -> asString();
     std::shared_ptr<ClassValue> cls = Classes::get(className);
     if (!cls -> isExists(key)) return nullptr;
@@ -43,7 +46,7 @@ std::shared_ptr<Value> ObjectValue::copy(){
 }
 
 double ObjectValue::asDouble(){
-    throw new TypeException("Cannot cast class to double");
+    throw CastException(Values::CLASS, Values::NUMBER);
 }
 
 std::string ObjectValue::asString(){
@@ -51,11 +54,11 @@ std::string ObjectValue::asString(){
 }
 
 bool ObjectValue::asBool(){
-    throw new TypeException("Cannot cast class to bool");
+    throw CastException(Values::CLASS, Values::BOOL);
 }
 
 Bignum ObjectValue::asBignum(){
-    throw new TypeException("Cannot cast class to number");
+    throw CastException(Values::CLASS, Values::NUMBER);
 }
 
 Values ObjectValue::type() const{
@@ -73,11 +76,11 @@ std::string ObjectValue::stringType() const{
 std::shared_ptr<Value> ObjectValue::getDot(std::shared_ptr<Value> value){
     std::shared_ptr<Value> result = get(value);
     if (result) return result;
-    throw new TypeException("Cannot get " + value -> asString() + " from " + className);
+    throw UnknownPropertyException(value -> asString());
 }
 
 void ObjectValue::setDot(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
-    if (!thisMap -> containsKey(key)) throw new std::logic_error("Unable to add new field " + key -> asString() + " to class " + className);
+    if (!thisMap -> containsKey(key)) throw LogicException("Unable to add new field " + key -> asString() + " to class " + className);
     thisMap -> set(key, value);
 }
 

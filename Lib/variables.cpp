@@ -1,11 +1,12 @@
 #include "variables.h"
-#include "../Value/nullvalue.h"
-#include "../Modules/global.h"
 #include "names.h"
+#include "../Modules/global.h"
+#include "../Value/nullvalue.h"
 #include <iostream>
 
 using namespace SlavaScript::lang;
 using SlavaScript::modules::Global;
+
 
 std::vector<VariablesScope> Variables::scope = {};
 

@@ -1,6 +1,6 @@
+#include "whilestatement.h"
 #include "breakstatement.h"
 #include "continuestatement.h"
-#include "whilestatement.h"
 
 using namespace SlavaScript::lang;
 
@@ -11,10 +11,10 @@ void WhileStatement::execute(){
         try{
             body -> execute();
         }
-        catch(BreakStatement* bs){
+        catch(BreakStatement& bs){
             break;
         }
-        catch(ContinueStatement* cs){
+        catch(ContinueStatement& cs){
             //continue;
         }
     }

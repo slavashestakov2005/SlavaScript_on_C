@@ -1,27 +1,23 @@
 #include "conditionalexpression.h"
-#include "../Value/boolvalue.h"
-#include "../Value/arrayvalue.h"
+#include "../Exception/exceptions.h"
 #include "../Lib/functions.h"
-#include "../Value/classvalue.h"
-#include "../Lib/moduleobject.h"
-#include "../Value/integrationvalue.h"
-#include "valueexpression.h"
-#include "../Exception/operationIsnotsupportedexception.h"
-#include "../Exception/typeexception.h"
 #include "../Lib/utils.h"
+#include "../Value/boolvalue.h"
 
 using namespace SlavaScript::lang;
-using SlavaScript::exceptions::OperationIsNotSupportedException;
+using SlavaScript::exceptions::LogicException;
+using SlavaScript::exceptions::UnknownOperationException;
+
 
 std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
     if (left -> type() == Values::OBJECT || right -> type() == Values::OBJECT){
         try{
             return get_property(left, operation) -> execute({right});
         } catch(...) {}
-        if (operation == ConditionalOperator::AND || operation == ConditionalOperator::OR) throw new TypeException("Operation " + getOperator(operation) + " undefined");
+        if (operation == ConditionalOperator::AND || operation == ConditionalOperator::OR) throw UnknownOperationException(getOperator(operation), left, right);
         std::shared_ptr<Function> func = get_property(left, ConditionalOperator::LTEQGT);
         std::shared_ptr<Value> res = func -> execute({right});
-        if (res -> type() != Values::NUMBER) throw new TypeException("Operation <=> return not a number");
+        if (res -> type() != Values::NUMBER) throw LogicException("Operation <=> return not a number");
         int sign_of_res = res -> asBignum().get_sign();
         bool result = false;
         if (sign_of_res == -1 && (operation == ConditionalOperator::LT || operation == ConditionalOperator::LTEQ || operation == ConditionalOperator::NOT_EQUALS)) result = true;
@@ -39,7 +35,7 @@ std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator oper
         case ConditionalOperator::GTEQ : result = comparator(right, left) || equals(left, right); break;
         case ConditionalOperator::AND : result = left -> asBool() && right -> asBool(); break;
         case ConditionalOperator::OR : result = left -> asBool() || right -> asBool(); break;
-        default: throw new OperationIsNotSupportedException(getOperator(operation));
+        default: throw UnknownOperationException(getOperator(operation), left, right);
     }
     return BoolValue::fromBool(result);
 }

@@ -1,9 +1,9 @@
 #ifndef CLASSDECLARATIONSSTATEMENT_H_INCLUDED
 #define CLASSDECLARATIONSSTATEMENT_H_INCLUDED
 
-#include <vector>
-#include "statement.h"
 #include "../Expression/expression.h"
+#include "statement.h"
+#include <vector>
 
 namespace SlavaScript::lang{
     class ClassDeclarationsStatement : public Statement{

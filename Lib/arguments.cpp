@@ -2,6 +2,7 @@
 
 using namespace SlavaScript::lang;
 
+
 void Arguments::addRequired(std::string name){
     arguments.push_back(Argument(name));
     ++requiredCount;

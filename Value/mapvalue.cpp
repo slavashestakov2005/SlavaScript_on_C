@@ -1,34 +1,30 @@
 #include "mapvalue.h"
-#include "arrayvalue.h"
-#include "boolvalue.h"
-#include "nullvalue.h"
-#include "functionvalue.h"
-#include "../Exception/argumentsmismatchexception.h"
-#include "../Exception/typeexception.h"
-#include "../Exception/unknownpropertyexception.h"
+#include "../Exception/exceptions.h"
 #include "../Lib/classmethod.h"
 #include "../Lib/utils.h"
+#include "arrayvalue.h"
+#include "boolvalue.h"
 
 using namespace SlavaScript::lang;
-using SlavaScript::exceptions::ArgumentsMismatchException;
-using SlavaScript::exceptions::TypeException;
+using SlavaScript::exceptions::CastException;
 using SlavaScript::exceptions::UnknownPropertyException;
+
 
 namespace {
     CLASS_METHOD(Exists, MapValue::container_type)
-        if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
+        argsCount(1, values.size());
         return BoolValue::fromBool(instance.find(values[0]) != instance.end());
     CME
 
     CLASS_METHOD(Keys, MapValue::container_type)
-        if (values.size() != 0) throw new ArgumentsMismatchException("Zero arguments expected");
+        argsCount(0, values.size());
         std::vector<std::shared_ptr<Value>> keys;
         for(auto p : instance) keys.push_back(p.first);
         SH_RET(ArrayValue, keys);
     CME
 
     CLASS_METHOD(ValuesMap, MapValue::container_type)
-        if (values.size() != 0) throw new ArgumentsMismatchException("Zero arguments expected");
+        argsCount(0, values.size());
         std::vector<std::shared_ptr<Value>> keys;
         for(auto p : instance) keys.push_back(p.second);
         SH_RET(ArrayValue, keys);
@@ -74,7 +70,7 @@ std::shared_ptr<Value> MapValue::copy(){
 }
 
 double MapValue::asDouble(){
-    throw new TypeException("Cannot cast map to number");
+    throw CastException(Values::MAP, Values::NUMBER);
 }
 
 std::string MapValue::asString(){
@@ -94,11 +90,11 @@ std::string MapValue::asString(){
 }
 
 bool MapValue::asBool(){
-    throw new TypeException("Cannot cast map to bool");
+    throw CastException(Values::MAP, Values::BOOL);
 }
 
 Bignum MapValue::asBignum(){
-    throw new TypeException("Cannot cast map to number");
+    throw CastException(Values::MAP, Values::NUMBER);
 }
 
 Values MapValue::type() const{
@@ -114,7 +110,7 @@ std::shared_ptr<Value> MapValue::getDot(std::shared_ptr<Value> property){
     ADD_METHOD("exists", Exists, map);
     ADD_METHOD("keys", Keys, map);
     ADD_METHOD("values", ValuesMap, map);
-    throw new UnknownPropertyException(prop);
+    throw UnknownPropertyException(prop);
 }
 
 std::shared_ptr<Value> MapValue::getBracket(std::shared_ptr<Value> prop){

@@ -1,9 +1,9 @@
 #ifndef ARRAYVALUE_H_INCLUDED
 #define ARRAYVALUE_H_INCLUDED
 
-#include <vector>
 #include "container.h"
 #include "value.h"
+#include <vector>
 
 namespace SlavaScript::lang{
     class ArrayValue : public Value, public Container<std::vector<std::shared_ptr<Value>>>{

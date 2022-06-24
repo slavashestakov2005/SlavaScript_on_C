@@ -1,8 +1,8 @@
 #ifndef MAPEXPRESSION_H_INCLUDED
 #define MAPEXPRESSION_H_INCLUDED
 
-#include <map>
 #include "expression.h"
+#include <map>
 
 namespace SlavaScript::lang{
     class MapExpression : public Expression{

@@ -1,29 +1,28 @@
-#include "breakstatement.h"
-#include "continuestatement.h"
 #include "foreachmapstatement.h"
 #include "../Lib/names.h"
+#include "../Lib/utils.h"
+#include "breakstatement.h"
+#include "continuestatement.h"
 #include "../Value/mapvalue.h"
-#include "../Exception/typeexception.h"
 
 using namespace SlavaScript::lang;
-using SlavaScript::exceptions::TypeException;
 
 ForeachMapStatement::ForeachMapStatement(std::string key, std::string value, Expression* container, Statement* body) : key(key), value(value), container(container), body(body) {}
 
 void ForeachMapStatement::execute(){
     NamedValue startKey = Names::getNamed(key), startValue = Names::getNamed(value);
     std::shared_ptr<Value> containerValue = container -> eval();
-    if (containerValue -> type() != Values::MAP) throw new TypeException("Map expected in foreach");
+    argType(Values::MAP, containerValue);
     for(auto now : *CAST(MapValue, containerValue)){
         Names::setVariable(key, now.first);
         Names::setVariable(value, now.second);
         try{
             body -> execute();
         }
-        catch(BreakStatement* bs){
+        catch(BreakStatement& bs){
             break;
         }
-        catch(ContinueStatement* cs){
+        catch(ContinueStatement& cs){
             //continue;
         }
     }

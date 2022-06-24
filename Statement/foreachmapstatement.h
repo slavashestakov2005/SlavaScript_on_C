@@ -1,8 +1,8 @@
 #ifndef FOREACHMAPSTATEMENT_H_INCLUDED
 #define FOREACHMAPSTATEMENT_H_INCLUDED
 
-#include "statement.h"
 #include "../Expression/expression.h"
+#include "statement.h"
 
 namespace SlavaScript::lang{
     class ForeachMapStatement : public Statement{

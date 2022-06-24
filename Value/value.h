@@ -1,10 +1,10 @@
 #ifndef VALUE_H_INCLUDED
 #define VALUE_H_INCLUDED
 
-#include <string>
-#include <memory>
-#include "values.h"
 #include "bignumbers/bignum.h"
+#include "values.h"
+#include <memory>
+#include <string>
 
 namespace SlavaScript::lang{
     class Value{

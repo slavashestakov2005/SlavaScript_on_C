@@ -2,8 +2,8 @@
 #define MODULE_H_INCLUDED
 
 #include "../Lib/function.h"
-#include "../Lib/modulefunction.h"
 #include "../Lib/macros.h"
+#include "../Lib/modulefunction.h"
 
 namespace SlavaScript::modules{
     CREATE_TEMPLATE(Constants)

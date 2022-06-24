@@ -3,11 +3,11 @@
 
 #include "expression.h"
 #include "../Value/arrayvalue.h"
-#include "../Value/numbervalue.h"
 #include "../Value/boolvalue.h"
 #include "../Value/functionvalue.h"
 #include "../Value/mapvalue.h"
 #include "../Value/nullvalue.h"
+#include "../Value/numbervalue.h"
 #include "../Value/stringvalue.h"
 #include "../Value/value.h"
 

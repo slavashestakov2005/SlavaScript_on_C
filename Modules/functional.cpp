@@ -1,19 +1,14 @@
 #include "functional.h"
 #include "../Lib/functions.h"
-#include "../Exception/argumentsmismatchexception.h"
-#include "../Exception/typeexception.h"
-#include "../Value/functionvalue.h"
+#include "../Lib/utils.h"
 #include "../Value/arrayvalue.h"
 #include "../Value/mapvalue.h"
 #include "../Value/nullvalue.h"
-#include "../Value/numbervalue.h"
-#include <algorithm>
 
 using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::functional_f;
 using SlavaScript::modules::Functional;
-using SlavaScript::exceptions::ArgumentsMismatchException;
-using SlavaScript::exceptions::TypeException;
+
 
 namespace SlavaScript::modules::functional_out{
     std::shared_ptr<Value> filterArray(std::shared_ptr<ArrayValue> arr, std::shared_ptr<Function> consumer){
@@ -42,7 +37,7 @@ namespace SlavaScript::modules::functional_out{
         std::vector<std::shared_ptr<Value>> values;
         for(auto value : *arr){
             std::shared_ptr<Value> inner = mapper -> execute({value});
-            if (inner -> type() != Values::ARRAY) throw new TypeException("Array expected " + std::string(*inner));
+            argType(Values::ARRAY, inner);
             std::shared_ptr<ArrayValue> valArr = CAST(ArrayValue, inner);
             for(auto value2 : *valArr){
                 values.push_back(value2);
@@ -77,10 +72,10 @@ namespace SlavaScript::modules::functional_out{
 
 namespace SlavaScript::modules::functional_f{
     CREATE_FUNCTION(chain)
-        if (values.size() < 3) throw new ArgumentsMismatchException("3 and least arguments expected");
+        argsCountLtEq(3, values.size());
         std::shared_ptr<Value> result = values[0];
         for(int i = 1; i < values.size(); i += 2){
-            if (values[i] -> type() != Values::FUNCTION) throw new TypeException(std::string(*values[i]) + " is not a function");
+            argType(Values::FUNCTION, values[i]);
             std::shared_ptr<Function> function = CAST(FunctionValue, values[i]) -> getFunction();
             result = function -> execute({result, values[i + 1]});
         }
@@ -88,12 +83,10 @@ namespace SlavaScript::modules::functional_f{
     FE
 
     CREATE_FUNCTION(combine)
-        if (values.size() < 1) throw new ArgumentsMismatchException("At least one arg expected");
+        argsCountLtEq(1, values.size());
         std::shared_ptr<Function> result = nullptr;
         for(auto arg : values){
-            if (arg -> type() != Values::FUNCTION){
-                throw new TypeException(std::string(*arg) + " is not a function");
-            }
+            argType(Values::FUNCTION, arg);
             std::shared_ptr<Function> current = result;
             std::shared_ptr<Function> next = CAST(FunctionValue, arg) -> getFunction();
             result = std::make_shared<ModuleFunction>([current, next](std::vector<std::shared_ptr<Value>> values) -> std::shared_ptr<Value>{
@@ -105,9 +98,9 @@ namespace SlavaScript::modules::functional_f{
     FE
 
     CREATE_FUNCTION(drop_while)
-        if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
-        if (values[0] -> type() != Values::ARRAY) throw new TypeException("Array expected in first argument");
-        if (values[1] -> type() != Values::FUNCTION) throw new TypeException("Function expected in second argument");
+        argsCount(2, values.size());
+        argType(Values::ARRAY, values[0]);
+        argType(Values::FUNCTION, values[1]);
         std::shared_ptr<Function> function = CAST(FunctionValue, values[1]) -> getFunction();
         std::shared_ptr<ArrayValue> array = CAST(ArrayValue, values[0]);
         int skipCount = 0;
@@ -124,25 +117,26 @@ namespace SlavaScript::modules::functional_f{
     FE
 
     CREATE_FUNCTION(filter)
-        if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments excepted");
-        if (values[1] -> type() != Values::FUNCTION) throw new TypeException("Function expected in second argument");
+        argsCount(2, values.size());
+        argType(Values::ARRAY, Values::MAP, values[0]);
+        argType(Values::FUNCTION, values[1]);
         std::shared_ptr<Value> container = values[0];
         std::shared_ptr<Function> consumer = CAST(FunctionValue, values[1]) -> getFunction();
         if (container -> type() == Values::ARRAY) return functional_out::filterArray(CAST(ArrayValue, container), consumer);
         if (container -> type() == Values::MAP) return functional_out::filterMap(CAST(MapValue, container), consumer);
-        throw new TypeException("Invalid first argument. Array or map expected");
     FE
 
     CREATE_FUNCTION(flat_map)
-        if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments excepted");
-        if (values[0] -> type() != Values::ARRAY) throw new TypeException("Array expected at first argument");
-        if (values[1] -> type() != Values::FUNCTION) throw new TypeException("Function expected at second arguments");
+        argsCount(2, values.size());
+        argType(Values::ARRAY, values[0]);
+        argType(Values::FUNCTION, values[1]);
         return functional_out::flatMapArray(CAST(ArrayValue, values[0]), CAST(FunctionValue, values[1]) -> getFunction());
     FE
 
     CREATE_FUNCTION(foreach)
-        if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
-        if (values[1] -> type() != Values::FUNCTION) throw new TypeException("Function expected at second argument");
+        argsCount(2, values.size());
+        argType(Values::ARRAY, Values::MAP, values[0]);
+        argType(Values::FUNCTION, values[1]);
         std::shared_ptr<Function> function = CAST(FunctionValue, values[1]) -> getFunction();
         std::shared_ptr<Value> container = values[0];
         if (container -> type() == Values::ARRAY){
@@ -162,31 +156,31 @@ namespace SlavaScript::modules::functional_f{
                 ++i;
             }
         }
-        else throw new TypeException("Invalid first argument. Array or map expected");
         return NullValue::NULL_;
     FE
 
     CREATE_FUNCTION(map)
-        if (values.size() < 2 || values.size() > 3) throw new ArgumentsMismatchException("Two or three arguments excepted");
-        if (values[1] -> type() != Values::FUNCTION) throw new TypeException("Function expected in second argument");
+        argsCount(2, 3, values.size());
+        argType(Values::ARRAY, Values::MAP, values[0]);
+        argType(Values::FUNCTION, values[1]);
         std::shared_ptr<Value> container = values[0];
         std::shared_ptr<Function> consumer = CAST(FunctionValue, values[1]) -> getFunction();
         if (container -> type() == Values::ARRAY){
-            if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments excepted");
+            argsCount(2, values.size());
             return functional_out::mapArray(CAST(ArrayValue, container), consumer);
         }
         if (container -> type() == Values::MAP){
-            if (values.size() != 3) throw new ArgumentsMismatchException("Three arguments excepted");
-            if (values[2] -> type() != Values::FUNCTION) throw new TypeException("Function expected in third argument");
+            argsCount(3, values.size());
+            argType(Values::FUNCTION, values[2]);
             std::shared_ptr<Function> consumer2 = CAST(FunctionValue, values[1]) -> getFunction();
             return functional_out::mapMap(CAST(MapValue, container), consumer, consumer2);
         }
-        throw new TypeException("Invalid first argument. Array or map expected");
     FE
 
     CREATE_FUNCTION(reduce)
-        if (values.size() != 3) throw new ArgumentsMismatchException("Three arguments expected");
-        if (values[2] -> type() != Values::FUNCTION) throw new TypeException("Function expected in third argument");
+        argsCount(3, values.size());
+        argType(Values::ARRAY, Values::MAP, values[0]);
+        argType(Values::FUNCTION, values[2]);
         std::shared_ptr<Value> container = values[0], identy = values[1];
         std::shared_ptr<Function> accumulator = CAST(FunctionValue, values[2]) -> getFunction();
         if (container -> type() == Values::ARRAY){
@@ -210,12 +204,12 @@ namespace SlavaScript::modules::functional_f{
             }
             return result;
         }
-        throw new TypeException("Invalid first argument. Array or map expected");
     FE
 
     CREATE_FUNCTION(take_while)
-        if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected");
-        if (values[1] -> type() != Values::FUNCTION) throw new TypeException("Function expected in second argument");
+        argsCount(2, values.size());
+        argType(Values::ARRAY, Values::MAP, values[0]);
+        argType(Values::FUNCTION, values[1]);
         std::shared_ptr<Value> container = values[0];
         std::shared_ptr<Function> function = CAST(FunctionValue, values[1]) -> getFunction();
         if (container -> type() == Values::ARRAY) {
@@ -239,7 +233,6 @@ namespace SlavaScript::modules::functional_f{
             }
             return result;
         }
-        throw new TypeException("Invalid first argument. Array or map expected");
     FE
 }
 

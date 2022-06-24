@@ -1,46 +1,41 @@
 #include "binaryexpression.h"
-#include "../Lib/moduleobject.h"
-#include "../Value/numbervalue.h"
-#include "../Value/stringvalue.h"
-#include "../Value/arrayvalue.h"
-#include "valueexpression.h"
-#include "../Exception/typeexception.h"
-#include "../Exception/mathexception.h"
-#include "../Exception/operationIsnotsupportedexception.h"
+#include "../Exception/exceptions.h"
 #include "../Lib/functions.h"
-#include "../Value/nullvalue.h"
-#include "../Value/bignumbers/smath.h"
 #include "../Lib/utils.h"
-#include <vector>
+#include "../Value/arrayvalue.h"
+#include "../Value/bignumbers/smath.h"
+#include "../Value/mapvalue.h"
+#include "../Value/nullvalue.h"
+#include "../Value/numbervalue.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::modules::math_out::pow;
-using SlavaScript::exceptions::TypeException;
-using SlavaScript::exceptions::OperationIsNotSupportedException;
+using SlavaScript::exceptions::UnknownOperationException;
+
 
 std::shared_ptr<Value> BinaryExpression::calculate(BinaryOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
-    if (left -> type() == Values::INTEGRATION || right -> type() == Values::INTEGRATION) throw new TypeException("Cannot used binary operation for integration");
+    if (left -> type() == Values::INTEGRATION || right -> type() == Values::INTEGRATION) throw UnknownOperationException(getOperator(operation), left, right);
     if (left -> type() == Values::OBJECT || right -> type() == Values::OBJECT){
         return get_property(left, operation) -> execute({right});
     }
-    if (left -> type() == Values::FUNCTION || right -> type() == Values::FUNCTION) throw new TypeException("Cannot used binary operation for function");
+    if (left -> type() == Values::FUNCTION || right -> type() == Values::FUNCTION) throw UnknownOperationException(getOperator(operation), left, right);
     if (left -> type() == Values::NULL_ || right -> type() == Values::NULL_) return NullValue::NULL_;
-    if (left -> type() == Values::MAP && right -> type() != Values::MAP && right -> type() != Values::STRING) throw new TypeException("Cannot used binary operation for map and not map and not string");
-    if (right -> type() == Values::MAP && left -> type() != Values::MAP && left -> type() != Values::STRING) throw new TypeException("Cannot used binary operation for not map and not string and array");
+    if (left -> type() == Values::MAP && right -> type() != Values::MAP && right -> type() != Values::STRING) throw UnknownOperationException(getOperator(operation), left, right);
+    if (right -> type() == Values::MAP && left -> type() != Values::MAP && left -> type() != Values::STRING) throw UnknownOperationException(getOperator(operation), left, right);
     if (left -> type() == Values::ARRAY && right -> type() == Values::ARRAY){
-        if (operation != BinaryOperator::ADD) throw new TypeException("Cannot used array and array for not plus operation");
+        if (operation != BinaryOperator::ADD) throw UnknownOperationException(getOperator(operation), left, right);
         return ArrayValue::add(CAST(ArrayValue, left), CAST(ArrayValue, right));
     }
     if (left -> type() == Values::MAP && right -> type() == Values::MAP){
-        if (operation != BinaryOperator::ADD) throw new TypeException("Cannot used map and map for not plus operation");
+        if (operation != BinaryOperator::ADD) throw UnknownOperationException(getOperator(operation), left, right);
         return MapValue::add(CAST(MapValue, left), CAST(MapValue, left));
     }
     if (left -> type() == Values::ARRAY){
-        if (operation != BinaryOperator::ADD) throw new TypeException("Cannot used not plus binary operation for array");
+        if (operation != BinaryOperator::ADD) throw UnknownOperationException(getOperator(operation), left, right);
         return ArrayValue::add(CAST(ArrayValue, left), right);
     }
     if (right -> type() == Values::ARRAY && left -> type() != Values::STRING){
-        throw new TypeException("Cannot used binary plus for not string, not array and array");
+        throw UnknownOperationException(getOperator(operation), left, right);
     }
     if (left -> type() == Values::STRING || right -> type() == Values::STRING){
         std::string string1 = left -> asString();
@@ -48,13 +43,13 @@ std::shared_ptr<Value> BinaryExpression::calculate(BinaryOperator operation, std
         switch(operation){
             case BinaryOperator::ADD : return SHARE(StringValue, string1 + string2);
             case BinaryOperator::MULTIPLY : {
-                if (right -> type() != Values::NUMBER) throw new TypeException("Unknown multiply for not number and not number");
+                if (right -> type() != Values::NUMBER) throw UnknownOperationException(getOperator(operation), left, right);
                 int iterations = right -> asDouble();
                 std::string result;
                 for(int i = 0; i < iterations; ++i) result += string1;
                 return SHARE(StringValue, result);
             }
-            default: throw new OperationIsNotSupportedException(getOperator(operation));
+            default: throw UnknownOperationException(getOperator(operation), left, right);
         }
     }
     Bignum num1 = left -> asBignum();
@@ -72,7 +67,7 @@ std::shared_ptr<Value> BinaryExpression::calculate(BinaryOperator operation, std
 ///        case BinaryOperator::XOR: return new NumberValue(lon1 ^ lon2);
 ///        case BinaryOperator::LSHIFT: return new NumberValue(lon1 << lon2);
 ///        case BinaryOperator::RSHIFT: return new NumberValue(lon1 >> lon2);
-        default: throw new OperationIsNotSupportedException(getOperator(operation));
+        default: throw UnknownOperationException(getOperator(operation), left, right);
     }
     return SHARE(NumberValue, num1);
 }

@@ -5,6 +5,7 @@
 
 using namespace SlavaScript::lang;
 
+
 namespace{
     std::string assign_op[int(AssignmentOperator::_MINUSMINUS) + 1] = {
         "=", "+=", "-=", "*=", "/=", "%=", "**=", "&=", "|=", "^=", "<<=", ">>=", "++", "--", "++", "--"
@@ -22,6 +23,7 @@ namespace{
         "+", "-", "!", "~", "++", "--"
     };
 }
+
 
 std::string SlavaScript::lang::getOperator(AssignmentOperator a){
     return assign_op[int(a)];

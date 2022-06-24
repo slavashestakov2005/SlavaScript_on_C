@@ -2,9 +2,9 @@
 #include <sstream>
 #include <algorithm>
 #include "../values.h"
-#include "../../Exception/mathexception.h"
-#include "../../Exception/typeexception.h"
+#include "../../Exception/exceptions.h"
 #include "../../Lib/utils.h"
+
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::MathException;
@@ -192,7 +192,7 @@ UnsignedBig& UnsignedBig::operator*=(UnsignedBig const& temp){
 }
 
 UnsignedBig& UnsignedBig::operator/=(UnsignedBig const& temp){
-    if (!temp) throw new MathException("Division by zero");
+    if (!temp) throw MathException("Division by zero");
     if ((*this) < temp){
         digits.clear();
         digits.push_back(0);
@@ -219,7 +219,7 @@ UnsignedBig& UnsignedBig::operator/=(UnsignedBig const& temp){
 }
 
 UnsignedBig& UnsignedBig::operator%=(UnsignedBig const& temp){
-    if (!temp) throw new MathException("Modulo by zero");
+    if (!temp) throw MathException("Modulo by zero");
     UnsignedBig divisior(temp);
     int steps = size() - temp.size();
     divisior.shift(steps);
@@ -289,7 +289,7 @@ Bignum::Bignum(std::string s){
         if (dot) ++dot;
         if (s[pos] != '.'){
             if ('0' <= s[pos] && s[pos] <= '9') r += s[pos];
-            else throw new TypeException(std::string("Cannot cast symbol \"") + s[pos] + "\" to number");
+            else throw TypeException(std::string("Cannot cast symbol \"") + s[pos] + "\" to number");
         }
         else dot = 1;
     }
@@ -505,7 +505,7 @@ RationalBig::RationalBig() : numerator(Bignum::ZERO), denominator(Bignum::ONE) {
 RationalBig::RationalBig(RationalBig const& temp) : numerator(temp.numerator), denominator(temp.denominator) {}
 RationalBig::RationalBig(Bignum numerator) : numerator(numerator), denominator(Bignum::ONE) {}
 RationalBig::RationalBig(Bignum numerator, Bignum denominator) : numerator(numerator), denominator(denominator) {
-    if (!denominator) throw new MathException("Division by zero");
+    if (!denominator) throw MathException("Division by zero");
 }
 
 RationalBig::operator bool() const{ return bool(numerator); }
@@ -540,7 +540,7 @@ RationalBig& RationalBig::operator*=(RationalBig const& temp){
 RationalBig& RationalBig::operator/=(RationalBig const& temp){
     numerator *= temp.denominator;
     denominator *= temp.numerator;
-    if (!denominator) throw new MathException("Division by zero");
+    if (!denominator) throw MathException("Division by zero");
     return *this;
 }
 

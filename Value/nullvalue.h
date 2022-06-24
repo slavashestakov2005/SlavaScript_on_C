@@ -1,7 +1,6 @@
 #ifndef NULLVALUE_H_INCLUDED
 #define NULLVALUE_H_INCLUDED
 
-#include <memory>
 #include "value.h"
 
 namespace SlavaScript::lang{

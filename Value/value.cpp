@@ -1,35 +1,37 @@
+#include "value.h"
+#include "../Exception/exceptions.h"
 #include "arrayvalue.h"
-#include "numbervalue.h"
 #include "boolvalue.h"
 #include "classvalue.h"
-#include "objectvalue.h"
 #include "functionvalue.h"
 #include "integrationvalue.h"
 #include "mapvalue.h"
 #include "nullvalue.h"
+#include "numbervalue.h"
 #include "stringvalue.h"
-#include "value.h"
+#include "objectvalue.h"
 
 using namespace SlavaScript::lang;
+using SlavaScript::exceptions::TypeException;
 
 
 #define RCHECK_CAST(cs, type) case Values::cs : RCHECK(*(type*)(&a), *(type*)(&b))
 
 
 std::shared_ptr<Value> Value::getDot(std::shared_ptr<Value> property){
-    throw new TypeException("Cannot get property using . for " + stringType());
+    throw TypeException("Cannot get property using . for " + stringType());
 }
 
 std::shared_ptr<Value> Value::getBracket(std::shared_ptr<Value> property){
-    throw new TypeException("Cannot get property using [] for " + stringType());
+    throw TypeException("Cannot get property using [] for " + stringType());
 }
 
 void Value::setDot(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
-    throw new TypeException("Cannot set property using . for " + stringType());
+    throw TypeException("Cannot set property using . for " + stringType());
 }
 
 void Value::setBracket(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
-    throw new TypeException("Cannot set property using [] for " + stringType());
+    throw TypeException("Cannot set property using [] for " + stringType());
 }
 
 std::string Value::stringType() const{

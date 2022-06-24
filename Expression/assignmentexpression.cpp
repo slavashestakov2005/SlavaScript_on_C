@@ -1,13 +1,13 @@
 #include "assignmentexpression.h"
+#include "../Exception/exceptions.h"
+#include "binaryexpression.h"
 #include "../Lib/names.h"
-#include "../Expression/binaryexpression.h"
-#include "../Expression/valueexpression.h"
-#include "../Exception/operationIsnotsupportedexception.h"
-#include "../Lib/moduleobject.h"
 #include "../Lib/utils.h"
+#include "../Value/numbervalue.h"
 
 using namespace SlavaScript::lang;
-using SlavaScript::exceptions::OperationIsNotSupportedException;
+using SlavaScript::exceptions::UnknownOperationException;
+
 
 std::shared_ptr<Value> AssignmentExpression::calculate(AssignmentOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
     if (left -> type() == Values::OBJECT && operation != AssignmentOperator::ASSIGN){
@@ -33,7 +33,7 @@ std::shared_ptr<Value> AssignmentExpression::calculate(AssignmentOperator operat
         case AssignmentOperator::PLUSPLUS_ : result = BinaryExpression::calculate(BinaryOperator::ADD, left, NumberValue::ONE); break;
         case AssignmentOperator::_MINUSMINUS : result = BinaryExpression::calculate(BinaryOperator::SUBSTRACT, left, NumberValue::ONE); break;
         case AssignmentOperator::MINUSMINUS_ : result = BinaryExpression::calculate(BinaryOperator::SUBSTRACT, left, NumberValue::ONE); break;
-        default: throw new OperationIsNotSupportedException(getOperator(operation));
+        default: throw UnknownOperationException(getOperator(operation), left, right);
     }
     return result;
 }

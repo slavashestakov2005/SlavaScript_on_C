@@ -1,18 +1,17 @@
 #include "importstatement.h"
+#include "../Exception/exceptions.h"
+#include "../Lib/moduleobject.h"
+#include "../Lib/names.h"
+#include "../Lib/variables.h"
 #include "../Run/path.h"
 #include "../Run/start.h"
-#include "../Exception/unknownmoduleexception.h"
-#include "../Lib/functions.h"
-#include "../Lib/variables.h"
-#include "../Lib/names.h"
-#include "../Lib/moduleobject.h"
-#include "../Modules/all.h"
+#include "../Modules/modules.h"
 #include "../Value/mapvalue.h"
 #include "../Value/stringvalue.h"
-#include "../Modules/modules.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::modules::try_import_module;
+using SlavaScript::exceptions::LogicException;
 using SlavaScript::exceptions::UnknownModuleException;
 
 namespace{
@@ -47,7 +46,7 @@ void ImportStatement::execute(){
                 start.start();
             }catch(...){
                 Names::popScope();
-                throw new UnknownModuleException(name);
+                throw UnknownModuleException(name);
             }
         }
     }
@@ -58,7 +57,7 @@ void ImportStatement::execute(){
         std::shared_ptr<MapValue> map = SHARE(MapValue, );
         for(auto x : variables) map -> set(SHARE(StringValue, x.first), x.second);
         for(auto x : functions){
-            if (x.second.size() > 1) throw std::logic_error("Cannot import overloaded function");
+            if (x.second.size() > 1) throw LogicException("Cannot import overloaded function");
             map -> set(SHARE(StringValue, x.first), x.second[0].second);
         }
         // for each

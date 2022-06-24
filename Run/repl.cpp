@@ -1,13 +1,14 @@
 #include "repl.h"
-#include <iostream>
+#include "../Exception/exception.h"
+#include "../Lib/functions.h"
+#include "../Lib/variables.h"
 #include "../Parser/lexer.h"
 #include "../Parser/parser.h"
-#include "../Statement/statement.h"
 #include "path.h"
-#include "../Lib/variables.h"
-#include "../Lib/functions.h"
+#include <iostream>
 
 using namespace SlavaScript::lang;
+using SlavaScript::exceptions::Exception;
 
 std::string Repl::HELP = "help", Repl::VARS = "vars", Repl::FUNCS = "funcs", Repl::SOURCE = "source", Repl::CLEAR = "clear", Repl::EXIT = "exit";
 
@@ -50,11 +51,8 @@ void Repl::start(){
             for(unsigned i = 0; i < tokens.size(); ++i) delete tokens[i];
             program -> execute();
         }
-        catch(std::exception& e){
-            std::cout << e.what() << std::endl;
-        }
-        catch(std::exception* e){
-            std::cout << e -> what() << std::endl;
+        catch(Exception& e){
+            std::cout << e.msg() << std::endl;
         }
         std::cout << start;
     }

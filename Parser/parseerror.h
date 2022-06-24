@@ -1,18 +1,17 @@
 #ifndef PARSEERROR_H_INCLUDED
 #define PARSEERROR_H_INCLUDED
 
-#include <exception>
-#include <string>
+#include "../Exception/exceptions.h"
 
 namespace SlavaScript::lang{
     class ParseError{
     private:
         int line;
-        std::exception* exception;
+        exceptions::ParseException exception;
     public:
-        ParseError(int line, std::exception* exception);
+        ParseError(int line, exceptions::ParseException exception);
         int getLine();
-        std::exception* getException();
+        exceptions::ParseException getException();
         operator std::string();
     };
 }

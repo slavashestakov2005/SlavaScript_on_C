@@ -1,5 +1,5 @@
-#include "throwstatement.h"
 #include "trystatement.h"
+#include "throwstatement.h"
 #include "../Lib/names.h"
 
 using namespace SlavaScript::lang;

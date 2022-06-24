@@ -1,11 +1,10 @@
 #include "compiler.h"
-#include "../Statement/statement.h"
 #include "../Parser/lexer.h"
 #include "../Parser/parser.h"
-#include "compilervisitor.h"
 
 using namespace SlavaScript::compiler;
 using namespace SlavaScript::lang;
+
 
 std::string Compiler::read_file = "";
 std::string Compiler::write_file = "";

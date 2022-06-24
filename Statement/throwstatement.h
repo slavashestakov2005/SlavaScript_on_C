@@ -1,8 +1,8 @@
 #ifndef THROWSTATEMENT_H_INCLUDED
 #define THROWSTATEMENT_H_INCLUDED
 
-#include "statement.h"
 #include "../Expression/expression.h"
+#include "statement.h"
 #include "../Value/value.h"
 
 namespace SlavaScript::lang{

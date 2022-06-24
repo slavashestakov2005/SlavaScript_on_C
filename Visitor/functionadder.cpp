@@ -1,5 +1,4 @@
 #include "functionadder.h"
-#include "../Lib/functions.h"
 #include "../Statement/functiondefinestatement.h"
 
 using namespace SlavaScript::lang;

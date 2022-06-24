@@ -1,11 +1,9 @@
 #ifndef VARIABLES_H_INCLUDED
 #define VARIABLES_H_INCLUDED
 
-#include <map>
-#include <memory>
-#include <string>
-#include <vector>
 #include "../Value/value.h"
+#include <map>
+#include <vector>
 
 namespace SlavaScript::lang{
     struct NamedValue;

@@ -1,10 +1,10 @@
 #include "filesystem.h"
 #include <filesystem>
-#include <sstream>
 #include <fstream>
 
 namespace fs = std::filesystem;
 using namespace SlavaScript::lang;
+
 
 namespace{
     fs::path appPath;
@@ -27,6 +27,7 @@ namespace{
         return s;
     }
 }
+
 
 std::string convert(std::wstring w){
     using convert_type = std::codecvt_utf8<wchar_t>;

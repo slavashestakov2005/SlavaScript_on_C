@@ -1,20 +1,20 @@
 #include "names.h"
-#include "variables.h"
-#include "functions.h"
+#include "../Exception/exceptions.h"
 #include "classes.h"
+#include "variables.h"
 #include "../Value/functionvalue.h"
 #include "../Value/nullvalue.h"
-#include "../Value/classvalue.h"
-#include "../Exception/variabledoesnotexistsexception.h"
+
 using namespace SlavaScript::lang;
-using SlavaScript::exceptions::VariableDoesNotExistsException;
+using SlavaScript::exceptions::UnknownVariableException;
+
 
 std::shared_ptr<Value> Names::get(std::string name, bool ignore){
     if (Variables::isExists(name)) return Variables::get(name);
     if (Functions::isExists(name)) SH_RET(FunctionValue, Functions::get(name));
     if (Classes::isExists(name)) return Classes::get(name);
     if (ignore) return NullValue::NULL_;
-    throw new VariableDoesNotExistsException(name);
+    throw UnknownVariableException(name);
 }
 
 NamedValue Names::getNamed(std::string name){

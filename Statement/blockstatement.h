@@ -1,8 +1,8 @@
 #ifndef BLOCKSTATEMENT_H_INCLUDED
 #define BLOCKSTATEMENT_H_INCLUDED
 
-#include <vector>
 #include "statement.h"
+#include <vector>
 
 namespace SlavaScript::lang{
     class BlockStatement : public Statement{

@@ -2,6 +2,7 @@
 
 using namespace SlavaScript::lang;
 
+
 Argument::Argument(std::string name) : name(name), expression(nullptr) {}
 
 Argument::Argument(std::string name, Expression* expression) : name(name), expression(expression) {}

@@ -1,9 +1,6 @@
 #ifndef NAMES_H_INCLUDED
 #define NAMES_H_INCLUDED
 
-#include <memory>
-#include <string>
-#include "function.h"
 #include "functions.h"
 #include "../Value/value.h"
 #include "../Value/classvalue.h"

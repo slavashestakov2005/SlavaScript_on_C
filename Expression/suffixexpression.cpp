@@ -1,15 +1,7 @@
 #include "suffixexpression.h"
-#include "../Lib/variables.h"
-#include "../Value/numbervalue.h"
-#include "../Value/stringvalue.h"
-#include "../Lib/moduleobject.h"
-#include "../Value/objectvalue.h"
-#include "../Value/integrationvalue.h"
-#include "../Exception/typeexception.h"
 #include "variableexpression.h"
 
 using namespace SlavaScript::lang;
-using SlavaScript::exceptions::TypeException;
 
 SuffixExpression::SuffixExpression(std::string variable, std::vector<SuffixElement*> access){
     (*this) = SuffixExpression(new VariableExpression(variable), access);

@@ -1,18 +1,17 @@
 #include "start.h"
-#include <iostream>
-#include <fstream>
+#include "../Exception/exception.h"
+#include "../Lib/filesystem.h"
 #include "../Parser/parser.h"
+#include "path.h"
 #include "../Visitor/assignvalidator.h"
 #include "../Visitor/functionadder.h"
 #include "../Visitor/importadder.h"
-#include "../Lib/variables.h"
-#include "../Lib/functions.h"
+#include "../Visitor/variableprinter.h"
 #include <ctime>
-#include "path.h"
-#include "../Parser/token.h"
-#include "../Lib/filesystem.h"
+#include <iostream>
 
 using namespace SlavaScript::lang;
+using SlavaScript::exceptions::Exception;
 
 Start::Start(std::string path) : path(path), lexer(Lexer("")) {
     if (this -> path.find(".") == std::string::npos) this -> path += ".s++";
@@ -56,11 +55,8 @@ void Start::start(){
         program -> execute();
         Path::setImpoted(true);
     }
-    catch(std::exception& e){
-        std::cout << e.what() << std::endl;
-    }
-    catch(std::exception* e){
-        std::cout << e -> what() << std::endl;
+    catch(Exception& e){
+        std::cout << e.msg() << std::endl;
     }
     time = clock() - startTime;
 }
@@ -81,8 +77,8 @@ void Start::printTokens(){
             ++i;
         }
     }
-    catch(std::exception& e){
-        std::cout << e.what() << std::endl;
+    catch(Exception& e){
+        std::cout << e.msg() << std::endl;
     }
 }
 

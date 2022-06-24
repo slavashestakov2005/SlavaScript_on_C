@@ -1,29 +1,22 @@
 #include "math.h"
-#include <cmath>
-#include "../Lib/function.h"
-#include "../Value/arrayvalue.h"
-#include "../Value/boolvalue.h"
-#include "../Value/numbervalue.h"
-#include "../Value/functionvalue.h"
+#include "../Exception/exceptions.h"
 #include "../Lib/classes.h"
-#include "../Lib/functions.h"
+#include "../Lib/classmethod.h"
 #include "../Lib/moduleclass.h"
 #include "../Lib/moduleobject.h"
-#include "../Lib/variables.h"
-#include "../Exception/argumentsmismatchexception.h"
-#include "../Exception/mathexception.h"
-#include "../Exception/typeexception.h"
-#include "../Exception/unknownpropertyexception.h"
-#include "../Value/bignumbers/smath.h"
 #include "../Lib/utils.h"
+#include "../Value/arrayvalue.h"
+#include "../Value/bignumbers/smath.h"
+#include "../Value/boolvalue.h"
+#include "../Value/numbervalue.h"
 
 using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::math_f;
 using SlavaScript::modules::Math;
-using SlavaScript::exceptions::ArgumentsMismatchException;
 using SlavaScript::exceptions::MathException;
 using SlavaScript::exceptions::TypeException;
 using SlavaScript::exceptions::UnknownPropertyException;
+
 
 namespace SlavaScript::modules::math_out{
     using SlavaScript::lang::compare;
@@ -167,25 +160,25 @@ namespace SlavaScript::modules::math_out{
     }
 
     CLASS_METHOD_PTR(Deg, Polynomial)
-        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        argsCount(0, values.size());
         SH_RET(NumberValue, instance -> deg());
     CME
 
     CLASS_METHOD_PTR(Compare, Polynomial)
-        if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
+        argsCount(1, values.size());
         std::shared_ptr<Polynomial> p;
         if (values[0] -> type() == Values::NUMBER) p = SHARE(Polynomial, std::vector<PolynomialCoeff>{values[0] -> asBignum()});
         else if (Polynomial::is_instance(values[0])) p = CAST(Polynomial, values[0]);
-        else throw new TypeException("Polynomial expected");
+        else throw TypeException("Polynomial expected");
         return SHARE(NumberValue, compare(*instance, *p));
     CME
 
     #define POLYNOMIAL_FUNCTION(cls, op) \
-        if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected"); \
+        argsCount(1, values.size()); \
         std::shared_ptr<Polynomial> p; \
         if (values[0] -> type() == Values::NUMBER) p = SHARE(Polynomial, std::vector<PolynomialCoeff>{values[0] -> asBignum()}); \
         else if (Polynomial::is_instance(values[0])) p = CAST(Polynomial, values[0]); \
-        else throw new TypeException("Polynomial expected"); \
+        else throw TypeException("Polynomial expected"); \
         auto q = (*instance) op (*p);
 
     #define POLYNOMIAL_FUNCTION_01(cls, op) \
@@ -243,20 +236,20 @@ namespace SlavaScript::modules::math_out{
         ADD_METHOD_PTR("<=", Le);
         ADD_METHOD_PTR(">", Gt);
         ADD_METHOD_PTR(">=", Ge);
-        throw new UnknownPropertyException(prop);
+        throw UnknownPropertyException(prop);
     }
 }
 
 namespace SlavaScript::modules::math_f{
     #define MATH_FUNCTION(name) \
         CREATE_FUNCTION(name) \
-            if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected"); \
+            argsCount(1, values.size()); \
             SH_RET(NumberValue, math_out:: name (values[0] -> asBignum())); \
         });
 
     #define MATH_BINARY_FUNCTION(name) \
         CREATE_FUNCTION(name) \
-            if (values.size() != 2) throw new ArgumentsMismatchException("Two arguments expected"); \
+            argsCount(2, values.size()); \
             SH_RET(NumberValue, math_out:: name (values[0] -> asBignum(), values[1] -> asBignum())); \
         });
 
@@ -274,8 +267,8 @@ namespace SlavaScript::modules::math_f{
     MATH_FUNCTION(expm1)
 
     CREATE_FUNCTION(factorial)
-        if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        if (values[0] -> asDouble() < 0) throw new MathException("Bad argument for factorial");
+        argsCount(1, values.size());
+        if (values[0] -> asDouble() < 0) throw MathException("Bad argument for factorial");
         Bignum result = 1;
         int n = values[0] -> asDouble();
         for(int i = 2; i <= n; ++i) result *= i;
@@ -287,13 +280,16 @@ namespace SlavaScript::modules::math_f{
 
     CREATE_FUNCTION(interpolate)
         math_out::Polynomial result;
-        for(int i = 0; i < values.size(); ++i) if (values[i] -> type() != Values::ARRAY || CAST(ArrayValue, values[i]) -> size() != 2) throw new TypeException("Expected array with len 2.");
+        for(int i = 0; i < values.size(); ++i){
+            argType(Values::ARRAY, values[i]);
+            if (CAST(ArrayValue, values[i]) -> size() != 2) throw TypeException("Expected array with len 2.");
+        }
         for(int i = 0; i < values.size(); ++i){
             math_out::Polynomial t({ CAST(ArrayValue, values[i]) -> get(1) -> asBignum() });
             for(int j = 0; j < values.size(); ++j){
                 if (i != j){
                     Bignum xi = CAST(ArrayValue, values[i]) -> get(0) -> asBignum(), xj = CAST(ArrayValue, values[j]) -> get(0) -> asBignum();
-                    if (xi == xj) throw new std::logic_error("Cannot used equals x");
+                    if (xi == xj) throw MathException("Cannot used equals x for interpolate");
                     t *= math_out::Polynomial({Bignum(-xj), Bignum(1)});
                     t /= xi - xj;
                 }
@@ -311,7 +307,7 @@ namespace SlavaScript::modules::math_f{
     MATH_FUNCTION(round)
 
     CREATE_FUNCTION(signum)
-        if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
+        argsCount(1, values.size());
         Bignum x = values[0] -> asBignum();
         if (x < 0) return NumberValue::M_ONE;
         else if (x > 0) return NumberValue::ONE;
@@ -322,8 +318,8 @@ namespace SlavaScript::modules::math_f{
     MATH_FUNCTION(sinh)
 
     CREATE_FUNCTION(sqrt)
-        if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-        if (values[0] -> asDouble() < 0) throw new MathException("Sqrt from negative argument");
+        argsCount(1, values.size());
+        if (values[0] -> asDouble() < 0) throw MathException("Sqrt from negative argument");
         SH_RET(NumberValue, math_out::sqrt(values[0] -> asBignum()));
     FE
 

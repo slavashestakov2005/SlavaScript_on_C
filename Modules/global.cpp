@@ -1,23 +1,17 @@
 // [[not imported module]]
 #include "global.h"
-#include "../Value/arrayvalue.h"
-#include "../Value/numbervalue.h"
 #include "../Lib/functions.h"
-#include "../Value/functionvalue.h"
-#include "../Value/classvalue.h"
-#include "../Value/mapvalue.h"
+#include "../Lib/utils.h"
 #include "../Lib/variables.h"
 #include "../Value/boolvalue.h"
 #include "../Value/nullvalue.h"
 #include "../Value/stringvalue.h"
-#include "../Exception/argumentsmismatchexception.h"
 #include <iostream>
 #include <windows.h>
 
 using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::global_f;
 using SlavaScript::modules::Global;
-using SlavaScript::exceptions::ArgumentsMismatchException;
 
 namespace SlavaScript::modules::global_out{
     HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -32,14 +26,14 @@ namespace SlavaScript::modules::global_f{
     FE
 
     CREATE_FUNCTION(max)
-        if (values.size() == 0) throw new ArgumentsMismatchException("One and least arguments expected");
+        argsCountLtEq(1, values.size());
         std::shared_ptr<Value> ans = values[0];
         for(int i = 1; i < values.size(); ++i) ans = comparator(ans, values[i]) ? values[i] : ans;
         return ans;
     FE
 
     CREATE_FUNCTION(min)
-        if (values.size() == 0) throw new ArgumentsMismatchException("One and least arguments expected");
+        argsCountLtEq(1, values.size());
         std::shared_ptr<Value> ans = values[0];
         for(int i = 1; i < values.size(); ++i) ans = comparator(ans, values[i]) ? ans : values[i];
         return ans;
@@ -47,9 +41,11 @@ namespace SlavaScript::modules::global_f{
 
     CREATE_FUNCTION(set_color)
         int color = 0;
-        if (values.size() > 1) throw new ArgumentsMismatchException("Zero or one argument expected");
-        if (values.size() > 0 && values[0] -> type() != Values::NUMBER) throw new TypeException("Number expected in first argument");
-        if (values.size() == 1) color = values[0] -> asDouble();
+        argsCount(0, 1, values.size());
+        if (values.size() == 1){
+            argType(Values::NUMBER, values[0]);
+            color = values[0] -> asDouble();
+        }
         SetConsoleTextAttribute(global_out::handle, color);
         return NullValue::NULL_;
     FE

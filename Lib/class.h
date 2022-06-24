@@ -1,10 +1,9 @@
 #ifndef CLASS_H_INCLUDED
 #define CLASS_H_INCLUDED
 
-#include <memory>
-#include <map>
-#include "../Value/value.h"
 #include "function.h"
+#include "../Value/value.h"
+#include <map>
 
 namespace SlavaScript::lang{
     class Class{
@@ -20,6 +19,8 @@ namespace SlavaScript::lang{
         virtual std::shared_ptr<Value> construct(std::vector<std::shared_ptr<Value>> values) = 0;
         virtual std::string stringType() const = 0;
         virtual operator std::string() = 0;
+
+        virtual ~Class();
     };
 }
 

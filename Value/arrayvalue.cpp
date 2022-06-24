@@ -1,37 +1,32 @@
 #include "arrayvalue.h"
-#include "boolvalue.h"
-#include "classvalue.h"
-#include "stringvalue.h"
-#include "../Exception/argumentsmismatchexception.h"
-#include "../Exception/typeexception.h"
-#include "../Exception/unknownpropertyexception.h"
-#include "../Expression/valueexpression.h"
+#include "../Exception/exceptions.h"
 #include "../Lib/classmethod.h"
 #include "../Lib/utils.h"
+#include "boolvalue.h"
+#include "numbervalue.h"
 #include <algorithm>
 
 using namespace SlavaScript::lang;
-using SlavaScript::exceptions::ArgumentsMismatchException;
+using SlavaScript::exceptions::CastException;
 using SlavaScript::exceptions::UnknownPropertyException;
-using SlavaScript::exceptions::TypeException;
 
 
 namespace {
     CLASS_METHOD(IsEmpty, ArrayValue::container_type)
-        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        argsCount(0, values.size());
         return BoolValue::fromBool(instance.empty());
     CME
 
     CLASS_METHOD(Length, ArrayValue::container_type)
-        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        argsCount(0, values.size());
         SH_RET(NumberValue, instance.size());
     CME
 
     CLASS_METHOD(Sort, ArrayValue::container_type)
-        if (values.size() > 2) throw new ArgumentsMismatchException("Zero, one or two arguments expected");
+        argsCount({0, 1, 2}, values.size());
         if (values.size() == 0) std::sort(instance.begin(), instance.end(), comparator);
         else {
-            if (values[0] -> type() != Values::FUNCTION) throw new TypeException("Function expected in first argument");
+            argType(Values::FUNCTION, values[0]);
             std::shared_ptr<Function> func = CAST(FunctionValue, values[0]) -> getFunction();
             bool binary = false;
             if (values.size() == 2) binary = values[1] -> asBool();
@@ -96,7 +91,7 @@ std::shared_ptr<Value> ArrayValue::copy(){
 }
 
 double ArrayValue::asDouble(){
-    throw new TypeException("Cannot cast array to double");
+    throw CastException(Values::ARRAY, Values::NUMBER);
 }
 
 std::string ArrayValue::asString(){
@@ -110,11 +105,11 @@ std::string ArrayValue::asString(){
 }
 
 bool ArrayValue::asBool(){
-    throw new TypeException("Cannot cast array to bool");
+    throw CastException(Values::ARRAY, Values::BOOL);
 }
 
 Bignum ArrayValue::asBignum(){
-    throw new TypeException("Cannot cast array to number");
+    throw CastException(Values::ARRAY, Values::NUMBER);
 }
 
 Values ArrayValue::type() const{
@@ -130,7 +125,7 @@ std::shared_ptr<Value> ArrayValue::getDot(std::shared_ptr<Value> property){
     ADD_METHOD("length", Length, elements);
     ADD_METHOD("is_empty", IsEmpty, elements);
     ADD_METHOD("sort", Sort, elements);
-    throw new UnknownPropertyException(prop);
+    throw UnknownPropertyException(prop);
 }
 
 std::shared_ptr<Value> ArrayValue::getBracket(std::shared_ptr<Value> property){

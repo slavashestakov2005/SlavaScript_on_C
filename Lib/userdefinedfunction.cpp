@@ -1,13 +1,13 @@
-#include <sstream>
-#include "variables.h"
 #include "userdefinedfunction.h"
-#include "../Exception/argumentsmismatchexception.h"
+#include "../Exception/exceptions.h"
+#include "variables.h"
 #include "../Statement/returnstatement.h"
 #include "../Value/arrayvalue.h"
 #include "../Value/nullvalue.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::ArgumentsMismatchException;
+
 
 UserDefinedFunction::UserDefinedFunction(Arguments arguments, Statement* body) : arguments(arguments), body(body) {}
 
@@ -26,20 +26,8 @@ std::shared_ptr<Value> UserDefinedFunction::execute(std::vector<std::shared_ptr<
     int total = getArgsCount();
     int positionArguments = total - arguments.getArrayCount();
     int minimal = std::min(positionArguments, siz);
-    if (siz < requiredArgsCount){
-        std::string result = "Arguments count mismatch. ";
-        std::ostringstream is;
-        is << siz << " < " << requiredArgsCount;
-        result += is.str();
-        throw new ArgumentsMismatchException(result);
-    }
-    if (siz > total && arguments.getArrayCount() == 0){
-        std::string result = "Arguments count mismatch. ";
-        std::ostringstream is;
-        is << siz << " > " << total;
-        result += is.str();
-        throw new ArgumentsMismatchException(result);
-    }
+    if (siz < requiredArgsCount) throw ArgumentsMismatchException(siz, requiredArgsCount);
+    if (siz > total && arguments.getArrayCount() == 0) throw ArgumentsMismatchException(siz, total);
     try{
         Variables::push();
         for(int i = 0; i < minimal; ++i){

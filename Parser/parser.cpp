@@ -1,14 +1,12 @@
-#include <sstream>
-#include <map>
 #include "parser.h"
-#include "../Exception/parseexception.h"
+#include "../Exception/exceptions.h"
 #include "../Expression/all.h"
 #include "../Lib/userdefinedfunction.h"
 #include "../Statement/all.h"
-#include "../Value/numbervalue.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::ParseException;
+
 
 namespace{
     #define ASSIGN_TO_WORD(start, end) \
@@ -21,6 +19,7 @@ namespace{
     #define ASSIGN_TO_CONTAINER(start, end) \
         if (match(TokenType::start)) return new SuffixAssignmentExpression(AssignmentOperator::end, (SuffixExpression*)nameExpression, expression());
 }
+
 
 ParseErrors Parser::getParseErrors(){
     return parseErrors;
@@ -40,7 +39,7 @@ void Parser::recover(){
             statement();
             pos = i;
             return;
-        }catch(std::exception* ex){}
+        }catch(ParseException& ex){}
     }
 }
 
@@ -50,7 +49,7 @@ Statement* Parser::parse(){
     while(!match(TokenType::END_OF_FILE)){
         try{
             block -> add(statement());
-        }catch(std::exception* ex){
+        }catch(ParseException& ex){
             parseErrors.add(ex, getErrorsLine());
             recover();
         }
@@ -164,7 +163,7 @@ Statement* Parser::tryStatement(){
         std::string name = consume(TokenType::WORD) -> getText();
         return new TryStatement(body, name, statementOrBlock());
     }
-    else throw new ParseException("Catch block not found after try block");
+    else throw ParseException("Catch block not found after try block");
 }
 
 Statement* Parser::switchStatement(){
@@ -186,11 +185,11 @@ Statement* Parser::switchStatement(){
                 consume(TokenType::COLON);
                 defaultCase = statementOrBlock();
             }
-            else throw std::logic_error("Multiple default in one switch");
+            else throw ParseException("Multiple default in one switch");
         }
         else break;
     }
-    if (!openParen && (body.size() + (defaultCase != nullptr)) > 1) throw std::logic_error("Missing open tag for switch");
+    if (!openParen && (body.size() + (defaultCase != nullptr)) > 1) throw ParseException("Missing open tag for switch");
     if (openParen) consume(TokenType::RBRACE);
     return new SwitchStatement(start, body, defaultCase);
 }
@@ -207,10 +206,10 @@ Statement* Parser::classDeclaration(){
                 names.push_back(consume(TokenType::WORD) -> getText());
                 consume(TokenType::EQ);
             }
-            if (names.empty()) throw new ParseException("Class can only assignments and declarations");
+            if (names.empty()) throw ParseException("Class can only assignments and declarations");
             Expression* expr = expression();
             if (expr != nullptr) classDeclaration -> addField(names, expr);
-            else throw new ParseException("Class can only assignments and declarations");
+            else throw ParseException("Class can only assignments and declarations");
         }
     }while(!match(TokenType::RBRACE));
     return classDeclaration;
@@ -236,7 +235,7 @@ Statement* Parser::importStatement(){
             consume(TokenType::COMMA);
         }
     }
-    if (modules.empty()) throw new ParseException("Unknown syntax for import");
+    if (modules.empty()) throw ParseException("Unknown syntax for import");
     std::string name;
     if (match(TokenType::AS)) name = consume(TokenType::WORD) -> getText();
     return new ImportStatement(modules, name);
@@ -250,17 +249,17 @@ Arguments Parser::functionArguments(){
         bool star = match(TokenType::STAR);
         std::string s = consume(TokenType::WORD) -> getText();
         if (star){
-            if (arrayArguments) throw new ParseException("Two or more array argument");
+            if (arrayArguments) throw ParseException("Two or more array argument");
             arrayArguments = true;
             args.addArrayArgument(s);
         }
-        else if (arrayArguments) throw new ParseException("Argument cannot be after array argument");
+        else if (arrayArguments) throw ParseException("Argument cannot be after array argument");
         else if (match(TokenType::EQ)){
             startOption = true;
             args.addOptional(s, expression());
         }
         else if (!startOption) args.addRequired(s);
-        else throw new ParseException("Required argument cannot be after optional");
+        else throw ParseException("Required argument cannot be after optional");
         if (match(TokenType::RPAREN)) break;
         else consume(TokenType::COMMA);
     }
@@ -293,7 +292,7 @@ std::vector<Expression*> Parser::functionCallArguments(){
 Statement* Parser::exprStatement(){
     Expression* expr = expression();
     if (expr != nullptr) return new ExprStatement(expr);
-    throw new ParseException("Unknown statement: " + std::string(*(get(0))));
+    throw ParseException("Unknown statement: " + std::string(*(get(0))));
 }
 
 Expression* Parser::expression(){
@@ -526,7 +525,7 @@ Expression* Parser::value(){
         }
         return new ValueExpression(new NumberValue(big));
     }
-    throw new ParseException("Unknown expression: " + std::string(*current));
+    throw ParseException("Unknown expression: " + std::string(*current));
 }
 
 Expression* Parser::array(){
@@ -594,7 +593,7 @@ Token* Parser::consume(TokenType type){
     Token* current = get(0);
     if (type != current -> getType()){
         std::string str = "Token " + std::string(*current) + " does not match " + std::string(Token(type, ""));
-        throw new ParseException(str);
+        throw ParseException(str);
     }
     ++pos;
     return current;

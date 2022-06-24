@@ -1,5 +1,5 @@
-#include <sstream>
 #include "token.h"
+#include <sstream>
 
 using namespace SlavaScript::lang;
 
@@ -36,10 +36,9 @@ int Token::getCol(){
 }
 
 std::string Token::position(){
-    std::ostringstream r, c;
-    r << row;
-    c << col;
-    return "{" + r.str() + " " + c.str() + "}";
+    std::ostringstream os;
+    os << "{" << row << " " << col << "}";
+    return os.str();
 }
 
 void Token::setType(TokenType type){

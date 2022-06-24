@@ -1,11 +1,8 @@
 #include "suffixassignmentexpression.h"
-#include "../Lib/variables.h"
-#include "../Expression/binaryexpression.h"
-#include "../Expression/unaryexpression.h"
-#include "../Expression/valueexpression.h"
-#include "../Exception/typeexception.h"
+#include "assignmentexpression.h"
 
 using namespace SlavaScript::lang;
+
 
 SuffixAssignmentExpression::SuffixAssignmentExpression(AssignmentOperator operation, SuffixExpression* containerExpr, Expression* expression) : operation(operation), containerExpr(containerExpr), expression(expression) {}
 

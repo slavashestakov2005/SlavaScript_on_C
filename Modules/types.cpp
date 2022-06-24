@@ -1,11 +1,11 @@
 #include "types.h"
-#include "../Lib/variables.h"
 #include "../Lib/functions.h"
+#include "../Lib/utils.h"
+#include "../Lib/variables.h"
 #include "../Value/boolvalue.h"
 #include "../Value/classvalue.h"
 #include "../Value/numbervalue.h"
 #include "../Value/objectvalue.h"
-#include "../Value/stringvalue.h"
 
 using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::types_f;
@@ -13,12 +13,12 @@ using SlavaScript::modules::Types;
 
 namespace SlavaScript::modules::types_f{
     CREATE_FUNCTION(float_)
-        if (values.size() != 1) throw std::logic_error("One argument expected");
+        argsCount(1, values.size());
         SH_RET(NumberValue, values[0] -> asBignum());
     FE
 
     CREATE_FUNCTION(int_)
-        if (values.size() != 1) throw std::logic_error("One argument expected");
+        argsCount(1, values.size());
         std::string str = std::string(NumberValue(values[0] -> asBignum())), cop;
         for(int i = 0; i < str.size(); ++i){
             if (str[i] == '.') break;
@@ -28,24 +28,24 @@ namespace SlavaScript::modules::types_f{
     FE
 
     CREATE_FUNCTION(isinstance)
-        if (values.size() != 2) throw std::logic_error("Two argument expected");
+        argsCount(2, values.size());
         if (values[0] -> type() != Values::OBJECT) return BoolValue::fromBool(false);
         if (values[1] -> type() != Values::CLASS) return BoolValue::fromBool(false);
         return BoolValue::fromBool(CAST(ObjectValue, values[0]) -> getName() == CAST(ClassValue, values[1]) -> getName());
     FE
 
     CREATE_FUNCTION(string)
-        if (values.size() != 1) throw std::logic_error("One argument expected");
+        argsCount(1, values.size());
         SH_RET(StringValue, values[0] -> asString());
     FE
 
     CREATE_FUNCTION(type_to_string)
-        if (values.size() != 1) throw std::logic_error("One argument expected");
+        argsCount(1, values.size());
         SH_RET(StringValue, values[0] -> stringType());
     FE
 
     CREATE_FUNCTION(typeof)
-        if (values.size() != 1) throw std::logic_error("One argument expected");
+        argsCount(1, values.size());
         SH_RET(NumberValue, int(values[0] -> type()));
     FE
 }

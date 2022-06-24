@@ -1,8 +1,8 @@
 #ifndef WHILESTATEMENT_H_INCLUDED
 #define WHILESTATEMENT_H_INCLUDED
 
-#include "statement.h"
 #include "../Expression/expression.h"
+#include "statement.h"
 
 namespace SlavaScript::lang{
     class WhileStatement : public Statement{

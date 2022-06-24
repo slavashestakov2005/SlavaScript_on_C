@@ -1,8 +1,9 @@
 #include "functionvalue.h"
-#include "../Exception/typeexception.h"
+#include "../Exception/exceptions.h"
 
 using namespace SlavaScript::lang;
-using SlavaScript::exceptions::TypeException;
+using SlavaScript::exceptions::CastException;
+using SlavaScript::exceptions::UnknownOperationException;
 
 
 FunctionValue::FunctionValue(std::shared_ptr<Function> value) : value(value) {}
@@ -19,7 +20,7 @@ std::shared_ptr<Value> FunctionValue::copy(){
 }
 
 double FunctionValue::asDouble(){
-    throw new TypeException("Cannot cast function to number");
+    throw CastException(Values::FUNCTION, Values::NUMBER);
 }
 
 std::string FunctionValue::asString(){
@@ -27,11 +28,11 @@ std::string FunctionValue::asString(){
 }
 
 bool FunctionValue::asBool(){
-    throw new TypeException("Cannot cast function to bool");
+    throw CastException(Values::FUNCTION, Values::BOOL);
 }
 
 Bignum FunctionValue::asBignum(){
-    throw new TypeException("Cannot cast function to number");
+    throw CastException(Values::FUNCTION, Values::NUMBER);
 }
 
 Values FunctionValue::type() const{
@@ -44,7 +45,7 @@ FunctionValue::operator std::string(){
 
 namespace SlavaScript::lang{
     CMP(FunctionValue){
-        throw new TypeException("Conditional operators cannot used for two functions");
+        throw UnknownOperationException("conditional", &a, &b);
     }
 
     DEF_CMP(FunctionValue)

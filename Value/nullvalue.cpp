@@ -1,8 +1,8 @@
 #include "nullvalue.h"
-#include "../Exception/typeexception.h"
+#include "../Exception/exceptions.h"
 
 using namespace SlavaScript::lang;
-using SlavaScript::exceptions::TypeException;
+using SlavaScript::exceptions::CastException;
 
 
 std::shared_ptr<NullValue> NullValue::NULL_ = SHARE(NullValue, );
@@ -13,19 +13,19 @@ std::shared_ptr<Value> NullValue::copy(){
 }
 
 double NullValue::asDouble(){
-    throw new TypeException("Cannot cast null to double");
+    throw CastException(Values::NULL_, Values::NUMBER);
 }
 
 std::string NullValue::asString(){
-    throw new TypeException("Cannot cast null to string");
+    throw CastException(Values::NULL_, Values::STRING);
 }
 
 bool NullValue::asBool(){
-    throw new TypeException("Cannot cast null to bool");
+    throw CastException(Values::NULL_, Values::BOOL);
 }
 
 Bignum NullValue::asBignum(){
-    throw new TypeException("Cannot cast null to number");
+    throw CastException(Values::NULL_, Values::NUMBER);
 }
 
 Values NullValue::type() const{

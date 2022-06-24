@@ -1,8 +1,8 @@
 #ifndef CLASSES_H_INCLUDED
 #define CLASSES_H_INCLUDED
 
-#include <map>
 #include "../Value/classvalue.h"
+#include <map>
 
 namespace SlavaScript::lang{
     struct NamedValue;

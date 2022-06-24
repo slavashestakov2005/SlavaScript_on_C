@@ -45,7 +45,7 @@ while run{
 		dx = food[0][i] - fieldX - w2
 		dy = food[1][i] - fieldY - h2
 		rad = food[2][i] + playerSize
-		dx = 0 dy = 0 rad = 0
+		//dx = 0 dy = 0 rad = 0
 		if dx * dx + dy * dy < rad * rad{
 			playerSize = playerSize + 0.5
 			food[0][i] = rand(fieldWidth)

@@ -1,10 +1,9 @@
 #ifndef NUMBERVALUE_H_INCLUDED
 #define NUMBERVALUE_H_INCLUDED
 
-#include "value.h"
 #include "bignumbers/bignum.h"
+#include "value.h"
 #include <ctime>
-#include <memory>
 
 namespace SlavaScript::lang{
     class NumberValue : public Value{

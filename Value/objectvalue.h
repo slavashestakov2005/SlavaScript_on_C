@@ -2,7 +2,6 @@
 #define OBJECTVALUE_H_INCLUDED
 
 #include "mapvalue.h"
-#include "../Lib/classmethod.h"
 
 namespace SlavaScript::lang{
     class ObjectValue : public Value, public std::enable_shared_from_this<ObjectValue>{

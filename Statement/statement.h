@@ -1,9 +1,9 @@
 #ifndef STATEMENT_H_INCLUDED
 #define STATEMENT_H_INCLUDED
 
-#include <string>
-#include "../Visitor/node.h"
 #include "../Compiler/compilervisitor.h"
+#include "../Visitor/node.h"
+#include <string>
 
 namespace SlavaScript::lang{
     enum class Statements{

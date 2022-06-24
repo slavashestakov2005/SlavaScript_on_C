@@ -1,8 +1,9 @@
-#include <sstream>
 #include "numbervalue.h"
-#include <exception>
+#include "../Exception/exceptions.h"
+#include <sstream>
 
 using namespace SlavaScript::lang;
+using SlavaScript::exceptions::MathException;
 
 
 std::shared_ptr<NumberValue> NumberValue::M_ONE = SHARE(NumberValue, -1);
@@ -30,7 +31,7 @@ double NumberValue::asDouble(){
         is >> val;
         return val;
     }catch(...) {
-        throw std::logic_error("Bad Number class");
+        throw MathException("Number is too large for operation");
     }
 }
 

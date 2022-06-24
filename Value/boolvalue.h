@@ -2,7 +2,6 @@
 #define BOOLVALUE_H_INCLUDED
 
 #include "value.h"
-#include <memory>
 
 namespace SlavaScript::lang{
     class BoolValue : public Value{

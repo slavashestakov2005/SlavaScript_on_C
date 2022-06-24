@@ -10,7 +10,7 @@ namespace SlavaScript::lang{
     template<typename T>
     std::shared_ptr<Value> ModuleClass<T>::construct(std::vector<std::shared_ptr<Value>> values){
         if constexpr(std::is_constructible_v<T, std::vector<std::shared_ptr<Value>>>) return SHARE(T, values);
-        else throw new TypeException("Cannot use constructor for " + correct_class_name());
+        else throw exceptions::TypeException("Cannot use constructor for " + correct_class_name());
     };
 
     template<typename T>

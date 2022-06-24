@@ -2,7 +2,6 @@
 #define SUFFIXELEMENT_H_INCLUDED
 
 #include "expression.h"
-#include "../Lib/function.h"
 #include "../Visitor/assignvalidator.h"
 
 namespace SlavaScript::lang{

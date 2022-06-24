@@ -1,7 +1,7 @@
 #include "path.h"
-#include "../Value/stringvalue.h"
-#include "../Lib/names.h"
 #include "../Lib/filesystem.h"
+#include "../Lib/names.h"
+#include "../Value/stringvalue.h"
 
 using namespace SlavaScript::lang;
 

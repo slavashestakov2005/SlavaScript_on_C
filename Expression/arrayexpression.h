@@ -1,8 +1,8 @@
 #ifndef ARRAYEXPRESSION_H_INCLUDED
 #define ARRAYEXPRESSION_H_INCLUDED
 
-#include <vector>
 #include "expression.h"
+#include <vector>
 
 namespace SlavaScript::lang{
     class ArrayExpression : public Expression{

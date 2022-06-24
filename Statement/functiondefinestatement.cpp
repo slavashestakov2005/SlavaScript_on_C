@@ -1,4 +1,3 @@
-#include <sstream>
 #include "functiondefinestatement.h"
 #include "../Lib/names.h"
 #include "../Lib/userdefinedfunction.h"

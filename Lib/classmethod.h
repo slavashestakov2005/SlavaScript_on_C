@@ -1,6 +1,8 @@
 #ifndef CLASSMETHOD_H_INCLUDED
 #define CLASSMETHOD_H_INCLUDED
 
+#include "function.h"
+
 namespace SlavaScript::lang{
     class ObjectValue;
 

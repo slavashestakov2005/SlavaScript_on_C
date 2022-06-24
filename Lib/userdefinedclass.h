@@ -14,8 +14,6 @@ namespace SlavaScript::lang{
         std::shared_ptr<Value> construct(std::vector<std::shared_ptr<Value>> values) override;
         std::string stringType() const override;
         operator std::string() override;
-
-        ~UserDefinedClass(){}
     };
 }
 

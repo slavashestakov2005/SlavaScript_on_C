@@ -1,8 +1,7 @@
 #include "classdeclarationsstatement.h"
-#include "functiondefinestatement.h"
-#include "../Expression/assignmentexpression.h"
 #include "../Lib/names.h"
 #include "../Lib/userdefinedclass.h"
+#include "functiondefinestatement.h"
 
 using namespace SlavaScript::lang;
 

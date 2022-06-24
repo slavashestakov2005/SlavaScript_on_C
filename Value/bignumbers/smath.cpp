@@ -1,6 +1,6 @@
 #include "bignum.h"
 #include <cmath>
-#include "../../Exception/mathexception.h"
+#include "../../Exception/exceptions.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::MathException;
@@ -36,12 +36,12 @@ namespace SlavaScript::modules::math_out{
     }
 
     Bignum asin(const Bignum& x){
-        if (x < -1 || x > 1) throw new MathException("For asin expected value in [-1; 1]");
+        if (x < -1 || x > 1) throw MathException("Cannot use value not from [-1; 1] for asin");
         return std::asin(double(x));
     }
 
     Bignum acos(const Bignum& x){
-        if (x < -1 || x > 1) throw new MathException("For acos expected value in [-1; 1]");
+        if (x < -1 || x > 1) throw MathException("Cannot use value not from [-1; 1] for acos");
         return std::acos(double(x));
     }
 

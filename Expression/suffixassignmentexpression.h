@@ -1,9 +1,9 @@
 #ifndef SUFFIXaSSIGNMENTSTATEMENT_H_INCLUDED
 #define SUFFIXASSIGNMENTSTATEMENT_H_INCLUDED
 
-#include "../Expression/assignmentexpression.h"
-#include "../Expression/suffixexpression.h"
-#include "../Expression/expression.h"
+#include "assignmentoperator.h"
+#include "expression.h"
+#include "suffixexpression.h"
 #include "../Visitor/assignvalidator.h"
 
 namespace SlavaScript::lang{

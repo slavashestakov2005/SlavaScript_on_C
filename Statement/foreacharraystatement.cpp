@@ -1,29 +1,28 @@
-#include "breakstatement.h"
-#include "continuestatement.h"
 #include "foreacharraystatement.h"
 #include "../Lib/names.h"
+#include "../Lib/utils.h"
+#include "breakstatement.h"
+#include "continuestatement.h"
 #include "../Value/arrayvalue.h"
-#include "../Exception/typeexception.h"
-#include "../Value/value.h"
 
 using namespace SlavaScript::lang;
-using SlavaScript::exceptions::TypeException;
+
 
 ForeachArrayStatement::ForeachArrayStatement(std::string variable, Expression* container, Statement* body) : variable(variable), container(container), body(body) {}
 
 void ForeachArrayStatement::execute(){
     NamedValue start = Names::getNamed(variable);
     std::shared_ptr<Value> containerValue = container -> eval();
-    if (containerValue -> type() != Values::ARRAY) throw new TypeException("Array expected in foreach");
+    argType(Values::ARRAY, containerValue);
     for (auto now : *CAST(ArrayValue, containerValue)){
         Names::setVariable(variable, now);
         try{
             body -> execute();
         }
-        catch(BreakStatement* bs){
+        catch(BreakStatement& bs){
             break;
         }
-        catch(ContinueStatement* cs){
+        catch(ContinueStatement& cs){
             //continue;
         }
     }

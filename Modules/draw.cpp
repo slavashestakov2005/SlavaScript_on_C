@@ -1,18 +1,17 @@
 // [[not imported module]]
 #include "draw.h"
-#include <SFML/Graphics.hpp>
 #include "../Lib/functions.h"
+#include "../Lib/utils.h"
 #include "../Lib/variables.h"
+#include "../Value/arrayvalue.h"
 #include "../Value/nullvalue.h"
 #include "../Value/numbervalue.h"
-#include "../Value/arrayvalue.h"
-#include "../Value/stringvalue.h"
-#include "../Exception/argumentsmismatchexception.h"
+#include <SFML/Graphics.hpp>
 
 using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::draw_f;
 using SlavaScript::modules::Draw;
-using SlavaScript::exceptions::ArgumentsMismatchException;
+
 
 namespace SlavaScript::modules::draw_out{
     enum class Keys{
@@ -43,7 +42,7 @@ namespace SlavaScript::modules::draw_out{
 namespace SlavaScript::modules::draw_f{
     CREATE_FUNCTION(window)
         int siz = values.size();
-        if (siz < 1 || siz > 3) throw new ArgumentsMismatchException("One or two or three arguments expected");
+        argsCount({1, 2, 3}, values.size());
         switch(siz){
             case (1) : {
                 draw_out::window.create(sf::VideoMode(draw_out::defaultWidth, draw_out::defaultHeight), values[0] -> asString());
@@ -64,7 +63,7 @@ namespace SlavaScript::modules::draw_f{
 
     CREATE_FUNCTION(color)
         int siz = values.size();
-        if (siz > 3) throw new ArgumentsMismatchException("Zero, one, two or three arguments expected");
+        argsCount({0, 1, 2, 3}, values.size());
         if (!siz) draw_out::color = draw_out::defaultColor;
         else{
             if (siz == 1){
@@ -85,7 +84,7 @@ namespace SlavaScript::modules::draw_f{
     FE
 
     CREATE_FUNCTION(line)
-        if (values.size() != 4) throw new ArgumentsMismatchException("Four arguments expected");
+        argsCount(4, values.size());
         sf::VertexArray line(sf::Lines, 2);
         line[0].position = sf::Vector2f(values[0] -> asDouble(), values[1] -> asDouble());
         line[0].color = draw_out::color;
@@ -96,7 +95,7 @@ namespace SlavaScript::modules::draw_f{
     FE
 
     CREATE_FUNCTION(rect)
-        if (values.size() != 4) throw new ArgumentsMismatchException("Four arguments expected");
+        argsCount(4, values.size());
         sf::RectangleShape rect;
         rect.setSize(sf::Vector2f(values[2] -> asDouble(), values[3] -> asDouble()));
         rect.setPosition(values[0] -> asDouble(), values[1] -> asDouble());
@@ -107,7 +106,7 @@ namespace SlavaScript::modules::draw_f{
     FE
 
     CREATE_FUNCTION(frect)
-        if (values.size() != 4) throw new ArgumentsMismatchException("Four arguments expected");
+        argsCount(4, values.size());
         sf::RectangleShape rect;
         rect.setSize(sf::Vector2f(values[2] -> asDouble(), values[3] -> asDouble()));
         rect.setPosition(values[0] -> asDouble(), values[1] -> asDouble());
@@ -117,7 +116,7 @@ namespace SlavaScript::modules::draw_f{
     FE
 
     CREATE_FUNCTION(circle)
-        if (values.size() != 3) throw new ArgumentsMismatchException("Three arguments expected");
+        argsCount(3, values.size());
         sf::CircleShape cricle(values[2] -> asDouble());
         cricle.setPosition(values[0] -> asDouble(), values[1] -> asDouble());
         draw_out::window.draw(cricle);
@@ -125,7 +124,7 @@ namespace SlavaScript::modules::draw_f{
     FE
 
     CREATE_FUNCTION(fcircle)
-        if (values.size() != 3) throw new ArgumentsMismatchException("Three arguments expected");
+        argsCount(3, values.size());
         sf::CircleShape cricle(values[2] -> asDouble());
         cricle.setPosition(values[0] -> asDouble(), values[1] -> asDouble());
         cricle.setFillColor(draw_out::color);
@@ -134,7 +133,7 @@ namespace SlavaScript::modules::draw_f{
     FE
 
     CREATE_FUNCTION(repaint)
-        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        argsCount(0, values.size());
         sf::Event event;
         while (draw_out::window.pollEvent(event)) if (event.type == sf::Event::Closed) draw_out::window.close();
         draw_out::window.display();
@@ -142,7 +141,7 @@ namespace SlavaScript::modules::draw_f{
     FE
 
     CREATE_FUNCTION(clear)
-        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        argsCount(0, values.size());
         sf::Event event;
         while (draw_out::window.pollEvent(event)) if (event.type == sf::Event::Closed) draw_out::window.close();
         draw_out::window.clear();
@@ -150,14 +149,14 @@ namespace SlavaScript::modules::draw_f{
     FE
 
     CREATE_FUNCTION(framelimit)
-        if (values.size() > 1) throw new ArgumentsMismatchException("Zero or one arguments expected");
+        argsCount(0, 1, values.size());
         if (values.size()) draw_out::window.setFramerateLimit(values[0] -> asDouble());
         else draw_out::window.setFramerateLimit(draw_out::defaultLimit);
         return NullValue::NULL_;
     FE
 
     CREATE_FUNCTION(keypressed)
-        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        argsCount(0, values.size());
         sf::Event event;
         while (draw_out::window.pollEvent(event)){
             if (event.type == sf::Event::Closed) draw_out::window.close();
@@ -174,7 +173,7 @@ namespace SlavaScript::modules::draw_f{
     FE
 
     CREATE_FUNCTION(mousehover)
-        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        argsCount(0, values.size());
         std::shared_ptr<ArrayValue> arr = SHARE(ArrayValue, 2);
         sf::Vector2i pixesPos = sf::Mouse::getPosition(draw_out::window);
         sf::Vector2f pos = draw_out::window.mapPixelToCoords(pixesPos);
@@ -186,7 +185,7 @@ namespace SlavaScript::modules::draw_f{
     FE
 
     CREATE_FUNCTION(close)
-        if (values.size()) throw new ArgumentsMismatchException("Zero arguments expected");
+        argsCount(0, values.size());
         draw_out::window.close();
         return NullValue::NULL_;
     FE

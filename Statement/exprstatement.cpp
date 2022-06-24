@@ -1,4 +1,5 @@
 #include "exprstatement.h"
+
 using namespace SlavaScript::lang;
 
 ExprStatement::ExprStatement(Expression* expression) : expression(expression) {}

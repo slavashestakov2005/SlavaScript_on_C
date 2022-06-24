@@ -1,8 +1,9 @@
 #include "modulefunction.h"
-#include "../Exception/typeexception.h"
+#include "../Exception/exceptions.h"
 
 using namespace SlavaScript::lang;
-using SlavaScript::exceptions::TypeException;
+using SlavaScript::exceptions::CastException;
+
 
 ModuleFunction::ModuleFunction(function_type f) : f(f) {}
 
@@ -11,5 +12,5 @@ std::shared_ptr<Value> ModuleFunction::execute(std::vector<std::shared_ptr<Value
 }
 
 ModuleFunction::operator std::string(){
-    throw new TypeException("Cannot cast function to string");
+    throw CastException(Values::FUNCTION, Values::STRING);
 }

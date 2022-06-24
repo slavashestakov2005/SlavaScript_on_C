@@ -3,7 +3,7 @@
 using namespace SlavaScript::lang;
 
 void BreakStatement::execute(){
-    throw this;
+    throw *this;
 }
 
 Statements BreakStatement::type() const{

@@ -1,12 +1,10 @@
 #ifndef SUFFIXEXPRESSION_H_INCLUDED
 #define SUFFIXEXPRESSION_H_INCLUDED
 
-#include <vector>
-#include "suffixelement.h"
 #include "expression.h"
-#include "../Value/arrayvalue.h"
-#include "../Value/mapvalue.h"
+#include "suffixelement.h"
 #include "../Visitor/assignvalidator.h"
+#include <vector>
 
 namespace SlavaScript::lang{
     class SuffixExpression : public Expression{

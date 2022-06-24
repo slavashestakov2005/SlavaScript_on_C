@@ -1,10 +1,10 @@
 #ifndef FUNCTIONS_H_INCLUDED
 #define FUNCTIONS_H_INCLUDED
 
-#include <map>
-#include <string>
 #include "function.h"
 #include "functions.h"
+#include <map>
+#include <string>
 
 namespace SlavaScript::lang{
     struct NamedValue;
@@ -14,13 +14,11 @@ namespace SlavaScript::lang{
         int required, optional, array;
     public:
         static ArgumentsInfo without, unary, binary, ternary, quaternary, inf, inf1;
-        ArgumentsInfo(int required, int optional = 0, int array = 0) : required(required), optional(optional), array(array) {}
-        int getRequired() { return required; }
-        int getOptional() { return optional; }
-        int getArray() { return array; }
-        bool canCalled(int argsCount){
-            return required <= argsCount && (array || argsCount <= required + optional);
-        }
+        ArgumentsInfo(int required, int optional = 0, int array = 0);
+        int getRequired() const;
+        int getOptional() const;
+        int getArray() const;
+        bool canCalled(int argsCount) const;
     };
 
     class FunctionsScope{

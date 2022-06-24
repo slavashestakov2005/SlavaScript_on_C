@@ -2,6 +2,7 @@
 
 using namespace SlavaScript::lang;
 
+
 ValueExpression::ValueExpression(Value* val){
     if (val -> type() == Values::ARRAY) value = SHARE(ArrayValue, *(ArrayValue*)val);
     else if (val -> type() == Values::STRING) value = SHARE(StringValue, *(StringValue*)val);

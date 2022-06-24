@@ -1,10 +1,10 @@
 #ifndef FUNCTIONDEFINESTATEMENT_H_INCLUDED
 #define FUNCTIONDEFINESTATEMENT_H_INCLUDED
 
-#include <vector>
-#include "statement.h"
 #include "../Lib/arguments.h"
+#include "statement.h"
 #include "../Visitor/functionadder.h"
+#include <vector>
 
 namespace SlavaScript::lang{
     class FunctionDefineStatement : public Statement{

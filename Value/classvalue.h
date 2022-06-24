@@ -1,8 +1,8 @@
 #ifndef CLASSVALUE_H_INCLUDED
 #define CLASSVALUE_H_INCLUDED
 
-#include "mapvalue.h"
 #include "../Lib/class.h"
+#include "value.h"
 
 namespace SlavaScript::lang{
     class ClassValue : public Value{

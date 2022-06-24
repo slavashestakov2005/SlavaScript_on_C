@@ -1,10 +1,10 @@
 #ifndef MAPVALUE_H_INCLUDED
 #define MAPVALUE_H_INCLUDED
 
-#include <map>
-#include "value.h"
-#include "container.h"
 #include "../Lib/function.h"
+#include "container.h"
+#include "value.h"
+#include <map>
 
 namespace SlavaScript::lang{
     class MapValue : public Value, public Container<std::map<std::shared_ptr<Value>, std::shared_ptr<Value>, Comparator>>{

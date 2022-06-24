@@ -2,6 +2,7 @@
 
 using namespace SlavaScript::lang;
 
+
 TernaryExpression::TernaryExpression(Expression* condition, Expression* trueExpr, Expression* falseExpr) : condition(condition), trueExpr(trueExpr), falseExpr(falseExpr) {}
 
 std::shared_ptr<Value> TernaryExpression::eval(){

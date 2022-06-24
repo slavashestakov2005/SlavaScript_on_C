@@ -3,6 +3,7 @@
 
 using namespace SlavaScript::lang;
 
+
 MapExpression::MapExpression(std::map<Expression*, Expression*> elements) : elements(elements) {}
 
 std::shared_ptr<Value> MapExpression::eval(){

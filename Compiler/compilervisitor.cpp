@@ -6,6 +6,7 @@
 
 using namespace SlavaScript::compiler;
 
+
 namespace{
     std::set<std::string> variables;
 
@@ -17,6 +18,7 @@ namespace{
         return variables.find(name) != variables.cend();
     }
 }
+
 
 void CompilerVisitor::visit(lang::BlockStatement* v){
     if (Compiler::getTabsCount() == 0){

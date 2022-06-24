@@ -1,13 +1,10 @@
 #ifndef LEXER_H_INCLUDED
 #define LEXER_H_INCLUDED
 
+#include "token.h"
 #include <map>
 #include <string>
 #include <vector>
-#include "token.h"
-#include "../Exception/lexerexception.h"
-
-using SlavaScript::exceptions::LexerException;
 
 namespace SlavaScript::lang{
     class Lexer{
@@ -31,7 +28,7 @@ namespace SlavaScript::lang{
         void addToken(TokenType type, std::string text);
         char peek(int position);
         char next();
-        LexerException* error(std::string s);
+        void error(std::string s);
     public:
         Lexer(std::string input);
         std::vector<Token*> tokenize();

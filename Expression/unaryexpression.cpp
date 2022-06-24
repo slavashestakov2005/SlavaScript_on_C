@@ -1,22 +1,17 @@
-#include "exception"
-#include "unaryoperator.h"
 #include "unaryexpression.h"
-#include "../Value/numbervalue.h"
-#include "../Lib/variables.h"
+#include "../Exception/exceptions.h"
+#include "../Lib/functions.h"
+#include "../Lib/utils.h"
 #include "../Value/boolvalue.h"
 #include "../Value/nullvalue.h"
-#include "../Lib/functions.h"
-#include "variableexpression.h"
-#include "../Exception/typeexception.h"
-#include "../Exception/operationIsnotsupportedexception.h"
-#include "../Lib/moduleobject.h"
-#include "../Lib/utils.h"
+#include "../Value/numbervalue.h"
 
 using namespace SlavaScript::lang;
-using SlavaScript::exceptions::OperationIsNotSupportedException;
+using SlavaScript::exceptions::UnknownOperationException;
+
 
 std::shared_ptr<Value> UnaryExpression::calculate(UnaryOperator operation, std::shared_ptr<Value> value){
-    if (value -> type() == Values::INTEGRATION) throw new TypeException("Cannot used unary operation for integration");
+    if (value -> type() == Values::INTEGRATION) throw UnknownOperationException(getOperator(operation), value);
     if (value -> type() == Values::OBJECT){
         return get_property(value, operation) -> execute({});
     }
@@ -28,7 +23,7 @@ std::shared_ptr<Value> UnaryExpression::calculate(UnaryOperator operation, std::
         /// case UnaryOperator::COMPLEMENT : return new NumberValue(~(value -> asBignum()));
         case UnaryOperator::PLUSPLUS : return SHARE(NumberValue, ++(value -> asBignum()));
         case UnaryOperator::MINUSMINUS : return SHARE(NumberValue, --(value -> asBignum()));
-        default: throw new OperationIsNotSupportedException(getOperator(operation));
+        default: throw UnknownOperationException(getOperator(operation), value);
     }
 }
 

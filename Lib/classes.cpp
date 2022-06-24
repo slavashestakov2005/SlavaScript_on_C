@@ -1,11 +1,12 @@
 #include "classes.h"
-#include "../Exception/unknownclassexception.h"
+#include "../Exception/exceptions.h"
+#include "../Lib/names.h"
 #include "../Modules/global.h"
-#include "names.h"
 
 using namespace SlavaScript::lang;
 using SlavaScript::modules::Global;
 using SlavaScript::exceptions::UnknownClassException;
+
 
 std::vector<ClassesScope> Classes::scope = {};
 
@@ -23,7 +24,7 @@ bool ClassesScope::isExists(std::string key){
 }
 
 std::shared_ptr<ClassValue> ClassesScope::get(std::string key){
-    if (!isExists(key)) throw new UnknownClassException(key);
+    if (!isExists(key)) throw UnknownClassException(key);
     return declarations[key];
 }
 

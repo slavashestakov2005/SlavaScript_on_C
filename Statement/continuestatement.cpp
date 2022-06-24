@@ -3,7 +3,7 @@
 using namespace SlavaScript::lang;
 
 void ContinueStatement::execute(){
-    throw this;
+    throw *this;
 }
 
 Statements ContinueStatement::type() const{

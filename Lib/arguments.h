@@ -1,8 +1,8 @@
 #ifndef ARGUMENTS_H_INCLUDED
 #define ARGUMENTS_H_INCLUDED
 
-#include <vector>
 #include "argument.h"
+#include <vector>
 
 namespace SlavaScript::lang{
     class Arguments{

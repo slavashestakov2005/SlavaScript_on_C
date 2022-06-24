@@ -1,17 +1,12 @@
 #include "integrationvalue.h"
-#include "../Exception/typeexception.h"
-#include "functionvalue.h"
-#include "stringvalue.h"
-#include "nullvalue.h"
-#include "../Exception/argumentsmismatchexception.h"
-#include "../Exception/unknownpropertyexception.h"
+#include "../Exception/exceptions.h"
 #include "../Lib/filesystem.h"
+#include "../Lib/function.h"
 #include "../Lib/utils.h"
 
 using namespace SlavaScript::lang;
-using SlavaScript::exceptions::TypeException;
+using SlavaScript::exceptions::CastException;
 using SlavaScript::exceptions::UnknownPropertyException;
-using SlavaScript::exceptions::ArgumentsMismatchException;
 
 
 namespace{
@@ -23,8 +18,8 @@ namespace{
     public:
         Get(std::string start, std::string finish) : start(start), finish(finish) {}
         std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values){
-            if (values.size() != 1) throw new ArgumentsMismatchException("One argument expected");
-            if (values[0] -> type() != Values::STRING) throw new TypeException("String expected in first argument");
+            argsCount(1, values.size());
+            argType(Values::STRING, values[0]);
             std::string filename = start + "_" + mas[COUNT++] + "." + finish;
             FS::writeToCache(filename, "import " + start + "\n"
                                  "with open('out.txt', 'w') as f:\n"
@@ -45,19 +40,19 @@ std::shared_ptr<Value> IntegrationValue::copy(){
 }
 
 double IntegrationValue::asDouble(){
-    throw new TypeException("Cannot cast integration to double");
+    throw CastException(Values::INTEGRATION, Values::NUMBER);
 }
 
 std::string IntegrationValue::asString(){
-    throw new TypeException("Cannot cast integration to string");
+    throw CastException(Values::INTEGRATION, Values::STRING);
 }
 
 bool IntegrationValue::asBool(){
-    throw new TypeException("Cannot cast integration to bool");
+    throw CastException(Values::INTEGRATION, Values::BOOL);
 }
 
 Bignum IntegrationValue::asBignum(){
-    throw new TypeException("Cannot cast integration to number");
+    throw CastException(Values::INTEGRATION, Values::NUMBER);
 }
 
 Values IntegrationValue::type() const{
@@ -71,7 +66,7 @@ IntegrationValue::operator std::string(){
 std::shared_ptr<Value> IntegrationValue::getDot(std::shared_ptr<Value> property){
     std::string prop = property -> asString();
     if (prop == "get") SH_RET(FunctionValue, SHARE_2(Get, fileNameBegin, fileNameEnd));
-    throw new UnknownPropertyException(prop);
+    throw UnknownPropertyException(prop);
 }
 
 

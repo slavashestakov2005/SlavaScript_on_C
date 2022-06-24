@@ -1,10 +1,9 @@
 #include "classvalue.h"
-#include "objectvalue.h"
-#include "../Statement/functiondefinestatement.h"
-#include "../Statement/classdeclarationsstatement.h"
+#include "../Exception/exceptions.h"
 #include "../Lib/utils.h"
 
 using namespace SlavaScript::lang;
+using SlavaScript::exceptions::CastException;
 
 
 ClassValue::ClassValue(std::shared_ptr<Class> cls) : cls(cls) {}
@@ -24,19 +23,19 @@ std::shared_ptr<Value> ClassValue::copy(){
 }
 
 double ClassValue::asDouble(){
-    throw new TypeException("Cannot cast class to double");
+    throw CastException(Values::CLASS, Values::NUMBER);
 }
 
 std::string ClassValue::asString(){
-    throw new TypeException("Cannot cast class to string");
+    throw CastException(Values::CLASS, Values::STRING);
 }
 
 bool ClassValue::asBool(){
-    throw new TypeException("Cannot cast class to bool");
+    throw CastException(Values::CLASS, Values::BOOL);
 }
 
 Bignum ClassValue::asBignum(){
-    throw new TypeException("Cannot cast class to number");
+    throw CastException(Values::CLASS, Values::NUMBER);
 }
 
 Values ClassValue::type() const{

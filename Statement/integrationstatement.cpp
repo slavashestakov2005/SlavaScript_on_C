@@ -1,9 +1,12 @@
 #include "integrationstatement.h"
+#include "../Exception/exceptions.h"
+#include "../Lib/filesystem.h"
 #include "../Lib/names.h"
 #include "../Value/integrationvalue.h"
-#include "../Lib/filesystem.h"
 
 using namespace SlavaScript::lang;
+using SlavaScript::exceptions::LogicException;
+
 
 namespace{
     std::string replace_all(std::string str){
@@ -11,7 +14,7 @@ namespace{
         size_t pos = str.find("\n");
         int last = 0;
         while(pos != std::string::npos) {
-            if (pos + 1 >= str.size() || str[pos + 1] != '\t') throw std::logic_error("Cannot used \\n with out \\t");
+            if (pos + 1 >= str.size() || str[pos + 1] != '\t') throw LogicException("Cannot used \\n with out \\t");
             result += str.substr(last, pos - last);
             result += "\n";
             last = pos + 2;
