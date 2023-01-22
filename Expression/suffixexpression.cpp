@@ -3,9 +3,6 @@
 
 using namespace SlavaScript::lang;
 
-SuffixExpression::SuffixExpression(std::string variable, std::vector<SuffixElement*> access){
-    (*this) = SuffixExpression(new VariableExpression(variable), access);
-}
 
 SuffixExpression::SuffixExpression(Expression* root, std::vector<SuffixElement*> access) : root(root), access(access) {}
 

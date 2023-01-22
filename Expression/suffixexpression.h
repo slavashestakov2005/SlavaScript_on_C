@@ -13,7 +13,6 @@ namespace SlavaScript::lang{
         std::vector<SuffixElement*> access;
         std::shared_ptr<Value> container, lastContainer;
     public:
-        SuffixExpression(std::string variable, std::vector<SuffixElement*> access);
         SuffixExpression(Expression* root, std::vector<SuffixElement*> access);
 
         std::shared_ptr<Value> get();

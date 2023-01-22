@@ -4,6 +4,7 @@
 #include "names.h"
 #include "variables.h"
 #include "../Value/nullvalue.h"
+#include "../Value/numbervalue.h"
 
 namespace SlavaScript::lang{
     template<typename T>
@@ -33,7 +34,7 @@ namespace SlavaScript::lang{
     template<typename T>
     std::shared_ptr<Value> ModuleClassMethod<T>::execute(std::vector<std::shared_ptr<Value>> values){
         Variables::push();
-        std::shared_ptr<Value> result = nullptr;
+        std::shared_ptr<Value> result = NullValue::NULL_;
         try{
             result = eval(values);
         } catch(...){

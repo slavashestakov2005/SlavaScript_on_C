@@ -14,7 +14,14 @@
 				<Option parameters='-f &quot;bin\Debug\test.s++&quot;' />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="C:/Users/Public/Plugins/SFML-2.5.1/include" />
 				</Compiler>
+				<Linker>
+					<Add library="sfml-graphics" />
+					<Add library="sfml-window" />
+					<Add library="sfml-system" />
+					<Add directory="C:/Users/Public/Plugins/SFML-2.5.1/lib" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/second" prefix_auto="1" extension_auto="1" />

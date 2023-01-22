@@ -46,7 +46,7 @@ std::shared_ptr<Value> ObjectValue::copy(){
 }
 
 double ObjectValue::asDouble(){
-    throw CastException(Values::CLASS, Values::NUMBER);
+    throw CastException(Values::OBJECT, Values::NUMBER);
 }
 
 std::string ObjectValue::asString(){
@@ -54,11 +54,11 @@ std::string ObjectValue::asString(){
 }
 
 bool ObjectValue::asBool(){
-    throw CastException(Values::CLASS, Values::BOOL);
+    throw CastException(Values::OBJECT, Values::BOOL);
 }
 
 Bignum ObjectValue::asBignum(){
-    throw CastException(Values::CLASS, Values::NUMBER);
+    throw CastException(Values::OBJECT, Values::NUMBER);
 }
 
 Values ObjectValue::type() const{
