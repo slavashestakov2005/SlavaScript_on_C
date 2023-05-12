@@ -48,5 +48,5 @@ namespace SlavaScript::lang{
         throw UnknownOperationException("conditional", &a, &b);
     }
 
-    DEF_CMP(FunctionValue)
+    DEF_EQ(FunctionValue)
 }

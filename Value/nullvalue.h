@@ -19,9 +19,8 @@ namespace SlavaScript::lang{
         operator std::string() override;
 
         friend CMP(NullValue);
+        friend EQ(NullValue);
     };
-
-    DEC_CMP(NullValue)
 }
 
 #endif // NULLVALUE_H_INCLUDED

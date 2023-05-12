@@ -18,6 +18,11 @@ NumberValue::NumberValue(long long value) : value(Bignum(value)) {}
 NumberValue::NumberValue(size_t value) : value(Bignum((long long) value)) {}
 NumberValue::NumberValue(clock_t value) : value(Bignum((long long) value)) {}
 NumberValue::NumberValue(double value) : value(Bignum(value)) {}
+NumberValue::NumberValue(std::strong_ordering val){
+    if (val == std::strong_ordering::less) value = Bignum(-1);
+    else if (val == std::strong_ordering::greater) value = Bignum(1);
+    else value = Bignum(0);
+}
 
 
 std::shared_ptr<Value> NumberValue::copy(){
@@ -61,5 +66,5 @@ namespace SlavaScript::lang{
         RCHECK(a.value, b.value);
     }
 
-    DEF_CMP(NumberValue)
+    DEF_EQ(NumberValue)
 }

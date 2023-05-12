@@ -36,9 +36,8 @@ namespace SlavaScript::lang{
         container_type::iterator end() override;
 
         friend CMP(MapValue);
+        friend EQ(MapValue);
     };
-
-    DEC_CMP(MapValue)
 }
 
 #endif // MAPVALUE_H_INCLUDED

@@ -23,9 +23,8 @@ namespace SlavaScript::lang{
         operator std::string() override;
 
         friend CMP(FunctionValue);
+        friend EQ(FunctionValue);
     };
-
-    DEC_CMP(FunctionValue)
 }
 
 #endif // FUNCTIONVALUE_H_INCLUDED

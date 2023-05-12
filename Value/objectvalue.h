@@ -28,9 +28,8 @@ namespace SlavaScript::lang{
         void setDot(std::shared_ptr<Value> key, std::shared_ptr<Value> value) override;
 
         friend CMP(ObjectValue);
+        friend EQ(ObjectValue);
     };
-
-    DEC_CMP(ObjectValue)
 }
 
 #endif // OBJECTVALUE_H_INCLUDED

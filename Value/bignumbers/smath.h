@@ -12,6 +12,7 @@ namespace SlavaScript::modules::math_out{
     lang::Bignum acos(const lang::Bignum& x);
     lang::Bignum atan(const lang::Bignum& x);
     lang::Bignum atan2(const lang::Bignum& x, const lang::Bignum& y);
+    lang::UnsignedBig binpow(const lang::UnsignedBig& x, const lang::UnsignedBig& y, const lang::UnsignedBig& mod);
     lang::Bignum exp(const lang::Bignum& x);
     lang::Bignum log(const lang::Bignum& x);
     lang::Bignum log10(const lang::Bignum& x);

@@ -90,5 +90,5 @@ namespace SlavaScript::lang{
         RCHECK(a.className, b.className);
     }
 
-    DEF_CMP(ObjectValue)
+    DEF_EQ(ObjectValue)
 }

@@ -22,9 +22,8 @@ namespace SlavaScript::lang{
         operator std::string() override;
 
         friend CMP(BoolValue);
+        friend EQ(BoolValue);
     };
-
-    DEC_CMP(BoolValue)
 }
 
 #endif // BOOLVALUE_H_INCLUDED

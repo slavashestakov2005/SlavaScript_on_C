@@ -19,7 +19,6 @@ using SlavaScript::exceptions::UnknownPropertyException;
 
 
 namespace SlavaScript::modules::math_out{
-    using SlavaScript::lang::compare;
     using PolynomialCoeff = RationalBig;
 
     CLASS_IN_MODULE_1(Polynomial)
@@ -142,13 +141,14 @@ namespace SlavaScript::modules::math_out{
             return *this;
         }
         friend CMP(Polynomial);
+        friend EQ(Polynomial);
     CLASS_IN_MODULE_2(Polynomial)
 
     DEF_OP_OUT(Polynomial, +)
     DEF_OP_OUT(Polynomial, -)
     DEF_OP_OUT(Polynomial, *)
     DEF_OP_OUT(Polynomial, %)
-    DEF_CMP(Polynomial)
+    DEF_EQ(Polynomial)
 
     CMP(Polynomial){
         CHECK(a.coefficients.size(), b.coefficients.size());
@@ -156,7 +156,7 @@ namespace SlavaScript::modules::math_out{
         for(int i = sz - 1; i >= 0; --i){
             CHECK(a.coefficients[i], b.coefficients[i]);
         }
-        return 0;
+        return std::strong_ordering::equal;
     }
 
     CLASS_METHOD_PTR(Deg, Polynomial)
@@ -170,7 +170,7 @@ namespace SlavaScript::modules::math_out{
         if (values[0] -> type() == Values::NUMBER) p = SHARE(Polynomial, std::vector<PolynomialCoeff>{values[0] -> asBignum()});
         else if (Polynomial::is_instance(values[0])) p = CAST(Polynomial, values[0]);
         else throw TypeException("Polynomial expected");
-        return SHARE(NumberValue, compare(*instance, *p));
+        return SHARE(NumberValue, *instance <=> *p);
     CME
 
     #define POLYNOMIAL_FUNCTION(cls, op) \
@@ -257,6 +257,13 @@ namespace SlavaScript::modules::math_f{
     MATH_FUNCTION(acos)
     MATH_FUNCTION(asin)
     MATH_FUNCTION(atan)
+    CREATE_FUNCTION(binpow)
+        argsCount(2, 3, values.size());
+        Bignum x = values[0] -> asBignum(), y = values[1] -> asBignum(), mod = Bignum::ZERO;
+        if (values.size() > 2) mod = values[2] -> asBignum();
+        SH_RET(NumberValue, math_out::binpow(x.toUnsigned(), y.toUnsigned(), mod.toUnsigned()));
+    FE
+
     MATH_BINARY_FUNCTION(atan2)
     MATH_FUNCTION(cbrt)
     MATH_FUNCTION(ceil)
@@ -343,6 +350,7 @@ void Math::initFunctions(){
     UNARY_F_(math_f, asin)
     UNARY_F_(math_f, atan)
     BINARY_F_(math_f, atan2)
+    INFO_F_(math_f, binpow, ArgumentsInfo(2, 1, 0))
     UNARY_F_(math_f, cbrt)
     UNARY_F_(math_f, ceil)
     BINARY_F_(math_f, copy_sign)

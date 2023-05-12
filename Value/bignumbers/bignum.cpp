@@ -259,7 +259,7 @@ namespace SlavaScript::lang{
     DEF_OP_OUT(UnsignedBig, *)
     DEF_OP_OUT(UnsignedBig, /)
     DEF_OP_OUT(UnsignedBig, %)
-    DEF_CMP(UnsignedBig)
+    DEF_EQ(UnsignedBig)
 }
 
 
@@ -355,6 +355,13 @@ Bignum::operator std::string() const{
     if (dot) r += ".";
     for(int i = s.size() - dot; i < s.size(); ++i) r += s[i];
     return r;
+}
+
+UnsignedBig Bignum::toUnsigned() const{
+    if (sign == MINUS) throw MathException("Cannot convert negative number to unsigned");
+    UnsignedBig cop = value;
+    cop.shift(dot);
+    return cop;
 }
 
 Bignum Bignum::operator-(){
@@ -478,8 +485,8 @@ namespace SlavaScript::lang{
         n = (n == std::string::npos ? s.size() : n);
         m = (m == std::string::npos ? t.size() : m);
         std::string s1 = s.substr(0, n), s2 = s.substr(n), t1 = t.substr(0, m), t2 = t.substr(m);
-        if (s[0] == '-' && t[0] != '-') return -1;
-        if (t[0] == '-' && s[0] != '-') return 1;
+        if (s[0] == '-' && t[0] != '-') return std::strong_ordering::less;
+        if (t[0] == '-' && s[0] != '-') return std::strong_ordering::greater;
         if (s[0] == '-'){
             CHECK(t1, s1);
             RCHECK(s2, t2);
@@ -493,7 +500,7 @@ namespace SlavaScript::lang{
     DEF_OP_OUT(Bignum, *)
     DEF_OP_OUT(Bignum, /)
     DEF_OP_OUT(Bignum, %)
-    DEF_CMP(Bignum)
+    DEF_EQ(Bignum)
 }
 
 
@@ -554,5 +561,5 @@ namespace SlavaScript::lang{
     DEF_OP_OUT(RationalBig, -)
     DEF_OP_OUT(RationalBig, *)
     DEF_OP_OUT(RationalBig, /)
-    DEF_CMP(RationalBig)
+    DEF_EQ(RationalBig)
 }

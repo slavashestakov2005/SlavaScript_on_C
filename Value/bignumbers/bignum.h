@@ -46,6 +46,7 @@ namespace SlavaScript::lang{
         DEC_OP_IN(UnsignedBig, /=);
         DEC_OP_IN(UnsignedBig, %=);
         friend CMP(UnsignedBig);
+        friend EQ(UnsignedBig);
     };
 
     inline const int UnsignedBig::BASE = 1000000000, UnsignedBig::POW = 9;
@@ -58,7 +59,6 @@ namespace SlavaScript::lang{
     DEC_OP_OUT(UnsignedBig, *);
     DEC_OP_OUT(UnsignedBig, /);
     DEC_OP_OUT(UnsignedBig, %);
-    DEC_CMP(UnsignedBig)
 
     class Bignum{
     private:
@@ -89,6 +89,7 @@ namespace SlavaScript::lang{
         explicit operator bool() const;
         explicit operator double() const;
         operator std::string() const;
+        UnsignedBig toUnsigned() const;
 
         Bignum operator-();
         Bignum operator+();
@@ -103,6 +104,7 @@ namespace SlavaScript::lang{
         DEC_OP_IN(Bignum, /=);
         DEC_OP_IN(Bignum, %=);
         friend CMP(Bignum);
+        friend EQ(Bignum);
     };
 
     inline const bool Bignum::PLUS = true, Bignum::MINUS = false;
@@ -115,7 +117,6 @@ namespace SlavaScript::lang{
     DEC_OP_OUT(Bignum, *);
     DEC_OP_OUT(Bignum, /);
     DEC_OP_OUT(Bignum, %);
-    DEC_CMP(Bignum)
 
     class RationalBig{
     private:
@@ -139,6 +140,7 @@ namespace SlavaScript::lang{
         DEC_OP_IN(RationalBig, *=);
         DEC_OP_IN(RationalBig, /=);
         friend CMP(RationalBig);
+        friend EQ(RationalBig);
     };
 
     DEC_OP_OUT(RationalBig, +);
@@ -146,7 +148,6 @@ namespace SlavaScript::lang{
     DEC_OP_OUT(RationalBig, *);
     DEC_OP_OUT(RationalBig, /);
     DEC_OP_OUT(RationalBig, %);
-    DEC_CMP(RationalBig)
 }
 
 #endif // BIGNUM_H_INCLUDED

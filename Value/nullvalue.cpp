@@ -39,8 +39,8 @@ NullValue::operator std::string(){
 
 namespace SlavaScript::lang{
     CMP(NullValue){
-        return 0;
+        return std::strong_ordering::equal;
     }
 
-    DEF_CMP(NullValue)
+    DEF_EQ(NullValue)
 }

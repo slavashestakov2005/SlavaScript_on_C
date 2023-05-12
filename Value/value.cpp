@@ -58,7 +58,7 @@ namespace SlavaScript::lang{
         }
     }
 
-    DEF_CMP(Value)
+    DEF_EQ(Value)
 
     bool comparator(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b){
         return (*a) < (*b);

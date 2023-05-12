@@ -29,9 +29,8 @@ namespace SlavaScript::lang{
         container_type::iterator end() override;
 
         friend CMP(StringValue);
+        friend EQ(StringValue);
     };
-
-    DEC_CMP(StringValue)
 }
 
 #endif // STRINGVALUE_H_INCLUDED

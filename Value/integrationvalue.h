@@ -20,9 +20,8 @@ namespace SlavaScript::lang{
         std::shared_ptr<Value> getDot(std::shared_ptr<Value> property) override;
 
         friend CMP(IntegrationValue);
+        friend EQ(IntegrationValue);
     };
-
-    DEC_CMP(IntegrationValue)
 }
 
 #endif // INTEGRATIONVALUE_H_INCLUDED

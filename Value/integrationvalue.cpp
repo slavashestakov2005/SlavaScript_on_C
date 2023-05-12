@@ -75,5 +75,5 @@ namespace SlavaScript::lang{
         RCHECK(a.fileNameBegin, b.fileNameBegin);
     }
 
-    DEF_CMP(IntegrationValue)
+    DEF_EQ(IntegrationValue)
 }

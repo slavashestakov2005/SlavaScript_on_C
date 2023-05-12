@@ -4,7 +4,6 @@
 #include "function.h"
 
 namespace SlavaScript::lang{
-    CMP(int);
     CMP(std::string);
     void argsCount(std::vector<int> expected, int got);
     void argsCount(int a, int got);

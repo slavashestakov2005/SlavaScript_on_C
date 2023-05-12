@@ -26,9 +26,8 @@ namespace SlavaScript::lang{
         std::string stringType() const override;
 
         friend CMP(ClassValue);
+        friend EQ(ClassValue);
     };
-
-    DEC_CMP(ClassValue)
 }
 
 #endif // CLASSVALUE_H_INCLUDED

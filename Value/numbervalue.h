@@ -19,6 +19,7 @@ namespace SlavaScript::lang{
         NumberValue(size_t value);
         NumberValue(clock_t value);
         NumberValue(double value);
+        NumberValue(std::strong_ordering val);
 
         std::shared_ptr<Value> copy() override;
         double asDouble() override;
@@ -29,9 +30,8 @@ namespace SlavaScript::lang{
         operator std::string() override;
 
         friend CMP(NumberValue);
+        friend EQ(NumberValue);
     };
-
-    DEC_CMP(NumberValue)
 }
 
 #endif // NUMBERVALUE_H_INCLUDED

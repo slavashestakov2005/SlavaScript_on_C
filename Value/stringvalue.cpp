@@ -255,5 +255,5 @@ namespace SlavaScript::lang{
         RCHECK(a.value, b.value);
     }
 
-    DEF_CMP(StringValue)
+    DEF_EQ(StringValue)
 }

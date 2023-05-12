@@ -48,5 +48,5 @@ namespace SlavaScript::lang{
         RCHECK(a.value, b.value);
     }
 
-    DEF_CMP(BoolValue)
+    DEF_EQ(BoolValue)
 }

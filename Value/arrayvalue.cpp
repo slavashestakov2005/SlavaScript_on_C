@@ -160,8 +160,8 @@ namespace SlavaScript::lang{
             CHECK(val1 -> type(), val2 -> type());
             CHECK(*val1, *val2);
         }
-        return 0;
+        return std::strong_ordering::equal;
     }
 
-    DEF_CMP(ArrayValue)
+    DEF_EQ(ArrayValue)
 }

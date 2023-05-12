@@ -53,6 +53,16 @@ namespace SlavaScript::modules::math_out{
         return std::atan2(double(x), double(y));
     }
 
+    UnsignedBig binpow(const UnsignedBig& x, const UnsignedBig& y, const UnsignedBig& mod){;
+        if (y == UnsignedBig::ZERO) return 1;
+        if (y == UnsignedBig::ONE) return mod == UnsignedBig::ZERO ? x : x % mod;
+        UnsignedBig yy = y / 2;
+        UnsignedBig r = binpow(x, yy, mod);
+        yy *= 2;
+        if (mod == UnsignedBig::ZERO) return yy == y ? r * r : r * r * x;
+        return yy == y ? r * r % mod : r * x * r % mod;
+    }
+
     Bignum exp(const Bignum& x){
         return std::exp(double(x));
     }

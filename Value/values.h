@@ -19,8 +19,6 @@ namespace SlavaScript::lang{
     };
 
     std::string getValueName(Values value);
-
-    CMP(Values);
 }
 
 #endif // VALUES_H_INCLUDED

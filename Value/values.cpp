@@ -13,8 +13,4 @@ namespace SlavaScript::lang{
     std::string getValueName(Values value){
         return mas[(int) value];
     }
-
-    CMP(Values){
-        RCHECK(int(a), int(b));
-    }
 }

@@ -6,17 +6,13 @@
 #include "../Lib/modulefunction.h"
 
 namespace SlavaScript::modules{
-    CREATE_TEMPLATE(Constants)
-    CREATE_TEMPLATE(Functions)
-    CREATE_TEMPLATE(Classes)
-
     template<class ModuleName>
     class Module{
     public:
         static void init(){
-            InitConstants<ModuleName>::init();
-            InitFunctions<ModuleName>::init();
-            InitClasses<ModuleName>::init();
+            if constexpr(requires{ ModuleName::initConstants(); }) ModuleName::initConstants();
+            if constexpr(requires{ ModuleName::initFunctions(); }) ModuleName::initFunctions();
+            if constexpr(requires{ ModuleName::initClasses(); }) ModuleName::initClasses();
         }
     };
 }

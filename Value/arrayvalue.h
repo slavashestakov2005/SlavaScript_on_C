@@ -37,9 +37,8 @@ namespace SlavaScript::lang{
         container_type::iterator end() override;
 
         friend CMP(ArrayValue);
+        friend EQ(ArrayValue);
     };
-
-    DEC_CMP(ArrayValue)
 }
 
 #endif // ARRAYVALUE_H_INCLUDED

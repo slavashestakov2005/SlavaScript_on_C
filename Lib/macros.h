@@ -1,14 +1,6 @@
 #ifndef MACROS_H_INCLUDED
 #define MACROS_H_INCLUDED
 
-namespace SlavaScript::modules{
-    /** using by module.h **/
-    #define CREATE_TEMPLATE(name) \
-        template<typename T, typename = void> struct Has##name: std::false_type{}; \
-        template<typename T> struct Has##name<T, std::enable_if_t<std::is_same<decltype(std::declval<T>().init##name()), void>::value>>: std::true_type{}; \
-        template<typename T> struct Init##name { static void init(){ if constexpr(Has##name<T>::value) T::init##name(); } };
-}
-
 namespace SlavaScript::lang{
     /** binary operators **/
     #define DEC_OP_IN(cls, op) cls& operator op(cls const& temp)
@@ -16,15 +8,13 @@ namespace SlavaScript::lang{
     #define DEF_OP_OUT(cls, op) cls& operator op(cls a, cls const& b){ return a op##= b; }
 
     /** conditional operators **/
-    #define CMP(cls) int compare(cls const& a, cls const& b)
-    #define DEC_CMP_(cls, op) bool operator op(cls const& a, cls const& b);
-    #define DEC_CMP(cls) DEC_CMP_(cls, ==) DEC_CMP_(cls, !=) DEC_CMP_(cls, <) DEC_CMP_(cls, >) DEC_CMP_(cls, <=) DEC_CMP_(cls, >=)
-    #define DEF_CMP_(cls, op) bool operator op(cls const& a, cls const& b){ return compare(a, b) op 0; }
-    #define DEF_CMP(cls) DEF_CMP_(cls, ==) DEF_CMP_(cls, !=) DEF_CMP_(cls, <) DEF_CMP_(cls, >) DEF_CMP_(cls, <=) DEF_CMP_(cls, >=)
+    #define CMP(cls) std::strong_ordering operator<=>(cls const& a, cls const& b)
+    #define EQ(cls) bool operator==(cls const& a, cls const& b)
+    #define DEF_EQ(cls) bool operator==(cls const& a, cls const& b){ return (a <=> b) == std::strong_ordering::equal; }
 
     /** short expressions **/
-    #define CHECK(x, y) {int r = compare(x, y); if(r) return r; }
-    #define RCHECK(x, y) return compare(x, y)
+    #define CHECK(x, y) { std::strong_ordering r = (x) <=> (y); if(r != std::strong_ordering::equal) return r; }
+    #define RCHECK(x, y) return x <=> y
     #define CAST(type, value) (std::static_pointer_cast<type>(value))
 
     /** shared_ptr **/

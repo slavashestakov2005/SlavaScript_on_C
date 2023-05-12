@@ -148,8 +148,8 @@ namespace SlavaScript::lang{
             ++nowa;
             ++nowb;
         }
-        return 0;
+        return std::strong_ordering::equal;
     }
 
-    DEF_CMP(MapValue)
+    DEF_EQ(MapValue)
 }

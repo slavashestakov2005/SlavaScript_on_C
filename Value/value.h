@@ -24,9 +24,9 @@ namespace SlavaScript::lang{
 
         virtual ~Value();
         friend CMP(Value);
+        friend EQ(Value);
     };
 
-    DEC_CMP(Value)
 
     bool comparator(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b);
     bool equals(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b);
