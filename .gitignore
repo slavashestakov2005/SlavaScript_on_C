@@ -1,5 +1,2 @@
-*.layout
-*.depend
 /*.dll
-/bin
-/obj
+/build_cpp
