@@ -44,7 +44,7 @@ namespace SlavaScript::modules::types_f{
         SH_RET(StringValue, values[0] -> stringType());
     FE
 
-    CREATE_FUNCTION(typeof)
+    CREATE_FUNCTION(typeof_)
         argsCount(1, values.size());
         SH_RET(NumberValue, int(values[0] -> type()));
     FE
@@ -69,5 +69,5 @@ void Types::initFunctions(){
     MFUNC_BINARY(isinstance)
     MFUNC_UNARY(string)
     MFUNC_UNARY(type_to_string)
-    MFUNC_UNARY(typeof)
+    MFUNC_RENAME(typeof_, "typeof", ArgumentsInfo::unary)
 }

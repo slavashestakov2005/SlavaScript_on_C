@@ -28,7 +28,7 @@ std::string Start::read(){
 
 void Start::start(){
     double startTime = clock();
-    /** Î÷èùåíèå äàííûõ **/
+    /** ÐžÑ‡Ð¸Ñ‰ÐµÐ½Ð¸Ðµ Ð´Ð°Ð½Ð½Ñ‹Ñ… **/
     try{
         std::string code = read();
         lexer = Lexer(code);
@@ -40,7 +40,7 @@ void Start::start(){
             return;
         }
         Path::setImpoted(true);
-        /** Çàïóñê ïðîãðàììû **/
+        /** Ð—Ð°Ð¿ÑƒÑÐº Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹ **/
         //Functions::print();
         //program -> accept(new VariablePrinter());
         //std::cout << "Tokenize:\n";

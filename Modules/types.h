@@ -5,7 +5,7 @@
 
 namespace SlavaScript::modules{
     namespace types_f{
-        extern std::shared_ptr<SlavaScript::lang::Function> float_, int_, string, type_to_string, typeof;
+        extern std::shared_ptr<SlavaScript::lang::Function> float_, int_, string, type_to_string, typeof_;
     }
 
     class Types : public Module<Types> {

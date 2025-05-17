@@ -46,7 +46,7 @@ void Repl::start(){
                 std::cout << std::string(parser.getParseErrors());
                 continue;
             }
-            /** Çàïóñê ïðîãðàììû **/
+            /** Ð—Ð°Ð¿ÑƒÑÐº Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹ **/
             Path::setImpoted(true);
             for(unsigned i = 0; i < tokens.size(); ++i) delete tokens[i];
             program -> execute();
