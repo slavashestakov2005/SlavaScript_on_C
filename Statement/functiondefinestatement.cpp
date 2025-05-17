@@ -7,7 +7,7 @@ using namespace SlavaScript::lang;
 FunctionDefineStatement::FunctionDefineStatement(std::string name, Arguments arguments, Statement* body) : name(name), arguments(arguments), body(body) {}
 
 void FunctionDefineStatement::execute(bool set){
-    if (set) Names::setFunction(name, SHARE_2(UserDefinedFunction, arguments, body),
+    if (set) Names::setFunction(name, SHARE(UserDefinedFunction, arguments, body),
                    ArgumentsInfo(arguments.getRequiredCount(), arguments.size() - arguments.getRequiredCount() - arguments.getArrayCount(),
                                  arguments.getArrayCount()));
 }

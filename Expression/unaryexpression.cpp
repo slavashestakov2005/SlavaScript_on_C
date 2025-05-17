@@ -17,12 +17,12 @@ std::shared_ptr<Value> UnaryExpression::calculate(UnaryOperator operation, std::
     }
     if (value -> type() == Values::NULL_) return NullValue::NULL_;
     switch(operation){
-        case UnaryOperator::PLUS : return SHARE(NumberValue, value -> asBignum());
-        case UnaryOperator::NEGATIVE : return SHARE(NumberValue, -(value -> asBignum()));
+        case UnaryOperator::PLUS : SH_RET(NumberValue, value -> asBignum());
+        case UnaryOperator::NEGATIVE : SH_RET(NumberValue, -(value -> asBignum()));
         case UnaryOperator::NOT : return BoolValue::fromBool(!(value -> asBignum()));
         /// case UnaryOperator::COMPLEMENT : return new NumberValue(~(value -> asBignum()));
-        case UnaryOperator::PLUSPLUS : return SHARE(NumberValue, ++(value -> asBignum()));
-        case UnaryOperator::MINUSMINUS : return SHARE(NumberValue, --(value -> asBignum()));
+        case UnaryOperator::PLUSPLUS : SH_RET(NumberValue, ++(value -> asBignum()));
+        case UnaryOperator::MINUSMINUS : SH_RET(NumberValue, --(value -> asBignum()));
         default: throw UnknownOperationException(getOperator(operation), value);
     }
 }

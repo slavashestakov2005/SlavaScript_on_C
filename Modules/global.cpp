@@ -58,8 +58,8 @@ void Global::initConstants(){
 }
 
 void Global::initFunctions(){
-    INF_F(input)
-    INF1_F(max)
-    INF1_F(min)
-    INFO_F(set_color, ArgumentsInfo(0, 1))
+    MFUNC_INF(input)
+    MFUNC_INF1(max)
+    MFUNC_INF1(min)
+    MFUNC_INFO(set_color, ArgumentsInfo(0, 1))
 }

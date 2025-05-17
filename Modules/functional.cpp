@@ -237,13 +237,13 @@ namespace SlavaScript::modules::functional_f{
 }
 
 void Functional::initFunctions(){
-    INFO_F(chain, ArgumentsInfo(3, 0, 1))
-    INFO_F(combine, ArgumentsInfo(1, 0, 1))
-    BINARY_F(drop_while)
-    BINARY_F(filter)
-    BINARY_F(flat_map)
-    BINARY_F(foreach)
-    INFO_F(map, ArgumentsInfo(2, 1))
-    TERNARY_F(reduce)
-    BINARY_F(take_while)
+    MFUNC_INFO(chain, ArgumentsInfo(3, 0, 1))
+    MFUNC_INFO(combine, ArgumentsInfo(1, 0, 1))
+    MFUNC_BINARY(drop_while)
+    MFUNC_BINARY(filter)
+    MFUNC_BINARY(flat_map)
+    MFUNC_BINARY(foreach)
+    MFUNC_INFO(map, ArgumentsInfo(2, 1))
+    MFUNC_TERNARY(reduce)
+    MFUNC_BINARY(take_while)
 }

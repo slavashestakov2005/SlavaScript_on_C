@@ -64,10 +64,10 @@ void Types::initConstants(){
 }
 
 void Types::initFunctions(){
-    _INFO_F(float_, "float", ArgumentsInfo::unary)
-    _INFO_F(int_, "int", ArgumentsInfo::unary)
-    BINARY_F(isinstance)
-    UNARY_F(string)
-    UNARY_F(type_to_string)
-    UNARY_F(typeof)
+    MFUNC_RENAME(float_, "float", ArgumentsInfo::unary)
+    MFUNC_RENAME(int_, "int", ArgumentsInfo::unary)
+    MFUNC_BINARY(isinstance)
+    MFUNC_UNARY(string)
+    MFUNC_UNARY(type_to_string)
+    MFUNC_UNARY(typeof)
 }

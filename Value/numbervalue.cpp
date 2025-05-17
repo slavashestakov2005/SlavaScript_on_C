@@ -26,7 +26,7 @@ NumberValue::NumberValue(std::strong_ordering val){
 
 
 std::shared_ptr<Value> NumberValue::copy(){
-    return SHARE(NumberValue, value);
+    SH_RET(NumberValue, value);
 }
 
 double NumberValue::asDouble(){

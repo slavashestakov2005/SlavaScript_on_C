@@ -36,7 +36,7 @@ IntegrationValue::IntegrationValue(std::string fileNameBegin, std::string fileNa
 
 
 std::shared_ptr<Value> IntegrationValue::copy(){
-    return SHARE_2(IntegrationValue, fileNameBegin, fileNameEnd);
+    SH_RET(IntegrationValue, fileNameBegin, fileNameEnd);
 }
 
 double IntegrationValue::asDouble(){
@@ -65,7 +65,7 @@ IntegrationValue::operator std::string(){
 
 std::shared_ptr<Value> IntegrationValue::getDot(std::shared_ptr<Value> property){
     std::string prop = property -> asString();
-    if (prop == "get") SH_RET(FunctionValue, SHARE_2(Get, fileNameBegin, fileNameEnd));
+    if (prop == "get") SH_RET(FunctionValue, SHARE(Get, fileNameBegin, fileNameEnd));
     throw UnknownPropertyException(prop);
 }
 

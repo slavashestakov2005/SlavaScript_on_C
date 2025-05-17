@@ -36,7 +36,7 @@ namespace SlavaScript::modules::math_out{
         }
 
         std::shared_ptr<Value> copy() override{
-            return SHARE(Polynomial, coefficients);
+            SH_RET(Polynomial, coefficients);
         }
         operator std::string() override{
             std::string ans = "<polynomial=";
@@ -170,7 +170,7 @@ namespace SlavaScript::modules::math_out{
         if (values[0] -> type() == Values::NUMBER) p = SHARE(Polynomial, std::vector<PolynomialCoeff>{values[0] -> asBignum()});
         else if (Polynomial::is_instance(values[0])) p = CAST(Polynomial, values[0]);
         else throw TypeException("Polynomial expected");
-        return SHARE(NumberValue, *instance <=> *p);
+        SH_RET(NumberValue, *instance <=> *p);
     CME
 
     #define POLYNOMIAL_FUNCTION(cls, op) \
@@ -335,7 +335,7 @@ namespace SlavaScript::modules::math_f{
     MATH_FUNCTION(to_degrees)
     MATH_FUNCTION(to_radians)
 
-    DEF_CLASS(math_out, Polynomial)
+    MCLASS_DEF(math_out, Polynomial)
 }
 
 
@@ -345,40 +345,40 @@ void Math::initConstants(){
 }
 
 void Math::initFunctions(){
-    UNARY_F_(math_f, abs)
-    UNARY_F_(math_f, acos)
-    UNARY_F_(math_f, asin)
-    UNARY_F_(math_f, atan)
-    BINARY_F_(math_f, atan2)
-    INFO_F_(math_f, binpow, ArgumentsInfo(2, 1, 0))
-    UNARY_F_(math_f, cbrt)
-    UNARY_F_(math_f, ceil)
-    BINARY_F_(math_f, copy_sign)
-    UNARY_F_(math_f, cos)
-    UNARY_F_(math_f, cosh)
-    UNARY_F_(math_f, exp)
-    UNARY_F_(math_f, expm1)
-    UNARY_F_(math_f, factorial)
-    UNARY_F_(math_f, floor)
-    BINARY_F_(math_f, hypot)
-    INF_F_(math_f, interpolate)
-    UNARY_F_(math_f, log)
-    UNARY_F_(math_f, log10)
-    UNARY_F_(math_f, log1p)
-    BINARY_F_(math_f, pow)
-    UNARY_F_(math_f, round)
-    UNARY_F_(math_f, signum)
-    UNARY_F_(math_f, sin)
-    UNARY_F_(math_f, sinh)
-    UNARY_F_(math_f, sqrt)
-    UNARY_F_(math_f, tan)
-    UNARY_F_(math_f, tanh)
-    UNARY_F_(math_f, to_degrees)
-    UNARY_F_(math_f, to_radians)
+    MFUNC_UNARY(math_f, abs)
+    MFUNC_UNARY(math_f, acos)
+    MFUNC_UNARY(math_f, asin)
+    MFUNC_UNARY(math_f, atan)
+    MFUNC_BINARY(math_f, atan2)
+    MFUNC_INFO(math_f, binpow, ArgumentsInfo(2, 1, 0))
+    MFUNC_UNARY(math_f, cbrt)
+    MFUNC_UNARY(math_f, ceil)
+    MFUNC_BINARY(math_f, copy_sign)
+    MFUNC_UNARY(math_f, cos)
+    MFUNC_UNARY(math_f, cosh)
+    MFUNC_UNARY(math_f, exp)
+    MFUNC_UNARY(math_f, expm1)
+    MFUNC_UNARY(math_f, factorial)
+    MFUNC_UNARY(math_f, floor)
+    MFUNC_BINARY(math_f, hypot)
+    MFUNC_INF(math_f, interpolate)
+    MFUNC_UNARY(math_f, log)
+    MFUNC_UNARY(math_f, log10)
+    MFUNC_UNARY(math_f, log1p)
+    MFUNC_BINARY(math_f, pow)
+    MFUNC_UNARY(math_f, round)
+    MFUNC_UNARY(math_f, signum)
+    MFUNC_UNARY(math_f, sin)
+    MFUNC_UNARY(math_f, sinh)
+    MFUNC_UNARY(math_f, sqrt)
+    MFUNC_UNARY(math_f, tan)
+    MFUNC_UNARY(math_f, tanh)
+    MFUNC_UNARY(math_f, to_degrees)
+    MFUNC_UNARY(math_f, to_radians)
 }
 
 void Math::initClasses(){
-    SET_CLASS(math_f, Polynomial)
+    MCLASS_SET(math_f, Polynomial)
 }
 
 /*

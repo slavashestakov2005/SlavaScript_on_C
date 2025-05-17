@@ -154,14 +154,14 @@ void Std::initConstants(){
 void Std::initFunctions(){
     srand(std::time(0));
     std::rand();
-    BINARY_F(array_combine)
-    INF_F(echo)
-    UNARY_F(len)
-    INF_F(new_array)
-    INFO_F(parse_number, ArgumentsInfo(1, 1))
-    INFO_F_(std_f, rand, ArgumentsInfo(0, 2))
-    UNARY_F(sleep)
-    WITHOUT_F_(std_f, time)
-    UNARY_F(to_char)
-    UNARY_F(to_hex_string)
+    MFUNC_BINARY(array_combine)
+    MFUNC_INF(echo)
+    MFUNC_UNARY(len)
+    MFUNC_INF(new_array)
+    MFUNC_INFO(parse_number, ArgumentsInfo(1, 1))
+    MFUNC_INFO(std_f, rand, ArgumentsInfo(0, 2))
+    MFUNC_UNARY(sleep)
+    MFUNC_WITHOUT(std_f, time)
+    MFUNC_UNARY(to_char)
+    MFUNC_UNARY(to_hex_string)
 }

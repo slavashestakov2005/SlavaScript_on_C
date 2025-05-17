@@ -21,7 +21,7 @@ namespace{
         Import(std::shared_ptr<MapValue> map) : map(map) {}
 
         std::shared_ptr<Value> copy() override{
-            return SHARE(Import, CAST(MapValue, map -> copy()));
+            SH_RET(Import, CAST(MapValue, map -> copy()));
         }
 
         std::shared_ptr<Value> getDot(std::shared_ptr<Value> property) override{

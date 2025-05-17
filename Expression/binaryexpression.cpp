@@ -41,13 +41,13 @@ std::shared_ptr<Value> BinaryExpression::calculate(BinaryOperator operation, std
         std::string string1 = left -> asString();
         std::string string2 = right -> asString();
         switch(operation){
-            case BinaryOperator::ADD : return SHARE(StringValue, string1 + string2);
+            case BinaryOperator::ADD : SH_RET(StringValue, string1 + string2);
             case BinaryOperator::MULTIPLY : {
                 if (right -> type() != Values::NUMBER) throw UnknownOperationException(getOperator(operation), left, right);
                 int iterations = right -> asDouble();
                 std::string result;
                 for(int i = 0; i < iterations; ++i) result += string1;
-                return SHARE(StringValue, result);
+                SH_RET(StringValue, result);
             }
             default: throw UnknownOperationException(getOperator(operation), left, right);
         }
@@ -69,7 +69,7 @@ std::shared_ptr<Value> BinaryExpression::calculate(BinaryOperator operation, std
 ///        case BinaryOperator::RSHIFT: return new NumberValue(lon1 >> lon2);
         default: throw UnknownOperationException(getOperator(operation), left, right);
     }
-    return SHARE(NumberValue, num1);
+    SH_RET(NumberValue, num1);
 }
 
 BinaryExpression::BinaryExpression(BinaryOperator operation) : operation(operation), expr1(nullptr), expr2(nullptr) {}

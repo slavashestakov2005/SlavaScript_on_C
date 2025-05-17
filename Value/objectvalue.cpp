@@ -18,8 +18,8 @@ std::shared_ptr<Value> ObjectValue::get(std::shared_ptr<Value> value){
     std::shared_ptr<ClassValue> cls = Classes::get(className);
     if (!cls -> isExists(key)) return nullptr;
     std::shared_ptr<Function> func = Classes::get(className) -> getFunction(key);
-    std::shared_ptr<ClassMethodObject> method = SHARE_2(ClassMethodObject, func, shared_from_this());
-    return SHARE(FunctionValue, CAST(Function, method));
+    std::shared_ptr<ClassMethodObject> method = SHARE(ClassMethodObject, func, shared_from_this());
+    SH_RET(FunctionValue, CAST(Function, method));
 }
 
 

@@ -13,17 +13,13 @@ namespace SlavaScript::lang{
     #define DEF_EQ(cls) bool operator==(cls const& a, cls const& b){ return (a <=> b) == std::strong_ordering::equal; }
 
     /** short expressions **/
-    #define CHECK(x, y) { std::strong_ordering r = (x) <=> (y); if(r != std::strong_ordering::equal) return r; }
+    #define CHECK(x, y) { std::strong_ordering r = (x) <=> (y); if (r != std::strong_ordering::equal) return r; }
     #define RCHECK(x, y) return x <=> y
     #define CAST(type, value) (std::static_pointer_cast<type>(value))
 
     /** shared_ptr **/
-    #define SHARE(type, value) std::make_shared<type>(value)
-    #define SHARE_2(type, arg1, arg2) std::make_shared<type>(arg1, arg2)
-    #define SHARE_3(type, arg1, arg2, arg3) std::make_shared<type>(arg1, arg2, arg3)
-    #define SH_RET(type, value) return SHARE(type, value)
-    #define SH_RET_2(type, arg1, arg2) return SHARE_2(type, arg1, arg2)
-    #define SH_RET_3(type, arg1, arg2, arg3) return SHARE_3(type, arg1, arg2, arg3)
+    #define SHARE(type, ...) std::make_shared<type>(__VA_ARGS__)
+    #define SH_RET(type, ...) return SHARE(type, __VA_ARGS__)
 
     /** short declarations **/
     #define CREATE_FUNCTION(name) std::shared_ptr<Function> name = std::make_shared<ModuleFunction>([](std::vector<std::shared_ptr<Value>> values) -> std::shared_ptr<Value>{
@@ -48,34 +44,23 @@ namespace SlavaScript::lang{
     #define ADD_METHOD_PTR(str, cls) ADD_METHOD(str, cls, shared_from_this())
 
     /** ArgumentsInfo **/
-    #define _INFO_F(oldName, newName, info) Functions::set(newName, oldName, info);
-    #define INFO_F_(space, text, info) Functions::set(#text, space::text, info);
-    #define INFO_F(text, info) Functions::set(#text, text, info);
+    #define MFUNC_RENAME(oldName, newName, info) Functions::set(newName, oldName, info);
+    #define DISPATCH3(a, b, c, d, ...) d
+    #define MFUNC_INFO3(space, func, info) MFUNC_RENAME(space::func, #func, info)
+    #define MFUNC_INFO2(func, info) MFUNC_RENAME(func, #func, info)
+    #define MFUNC_INFO(...) DISPATCH3(__VA_ARGS__, MFUNC_INFO3, MFUNC_INFO2)(__VA_ARGS__)
 
-    #define WITHOUT_F_(space, text) INFO_F_(space, text, ArgumentsInfo::without)
-    #define WITHOUT_F(text) INFO_F(text, ArgumentsInfo::without)
-
-    #define UNARY_F_(space, text) INFO_F_(space, text, ArgumentsInfo::unary)
-    #define UNARY_F(text) INFO_F(text, ArgumentsInfo::unary)
-
-    #define BINARY_F_(space, text) INFO_F_(space, text, ArgumentsInfo::binary)
-    #define BINARY_F(text) INFO_F(text, ArgumentsInfo::binary)
-
-    #define TERNARY_F_(space, text) INFO_F_(space, text, ArgumentsInfo::ternary)
-    #define TERNARY_F(text) INFO_F(text, ArgumentsInfo::ternary)
-
-    #define QUATERNARY_F_(space, text) INFO_F_(space, text, ArgumentsInfo::quaternary)
-    #define QUATERNARY_F(text) INFO_F(text, ArgumentsInfo::quaternary)
-
-    #define INF_F_(space, text) INFO_F_(space, text, ArgumentsInfo::inf)
-    #define INF_F(text) INFO_F(text, ArgumentsInfo::inf)
-
-    #define INF1_F_(space, text) INFO_F_(space, text, ArgumentsInfo::inf1)
-    #define INF1_F(text) INFO_F(text, ArgumentsInfo::inf1)
+    #define MFUNC_WITHOUT(...) MFUNC_INFO(__VA_ARGS__, ArgumentsInfo::without)
+    #define MFUNC_UNARY(...) MFUNC_INFO(__VA_ARGS__, ArgumentsInfo::unary)
+    #define MFUNC_BINARY(...) MFUNC_INFO(__VA_ARGS__, ArgumentsInfo::binary)
+    #define MFUNC_TERNARY(...) MFUNC_INFO(__VA_ARGS__, ArgumentsInfo::ternary)
+    #define MFUNC_QUATERNARY(...) MFUNC_INFO(__VA_ARGS__, ArgumentsInfo::quaternary)
+    #define MFUNC_INF(...) MFUNC_INFO(__VA_ARGS__, ArgumentsInfo::inf)
+    #define MFUNC_INF1(...) MFUNC_INFO(__VA_ARGS__, ArgumentsInfo::inf1)
 
     /** Classes **/
-    #define DEF_CLASS(space, cls) class cls##Class : public ModuleClass<space::cls> {};
-    #define SET_CLASS(space, cls) Classes::set(#cls, SHARE(ClassValue, std::make_shared<space::cls##Class>()));
+    #define MCLASS_DEF(space, cls) class cls##Class : public ModuleClass<space::cls> {};
+    #define MCLASS_SET(space, cls) Classes::set(#cls, SHARE(ClassValue, std::make_shared<space::cls##Class>()));
 }
 
 #endif // MACROS_H_INCLUDED

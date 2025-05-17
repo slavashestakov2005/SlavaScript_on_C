@@ -16,7 +16,7 @@ std::shared_ptr<Function> FunctionValue::getFunction(){
 
 
 std::shared_ptr<Value> FunctionValue::copy(){
-    return SHARE(FunctionValue, value);
+    SH_RET(FunctionValue, value);
 }
 
 double FunctionValue::asDouble(){

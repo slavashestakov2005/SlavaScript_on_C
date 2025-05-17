@@ -33,7 +33,7 @@ namespace {
             if (!binary) std::sort(instance.begin(), instance.end(), [func](std::shared_ptr<Value> l, std::shared_ptr<Value> r) -> bool { return comparator(func -> execute({l}), func -> execute({r})); });
             else std::sort(instance.begin(), instance.end(), [func](std::shared_ptr<Value> l, std::shared_ptr<Value> r) -> bool { return func -> execute({l, r}) -> asBool(); });
         }
-        return SHARE(ArrayValue, instance);
+        SH_RET(ArrayValue, instance);
     CME
 }
 

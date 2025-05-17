@@ -170,7 +170,7 @@ void StringValue::set(int index, std::shared_ptr<Value> val){
 
 
 std::shared_ptr<Value> StringValue::copy(){
-    return SHARE(StringValue, value);
+    SH_RET(StringValue, value);
 }
 
 double StringValue::asDouble(){
@@ -228,7 +228,7 @@ std::shared_ptr<Value> StringValue::getDot(std::shared_ptr<Value> property){
 std::shared_ptr<Value> StringValue::getBracket(std::shared_ptr<Value> property){
     std::string s;
     s += value[(int) property -> asDouble()];
-    return SHARE(StringValue, s);
+    SH_RET(StringValue, s);
 }
 
 void StringValue::setBracket(std::shared_ptr<Value> key, std::shared_ptr<Value> value){

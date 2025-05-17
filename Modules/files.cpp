@@ -30,7 +30,7 @@ namespace SlavaScript::modules::files_out{
         }
 
         std::shared_ptr<Value> copy() override{
-            return SHARE(File, name);
+            SH_RET(File, name);
         }
         operator std::string() override{ return "<file=\"" + name + "\">"; }
         std::shared_ptr<Value> getDot(std::shared_ptr<Value> property) override;
@@ -87,13 +87,13 @@ namespace SlavaScript::modules::files_f{
         return CAST(Value, file);
     FE
 
-    DEF_CLASS(files_out, File)
+    MCLASS_DEF(files_out, File)
 }
 
 void Files::initFunctions(){
-    UNARY_F(open)
+    MFUNC_UNARY(open)
 }
 
 void Files::initClasses(){
-    SET_CLASS(files_f, File)
+    MCLASS_SET(files_f, File)
 }

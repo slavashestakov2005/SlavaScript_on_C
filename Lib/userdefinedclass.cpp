@@ -10,7 +10,7 @@ using namespace SlavaScript::lang;
 UserDefinedClass::UserDefinedClass(ClassDeclarationsStatement* statement) : statement(statement) {
     name = statement -> get_name();
     for(auto function : statement -> methods){
-        addMethod(function -> name, SHARE_2(UserDefinedFunction, function -> arguments, function -> body));
+        addMethod(function -> name, SHARE(UserDefinedFunction, function -> arguments, function -> body));
     }
 }
 

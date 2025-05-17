@@ -32,7 +32,7 @@ void IntegrationStatement::execute(){
     std::string fileEnd = "py";
     std::string filename = fileBegin + "." + fileEnd;
     FS::writeToCache(filename, replace_all(code));
-    Names::setVariable(name, SHARE_2(IntegrationValue, fileBegin, fileEnd));
+    Names::setVariable(name, SHARE(IntegrationValue, fileBegin, fileEnd));
 }
 
 Statements IntegrationStatement::type() const{
