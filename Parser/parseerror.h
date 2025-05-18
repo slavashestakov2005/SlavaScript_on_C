@@ -1,10 +1,10 @@
-#ifndef PARSEERROR_H_INCLUDED
-#define PARSEERROR_H_INCLUDED
+#pragma once
 
-#include "../Exception/exceptions.h"
+#include <Exception/exceptions.h>
 
-namespace SlavaScript::lang{
-    class ParseError{
+
+namespace SlavaScript::lang {
+    class ParseError {
     private:
         int line;
         exceptions::ParseException exception;
@@ -15,5 +15,3 @@ namespace SlavaScript::lang{
         operator std::string();
     };
 }
-
-#endif // PARSEERROR_H_INCLUDED

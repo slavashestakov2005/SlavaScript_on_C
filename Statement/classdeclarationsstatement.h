@@ -1,12 +1,13 @@
-#ifndef CLASSDECLARATIONSSTATEMENT_H_INCLUDED
-#define CLASSDECLARATIONSSTATEMENT_H_INCLUDED
+#pragma once
 
-#include "../Expression/expression.h"
-#include "statement.h"
 #include <vector>
 
-namespace SlavaScript::lang{
-    class ClassDeclarationsStatement : public Statement{
+#include <Expression/expression.h>
+#include <Statement/statement.h>
+
+
+namespace SlavaScript::lang {
+    class ClassDeclarationsStatement : public Statement {
     private:
         std::string name;
     public:
@@ -30,5 +31,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // CLASSDECLARATIONSSTATEMENT_H_INCLUDED

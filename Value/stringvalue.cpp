@@ -1,26 +1,28 @@
-#include "stringvalue.h"
-#include "../Exception/exceptions.h"
-#include "../Lib/classmethod.h"
-#include "../Lib/utils.h"
-#include "arrayvalue.h"
-#include "numbervalue.h"
 #include <algorithm>
 #include <sstream>
+
+#include <Exception/exceptions.h>
+#include <Lib/classmethod.h>
+#include <Lib/utils.h>
+#include <Value/arrayvalue.h>
+#include <Value/numbervalue.h>
+#include <Value/stringvalue.h>
+
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::CastException;
 using SlavaScript::exceptions::UnknownPropertyException;
 
 
-namespace{
+namespace {
     CLASS_METHOD(Trim, StringValue::container_type)
         argsCount(0, values.size());
         std::string ans;
-        for(int i = 0; i < instance.size(); ++i){
+        for (size_t i = 0; i < instance.size(); ++i) {
             if (instance[i] != ' ' && instance[i] != '\t' && instance[i] != '\n' || ans.size()) ans += instance[i];
         }
         instance = "";
-        for(int i = ans.size() - 1; i > -1; --i){
+        for (int i = ans.size() - 1; i > -1; --i) {
             if (ans[i] != ' ' && ans[i] != '\t' && ans[i] != '\n' || instance.size()) instance += ans[i];
         }
         reverse(instance.begin(), instance.end());
@@ -29,20 +31,20 @@ namespace{
 
     CLASS_METHOD(To_upper, StringValue::container_type)
         argsCount(0, values.size());
-        for(char& x : instance) x = toupper(x);
+        for (char& x : instance) x = toupper(x);
         SH_RET(StringValue, instance);
     CME
 
     CLASS_METHOD(To_lower, StringValue::container_type)
         argsCount(0, values.size());
-        for(char& x : instance) x = tolower(x);
+        for (char& x : instance) x = tolower(x);
         SH_RET(StringValue, instance);
     CME
 
     CLASS_METHOD(Chars, StringValue::container_type)
         argsCount(0, values.size());
         std::vector<std::shared_ptr<Value>> vec;
-        for(auto x : instance){
+        for (auto x : instance) {
             std::string s;
             s += x;
             vec.push_back(SHARE(StringValue, s));
@@ -64,15 +66,14 @@ namespace{
     CLASS_METHOD(Join, StringValue::container_type)
         argsCountLtEq(1, values.size());
         std::string ans;
-        if (values.size() == 1 && values[0] -> type() == Values::ARRAY){
+        if (values.size() == 1 && values[0] -> type() == Values::ARRAY) {
             std::shared_ptr<ArrayValue> arr = CAST(ArrayValue, values[0]);
-            for(int i = 0; i < arr -> size(); ++i){
+            for (int i = 0; i < arr -> size(); ++i) {
                 ans += arr -> get(i) -> asString();
                 if (i < arr -> size() - 1) ans += instance;
             }
-        }
-        else{
-            for(int i = 0; i < values.size(); ++i){
+        } else {
+            for (size_t i = 0; i < values.size(); ++i) {
                 ans += values[i] -> asString();
                 if (i < values.size() - 1) ans += instance;
             }
@@ -85,12 +86,12 @@ namespace{
         argType(Values::STRING, values[0]);
         argType(Values::STRING, values[1]);
         std::string start = values[0] -> asString(), finish = values[1] -> asString(), result;
-        /// using regex
-        //std::regex rx(start.c_str());
-        //return new StringValue(std::regex_replace(instance, rx, finish));
+        // using regex
+        // std::regex rx(start.c_str());
+        // return new StringValue(std::regex_replace(instance, rx, finish));
         int last = 0;
         size_t pos = instance.find(start);
-        while(pos != std::string::npos) {
+        while (pos != std::string::npos) {
             result += instance.substr(last, pos - last);
             result += finish;
             last = pos + start.size();
@@ -132,15 +133,15 @@ namespace{
         std::vector<std::shared_ptr<Value>> val;
         int pos = instance.find(reg), last = 0;
         std::string t;
-        while(pos != std::string::npos){
+        while (pos != std::string::npos) {
             std::string temp;
-            for(int i = last; i < pos; ++i) temp += instance[i];
+            for (int i = last; i < pos; ++i) temp += instance[i];
             if (limit == -1 || val.size() < limit) val.push_back(SHARE(StringValue, temp));
             else break;
             last = pos + 1;
             pos = instance.find(reg, last);
         }
-        for(int i = last; i < instance.size(); ++i) t += instance[i];
+        for (size_t i = last; i < instance.size(); ++i) t += instance[i];
         if (t != "") val.push_back(SHARE(StringValue, t));
         SH_RET(ArrayValue, val);
     CME
@@ -152,7 +153,7 @@ namespace{
         std::string ans;
         int start = values[0] -> asDouble();
         if (values.size() == 1) ans = instance.substr(start);
-        else{
+        else {
             int finish = values[1] -> asDouble();
             ans = instance.substr(start, finish - start);
         }
@@ -164,51 +165,51 @@ namespace{
 StringValue::StringValue(StringValue::container_type value) : value(value) {}
 
 
-void StringValue::set(int index, std::shared_ptr<Value> val){
+void StringValue::set(int index, std::shared_ptr<Value> val) {
     value = value.substr(0, index) + val -> asString() + value.substr(index + 1);
 }
 
 
-std::shared_ptr<Value> StringValue::copy(){
+std::shared_ptr<Value> StringValue::copy() {
     SH_RET(StringValue, value);
 }
 
-double StringValue::asDouble(){
+double StringValue::asDouble() {
     std::istringstream is(value);
     double val = 0;
-    try{
+    try {
         is >> val;
         return val;
-    }catch(...) {
+    } catch (...) {
         throw CastException(Values::STRING, Values::NUMBER);
     }
 }
 
-std::string StringValue::asString(){
+std::string StringValue::asString() {
     return value;
 }
 
-bool StringValue::asBool(){
+bool StringValue::asBool() {
     throw CastException(Values::STRING, Values::BOOL);
 }
 
-Bignum StringValue::asBignum(){
-    try{
+Bignum StringValue::asBignum() {
+    try {
         return Bignum(value);
-    }catch(...){
+    } catch (...) {
         throw CastException(Values::STRING, Values::NUMBER);
     }
 }
 
-Values StringValue::type() const{
+Values StringValue::type() const {
     return Values::STRING;
 }
 
-StringValue::operator std::string(){
+StringValue::operator std::string() {
     return asString();
 };
 
-std::shared_ptr<Value> StringValue::getDot(std::shared_ptr<Value> property){
+std::shared_ptr<Value> StringValue::getDot(std::shared_ptr<Value> property) {
     std::string prop = property -> asString();
     if (prop == "length") SH_RET(NumberValue, size());
     ADD_METHOD("trim", Trim, value);
@@ -225,33 +226,33 @@ std::shared_ptr<Value> StringValue::getDot(std::shared_ptr<Value> property){
     throw UnknownPropertyException(prop);
 }
 
-std::shared_ptr<Value> StringValue::getBracket(std::shared_ptr<Value> property){
+std::shared_ptr<Value> StringValue::getBracket(std::shared_ptr<Value> property) {
     std::string s;
     s += value[(int) property -> asDouble()];
     SH_RET(StringValue, s);
 }
 
-void StringValue::setBracket(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
+void StringValue::setBracket(std::shared_ptr<Value> key, std::shared_ptr<Value> value) {
     int stringIndex = (int) key -> asDouble();
     set(stringIndex, value);
 }
 
 
-int StringValue::size() const{
+int StringValue::size() const {
     return value.size();
 }
 
-std::string::iterator StringValue::begin(){
+std::string::iterator StringValue::begin() {
     return value.begin();
 }
 
-std::string::iterator StringValue::end(){
+std::string::iterator StringValue::end() {
     return value.end();
 }
 
 
-namespace SlavaScript::lang{
-    CMP(StringValue){
+namespace SlavaScript::lang {
+    CMP(StringValue) {
         RCHECK(a.value, b.value);
     }
 

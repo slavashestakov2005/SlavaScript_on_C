@@ -1,10 +1,10 @@
-#ifndef DRAW_H_INCLUDED
-#define DRAW_H_INCLUDED
+#pragma once
 
-#include "module.h"
+#include <Modules/module.h>
 
-namespace SlavaScript::modules{
-    namespace draw_f{
+
+namespace SlavaScript::modules {
+    namespace draw_f {
         extern std::shared_ptr<SlavaScript::lang::Function> window, color, line, rect, frect, circle, fcircle, repaint, clear, framelimit, keypressed, mousehover, close;
     }
 
@@ -14,5 +14,3 @@ namespace SlavaScript::modules{
         static void initFunctions();
     };
 }
-
-#endif // DRAW_H_INCLUDED

@@ -1,11 +1,11 @@
-#ifndef FOREACHMAPSTATEMENT_H_INCLUDED
-#define FOREACHMAPSTATEMENT_H_INCLUDED
+#pragma once
 
-#include "../Expression/expression.h"
-#include "statement.h"
+#include <Expression/expression.h>
+#include <Statement/statement.h>
 
-namespace SlavaScript::lang{
-    class ForeachMapStatement : public Statement{
+
+namespace SlavaScript::lang {
+    class ForeachMapStatement : public Statement {
     private:
         std::string key, value;
         Expression* container;
@@ -23,5 +23,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // FOREACHMAPSTATEMENT_H_INCLUDED

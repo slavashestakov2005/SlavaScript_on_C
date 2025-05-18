@@ -1,10 +1,10 @@
-#ifndef GLOBAL_H_INCLUDED
-#define GLOBAL_H_INCLUDED
+#pragma once
 
-#include "module.h"
+#include <Modules/module.h>
 
-namespace SlavaScript::modules{
-    namespace global_f{
+
+namespace SlavaScript::modules {
+    namespace global_f {
         extern std::shared_ptr<SlavaScript::lang::Function> input, max, min, set_color;
     }
 
@@ -12,8 +12,6 @@ namespace SlavaScript::modules{
     public:
         static void initConstants();
         static void initFunctions();
-        static void initClasses(){}
+        static void initClasses() {}
     };
 }
-
-#endif // GLOBAL_H_INCLUDED

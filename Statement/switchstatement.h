@@ -1,12 +1,13 @@
-#ifndef SWITCHSTATEMENT_H_INCLUDED
-#define SWITCHSTATEMENT_H_INCLUDED
+#pragma once
 
-#include "../Expression/expression.h"
-#include "statement.h"
 #include <vector>
 
-namespace SlavaScript::lang{
-    class SwitchStatement : public Statement{
+#include <Expression/expression.h>
+#include <Statement/statement.h>
+
+
+namespace SlavaScript::lang {
+    class SwitchStatement : public Statement {
     private:
         Expression* start;
         std::vector<std::pair<Expression*, Statement*>> body;
@@ -24,5 +25,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // SWITCHSTATEMENT_H_INCLUDED

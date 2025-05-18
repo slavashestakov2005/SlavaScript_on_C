@@ -1,10 +1,10 @@
-#ifndef FUNCTIONAL_H_INCLUDED
-#define FUNCTIONAL_H_INCLUDED
+#pragma once
 
-#include "module.h"
+#include <Modules/module.h>
 
-namespace SlavaScript::modules{
-    namespace functional_f{
+
+namespace SlavaScript::modules {
+    namespace functional_f {
         extern std::shared_ptr<SlavaScript::lang::Function> chain, combine, drop_while, filter, flat_map, foreach,
                                             map, reduce, take_while;
     }
@@ -14,5 +14,3 @@ namespace SlavaScript::modules{
         static void initFunctions();
     };
 }
-
-#endif // FUNCTIONAL_H_INCLUDED

@@ -1,14 +1,15 @@
-#ifndef VARIABLES_H_INCLUDED
-#define VARIABLES_H_INCLUDED
+#pragma once
 
-#include "../Value/value.h"
 #include <map>
 #include <vector>
 
-namespace SlavaScript::lang{
+#include <Value/value.h>
+
+
+namespace SlavaScript::lang {
     struct NamedValue;
 
-    class VariablesScope{
+    class VariablesScope {
     private:
         std::map<std::string, std::shared_ptr<Value>> variables;
         std::vector<std::map<std::string, std::shared_ptr<Value>>> vec;
@@ -26,7 +27,7 @@ namespace SlavaScript::lang{
         void restore(NamedValue named);
     };
 
-    class Variables{
+    class Variables {
     private:
         static std::vector<VariablesScope> scope;
     public:
@@ -47,5 +48,3 @@ namespace SlavaScript::lang{
         static void copyScope();
     };
 }
-
-#endif // VARIABLES_H_INCLUDED

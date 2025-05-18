@@ -1,13 +1,14 @@
-#ifndef SUFFIXEXPRESSION_H_INCLUDED
-#define SUFFIXEXPRESSION_H_INCLUDED
+#pragma once
 
-#include "expression.h"
-#include "suffixelement.h"
-#include "../Visitor/assignvalidator.h"
 #include <vector>
 
-namespace SlavaScript::lang{
-    class SuffixExpression : public Expression{
+#include <Expression/expression.h>
+#include <Expression/suffixelement.h>
+#include <Visitor/assignvalidator.h>
+
+
+namespace SlavaScript::lang {
+    class SuffixExpression : public Expression {
     private:
         Expression* root;
         std::vector<SuffixElement*> access;
@@ -29,5 +30,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // SUFFIXEXPRESSION_H_INCLUDED

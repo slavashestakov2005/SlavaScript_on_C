@@ -1,10 +1,10 @@
-#ifndef TERNARYEXPRESSION_H_INCLUDED
-#define TERNARYEXPRESSION_H_INCLUDED
+#pragma once
 
-#include "expression.h"
+#include <Expression/expression.h>
 
-namespace SlavaScript::lang{
-    class TernaryExpression : public Expression{
+
+namespace SlavaScript::lang {
+    class TernaryExpression : public Expression {
     private:
         Expression* condition, *trueExpr, *falseExpr;
     public:
@@ -20,5 +20,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // TERNARYEXPRESSION_H_INCLUDED

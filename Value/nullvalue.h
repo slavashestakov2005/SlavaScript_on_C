@@ -1,14 +1,14 @@
-#ifndef NULLVALUE_H_INCLUDED
-#define NULLVALUE_H_INCLUDED
+#pragma once
 
-#include "value.h"
+#include <Value/value.h>
 
-namespace SlavaScript::lang{
-    class NullValue : public Value{
+
+namespace SlavaScript::lang {
+    class NullValue : public Value {
     public:
         static std::shared_ptr<NullValue> NULL_;
 
-        NullValue(){}
+        NullValue() {}
 
         std::shared_ptr<Value> copy() override;
         double asDouble() override;
@@ -22,5 +22,3 @@ namespace SlavaScript::lang{
         friend EQ(NullValue);
     };
 }
-
-#endif // NULLVALUE_H_INCLUDED

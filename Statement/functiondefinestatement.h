@@ -1,13 +1,14 @@
-#ifndef FUNCTIONDEFINESTATEMENT_H_INCLUDED
-#define FUNCTIONDEFINESTATEMENT_H_INCLUDED
+#pragma once
 
-#include "../Lib/arguments.h"
-#include "statement.h"
-#include "../Visitor/functionadder.h"
 #include <vector>
 
-namespace SlavaScript::lang{
-    class FunctionDefineStatement : public Statement{
+#include <Lib/arguments.h>
+#include <Statement/statement.h>
+#include <Visitor/functionadder.h>
+
+
+namespace SlavaScript::lang {
+    class FunctionDefineStatement : public Statement {
     public:
         Arguments arguments;
         Statement* body;
@@ -29,5 +30,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // FUNCTIONDEFINESTATEMENT_H_INCLUDED

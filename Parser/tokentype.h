@@ -1,14 +1,14 @@
-#ifndef TOKENTYPE_H_INCLUDED
-#define TOKENTYPE_H_INCLUDED
+#pragma once
 
-namespace SlavaScript::lang{
-    enum class TokenType{
+
+namespace SlavaScript::lang {
+    enum class TokenType {
         NUMBER,
         HEX_NUMBER,
         WORD,
         TEXT,
 
-        ///keywords
+        // keywords
         PRINT,
         PRINTLN,
         IF,
@@ -89,5 +89,3 @@ namespace SlavaScript::lang{
         END_OF_FILE
     };
 }
-
-#endif // TOKENTYPE_H_INCLUDED

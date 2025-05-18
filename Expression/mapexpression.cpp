@@ -1,28 +1,28 @@
-#include "mapexpression.h"
-#include "../Value/mapvalue.h"
+#include <Expression/mapexpression.h>
+#include <Value/mapvalue.h>
+
 
 using namespace SlavaScript::lang;
 
 
 MapExpression::MapExpression(std::map<Expression*, Expression*> elements) : elements(elements) {}
 
-std::shared_ptr<Value> MapExpression::eval(){
-    int siz = elements.size();
-    std::shared_ptr<MapValue> map = SHARE(MapValue, );
-    for (auto now : elements){
+std::shared_ptr<Value> MapExpression::eval() {
+    std::shared_ptr<MapValue> map = SHARE(MapValue);
+    for (auto now : elements) {
         map -> set(now.first -> eval(), now.second -> eval());
     }
     return map;
 }
 
-Expressions MapExpression::type() const{
+Expressions MapExpression::type() const {
     return Expressions::MapExpression;
 }
 
-MapExpression::operator std::string(){
+MapExpression::operator std::string() {
     std::string result = "{";
     int siz = elements.size(), i = 0;
-    for(auto now : elements){
+    for (auto now : elements) {
         result += std::string(*(now.first));
         result += " : ";
         result += std::string(*(now.second));
@@ -33,8 +33,8 @@ MapExpression::operator std::string(){
     return result;
 }
 
-MapExpression::~MapExpression(){}
+MapExpression::~MapExpression() {}
 
-void MapExpression::accept(Visitor* visitor){
+void MapExpression::accept(Visitor* visitor) {
     visitor -> visit(this);
 }

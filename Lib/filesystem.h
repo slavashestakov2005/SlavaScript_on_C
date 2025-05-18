@@ -1,7 +1,7 @@
-#ifndef FILESYSTEM_H_INCLUDED
-#define FILESYSTEM_H_INCLUDED
+#pragma once
 
 #include <string>
+
 
 namespace SlavaScript::lang::FS {
     void setApplicationPath(std::string);
@@ -10,5 +10,3 @@ namespace SlavaScript::lang::FS {
     std::string read(std::string);
     void cdCacheAndCall(std::string);
 }
-
-#endif // FILESYSTEM_H_INCLUDED

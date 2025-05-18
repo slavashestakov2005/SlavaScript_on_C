@@ -1,10 +1,10 @@
-#ifndef CHEMISTRY_H_INCLUDED
-#define CHEMISTRY_H_INCLUDED
+#pragma once
 
-#include "module.h"
+#include <Modules/module.h>
 
-namespace SlavaScript::modules{
-    namespace chemistry_f{
+
+namespace SlavaScript::modules {
+    namespace chemistry_f {
         extern std::shared_ptr<SlavaScript::lang::Function> electron, proton, latin_read, mr, neutron, omega, russian_read, write;
     }
 
@@ -13,5 +13,3 @@ namespace SlavaScript::modules{
         static void initFunctions();
     };
 }
-
-#endif // CHEMISTRY_H_INCLUDED

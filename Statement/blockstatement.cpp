@@ -1,39 +1,40 @@
-#include "blockstatement.h"
+#include <Statement/blockstatement.h>
+
 
 using namespace SlavaScript::lang;
 
 BlockStatement::BlockStatement() {}
 
-void BlockStatement::add(Statement* statement){
+void BlockStatement::add(Statement* statement) {
     statements.push_back(statement);
 }
 
-void BlockStatement::execute(){
-    for(int i = 0; i < statements.size(); ++i){
+void BlockStatement::execute() {
+    for (size_t i = 0; i < statements.size(); ++i) {
         statements[i] -> execute();
     }
 }
 
-Statements BlockStatement::type() const{
+Statements BlockStatement::type() const {
     return Statements::BlockStatement;
 }
 
-BlockStatement::operator std::string(){
+BlockStatement::operator std::string() {
     std::string result = "{\n";
-    for(int i = 0; i < statements.size(); ++i){
+    for (size_t i = 0; i < statements.size(); ++i) {
         result += std::string(*statements[i]) + "\n";
     }
     result += "}";
     return result;
 }
 
-BlockStatement::~BlockStatement(){
-    for(int i = 0; i < statements.size(); ++i) {
+BlockStatement::~BlockStatement() {
+    for (size_t i = 0; i < statements.size(); ++i) {
         delete statements[i];
         statements[i] = nullptr;
     }
 }
 
-void BlockStatement::accept(Visitor* visitor){
+void BlockStatement::accept(Visitor* visitor) {
     visitor -> visit(this);
 }

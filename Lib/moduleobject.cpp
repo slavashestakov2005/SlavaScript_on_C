@@ -1,29 +1,30 @@
-#include "moduleobject.h"
-#include "../Exception/exceptions.h"
+#include <Exception/exceptions.h>
+#include <Lib/moduleobject.h>
+
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::CastException;
 
-double ModuleObject::asDouble(){
+double ModuleObject::asDouble() {
     throw CastException(Values::OBJECT, Values::NUMBER);
 }
 
-std::string ModuleObject::asString(){
+std::string ModuleObject::asString() {
     throw CastException(Values::OBJECT, Values::STRING);
 }
 
-bool ModuleObject::asBool(){
+bool ModuleObject::asBool() {
     throw CastException(Values::OBJECT, Values::BOOL);
 }
 
-Bignum ModuleObject::asBignum(){
+Bignum ModuleObject::asBignum() {
     throw CastException(Values::OBJECT, Values::NUMBER);
 }
 
-Values ModuleObject::type() const{
+Values ModuleObject::type() const {
     return Values::OBJECT;
 }
 
-ModuleObject::operator std::string(){
+ModuleObject::operator std::string() {
     throw CastException(Values::OBJECT, Values::STRING);
 }

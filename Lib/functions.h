@@ -1,15 +1,15 @@
-#ifndef FUNCTIONS_H_INCLUDED
-#define FUNCTIONS_H_INCLUDED
+#pragma once
 
-#include "function.h"
-#include "functions.h"
 #include <map>
 #include <string>
 
-namespace SlavaScript::lang{
+#include <Lib/function.h>
+
+
+namespace SlavaScript::lang {
     struct NamedValue;
 
-    class ArgumentsInfo{
+    class ArgumentsInfo {
     private:
         int required, optional, array;
     public:
@@ -21,7 +21,7 @@ namespace SlavaScript::lang{
         bool canCalled(int argsCount) const;
     };
 
-    class FunctionsScope{
+    class FunctionsScope {
     private:
         std::map<std::string, std::vector<std::pair<ArgumentsInfo, std::shared_ptr<Function>>>> functions;
     public:
@@ -40,7 +40,7 @@ namespace SlavaScript::lang{
         void restore(NamedValue named);
     };
 
-    class Functions{
+    class Functions {
     private:
         static std::vector<FunctionsScope> scope;
     public:
@@ -61,5 +61,3 @@ namespace SlavaScript::lang{
         static void copyScope();
     };
 }
-
-#endif // FUNCTIONS_H_INCLUDED

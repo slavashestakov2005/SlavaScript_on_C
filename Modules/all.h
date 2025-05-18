@@ -1,13 +1,10 @@
-#ifndef MODULES_ALL_H_INCLUDED
-#define MODULES_ALL_H_INCLUDED
+#pragma once
 
-#include "chemistry.h"
-#include "draw.h"
-#include "files.h"
-#include "functional.h"
-#include "global.h"
-#include "math.h"
-#include "std.h"
-#include "types.h"
-
-#endif // ALL_H_INCLUDED
+#include <Modules/chemistry.h>
+#include <Modules/draw.h>
+#include <Modules/files.h>
+#include <Modules/functional.h>
+#include <Modules/global.h>
+#include <Modules/math.h>
+#include <Modules/std.h>
+#include <Modules/types.h>

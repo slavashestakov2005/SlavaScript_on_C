@@ -1,11 +1,11 @@
-#ifndef CONDITIONALEXPRESSION_H_INCLUDED
-#define CONDITIONALEXPRESSION_H_INCLUDED
+#pragma once
 
-#include "conditionaloperator.h"
-#include "expression.h"
+#include <Expression/conditionaloperator.h>
+#include <Expression/expression.h>
 
-namespace SlavaScript::lang{
-    class ConditionalExpression : public Expression{
+
+namespace SlavaScript::lang {
+    class ConditionalExpression : public Expression {
     private:
         Expression* expr1, *expr2;
         ConditionalOperator operation;
@@ -25,5 +25,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // CONDITIONALEXPRESSION_H_INCLUDED

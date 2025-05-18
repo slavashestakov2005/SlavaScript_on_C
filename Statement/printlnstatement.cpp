@@ -1,27 +1,29 @@
-#include "printlnstatement.h"
 #include <iostream>
+
+#include <Statement/printlnstatement.h>
+
 
 using namespace SlavaScript::lang;
 
 PrintlnStatement::PrintlnStatement(Expression* expression) : expression(expression) {}
 
-void PrintlnStatement::execute(){
+void PrintlnStatement::execute() {
     std::cout << std::string(*(expression -> eval())) << std::endl;
 }
 
-Statements PrintlnStatement::type() const{
+Statements PrintlnStatement::type() const {
     return Statements::PrintlnStatement;
 }
 
-PrintlnStatement::operator std::string(){
+PrintlnStatement::operator std::string() {
     return "println " + std::string(*expression);
 }
 
-PrintlnStatement::~PrintlnStatement(){
+PrintlnStatement::~PrintlnStatement() {
     delete expression;
     expression = nullptr;
 }
 
-void PrintlnStatement::accept(Visitor* visitor){
+void PrintlnStatement::accept(Visitor* visitor) {
     visitor -> visit(this);
 }

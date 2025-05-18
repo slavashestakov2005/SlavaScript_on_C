@@ -1,13 +1,13 @@
-#ifndef ASSIGNMENTEXPRESSION_H_INCLUDED
-#define ASSIGNMENTEXPRESSION_H_INCLUDED
+#pragma once
 
-#include "assignmentoperator.h"
-#include "expression.h"
-#include "../Visitor/assignvalidator.h"
-#include "../Visitor/variableprinter.h"
+#include <Expression/assignmentoperator.h>
+#include <Expression/expression.h>
+#include <Visitor/assignvalidator.h>
+#include <Visitor/variableprinter.h>
 
-namespace SlavaScript::lang{
-    class AssignmentExpression : public Expression{
+
+namespace SlavaScript::lang {
+    class AssignmentExpression : public Expression {
     private:
         AssignmentOperator operation;
         Expression* expression;
@@ -30,5 +30,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // ASSIGNMENTEXPRESSION_H_INCLUDED

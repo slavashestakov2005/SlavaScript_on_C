@@ -1,11 +1,12 @@
-#ifndef PARSEERRORS_H_INCLUDED
-#define PARSEERRORS_H_INCLUDED
+#pragma once
 
-#include "parseerror.h"
 #include <vector>
 
-namespace SlavaScript::lang{
-    class ParseErrors{
+#include <Parser/parseerror.h>
+
+
+namespace SlavaScript::lang {
+    class ParseErrors {
     private:
         std::vector<ParseError> errors;
     public:
@@ -16,5 +17,3 @@ namespace SlavaScript::lang{
         operator std::string();
     };
 }
-
-#endif // PARSEERRORS_H_INCLUDED

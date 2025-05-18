@@ -1,25 +1,22 @@
-#ifndef STATEMENT_ALL_H_INCLUDED
-#define STATEMENT_ALL_H_INCLUDED
+#pragma once
 
-#include "blockstatement.h"
-#include "breakstatement.h"
-#include "classdeclarationsstatement.h"
-#include "continuestatement.h"
-#include "dowhilestatement.h"
-#include "exprstatement.h"
-#include "foreacharraystatement.h"
-#include "foreachmapstatement.h"
-#include "forstatement.h"
-#include "functiondefinestatement.h"
-#include "ifstatement.h"
-#include "importstatement.h"
-#include "integrationstatement.h"
-#include "printlnstatement.h"
-#include "printstatement.h"
-#include "returnstatement.h"
-#include "switchstatement.h"
-#include "throwstatement.h"
-#include "trystatement.h"
-#include "whilestatement.h"
-
-#endif // STATEMENT_ALL_H_INCLUDED
+#include <Statement/blockstatement.h>
+#include <Statement/breakstatement.h>
+#include <Statement/classdeclarationsstatement.h>
+#include <Statement/continuestatement.h>
+#include <Statement/dowhilestatement.h>
+#include <Statement/exprstatement.h>
+#include <Statement/foreacharraystatement.h>
+#include <Statement/foreachmapstatement.h>
+#include <Statement/forstatement.h>
+#include <Statement/functiondefinestatement.h>
+#include <Statement/ifstatement.h>
+#include <Statement/importstatement.h>
+#include <Statement/integrationstatement.h>
+#include <Statement/printlnstatement.h>
+#include <Statement/printstatement.h>
+#include <Statement/returnstatement.h>
+#include <Statement/switchstatement.h>
+#include <Statement/throwstatement.h>
+#include <Statement/trystatement.h>
+#include <Statement/whilestatement.h>

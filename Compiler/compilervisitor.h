@@ -1,10 +1,10 @@
-#ifndef COMPILERVISITOR_H_INCLUDED
-#define COMPILERVISITOR_H_INCLUDED
+#pragma once
 
-#include "../Visitor/visitor.h"
+#include <Visitor/visitor.h>
 
-namespace SlavaScript::compiler{
-    class CompilerVisitor : public lang::Visitor{
+
+namespace SlavaScript::compiler {
+    class CompilerVisitor : public lang::Visitor {
     public:
         void visit(lang::BlockStatement* v) override;
         void visit(lang::BreakStatement* v) override;
@@ -40,5 +40,3 @@ namespace SlavaScript::compiler{
         void visit(lang::VariableExpression* v) override;
     };
 }
-
-#endif // COMPILERVISITOR_H_INCLUDED

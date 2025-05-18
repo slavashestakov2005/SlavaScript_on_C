@@ -1,20 +1,18 @@
-#ifndef MODULE_H_INCLUDED
-#define MODULE_H_INCLUDED
+#pragma once
 
-#include "../Lib/function.h"
-#include "../Lib/macros.h"
-#include "../Lib/modulefunction.h"
+#include <Lib/function.h>
+#include <Lib/macros.h>
+#include <Lib/modulefunction.h>
 
-namespace SlavaScript::modules{
+
+namespace SlavaScript::modules {
     template<class ModuleName>
-    class Module{
+    class Module {
     public:
-        static void init(){
+        static void init() {
             if constexpr(requires{ ModuleName::initConstants(); }) ModuleName::initConstants();
             if constexpr(requires{ ModuleName::initFunctions(); }) ModuleName::initFunctions();
             if constexpr(requires{ ModuleName::initClasses(); }) ModuleName::initClasses();
         }
     };
 }
-
-#endif // MODULE_H_INCLUDED

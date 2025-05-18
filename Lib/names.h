@@ -1,19 +1,19 @@
-#ifndef NAMES_H_INCLUDED
-#define NAMES_H_INCLUDED
+#pragma once
 
-#include "functions.h"
-#include "../Value/value.h"
-#include "../Value/classvalue.h"
+#include <Lib/functions.h>
+#include <Value/classvalue.h>
+#include <Value/value.h>
 
-namespace SlavaScript::lang{
-    struct NamedValue{
+
+namespace SlavaScript::lang {
+    struct NamedValue {
         std::string name;
         std::shared_ptr<Value> variable = nullptr;
         std::vector<std::pair<ArgumentsInfo, std::shared_ptr<Function>>> function;
         std::shared_ptr<ClassValue> classDec = nullptr;
     };
 
-    class Names{
+    class Names {
     private:
         static void erase(std::string name, int type);
     public:
@@ -31,5 +31,3 @@ namespace SlavaScript::lang{
         static void restore(NamedValue named);
     };
 }
-
-#endif // NAMES_H_INCLUDED

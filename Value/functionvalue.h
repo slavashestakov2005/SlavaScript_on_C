@@ -1,11 +1,11 @@
-#ifndef FUNCTIONVALUE_H_INCLUDED
-#define FUNCTIONVALUE_H_INCLUDED
+#pragma once
 
-#include "value.h"
-#include "../Lib/function.h"
+#include <Lib/function.h>
+#include <Value/value.h>
 
-namespace SlavaScript::lang{
-    class FunctionValue : public Value{
+
+namespace SlavaScript::lang {
+    class FunctionValue : public Value {
     private:
         std::shared_ptr<Function> value;
     public:
@@ -26,5 +26,3 @@ namespace SlavaScript::lang{
         friend EQ(FunctionValue);
     };
 }
-
-#endif // FUNCTIONVALUE_H_INCLUDED

@@ -1,20 +1,21 @@
-// [[not imported module]]
-#include "draw.h"
-#include "../Lib/functions.h"
-#include "../Lib/utils.h"
-#include "../Lib/variables.h"
-#include "../Value/arrayvalue.h"
-#include "../Value/nullvalue.h"
-#include "../Value/numbervalue.h"
 #include <SFML/Graphics.hpp>
+
+#include <Lib/functions.h>
+#include <Lib/utils.h>
+#include <Lib/variables.h>
+#include <Modules/draw.h>
+#include <Value/arrayvalue.h>
+#include <Value/nullvalue.h>
+#include <Value/numbervalue.h>
+
 
 using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::draw_f;
 using SlavaScript::modules::Draw;
 
 
-namespace SlavaScript::modules::draw_out{
-    enum class Keys{
+namespace SlavaScript::modules::draw_out {
+    enum class Keys {
         ESCAPE,
         UP,
         DOWN,
@@ -32,18 +33,18 @@ namespace SlavaScript::modules::draw_out{
     sf::RenderWindow window;
     sf::Color color = defaultColor;
 
-    int correctColor(double alpha){
+    int correctColor(double alpha) {
         if (alpha <  0) return 0;
         if (alpha > 255) return 255;
         return int(alpha);
     }
 }
 
-namespace SlavaScript::modules::draw_f{
+namespace SlavaScript::modules::draw_f {
     CREATE_FUNCTION(window)
         int siz = values.size();
         argsCount({1, 2, 3}, values.size());
-        switch(siz){
+        switch (siz) {
             case (1) : {
                 draw_out::window.create(sf::VideoMode(draw_out::defaultWidth, draw_out::defaultHeight), values[0] -> asString());
                 break;
@@ -65,16 +66,15 @@ namespace SlavaScript::modules::draw_f{
         int siz = values.size();
         argsCount({0, 1, 2, 3}, values.size());
         if (!siz) draw_out::color = draw_out::defaultColor;
-        else{
-            if (siz == 1){
+        else {
+            if (siz == 1) {
                 int colo = values[0] -> asDouble();
                 draw_out::color = sf::Color(colo / (draw_out::RGB + 1) / (draw_out::RGB + 1), colo / (draw_out::RGB + 1) % (draw_out::RGB + 1), colo % (draw_out::RGB + 1));
-            }
-            else{
+            } else {
                 int red = draw_out::correctColor(values[0] -> asDouble());
                 int green = draw_out::correctColor(values[1] -> asDouble());
                 if (siz == 2) draw_out::color = sf::Color(red, green, draw_out::RGB);
-                else{
+                else {
                     int blue = draw_out::correctColor(values[2] -> asDouble());
                     draw_out::color = sf::Color(red, green, blue);
                 }
@@ -158,9 +158,9 @@ namespace SlavaScript::modules::draw_f{
     CREATE_FUNCTION(keypressed)
         argsCount(0, values.size());
         sf::Event event;
-        while (draw_out::window.pollEvent(event)){
+        while (draw_out::window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) draw_out::window.close();
-            if (event.type == sf::Event::KeyPressed){
+            if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Escape) SH_RET(NumberValue, int(draw_out::Keys::ESCAPE));
                 if (event.key.code == sf::Keyboard::Up) SH_RET(NumberValue, int(draw_out::Keys::UP));
                 if (event.key.code == sf::Keyboard::Down) SH_RET(NumberValue, int(draw_out::Keys::DOWN));
@@ -191,7 +191,7 @@ namespace SlavaScript::modules::draw_f{
     FE
 }
 
-void Draw::initConstants(){
+void Draw::initConstants() {
     Variables::set("KB_ESCAPE", SHARE(NumberValue, int(draw_out::Keys::ESCAPE)));
     Variables::set("KB_UP", SHARE(NumberValue, int(draw_out::Keys::UP)));
     Variables::set("KB_DOWN", SHARE(NumberValue, int(draw_out::Keys::DOWN)));
@@ -200,7 +200,7 @@ void Draw::initConstants(){
     Variables::set("KB_SPACE", SHARE(NumberValue, int(draw_out::Keys::SPACE)));
 }
 
-void Draw::initFunctions(){
+void Draw::initFunctions() {
     MFUNC_INFO(window, ArgumentsInfo(1, 2))
     MFUNC_INFO(color, ArgumentsInfo(0, 3))
     MFUNC_QUATERNARY(line)

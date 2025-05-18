@@ -1,6 +1,8 @@
-#include "numbervalue.h"
-#include "../Exception/exceptions.h"
 #include <sstream>
+
+#include <Exception/exceptions.h>
+#include <Value/numbervalue.h>
+
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::MathException;
@@ -18,51 +20,51 @@ NumberValue::NumberValue(long long value) : value(Bignum(value)) {}
 NumberValue::NumberValue(size_t value) : value(Bignum((long long) value)) {}
 NumberValue::NumberValue(clock_t value) : value(Bignum((long long) value)) {}
 NumberValue::NumberValue(double value) : value(Bignum(value)) {}
-NumberValue::NumberValue(std::strong_ordering val){
+NumberValue::NumberValue(std::strong_ordering val) {
     if (val == std::strong_ordering::less) value = Bignum(-1);
     else if (val == std::strong_ordering::greater) value = Bignum(1);
     else value = Bignum(0);
 }
 
 
-std::shared_ptr<Value> NumberValue::copy(){
+std::shared_ptr<Value> NumberValue::copy() {
     SH_RET(NumberValue, value);
 }
 
-double NumberValue::asDouble(){
+double NumberValue::asDouble() {
     std::istringstream is(value);
     double val = 0;
-    try{
+    try {
         is >> val;
         return val;
-    }catch(...) {
+    } catch (...) {
         throw MathException("Number is too large for operation");
     }
 }
 
-std::string NumberValue::asString(){
+std::string NumberValue::asString() {
     return value;
 }
 
-bool NumberValue::asBool(){
+bool NumberValue::asBool() {
     return bool(value);
 }
 
-Bignum NumberValue::asBignum(){
+Bignum NumberValue::asBignum() {
     return value;
 }
 
-Values NumberValue::type() const{
+Values NumberValue::type() const {
     return Values::NUMBER;
 }
 
-NumberValue::operator std::string(){
+NumberValue::operator std::string() {
     return asString();
 };
 
 
-namespace SlavaScript::lang{
-    CMP(NumberValue){
+namespace SlavaScript::lang {
+    CMP(NumberValue) {
         RCHECK(a.value, b.value);
     }
 

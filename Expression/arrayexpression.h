@@ -1,11 +1,12 @@
-#ifndef ARRAYEXPRESSION_H_INCLUDED
-#define ARRAYEXPRESSION_H_INCLUDED
+#pragma once
 
-#include "expression.h"
 #include <vector>
 
-namespace SlavaScript::lang{
-    class ArrayExpression : public Expression{
+#include <Expression/expression.h>
+
+
+namespace SlavaScript::lang {
+    class ArrayExpression : public Expression {
     private:
         std::vector<Expression*> elements;
     public:
@@ -21,5 +22,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // ARRAYEXPRESSION_H_INCLUDED

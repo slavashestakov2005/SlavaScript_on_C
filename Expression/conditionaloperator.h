@@ -1,10 +1,10 @@
-#ifndef CONDITIONALOPERATOR_H_INCLUDED
-#define CONDITIONALOPERATOR_H_INCLUDED
+#pragma once
 
 #include <string>
 
-namespace SlavaScript::lang{
-    enum class ConditionalOperator{
+
+namespace SlavaScript::lang {
+    enum class ConditionalOperator {
         EQUALS,     /// ==
         NOT_EQUALS, /// !=
 
@@ -20,5 +20,3 @@ namespace SlavaScript::lang{
 
     std::string getOperator(ConditionalOperator);
 }
-
-#endif // CONDITIONALOPERATOR_H_INCLUDED

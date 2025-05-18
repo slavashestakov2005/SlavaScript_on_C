@@ -1,13 +1,11 @@
-#ifndef NODE_H_INCLUDED
-#define NODE_H_INCLUDED
+#pragma once
 
-#include "visitor.h"
+#include <Visitor/visitor.h>
 
-namespace SlavaScript::lang{
-    class Node{
+
+namespace SlavaScript::lang {
+    class Node {
     public:
         virtual void accept(Visitor* visitor) = 0;
     };
 }
-
-#endif // NODE_H_INCLUDED

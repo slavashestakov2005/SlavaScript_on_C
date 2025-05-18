@@ -1,12 +1,13 @@
-#ifndef STATEMENT_H_INCLUDED
-#define STATEMENT_H_INCLUDED
+#pragma once
 
-#include "../Compiler/compilervisitor.h"
-#include "../Visitor/node.h"
 #include <string>
 
-namespace SlavaScript::lang{
-    enum class Statements{
+#include <Compiler/compilervisitor.h>
+#include <Visitor/node.h>
+
+
+namespace SlavaScript::lang {
+    enum class Statements {
         BlockStatement,
         BreakStatement,
         ClassDeclarationsStatement,
@@ -30,14 +31,12 @@ namespace SlavaScript::lang{
         WhileStatement
     };
 
-    class Statement : public Node{
+    class Statement : public Node {
     public:
         virtual void execute() = 0;
         virtual Statements type() const = 0;
         virtual operator std::string() = 0;
 
-        virtual ~Statement(){}
+        virtual ~Statement() {}
     };
 }
-
-#endif // STATEMENT_H_INCLUDED

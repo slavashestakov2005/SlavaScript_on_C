@@ -1,10 +1,10 @@
-#ifndef BINARYOPERATOR_H_INCLUDED
-#define BINARYOPERATOR_H_INCLUDED
+#pragma once
 
 #include <string>
 
-namespace SlavaScript::lang{
-    enum class BinaryOperator{
+
+namespace SlavaScript::lang {
+    enum class BinaryOperator {
         ADD,        /// +
         SUBSTRACT,  /// -
         MULTIPLY,   /// *
@@ -21,5 +21,3 @@ namespace SlavaScript::lang{
 
     std::string getOperator(BinaryOperator);
 }
-
-#endif // BINARYOPERATOR_H_INCLUDED

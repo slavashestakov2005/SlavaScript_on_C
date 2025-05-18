@@ -1,11 +1,11 @@
-#ifndef FORSTATEMENT_H_INCLUDED
-#define FORSTATEMENT_H_INCLUDED
+#pragma once
 
-#include "../Expression/expression.h"
-#include "statement.h"
+#include <Expression/expression.h>
+#include <Statement/statement.h>
 
-namespace SlavaScript::lang{
-    class ForStatement: public Statement{
+
+namespace SlavaScript::lang {
+    class ForStatement: public Statement {
     private:
         Statement* initialization;
         Expression* termination;
@@ -24,5 +24,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // FORSTATEMENT_H_INCLUDED

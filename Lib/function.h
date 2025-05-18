@@ -1,11 +1,12 @@
-#ifndef FUNCTION_H_INCLUDED
-#define FUNCTION_H_INCLUDED
+#pragma once
 
-#include "../Value/value.h"
 #include <vector>
 
-namespace SlavaScript::lang{
-    class Function{
+#include <Value/value.h>
+
+
+namespace SlavaScript::lang {
+    class Function {
     public:
         virtual std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>>) = 0;
         virtual operator std::string();
@@ -15,5 +16,3 @@ namespace SlavaScript::lang{
         virtual ~Function();
     };
 }
-
-#endif // FUNCTION_H_INCLUDED

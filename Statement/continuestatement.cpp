@@ -1,19 +1,20 @@
-#include "continuestatement.h"
+#include <Statement/continuestatement.h>
+
 
 using namespace SlavaScript::lang;
 
-void ContinueStatement::execute(){
+void ContinueStatement::execute() {
     throw *this;
 }
 
-Statements ContinueStatement::type() const{
+Statements ContinueStatement::type() const {
     return Statements::ContinueStatement;
 }
 
-ContinueStatement::operator std::string(){
+ContinueStatement::operator std::string() {
     return "continue";
 }
 
-void ContinueStatement::accept(Visitor* visitor){
+void ContinueStatement::accept(Visitor* visitor) {
     visitor -> visit(this);
 }

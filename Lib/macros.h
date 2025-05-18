@@ -1,16 +1,16 @@
-#ifndef MACROS_H_INCLUDED
-#define MACROS_H_INCLUDED
+#pragma once
 
-namespace SlavaScript::lang{
+
+namespace SlavaScript::lang {
     /** binary operators **/
     #define DEC_OP_IN(cls, op) cls& operator op(cls const& temp)
     #define DEC_OP_OUT(cls, op) cls& operator op(cls a, cls const& b)
-    #define DEF_OP_OUT(cls, op) cls& operator op(cls a, cls const& b){ return a op##= b; }
+    #define DEF_OP_OUT(cls, op) cls& operator op(cls a, cls const& b) { return a op##= b; }
 
     /** conditional operators **/
     #define CMP(cls) std::strong_ordering operator<=>(cls const& a, cls const& b)
     #define EQ(cls) bool operator==(cls const& a, cls const& b)
-    #define DEF_EQ(cls) bool operator==(cls const& a, cls const& b){ return (a <=> b) == std::strong_ordering::equal; }
+    #define DEF_EQ(cls) bool operator==(cls const& a, cls const& b) { return (a <=> b) == std::strong_ordering::equal; }
 
     /** short expressions **/
     #define CHECK(x, y) { std::strong_ordering r = (x) <=> (y); if (r != std::strong_ordering::equal) return r; }
@@ -30,7 +30,7 @@ namespace SlavaScript::lang{
         public: \
             className(fieldType instance) : ModuleClassMethod<fieldType>(instance) {} \
         private: \
-            virtual std::shared_ptr<Value> eval(std::vector<std::shared_ptr<Value>> values){
+            virtual std::shared_ptr<Value> eval(std::vector<std::shared_ptr<Value>> values) {
     #define CLASS_METHOD_PTR(className, fieldType) CLASS_METHOD(className, std::shared_ptr<fieldType>)
     #define CME }};
 
@@ -62,5 +62,3 @@ namespace SlavaScript::lang{
     #define MCLASS_DEF(space, cls) class cls##Class : public ModuleClass<space::cls> {};
     #define MCLASS_SET(space, cls) Classes::set(#cls, SHARE(ClassValue, std::make_shared<space::cls##Class>()));
 }
-
-#endif // MACROS_H_INCLUDED

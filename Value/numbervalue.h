@@ -1,12 +1,13 @@
-#ifndef NUMBERVALUE_H_INCLUDED
-#define NUMBERVALUE_H_INCLUDED
+#pragma once
 
-#include "bignumbers/bignum.h"
-#include "value.h"
 #include <ctime>
 
-namespace SlavaScript::lang{
-    class NumberValue : public Value{
+#include <Value/bignumbers/bignum.h>
+#include <Value/value.h>
+
+
+namespace SlavaScript::lang {
+    class NumberValue : public Value {
     private:
         Bignum value;
     public:
@@ -33,5 +34,3 @@ namespace SlavaScript::lang{
         friend EQ(NumberValue);
     };
 }
-
-#endif // NUMBERVALUE_H_INCLUDED

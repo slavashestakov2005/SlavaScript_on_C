@@ -1,13 +1,13 @@
-#ifndef CLASSMETHOD_H_INCLUDED
-#define CLASSMETHOD_H_INCLUDED
+#pragma once
 
-#include "function.h"
+#include <Lib/function.h>
 
-namespace SlavaScript::lang{
+
+namespace SlavaScript::lang {
     class ObjectValue;
 
     template<typename T>
-    class ClassMethod : public Function{
+    class ClassMethod : public Function {
     private:
         std::shared_ptr<Function> function;
         T instance;
@@ -18,7 +18,7 @@ namespace SlavaScript::lang{
     };
 
     template<typename T>
-    class ModuleClassMethod : public Function, public std::enable_shared_from_this<T>{
+    class ModuleClassMethod : public Function, public std::enable_shared_from_this<T> {
     protected:
         T instance;
         virtual std::shared_ptr<Value> eval(std::vector<std::shared_ptr<Value>> values) = 0;
@@ -31,6 +31,5 @@ namespace SlavaScript::lang{
     using ClassMethodObject = ClassMethod<std::shared_ptr<ObjectValue>>;
 }
 
-#include "classmethod_impl.h"
 
-#endif // CLASSMETHOD_H_INCLUDED
+#include <Lib/classmethod_impl.h>

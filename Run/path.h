@@ -1,12 +1,13 @@
-#ifndef PATH_H_INCLUDED
-#define PATH_H_INCLUDED
+#pragma once
 
-#include "../Value/arrayvalue.h"
 #include <string>
 #include <vector>
 
-namespace SlavaScript::lang{
-    class Path{
+#include <Value/arrayvalue.h>
+
+
+namespace SlavaScript::lang {
+    class Path {
     private:
         static std::vector<std::string> pathes;
         static bool import;
@@ -22,5 +23,3 @@ namespace SlavaScript::lang{
         static std::shared_ptr<ArrayValue> getCommandArguments();
     };
 }
-
-#endif // PATH_H_INCLUDED

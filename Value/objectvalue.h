@@ -1,13 +1,13 @@
-#ifndef OBJECTVALUE_H_INCLUDED
-#define OBJECTVALUE_H_INCLUDED
+#pragma once
 
-#include "mapvalue.h"
+#include <Value/mapvalue.h>
 
-namespace SlavaScript::lang{
+
+namespace SlavaScript::lang {
     class ObjectValue : public Value, public std::enable_shared_from_this<ObjectValue>{
     private:
         std::string className;
-        std::shared_ptr<MapValue> thisMap = SHARE(MapValue, );
+        std::shared_ptr<MapValue> thisMap = SHARE(MapValue);
         std::shared_ptr<Value> get(std::shared_ptr<Value> key);
     public:
         ObjectValue(std::string className);
@@ -31,5 +31,3 @@ namespace SlavaScript::lang{
         friend EQ(ObjectValue);
     };
 }
-
-#endif // OBJECTVALUE_H_INCLUDED

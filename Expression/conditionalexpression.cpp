@@ -1,19 +1,20 @@
-#include "conditionalexpression.h"
-#include "../Exception/exceptions.h"
-#include "../Lib/functions.h"
-#include "../Lib/utils.h"
-#include "../Value/boolvalue.h"
+#include <Exception/exceptions.h>
+#include <Expression/conditionalexpression.h>
+#include <Lib/functions.h>
+#include <Lib/utils.h>
+#include <Value/boolvalue.h>
+
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::LogicException;
 using SlavaScript::exceptions::UnknownOperationException;
 
 
-std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
-    if (left -> type() == Values::OBJECT || right -> type() == Values::OBJECT){
-        try{
+std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right) {
+    if (left -> type() == Values::OBJECT || right -> type() == Values::OBJECT) {
+        try {
             return get_property(left, operation) -> execute({right});
-        } catch(...) {}
+        } catch (...) {}
         if (operation == ConditionalOperator::AND || operation == ConditionalOperator::OR) throw UnknownOperationException(getOperator(operation), left, right);
         std::shared_ptr<Function> func = get_property(left, ConditionalOperator::LTEQGT);
         std::shared_ptr<Value> res = func -> execute({right});
@@ -26,7 +27,7 @@ std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator oper
         return BoolValue::fromBool(result);
     }
     bool result;
-    switch(operation){
+    switch (operation) {
         case ConditionalOperator::EQUALS : result = equals(left, right); break;
         case ConditionalOperator::NOT_EQUALS : result = !equals(left, right); break;
         case ConditionalOperator::LT : result = comparator(left, right); break;
@@ -42,31 +43,31 @@ std::shared_ptr<Value> ConditionalExpression::calculate(ConditionalOperator oper
 
 ConditionalExpression::ConditionalExpression(ConditionalOperator operation, Expression* expr1, Expression* expr2) : operation(operation), expr1(expr1), expr2(expr2) {}
 
-std::shared_ptr<Value> ConditionalExpression::eval(){
+std::shared_ptr<Value> ConditionalExpression::eval() {
     std::shared_ptr<Value> value1 = expr1 -> eval();
     std::shared_ptr<Value> value2 = expr2 -> eval();
-    if (Functions::find(getOperator(operation), 2)){
+    if (Functions::find(getOperator(operation), 2)) {
         std::vector<std::shared_ptr<Value>> vec = { value1, value2 };
         return Functions::get(getOperator(operation), 2) -> execute(vec);
     }
     return calculate(operation, value1, value2);
 }
 
-Expressions ConditionalExpression::type() const{
+Expressions ConditionalExpression::type() const {
     return Expressions::ConditionalExpression;
 }
 
-ConditionalExpression::operator std::string(){
+ConditionalExpression::operator std::string() {
     return "[" + std::string(*expr1) + " " + getOperator(operation) + " " + std::string(*expr2) + "]";
 }
 
-ConditionalExpression::~ConditionalExpression(){
+ConditionalExpression::~ConditionalExpression() {
     delete expr1;
     expr1 = nullptr;
     delete expr2;
     expr2 = nullptr;
 }
 
-void ConditionalExpression::accept(Visitor* visitor){
+void ConditionalExpression::accept(Visitor* visitor) {
     visitor -> visit(this);
 }

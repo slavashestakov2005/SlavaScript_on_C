@@ -1,12 +1,12 @@
-#ifndef IMPORTSTATEMENT_H_INCLUDED
-#define IMPORTSTATEMENT_H_INCLUDED
+#pragma once
 
-#include "../Expression/expression.h"
-#include "statement.h"
-#include "../Visitor/importadder.h"
+#include <Expression/expression.h>
+#include <Statement/statement.h>
+#include <Visitor/importadder.h>
 
-namespace SlavaScript::lang{
-    class ImportStatement : public Statement{
+
+namespace SlavaScript::lang {
+    class ImportStatement : public Statement {
     private:
         std::vector<std::string> names;
         std::string moduleName;
@@ -24,5 +24,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // IMPORTSTATEMENT_H_INCLUDED

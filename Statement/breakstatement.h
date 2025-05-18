@@ -1,10 +1,10 @@
-#ifndef BREAKSTATEMENT_H_INCLUDED
-#define BREAKSTATEMENT_H_INCLUDED
+#pragma once
 
-#include "statement.h"
+#include <Statement/statement.h>
 
-namespace SlavaScript::lang{
-    class BreakStatement : public Statement{
+
+namespace SlavaScript::lang {
+    class BreakStatement : public Statement {
     public:
         /** @return  throw: BreakStatement*. */
         void execute() override;
@@ -16,5 +16,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // BREAKSTATEMENT_H_INCLUDED

@@ -1,8 +1,9 @@
-#include "importadder.h"
-#include "../Statement/importstatement.h"
+#include <Statement/importstatement.h>
+#include <Visitor/importadder.h>
+
 
 using namespace SlavaScript::lang;
 
-void ImportAdder::visit(ImportStatement* v){
+void ImportAdder::visit(ImportStatement* v) {
     v -> execute();
 }

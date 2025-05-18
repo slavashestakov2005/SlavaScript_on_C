@@ -1,10 +1,12 @@
-#include "chemistry.h"
-#include "../Exception/exceptions.h"
-#include "../Lib/functions.h"
-#include "../Lib/utils.h"
-#include "../Value/numbervalue.h"
 #include <cmath>
 #include <map>
+
+#include <Exception/exceptions.h>
+#include <Lib/functions.h>
+#include <Lib/utils.h>
+#include <Modules/chemistry.h>
+#include <Value/numbervalue.h>
+
 
 using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::chemistry_f;
@@ -12,8 +14,8 @@ using SlavaScript::modules::Chemistry;
 using SlavaScript::exceptions::LogicException;
 
 
-namespace SlavaScript::modules::chemistry_out{
-    struct Element{
+namespace SlavaScript::modules::chemistry_out {
+    struct Element {
         std::string name, russionRead, latinRead, electrons;
         double massa;
         int number, period, group;
@@ -151,20 +153,20 @@ namespace SlavaScript::modules::chemistry_out{
         Element(110, "Ds", "дармштадтий", "дармштадтий", "6d97s1", 271, 7, 8, true, false),
     };
 
-    int get_element(std::string name){
-        for(int i = 0; i < SizeOfTabel; ++i){
+    int get_element(std::string name) {
+        for (int i = 0; i < SizeOfTabel; ++i) {
             if (elements[i].name == name) return i;
         }
         return -1;
     }
 
-    std::map<std::string, int> correct(std::string str){
+    std::map<std::string, int> correct(std::string str) {
         int pos = 0, index = 0, koeff = 0;
         std::string element;
         std::map<std::string, int> el;
         std::vector<std::string> inBracket;
         bool openParen = false;
-        while(pos < str.size() && str[pos] >= '0' && str[pos] <= '9'){
+        while (pos < str.size() && str[pos] >= '0' && str[pos] <= '9') {
             koeff *= 10;
             koeff += str[pos] - '0';
             ++pos;
@@ -172,13 +174,13 @@ namespace SlavaScript::modules::chemistry_out{
         if (!koeff) koeff = 1;
         if (koeff < 0) throw LogicException("Minus koefficient");
         el["_"] = koeff;
-        while(pos < str.size()){
-            if (str[pos] >= '0' && str[pos] <= '9'){
+        while (pos < str.size()) {
+            if (str[pos] >= '0' && str[pos] <= '9') {
                 if (element == "") throw LogicException("Empty element");
                 index *= 10;
                 index += str[pos] - '0';
-            }else if (str[pos] >= 'A' && str[pos] <= 'Z'){
-                if (element != ""){
+            } else if (str[pos] >= 'A' && str[pos] <= 'Z') {
+                if (element != "") {
                     int finded = get_element(element);
                     if (finded == -1) throw LogicException("Bad element");
                     if (index == 0) index = 1;
@@ -188,13 +190,13 @@ namespace SlavaScript::modules::chemistry_out{
                     element = "";
                 }
                 element += str[pos];
-            }else if (str[pos] >= 'a' && str[pos] <= 'z'){
+            } else if (str[pos] >= 'a' && str[pos] <= 'z') {
                 if (element == "") throw LogicException("Bad element");
                 element += str[pos];
-            }else if (str[pos] == '('){
+            } else if (str[pos] == '(') {
                 if (openParen) throw LogicException("Two open paren");
                 openParen = true;
-                if (element != ""){
+                if (element != "") {
                     int finded = get_element(element);
                     if (finded == -1) throw LogicException("Bad element");
                     if (index == 0) index = 1;
@@ -202,7 +204,7 @@ namespace SlavaScript::modules::chemistry_out{
                     index = 0;
                     element = "";
                 }
-            }else if (str[pos] == ')'){
+            } else if (str[pos] == ')') {
                 if (!openParen) throw LogicException("Missing open paren");
                 int finded = get_element(element);
                 if (finded == -1) throw LogicException("Bad element");
@@ -212,18 +214,17 @@ namespace SlavaScript::modules::chemistry_out{
                 element = "";
                 index = 0;
                 ++pos;
-                while(pos < str.size() && str[pos] >= '0' && str[pos] <= '9') { index *= 10; index += str[pos] - '0'; ++pos; }
+                while (pos < str.size() && str[pos] >= '0' && str[pos] <= '9') { index *= 10; index += str[pos] - '0'; ++pos; }
                 if (!index) index = 1;
-                for(int i = 0; i < inBracket.size(); ++i){
+                for (size_t i = 0; i < inBracket.size(); ++i) {
                     el[inBracket[i]] *= index;
                 }
                 index = 0;
                 inBracket.clear();
-            }
-            else throw LogicException("Bad symbol");
+            } else throw LogicException("Bad symbol");
             ++pos;
         }
-        if (element != ""){
+        if (element != "") {
             int finded = get_element(element);
             if (finded == -1) throw LogicException("Bad element");
             if (index == 0) index = 1;
@@ -232,34 +233,34 @@ namespace SlavaScript::modules::chemistry_out{
         return el;
     }
 
-    double mr(std::string str){
+    double mr(std::string str) {
         std::map<std::string, int> element = correct(str);
         double m = 0;
-        for(auto x : element){
+        for (auto x : element) {
             int finded = get_element(x.first);
             m += elements[finded].massa * x.second;
         }
         return m * element["_"];
     }
 
-    double omega(std::string substance, std::string el){
+    double omega(std::string substance, std::string el) {
         std::map<std::string, int> element = correct(substance);
         int index = 0;
-        for(auto x : element){
-            if (x.first == el){
+        for (auto x : element) {
+            if (x.first == el) {
                 index = x.second;
                 break;
             }
         }
         if (!index) throw LogicException(substance + " not contain a " + el);
-        for(int i = 0; i < SizeOfTabel; ++i){
+        for (int i = 0; i < SizeOfTabel; ++i) {
             if (elements[i].name == el) return index * elements[i].massa / mr(substance);
         }
         return -1;
     }
 }
 
-namespace SlavaScript::modules::chemistry_f{
+namespace SlavaScript::modules::chemistry_f {
     CREATE_FUNCTION(electron)
         argsCount(1, values.size());
         argType(Values::STRING, values[0]);
@@ -319,7 +320,7 @@ namespace SlavaScript::modules::chemistry_f{
         argType(Values::STRING, values[0]);
         std::string str = CAST(StringValue, values[0]) -> asString();
         int finded = -1;
-        for(int i = 0; i < chemistry_out::SizeOfTabel; ++i){
+        for (int i = 0; i < chemistry_out::SizeOfTabel; ++i) {
             if (chemistry_out::elements[i].russionRead == str) finded = i;
         }
         if (finded == -1) throw LogicException("First argument not element");
@@ -329,7 +330,7 @@ namespace SlavaScript::modules::chemistry_f{
     std::shared_ptr<Function> proton = electron;
 }
 
-void Chemistry::initFunctions(){
+void Chemistry::initFunctions() {
     MFUNC_UNARY(electron)
     MFUNC_UNARY(latin_read)
     MFUNC_UNARY(mr)

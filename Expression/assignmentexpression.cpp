@@ -1,22 +1,23 @@
-#include "assignmentexpression.h"
-#include "../Exception/exceptions.h"
-#include "binaryexpression.h"
-#include "../Lib/names.h"
-#include "../Lib/utils.h"
-#include "../Value/numbervalue.h"
+#include <Exception/exceptions.h>
+#include <Expression/assignmentexpression.h>
+#include <Expression/binaryexpression.h>
+#include <Lib/names.h>
+#include <Lib/utils.h>
+#include <Value/numbervalue.h>
+
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::UnknownOperationException;
 
 
-std::shared_ptr<Value> AssignmentExpression::calculate(AssignmentOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right){
-    if (left -> type() == Values::OBJECT && operation != AssignmentOperator::ASSIGN){
-        try{
+std::shared_ptr<Value> AssignmentExpression::calculate(AssignmentOperator operation, std::shared_ptr<Value> left, std::shared_ptr<Value> right) {
+    if (left -> type() == Values::OBJECT && operation != AssignmentOperator::ASSIGN) {
+        try {
             return get_property(left, operation) -> execute({right});
         } catch (...) {}
     }
     std::shared_ptr<Value> result;
-    switch(operation){
+    switch (operation) {
         case AssignmentOperator::ASSIGN : result = right -> copy(); break;
         case AssignmentOperator::ADD : result = BinaryExpression::calculate(BinaryOperator::ADD, left, right); break;
         case AssignmentOperator::SUBSTRACT : result = BinaryExpression::calculate(BinaryOperator::SUBSTRACT , left, right); break;
@@ -40,7 +41,7 @@ std::shared_ptr<Value> AssignmentExpression::calculate(AssignmentOperator operat
 
 AssignmentExpression::AssignmentExpression(AssignmentOperator operation, std::string variable, Expression* expression) : operation(operation), variable(variable), expression(expression) {}
 
-std::shared_ptr<Value> AssignmentExpression::eval(){
+std::shared_ptr<Value> AssignmentExpression::eval() {
     std::shared_ptr<Value> left = Names::get(variable, true);
     std::shared_ptr<Value> right = expression == nullptr ? nullptr : expression -> eval();
     std::shared_ptr<Value> result = calculate(operation, left, right);
@@ -49,22 +50,22 @@ std::shared_ptr<Value> AssignmentExpression::eval(){
     return result;
 }
 
-Expressions AssignmentExpression::type() const{
+Expressions AssignmentExpression::type() const {
     return Expressions::AssignmentExpression;
 }
 
-AssignmentExpression::operator std::string(){
-    if (operation == AssignmentOperator::MINUSMINUS_ || operation == AssignmentOperator::PLUSPLUS_){
+AssignmentExpression::operator std::string() {
+    if (operation == AssignmentOperator::MINUSMINUS_ || operation == AssignmentOperator::PLUSPLUS_) {
         return getOperator(operation) + " '" + variable + "'";
     }
     return "'" + variable + "' " + getOperator(operation) + " " + std::string(*expression);
 }
 
-AssignmentExpression::~AssignmentExpression(){
+AssignmentExpression::~AssignmentExpression() {
     delete expression;
     expression = nullptr;
 }
 
-void AssignmentExpression::accept(Visitor* visitor){
+void AssignmentExpression::accept(Visitor* visitor) {
     visitor -> visit(this);
 }

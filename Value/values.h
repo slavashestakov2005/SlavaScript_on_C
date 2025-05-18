@@ -1,11 +1,12 @@
-#ifndef VALUES_H_INCLUDED
-#define VALUES_H_INCLUDED
+#pragma once
 
-#include "../Lib/macros.h"
 #include <string>
 
-namespace SlavaScript::lang{
-    enum class Values{
+#include <Lib/macros.h>
+
+
+namespace SlavaScript::lang {
+    enum class Values {
         BOOL,
         NUMBER,
         STRING,
@@ -20,5 +21,3 @@ namespace SlavaScript::lang{
 
     std::string getValueName(Values value);
 }
-
-#endif // VALUES_H_INCLUDED

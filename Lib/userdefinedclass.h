@@ -1,11 +1,11 @@
-#ifndef USERDEFINEDCLASS_H_INCLUDED
-#define USERDEFINEDCLASS_H_INCLUDED
+#pragma once
 
-#include "../Lib/class.h"
-#include "../Statement/classdeclarationsstatement.h"
+#include <Lib/class.h>
+#include <Statement/classdeclarationsstatement.h>
 
-namespace SlavaScript::lang{
-    class UserDefinedClass final : public Class{
+
+namespace SlavaScript::lang {
+    class UserDefinedClass final : public Class {
     private:
         ClassDeclarationsStatement* statement;
     public:
@@ -16,5 +16,3 @@ namespace SlavaScript::lang{
         operator std::string() override;
     };
 }
-
-#endif // USERDEFINEDCLASS_H_INCLUDED

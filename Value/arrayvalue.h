@@ -1,11 +1,12 @@
-#ifndef ARRAYVALUE_H_INCLUDED
-#define ARRAYVALUE_H_INCLUDED
+#pragma once
 
-#include "container.h"
-#include "value.h"
 #include <vector>
 
-namespace SlavaScript::lang{
+#include <Value/container.h>
+#include <Value/value.h>
+
+
+namespace SlavaScript::lang {
     class ArrayValue : public Value, public Container<std::vector<std::shared_ptr<Value>>>{
     private:
         container_type elements;
@@ -40,5 +41,3 @@ namespace SlavaScript::lang{
         friend EQ(ArrayValue);
     };
 }
-
-#endif // ARRAYVALUE_H_INCLUDED

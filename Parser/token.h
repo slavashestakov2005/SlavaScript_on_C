@@ -1,11 +1,12 @@
-#ifndef TOKEN_H_INCLUDED
-#define TOKEN_H_INCLUDED
+#pragma once
 
-#include "tokentype.h"
 #include <string>
 
-namespace SlavaScript::lang{
-    class Token{
+#include <Parser/tokentype.h>
+
+
+namespace SlavaScript::lang {
+    class Token {
     private:
         TokenType type;
         std::string text;
@@ -26,5 +27,3 @@ namespace SlavaScript::lang{
 
 std::ostream& operator<<(std::ostream& os, const SlavaScript::lang::Token& tok);
 std::ostream& operator<<(std::ostream& os, SlavaScript::lang::Token* tok);
-
-#endif // TOKEN_H_INCLUDED

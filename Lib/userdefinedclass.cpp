@@ -1,24 +1,25 @@
-#include "userdefinedclass.h"
-#include "userdefinedfunction.h"
-#include "utils.h"
-#include "../Statement/functiondefinestatement.h"
-#include "../Value/objectvalue.h"
+#include <Lib/userdefinedclass.h>
+#include <Lib/userdefinedfunction.h>
+#include <Lib/utils.h>
+#include <Statement/functiondefinestatement.h>
+#include <Value/objectvalue.h>
+
 
 using namespace SlavaScript::lang;
 
 
 UserDefinedClass::UserDefinedClass(ClassDeclarationsStatement* statement) : statement(statement) {
     name = statement -> get_name();
-    for(auto function : statement -> methods){
+    for (auto function : statement -> methods) {
         addMethod(function -> name, SHARE(UserDefinedFunction, function -> arguments, function -> body));
     }
 }
 
-std::shared_ptr<Value> UserDefinedClass::construct(std::vector<std::shared_ptr<Value>> values){
+std::shared_ptr<Value> UserDefinedClass::construct(std::vector<std::shared_ptr<Value>> values) {
     std::shared_ptr<ObjectValue> instance = SHARE(ObjectValue, name);
-    for(auto now : statement -> fields){
+    for (auto now : statement -> fields) {
         auto value = now.second -> eval();
-        for(std::string fieldName : now.first) instance -> addField(fieldName, value);
+        for (std::string fieldName : now.first) instance -> addField(fieldName, value);
     }
     std::shared_ptr<Value> value = instance -> getConstructor();
     if (!value) return instance;
@@ -28,10 +29,10 @@ std::shared_ptr<Value> UserDefinedClass::construct(std::vector<std::shared_ptr<V
     return instance;
 }
 
-std::string UserDefinedClass::stringType() const{
+std::string UserDefinedClass::stringType() const {
     return "UserClass " + name;
 }
 
-UserDefinedClass::operator std::string(){
+UserDefinedClass::operator std::string() {
     return "class Value for " + std::string(*statement);
 }

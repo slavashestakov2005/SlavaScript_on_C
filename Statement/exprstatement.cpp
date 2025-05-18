@@ -1,25 +1,26 @@
-#include "exprstatement.h"
+#include <Statement/exprstatement.h>
+
 
 using namespace SlavaScript::lang;
 
 ExprStatement::ExprStatement(Expression* expression) : expression(expression) {}
 
-void ExprStatement::execute(){
+void ExprStatement::execute() {
     expression -> eval();
 }
 
-Statements ExprStatement::type() const{
+Statements ExprStatement::type() const {
     return Statements::ExprStatement;
 }
 
-ExprStatement::operator std::string(){
+ExprStatement::operator std::string() {
     return std::string(*expression);
 }
 
-ExprStatement::~ExprStatement(){
+ExprStatement::~ExprStatement() {
     delete expression;
 }
 
-void ExprStatement::accept(Visitor* visitor){
+void ExprStatement::accept(Visitor* visitor) {
     visitor -> visit(this);
 }

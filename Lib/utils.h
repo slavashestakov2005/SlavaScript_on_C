@@ -1,9 +1,9 @@
-#ifndef UTILS_H_INCLUDED
-#define UTILS_H_INCLUDED
+#pragma once
 
-#include "function.h"
+#include <Lib/function.h>
 
-namespace SlavaScript::lang{
+
+namespace SlavaScript::lang {
     CMP(std::string);
     void argsCount(std::vector<int> expected, int got);
     void argsCount(int a, int got);
@@ -17,6 +17,5 @@ namespace SlavaScript::lang{
     std::shared_ptr<Function> get_property(std::shared_ptr<Value> value, T operation);
 }
 
-#include "utils_impl.h"
 
-#endif // UTILS_H_INCLUDED
+#include <Lib/utils_impl.h>

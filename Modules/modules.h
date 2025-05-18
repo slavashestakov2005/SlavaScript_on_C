@@ -1,10 +1,8 @@
-#ifndef MODULES_H_INCLUDED
-#define MODULES_H_INCLUDED
+#pragma once
 
 #include <string>
 
-namespace SlavaScript::modules{
+
+namespace SlavaScript::modules {
     bool try_import_module(std::string name);
 }
-
-#endif // MODULES_H_INCLUDED

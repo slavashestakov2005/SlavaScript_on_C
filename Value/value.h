@@ -1,13 +1,14 @@
-#ifndef VALUE_H_INCLUDED
-#define VALUE_H_INCLUDED
+#pragma once
 
-#include "bignumbers/bignum.h"
-#include "values.h"
 #include <memory>
 #include <string>
 
-namespace SlavaScript::lang{
-    class Value{
+#include <Value/bignumbers/bignum.h>
+#include <Value/values.h>
+
+
+namespace SlavaScript::lang {
+    class Value {
     public:
         virtual std::shared_ptr<Value> copy() = 0;
         virtual double asDouble() = 0;
@@ -31,10 +32,8 @@ namespace SlavaScript::lang{
     bool comparator(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b);
     bool equals(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b);
 
-    class Comparator{
+    class Comparator {
     public:
         bool operator()(std::shared_ptr<Value> const& a, std::shared_ptr<Value> const& b) const;
     };
 }
-
-#endif // VALUE_H_INCLUDED

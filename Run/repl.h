@@ -1,10 +1,10 @@
-#ifndef REPL_H_INCLUDED
-#define REPL_H_INCLUDED
+#pragma once
 
 #include <string>
 
-namespace SlavaScript::lang{
-    class Repl{
+
+namespace SlavaScript::lang {
+    class Repl {
     private:
         static std::string HELP, VARS, FUNCS, SOURCE, CLEAR, EXIT;
         static void help(bool full);
@@ -14,5 +14,3 @@ namespace SlavaScript::lang{
         static void start();
     };
 }
-
-#endif // REPL_H_INCLUDED

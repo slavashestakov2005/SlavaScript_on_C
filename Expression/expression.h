@@ -1,14 +1,15 @@
-#ifndef EXPRESSION_H_INCLUDED
-#define EXPRESSION_H_INCLUDED
+#pragma once
 
-#include "../Compiler/compilervisitor.h"
-#include "../Value/value.h"
-#include "../Visitor/node.h"
 #include <memory>
 #include <string>
 
-namespace SlavaScript::lang{
-    enum class Expressions{
+#include <Compiler/compilervisitor.h>
+#include <Value/value.h>
+#include <Visitor/node.h>
+
+
+namespace SlavaScript::lang {
+    enum class Expressions {
         ArrayExpression,
         AssignmentExpression,
         BinaryExpression,
@@ -22,14 +23,12 @@ namespace SlavaScript::lang{
         VariableExpression
     };
 
-    class Expression : public Node{
+    class Expression : public Node {
     public:
         virtual std::shared_ptr<Value> eval() = 0;
         virtual Expressions type() const = 0;
         virtual operator std::string() = 0;
 
-        virtual ~Expression(){}
+        virtual ~Expression() {}
     };
 }
-
-#endif // EXPRESSION_H_INCLUDED

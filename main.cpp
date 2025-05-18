@@ -1,20 +1,22 @@
 #include <iostream>
 #include <vector>
 #include <windows.h>
-#include "Run/start.h"
-#include "Run/repl.h"
-#include "Run/path.h"
-#include "Compiler/compiler.h"
+
+#include <Compiler/compiler.h>
+#include <Run/path.h>
+#include <Run/repl.h>
+#include <Run/start.h>
+
 
 using namespace std;
 using namespace SlavaScript::lang;
 
 /**
-    1.  Все import происходят перед запуском интерпритатора
+    1.  Все import происходят перед запуском интерпретатора
     2.  При нахождение импортированной константы или функции выбрасывается исключение
 **/
 
-namespace{
+namespace {
     const int N = 14;
     string mas[N] = {
         "-f", "--file",
@@ -27,22 +29,22 @@ namespace{
     };
 }
 
-int main(int argc, char* arg[]){
+int main(int argc, char* arg[]) {
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
     vector<string> argv;
-    for(int i = 0; i < argc; ++i) argv.push_back(arg[i]);
+    for (int i = 0; i < argc; ++i) argv.push_back(arg[i]);
     cout << "SlavaScript version 1.2.0" << endl;
     Path::setCommandArguments(argv);
-    //for(int i = 0; i < argc; ++i) cout << "\"" << argv[i] << "\"" << endl;
-    if (argc == 1){
+    // for (int i = 0; i < argc; ++i) cout << "\"" << argv[i] << "\"" << endl;
+    if (argc == 1) {
         cout << "Usage: slavascript [options]" << endl;
         cout << "  options:" << endl;
         cout << "    -f, --file [input]     Run program file. Required." << endl;
         cout << "    -r, --repl             Enter to a REPL mode" << endl;
-        //cout << "    -l, --lint             Find bugs in code" << endl;
-        //cout << "    -o N, --optimize N     Perform optimization with N passes" << endl;
-        //cout << "    -b, --beautify         Beautify source code" << endl;
+        // cout << "    -l, --lint             Find bugs in code" << endl;
+        // cout << "    -o N, --optimize N     Perform optimization with N passes" << endl;
+        // cout << "    -b, --beautify         Beautify source code" << endl;
         cout << "    -a, --showast          Show AST of program" << endl;
         cout << "    -t, --showtokens       Show lexical tokens" << endl;
         cout << "    -h, --history          Show SlavaScript's history" << endl;
@@ -50,20 +52,19 @@ int main(int argc, char* arg[]){
         cout << "    -c, --compile [input]  Compile program file. Required." << endl;
     }
     else if (argc == 3 && (argv[1] == "-c" || argv[1] == "--compile")) SlavaScript::compiler::Compiler::create_compiler(argv[2]);
-    else{
+    else {
         bool repl = false;
         bool his = false;
-        for(int i = 1; (!repl || !his) && i < argc; ++i){
+        for (int i = 1; (!repl || !his) && i < argc; ++i) {
             if (argv[i] == "-r" || argv[i] == "--repl") repl = true;
             if (argv[i] == "-h" || argv[i] == "--history") his = true;
         }
-        if (repl){
+        if (repl) {
             if (argc != 2) cout << "Неизвестный синтаксис для входа в динамический режим" << endl;
             else Repl::start();
-        }
-        else if(his){
+        } else if (his) {
             if (argc != 2) cout << "Неизвестный синтаксис для входа в режим истории" << endl;
-            else{
+            else {
                 cout << endl << endl;
                 cout << "Вы вошли в режим истории языка SlavaScript" << endl;
                 cout << "    В период с 30 декабря 2019 по 11 января 2020 SlavaScript динамично развивался" << endl;
@@ -181,67 +182,60 @@ int main(int argc, char* arg[]){
                 cout << "\t16. Расскрасить консоль" << endl;
                 cout << "    Хочется верить, что язык в дальнейшем будет развиваться" << endl;
             }
-        }
-        else{
+        } else {
             bool a = false, t = false, time = false;
             std::string path;
-            for(int i = 1; i < argc; ++i){
-                if (argv[i] == "-a" || argv[i] == "--ahowast"){
-                    if (a){
+            for (int i = 1; i < argc; ++i) {
+                if (argv[i] == "-a" || argv[i] == "--showast") {
+                    if (a) {
                         cout << "Более одного тэга для показа AST" << endl;
                         return 0;
                     }
                     a = true;
-                }
-                else if (argv[i] == "-t" || argv[i] == "--ahowtokens"){
-                    if (t){
+                } else if (argv[i] == "-t" || argv[i] == "--showtokens") {
+                    if (t) {
                         cout << "Более одного тэга для показа токенов" << endl;
                         return 0;
                     }
                     t = true;
-                }
-                else if (argv[i] == "-f" || argv[i] == "--file"){
-                    if (i == argc - 1){
+                } else if (argv[i] == "-f" || argv[i] == "--file") {
+                    if (i == argc - 1) {
                         cout << "Нет входного файла" << endl;
                         return 0;
                     }
                     bool found = false;
                     ++i;
-                    for(int j = 0; !found && j < N; ++j){
+                    for (int j = 0; !found && j < N; ++j) {
                         if (mas[j] == argv[i]) found = true;
                     }
-                    if (found){
+                    if (found) {
                         cout << "Для имени файла использован тэг" << endl;
                         return 0;
-                    }
-                    else if (path != ""){
+                    } else if (path != "") {
                         cout << "Больше одного входного файла";
                         return 0;
                     }
                     path = argv[i];
-                }
-                else if (argv[i] == "-m" || argv[i] == "--showtime"){
-                    if (time){
+                } else if (argv[i] == "-m" || argv[i] == "--showtime") {
+                    if (time) {
                         cout << "Более одного тэга для показа времени работы" << endl;
                         return 0;
                     }
                     time = true;
-                }
-                else if (i == 1) path = argv[i];
-                else{
+                } else if (i == 1) path = argv[i];
+                else {
                     cout << "Неизвестный синтаксис";
                     return 0;
                 }
             }
-            try{
+            try {
                 Path::initContainers();
                 Start start(path);
                 start.start();
                 if (a) start.printAST();
                 if (t) start.printTokens();
                 if (time) start.printWorkTime();
-            }
-            catch(...) { cout << "exception :-("; }
+            } catch (...) { cout << "exception :-("; }
         }
     }
     system("pause");

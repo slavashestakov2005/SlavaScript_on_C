@@ -1,10 +1,10 @@
-#ifndef INTEGRATIONSTATEMENT_H_INCLUDED
-#define INTEGRATIONSTATEMENT_H_INCLUDED
+#pragma once
 
-#include "statement.h"
+#include <Statement/statement.h>
 
-namespace SlavaScript::lang{
-    class IntegrationStatement : public Statement{
+
+namespace SlavaScript::lang {
+    class IntegrationStatement : public Statement {
     private:
         std::string lang, name, code;
     public:
@@ -19,5 +19,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // INTEGRATIONSTATEMENT_H_INCLUDED

@@ -1,10 +1,10 @@
-#ifndef EXCEPTION_H_INCLUDED
-#define EXCEPTION_H_INCLUDED
+#pragma once
 
 #include <string>
 
-namespace SlavaScript::exceptions{
-    class Exception : public std::exception{
+
+namespace SlavaScript::exceptions {
+    class Exception : public std::exception {
     private:
         std::string text;
     public:
@@ -15,5 +15,3 @@ namespace SlavaScript::exceptions{
         virtual ~Exception() noexcept;
     };
 }
-
-#endif // EXCEPTION_H_INCLUDED

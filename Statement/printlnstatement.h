@@ -1,11 +1,11 @@
-#ifndef PRINTLNSTATEMENT_H_INCLUDED
-#define PRINTLNSTATEMENT_H_INCLUDED
+#pragma once
 
-#include "../Expression/expression.h"
-#include "statement.h"
+#include <Expression/expression.h>
+#include <Statement/statement.h>
 
-namespace SlavaScript::lang{
-    class PrintlnStatement : public Statement{
+
+namespace SlavaScript::lang {
+    class PrintlnStatement : public Statement {
     private:
         Expression* expression;
     public:
@@ -21,5 +21,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // PRINTLNSTATEMENT_H_INCLUDED

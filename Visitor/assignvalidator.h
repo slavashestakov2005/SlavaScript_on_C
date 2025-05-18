@@ -1,10 +1,10 @@
-#ifndef ASSIGNVALIDATOR_H_INCLUDED
-#define ASSIGNVALIDATOR_H_INCLUDED
+#pragma once
 
-#include "visitor.h"
+#include <Visitor/visitor.h>
 
-namespace SlavaScript::lang{
-    class AssignValidator : public Visitor{
+
+namespace SlavaScript::lang {
+    class AssignValidator : public Visitor {
     public:
         /** @return  throw: std::logic_error. */
         void visit(AssignmentExpression* v) override;
@@ -12,5 +12,3 @@ namespace SlavaScript::lang{
         void visit(SuffixAssignmentExpression* v) override;
     };
 }
-
-#endif // ASSIGNVALIDATOR_H_INCLUDED

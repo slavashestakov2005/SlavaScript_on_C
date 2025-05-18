@@ -1,11 +1,11 @@
-#ifndef CLASSVALUE_H_INCLUDED
-#define CLASSVALUE_H_INCLUDED
+#pragma once
 
-#include "../Lib/class.h"
-#include "value.h"
+#include <Lib/class.h>
+#include <Value/value.h>
 
-namespace SlavaScript::lang{
-    class ClassValue : public Value{
+
+namespace SlavaScript::lang {
+    class ClassValue : public Value {
     private:
         std::shared_ptr<Class> cls;
     public:
@@ -29,5 +29,3 @@ namespace SlavaScript::lang{
         friend EQ(ClassValue);
     };
 }
-
-#endif // CLASSVALUE_H_INCLUDED

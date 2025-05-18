@@ -1,13 +1,14 @@
-#ifndef LEXER_H_INCLUDED
-#define LEXER_H_INCLUDED
+#pragma once
 
-#include "token.h"
 #include <map>
 #include <string>
 #include <vector>
 
-namespace SlavaScript::lang{
-    class Lexer{
+#include <Parser/token.h>
+
+
+namespace SlavaScript::lang {
+    class Lexer {
     private:
         static std::map<std::string, TokenType> OPERATORS, KEYWORDS;
         static std::string OPERATOR_CHARS;
@@ -34,5 +35,3 @@ namespace SlavaScript::lang{
         std::vector<Token*> tokenize();
     };
 }
-
-#endif // LEXER_H_INCLUDED

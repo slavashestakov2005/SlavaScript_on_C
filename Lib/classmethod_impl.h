@@ -1,24 +1,24 @@
-#ifndef CLASSMETHOD_IMPL_H_INCLUDED
-#define CLASSMETHOD_IMPL_H_INCLUDED
+#pragma once
 
-#include "names.h"
-#include "variables.h"
-#include "../Value/nullvalue.h"
-#include "../Value/numbervalue.h"
+#include <Lib/names.h>
+#include <Lib/variables.h>
+#include <Value/nullvalue.h>
+#include <Value/numbervalue.h>
 
-namespace SlavaScript::lang{
+
+namespace SlavaScript::lang {
     template<typename T>
     ClassMethod<T>::ClassMethod(std::shared_ptr<Function> function, T instance) : function(function), instance(instance) {}
 
     template<typename T>
-    std::shared_ptr<Value> ClassMethod<T>::execute(std::vector<std::shared_ptr<Value>> values){
+    std::shared_ptr<Value> ClassMethod<T>::execute(std::vector<std::shared_ptr<Value>> values) {
         NamedValue name = Names::getNamed("this");
         Variables::push();
         Variables::set("this", instance);
         std::shared_ptr<Value> result = NullValue::NULL_;
-        try{
+        try {
             result = function -> execute(values);
-        } catch(...){
+        } catch (...) {
             Variables::pop();
             Names::restore(name);
             throw;
@@ -32,12 +32,12 @@ namespace SlavaScript::lang{
     ModuleClassMethod<T>::ModuleClassMethod(T instance) : instance(instance) {}
 
     template<typename T>
-    std::shared_ptr<Value> ModuleClassMethod<T>::execute(std::vector<std::shared_ptr<Value>> values){
+    std::shared_ptr<Value> ModuleClassMethod<T>::execute(std::vector<std::shared_ptr<Value>> values) {
         Variables::push();
         std::shared_ptr<Value> result = NullValue::NULL_;
-        try{
+        try {
             result = eval(values);
-        } catch(...){
+        } catch (...) {
             Variables::pop();
             throw;
         }
@@ -45,5 +45,3 @@ namespace SlavaScript::lang{
         return result;
     }
 }
-
-#endif // CLASSMETHOD_IMPL_H_INCLUDED

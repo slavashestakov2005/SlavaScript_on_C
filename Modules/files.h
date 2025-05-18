@@ -1,10 +1,10 @@
-#ifndef FILES_H_INCLUDED
-#define FILES_H_INCLUDED
+#pragma once
 
-#include "module.h"
+#include <Modules/module.h>
 
-namespace SlavaScript::modules{
-    namespace files_f{
+
+namespace SlavaScript::modules {
+    namespace files_f {
         extern std::shared_ptr<SlavaScript::lang::Function> open;
     }
 
@@ -14,5 +14,3 @@ namespace SlavaScript::modules{
         static void initClasses();
     };
 }
-
-#endif // FILES_H_INCLUDED

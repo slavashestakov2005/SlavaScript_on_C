@@ -1,5 +1,6 @@
-#include "values.h"
-#include "../Lib/utils.h"
+#include <Lib/utils.h>
+#include <Value/values.h>
+
 
 using namespace SlavaScript::lang;
 
@@ -9,8 +10,8 @@ namespace {
     };
 }
 
-namespace SlavaScript::lang{
-    std::string getValueName(Values value){
+namespace SlavaScript::lang {
+    std::string getValueName(Values value) {
         return mas[(int) value];
     }
 }

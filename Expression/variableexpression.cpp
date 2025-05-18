@@ -1,25 +1,26 @@
-#include "variableexpression.h"
-#include "../Lib/names.h"
+#include <Expression/variableexpression.h>
+#include <Lib/names.h>
+
 
 using namespace SlavaScript::lang;
 
 
 VariableExpression::VariableExpression(std::string name) : name(name) {}
 
-std::shared_ptr<Value> VariableExpression::eval(){
+std::shared_ptr<Value> VariableExpression::eval() {
     return Names::get(name);
 }
 
-Expressions VariableExpression::type() const{
+Expressions VariableExpression::type() const {
     return Expressions::VariableExpression;
 }
 
-VariableExpression::operator std::string(){
+VariableExpression::operator std::string() {
     return "'" + name + "'";
 }
 
 VariableExpression::~VariableExpression() {}
 
-void VariableExpression::accept(Visitor* visitor){
+void VariableExpression::accept(Visitor* visitor) {
     visitor -> visit(this);
 }

@@ -1,17 +1,18 @@
-#ifndef PARSER_H_INCLUDED
-#define PARSER_H_INCLUDED
+#pragma once
 
-#include "parseerrors.h"
-#include "token.h"
-#include "../Expression/expression.h"
-#include "../Statement/foreacharraystatement.h"
-#include "../Statement/foreachmapstatement.h"
-#include "../Statement/functiondefinestatement.h"
-#include "../Statement/statement.h"
 #include <vector>
 
-namespace SlavaScript::lang{
-    class Parser{
+#include <Expression/expression.h>
+#include <Parser/parseerrors.h>
+#include <Parser/token.h>
+#include <Statement/foreacharraystatement.h>
+#include <Statement/foreachmapstatement.h>
+#include <Statement/functiondefinestatement.h>
+#include <Statement/statement.h>
+
+
+namespace SlavaScript::lang {
+    class Parser {
     private:
         std::vector<Token*> tokens;
         int pos, size;
@@ -73,5 +74,3 @@ namespace SlavaScript::lang{
         ParseErrors getParseErrors();
     };
 }
-
-#endif // PARSER_H_INCLUDED

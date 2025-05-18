@@ -1,13 +1,14 @@
-#ifndef START_H_INCLUDED
-#define START_H_INCLUDED
+#pragma once
 
-#include "../Parser/lexer.h"
-#include "../Statement/statement.h"
 #include <string>
 #include <vector>
 
-namespace SlavaScript::lang{
-    class Start{
+#include <Parser/lexer.h>
+#include <Statement/statement.h>
+
+
+namespace SlavaScript::lang {
+    class Start {
     private:
         double time = 0;
         std::string path;
@@ -23,5 +24,3 @@ namespace SlavaScript::lang{
         void printWorkTime();
     };
 }
-
-#endif // START_H_INCLUDED

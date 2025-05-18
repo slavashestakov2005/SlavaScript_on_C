@@ -1,4 +1,5 @@
-#include "argument.h"
+#include <Lib/argument.h>
+
 
 using namespace SlavaScript::lang;
 
@@ -9,18 +10,18 @@ Argument::Argument(std::string name, Expression* expression) : name(name), expre
 
 Argument::Argument(std::string name, bool array) : name(name), expression(nullptr), arrayArgument(array) {}
 
-std::string Argument::getName(){
+std::string Argument::getName() {
     return name;
 }
 
-Expression* Argument::getExpression(){
+Expression* Argument::getExpression() {
     return expression;
 }
 
-bool Argument::isArrayArgument(){
+bool Argument::isArrayArgument() {
     return arrayArgument;
 }
 
-Argument::operator std::string(){
+Argument::operator std::string() {
     return (arrayArgument ? "*'" : "'") + name + "'" + (expression == nullptr ? "" : " = " + std::string(*expression));
 }

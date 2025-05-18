@@ -1,7 +1,7 @@
-#ifndef SMATH_H_INCLUDED
-#define SMATH_H_INCLUDED
+#pragma once
 
-namespace SlavaScript::modules::math_out{
+
+namespace SlavaScript::modules::math_out {
     lang::Bignum sin(const lang::Bignum& x);
     lang::Bignum cos(const lang::Bignum& x);
     lang::Bignum tan(const lang::Bignum& x);
@@ -59,5 +59,3 @@ namespace SlavaScript::modules::math_out{
     _CRTIMP double __cdecl fmod (double, double);
     */
 }
-
-#endif // SMATH_H_INCLUDED

@@ -1,31 +1,32 @@
-#include "returnstatement.h"
+#include <Statement/returnstatement.h>
+
 
 using namespace SlavaScript::lang;
 
 ReturnStatement::ReturnStatement(Expression* expression) : expression(expression) {}
 
-std::shared_ptr<Value> ReturnStatement::getResult(){
+std::shared_ptr<Value> ReturnStatement::getResult() {
     return result;
 }
 
-void ReturnStatement::execute(){
+void ReturnStatement::execute() {
     result = expression -> eval();
     throw this;
 }
 
-Statements ReturnStatement::type() const{
+Statements ReturnStatement::type() const {
     return Statements::ReturnStatement;
 }
 
-ReturnStatement::operator std::string(){
+ReturnStatement::operator std::string() {
     return "return " + std::string(*expression);
 }
 
-ReturnStatement::~ReturnStatement(){
+ReturnStatement::~ReturnStatement() {
     delete expression;
     expression = nullptr;
 }
 
-void ReturnStatement::accept(Visitor* visitor){
+void ReturnStatement::accept(Visitor* visitor) {
     visitor -> visit(this);
 }

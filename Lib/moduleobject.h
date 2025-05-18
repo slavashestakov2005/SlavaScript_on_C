@@ -1,10 +1,10 @@
-#ifndef MODULEOBJECT_H_INCLUDED
-#define MODULEOBJECT_H_INCLUDED
+#pragma once
 
-#include "../Value/value.h"
+#include <Value/value.h>
 
-namespace SlavaScript::lang{
-    class ModuleObject : public Value{
+
+namespace SlavaScript::lang {
+    class ModuleObject : public Value {
     public:
         double asDouble() override;
         std::string asString() override;
@@ -15,7 +15,7 @@ namespace SlavaScript::lang{
     };
 
     template<typename T>
-    class ModuleObjectT : public ModuleObject{
+    class ModuleObjectT : public ModuleObject {
     public:
         static bool is_instance(std::shared_ptr<Value> v);
         static std::string correct_class_name();
@@ -24,6 +24,5 @@ namespace SlavaScript::lang{
     };
 }
 
-#include "moduleobject_impl.h"
 
-#endif // MODULEOBJECT_H_INCLUDED
+#include <Lib/moduleobject_impl.h>

@@ -1,11 +1,11 @@
-#ifndef TRYSTATEMENT_H_INCLUDED
-#define TRYSTATEMENT_H_INCLUDED
+#pragma once
 
-#include "../Expression/expression.h"
-#include "statement.h"
+#include <Expression/expression.h>
+#include <Statement/statement.h>
 
-namespace SlavaScript::lang{
-    class TryStatement : public Statement{
+
+namespace SlavaScript::lang {
+    class TryStatement : public Statement {
     private:
         Statement* body, *catchBlock;
         std::string name;
@@ -22,5 +22,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // TRYSTATEMENT_H_INCLUDED

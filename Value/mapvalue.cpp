@@ -1,9 +1,10 @@
-#include "mapvalue.h"
-#include "../Exception/exceptions.h"
-#include "../Lib/classmethod.h"
-#include "../Lib/utils.h"
-#include "arrayvalue.h"
-#include "boolvalue.h"
+#include <Exception/exceptions.h>
+#include <Lib/classmethod.h>
+#include <Lib/utils.h>
+#include <Value/arrayvalue.h>
+#include <Value/boolvalue.h>
+#include <Value/mapvalue.h>
+
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::CastException;
@@ -19,23 +20,23 @@ namespace {
     CLASS_METHOD(Keys, MapValue::container_type)
         argsCount(0, values.size());
         std::vector<std::shared_ptr<Value>> keys;
-        for(auto p : instance) keys.push_back(p.first);
+        for (auto p : instance) keys.push_back(p.first);
         SH_RET(ArrayValue, keys);
     CME
 
     CLASS_METHOD(ValuesMap, MapValue::container_type)
         argsCount(0, values.size());
         std::vector<std::shared_ptr<Value>> keys;
-        for(auto p : instance) keys.push_back(p.second);
+        for (auto p : instance) keys.push_back(p.second);
         SH_RET(ArrayValue, keys);
     CME
 }
 
 
-std::shared_ptr<MapValue> MapValue::add(std::shared_ptr<MapValue> map1, std::shared_ptr<MapValue> map2){
-    std::shared_ptr<MapValue> result = SHARE(MapValue, );
-    for(auto now : map1 -> map) result -> set(now.first, now.second);
-    for(auto now : map2 -> map) result -> set(now.first, now.second);
+std::shared_ptr<MapValue> MapValue::add(std::shared_ptr<MapValue> map1, std::shared_ptr<MapValue> map2) {
+    std::shared_ptr<MapValue> result = SHARE(MapValue);
+    for (auto now : map1 -> map) result -> set(now.first, now.second);
+    for (auto now : map2 -> map) result -> set(now.first, now.second);
     return result;
 }
 
@@ -43,44 +44,42 @@ std::shared_ptr<MapValue> MapValue::add(std::shared_ptr<MapValue> map1, std::sha
 MapValue::MapValue() {}
 
 
-std::shared_ptr<Value> MapValue::get(std::shared_ptr<Value> key){
+std::shared_ptr<Value> MapValue::get(std::shared_ptr<Value> key) {
     if (containsKey(key)) return map[key];
     else return NullValue::NULL_;
 }
 
-void MapValue::set(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
+void MapValue::set(std::shared_ptr<Value> key, std::shared_ptr<Value> value) {
     map[key] = value;
 }
 
-void MapValue::set(std::shared_ptr<Value> key, std::shared_ptr<Function> value){
+void MapValue::set(std::shared_ptr<Value> key, std::shared_ptr<Function> value) {
     map[key] = SHARE(FunctionValue, value);
 }
 
-bool MapValue::containsKey(std::shared_ptr<Value> key){
+bool MapValue::containsKey(std::shared_ptr<Value> key) {
     return map.find(key) != map.cend();
 }
 
 
-std::shared_ptr<Value> MapValue::copy(){
-    std::shared_ptr<MapValue> newMap = SHARE(MapValue, );
-    for(auto now : map){
+std::shared_ptr<Value> MapValue::copy() {
+    std::shared_ptr<MapValue> newMap = SHARE(MapValue);
+    for (auto now : map) {
         newMap -> set(now.first -> copy(), now.second -> copy());
     }
     return newMap;
 }
 
-double MapValue::asDouble(){
+double MapValue::asDouble() {
     throw CastException(Values::MAP, Values::NUMBER);
 }
 
-std::string MapValue::asString(){
+std::string MapValue::asString() {
     std::string result = "{";
     int siz = map.size(), i = 0;
-    for(auto now : map){
-        bool str = now.first -> type() == Values::STRING;
+    for (auto now : map) {
         result += std::string(*now.first);
         result += ": ";
-        str = now.second -> type() == Values::STRING;
         result += std::string(*now.second);
         if (i < siz - 1) result += ", ";
         ++i;
@@ -89,23 +88,23 @@ std::string MapValue::asString(){
     return result;
 }
 
-bool MapValue::asBool(){
+bool MapValue::asBool() {
     throw CastException(Values::MAP, Values::BOOL);
 }
 
-Bignum MapValue::asBignum(){
+Bignum MapValue::asBignum() {
     throw CastException(Values::MAP, Values::NUMBER);
 }
 
-Values MapValue::type() const{
+Values MapValue::type() const {
     return Values::MAP;
 }
 
-MapValue::operator std::string(){
+MapValue::operator std::string() {
     return asString();
 }
 
-std::shared_ptr<Value> MapValue::getDot(std::shared_ptr<Value> property){
+std::shared_ptr<Value> MapValue::getDot(std::shared_ptr<Value> property) {
     std::string prop = property -> asString();
     ADD_METHOD("exists", Exists, map);
     ADD_METHOD("keys", Keys, map);
@@ -113,34 +112,34 @@ std::shared_ptr<Value> MapValue::getDot(std::shared_ptr<Value> property){
     throw UnknownPropertyException(prop);
 }
 
-std::shared_ptr<Value> MapValue::getBracket(std::shared_ptr<Value> prop){
+std::shared_ptr<Value> MapValue::getBracket(std::shared_ptr<Value> prop) {
     return get(prop);
 }
 
-void MapValue::setBracket(std::shared_ptr<Value> key, std::shared_ptr<Value> value){
+void MapValue::setBracket(std::shared_ptr<Value> key, std::shared_ptr<Value> value) {
     set(key, value);
 }
 
 
-int MapValue::size() const{
+int MapValue::size() const {
     return map.size();
 }
 
-MapValue::container_type::iterator MapValue::begin(){
+MapValue::container_type::iterator MapValue::begin() {
     return map.begin();
 }
 
-MapValue::container_type::iterator MapValue::end(){
+MapValue::container_type::iterator MapValue::end() {
     return map.end();
 }
 
 
-namespace SlavaScript::lang{
-    CMP(MapValue){
+namespace SlavaScript::lang {
+    CMP(MapValue) {
         CHECK(a.size(), b.size());
         auto nowa = a.map.begin();
         auto nowb = b.map.begin();
-        while(nowa != a.map.end()){
+        while (nowa != a.map.end()) {
             CHECK(nowa -> first -> type(), nowb -> first -> type());
             CHECK(*(nowa -> first), *(nowb -> first));
             CHECK(nowa -> second -> type(), nowb -> second -> type());

@@ -1,16 +1,14 @@
-#ifndef FUNCTIONADDER_H_INCLUDED
-#define FUNCTIONADDER_H_INCLUDED
+#pragma once
 
-#include "visitor.h"
+#include <Visitor/visitor.h>
 
-namespace SlavaScript::lang{
+
+namespace SlavaScript::lang {
     class FunctionDefineStatement;
 
-    class FunctionAdder : public Visitor{
+    class FunctionAdder : public Visitor {
     public:
         /** @return  throw: std::logic_error. */
         void visit(FunctionDefineStatement* v) override;
     };
 }
-
-#endif // FUNCTIONADDER_H_INCLUDED

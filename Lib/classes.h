@@ -1,13 +1,14 @@
-#ifndef CLASSES_H_INCLUDED
-#define CLASSES_H_INCLUDED
+#pragma once
 
-#include "../Value/classvalue.h"
 #include <map>
 
-namespace SlavaScript::lang{
+#include <Value/classvalue.h>
+
+
+namespace SlavaScript::lang {
     struct NamedValue;
 
-    class ClassesScope{
+    class ClassesScope {
     private:
         std::map<std::string, std::shared_ptr<ClassValue>> declarations;
     public:
@@ -22,7 +23,7 @@ namespace SlavaScript::lang{
         void restore(NamedValue named);
     };
 
-    class Classes{
+    class Classes {
     private:
         static std::vector<ClassesScope> scope;
     public:
@@ -33,7 +34,6 @@ namespace SlavaScript::lang{
         static std::shared_ptr<ClassValue> get(std::string key);
         static void set(std::string key, std::shared_ptr<ClassValue> classDef);
         static void erase(std::string key);
-        //static void print();
         static std::shared_ptr<ClassValue> save(std::string key);
         static void restore(NamedValue named);
         static void pushScope();
@@ -41,5 +41,3 @@ namespace SlavaScript::lang{
         static void copyScope();
     };
 }
-
-#endif // CLASSES_H_INCLUDED

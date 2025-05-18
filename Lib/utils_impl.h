@@ -1,13 +1,13 @@
-#ifndef UTILS_IMPL_H_INCLUDED
-#define UTILS_IMPL_H_INCLUDED
+#pragma once
 
-#include "../Exception/exceptions.h"
-#include "../Value/functionvalue.h"
-#include "../Value/stringvalue.h"
+#include <Exception/exceptions.h>
+#include <Value/functionvalue.h>
+#include <Value/stringvalue.h>
 
-namespace SlavaScript::lang{
+
+namespace SlavaScript::lang {
     template<typename T>
-    std::shared_ptr<Function> get_property(std::shared_ptr<Value> value, T operation){
+    std::shared_ptr<Function> get_property(std::shared_ptr<Value> value, T operation) {
         std::string op = getOperator(operation);
         argType(Values::OBJECT, value, "Can not use " + op + " for non-class and class values");
         std::shared_ptr<Value> val = value -> getDot(SHARE(StringValue, op));
@@ -16,5 +16,3 @@ namespace SlavaScript::lang{
         return func;
     }
 }
-
-#endif // UTILS_IMPL_H_INCLUDED

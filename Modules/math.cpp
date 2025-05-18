@@ -1,14 +1,15 @@
-#include "math.h"
-#include "../Exception/exceptions.h"
-#include "../Lib/classes.h"
-#include "../Lib/classmethod.h"
-#include "../Lib/moduleclass.h"
-#include "../Lib/moduleobject.h"
-#include "../Lib/utils.h"
-#include "../Value/arrayvalue.h"
-#include "../Value/bignumbers/smath.h"
-#include "../Value/boolvalue.h"
-#include "../Value/numbervalue.h"
+#include <Exception/exceptions.h>
+#include <Lib/classes.h>
+#include <Lib/classmethod.h>
+#include <Lib/moduleclass.h>
+#include <Lib/moduleobject.h>
+#include <Lib/utils.h>
+#include <Modules/math.h>
+#include <Value/arrayvalue.h>
+#include <Value/bignumbers/smath.h>
+#include <Value/boolvalue.h>
+#include <Value/numbervalue.h>
+
 
 using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::math_f;
@@ -18,39 +19,39 @@ using SlavaScript::exceptions::TypeException;
 using SlavaScript::exceptions::UnknownPropertyException;
 
 
-namespace SlavaScript::modules::math_out{
+namespace SlavaScript::modules::math_out {
     using PolynomialCoeff = RationalBig;
 
     CLASS_IN_MODULE_1(Polynomial)
         std::vector<PolynomialCoeff> coefficients;
 
-        Polynomial(std::vector<std::shared_ptr<Value>> values){
-            for(auto x : values) coefficients.push_back(x -> asBignum());
+        Polynomial(std::vector<std::shared_ptr<Value>> values) {
+            for (auto x : values) coefficients.push_back(x -> asBignum());
         }
         Polynomial(Polynomial const& temp) : coefficients(temp.coefficients) {}
-        Polynomial(std::vector<PolynomialCoeff> coefficients = {Bignum::ZERO}) : coefficients(coefficients){ delete_end_zero(); }
+        Polynomial(std::vector<PolynomialCoeff> coefficients = {Bignum::ZERO}) : coefficients(coefficients) { delete_end_zero(); }
 
-        int deg() const{
+        int deg() const {
             if (coefficients.size() == 1 && !coefficients[0]) return -1;
             return coefficients.size() - 1;
         }
 
-        std::shared_ptr<Value> copy() override{
+        std::shared_ptr<Value> copy() override {
             SH_RET(Polynomial, coefficients);
         }
-        operator std::string() override{
+        operator std::string() override {
             std::string ans = "<polynomial=";
-            for(int i = coefficients.size() - 1; i > -1; --i){
-                if (coefficients[i]){
+            for (int i = coefficients.size() - 1; i > -1; --i) {
+                if (coefficients[i]) {
                     std::string c = std::string(coefficients[i]);
                     if (c == "-1" && i) ans += "-";
                     else if (c[0] != '-' && ans.size() > 12) ans += "+";
                     if (i == 0 || c != "1" && c != "-1") ans += c;
                     if (i) ans += "x";
-                    if (i > 1){
+                    if (i > 1) {
                         ans += "^";
                         int q = i;
-                        while(q){
+                        while (q) {
                             ans += char('0' + q % 10);
                             q /= 10;
                         }
@@ -63,31 +64,34 @@ namespace SlavaScript::modules::math_out{
 
         std::shared_ptr<Value> getDot(std::shared_ptr<Value> property) override;
 
-        ~Polynomial(){}
+        ~Polynomial() {}
 
-        void delete_end_zero(){
-            for(int i = coefficients.size() - 1; i > 0; --i) if (coefficients[i]) break; else coefficients.pop_back();
+        void delete_end_zero() {
+            for (int i = coefficients.size() - 1; i > 0; --i) {
+                if (coefficients[i]) break;
+                else coefficients.pop_back();
+            }
         }
 
-        Polynomial operator+() const{
+        Polynomial operator+() const {
             return Polynomial(*this);
         }
 
-        Polynomial operator-() const{
+        Polynomial operator-() const {
             int sz = coefficients.size();
             std::vector<PolynomialCoeff> new_v(sz);
-            for(int i = 0; i < sz; ++i) new_v[i] -= coefficients[i];
+            for (int i = 0; i < sz; ++i) new_v[i] -= coefficients[i];
             return Polynomial(new_v);
         }
 
-        Polynomial& operator+=(Polynomial const& tem){
+        Polynomial& operator+=(Polynomial const& tem) {
             int d1 = deg(), d2 = tem.deg();
-            if (d1 == -1 && d2 == -1){
+            if (d1 == -1 && d2 == -1) {
                 coefficients = {Bignum::ZERO};
                 return *this;
             }
             std::vector<PolynomialCoeff> new_v(std::max(d1, d2) + 1);
-            for(int i = 0; i < new_v.size(); ++i){
+            for (size_t i = 0; i < new_v.size(); ++i) {
                 if (i <= d1) new_v[i] += coefficients[i];
                 if (i <= d2) new_v[i] += tem.coefficients[i];
             }
@@ -96,19 +100,19 @@ namespace SlavaScript::modules::math_out{
             return *this;
         }
 
-        Polynomial& operator-=(Polynomial const& tem){
+        Polynomial& operator-=(Polynomial const& tem) {
             return *this += -tem;
         }
 
-        Polynomial& operator*=(Polynomial const& tem){
+        Polynomial& operator*=(Polynomial const& tem) {
             int d1 = deg(), d2 = tem.deg();
-            if (d1 == -1 || d2 == -1){
+            if (d1 == -1 || d2 == -1) {
                 coefficients = {Bignum::ZERO};
                 return *this;
             }
             std::vector<PolynomialCoeff> new_v(d1 + d2 + 1);
-            for(int i = 0; i < coefficients.size(); ++i){
-                for(int j = 0; j < tem.coefficients.size(); ++j){
+            for (size_t i = 0; i < coefficients.size(); ++i) {
+                for (size_t j = 0; j < tem.coefficients.size(); ++j) {
                     new_v[i + j] += coefficients[i] * tem.coefficients[j];
                 }
             }
@@ -117,14 +121,14 @@ namespace SlavaScript::modules::math_out{
             return *this;
         }
 
-        Polynomial& operator/=(PolynomialCoeff const& tem){
-            for(PolynomialCoeff &x : coefficients) x /= tem;
+        Polynomial& operator/=(PolynomialCoeff const& tem) {
+            for (PolynomialCoeff &x : coefficients) x /= tem;
             return *this;
         }
 
-        std::pair<Polynomial, Polynomial> operator/(Polynomial const& temp){
+        std::pair<Polynomial, Polynomial> operator/(Polynomial const& temp) {
             Polynomial a = *this, ans;
-            while(a.deg() >= temp.deg()){
+            while (a.deg() >= temp.deg()) {
                 std::vector<PolynomialCoeff> coeff(a.deg() - temp.deg());
                 coeff.push_back(a.coefficients.back() / temp.coefficients.back());
                 Polynomial p(coeff);
@@ -135,7 +139,7 @@ namespace SlavaScript::modules::math_out{
             return {ans, a};
         }
 
-        Polynomial& operator%=(Polynomial const& tem){
+        Polynomial& operator%=(Polynomial const& tem) {
             std::pair<Polynomial, Polynomial> divmod = ((*this) / tem);
             (*this) = divmod.second;
             return *this;
@@ -150,10 +154,10 @@ namespace SlavaScript::modules::math_out{
     DEF_OP_OUT(Polynomial, %)
     DEF_EQ(Polynomial)
 
-    CMP(Polynomial){
+    CMP(Polynomial) {
         CHECK(a.coefficients.size(), b.coefficients.size());
         int sz = a.coefficients.size();
-        for(int i = sz - 1; i >= 0; --i){
+        for (int i = sz - 1; i >= 0; --i) {
             CHECK(a.coefficients[i], b.coefficients[i]);
         }
         return std::strong_ordering::equal;
@@ -208,20 +212,20 @@ namespace SlavaScript::modules::math_out{
             return BoolValue::fromBool(q); \
         CME
 
-    POLYNOMIAL_FUNCTION_01(Add, +)  /// x + y   x += y      +x
-    POLYNOMIAL_FUNCTION_01(Sub, -)  /// x - y   x -= y      -x
-    POLYNOMIAL_FUNCTION_1(Mul, *)   /// x * y   x *= y
-    POLYNOMIAL_FUNCTION_2(Div, /)   /// x / y   x /= y
-    POLYNOMIAL_FUNCTION_1(Mod, %)   /// x % y   x %= y
-    POLYNOMIAL_FUNCTION_3(Eq, ==)   /// x == y
-    POLYNOMIAL_FUNCTION_3(Ne, !=)   /// x != y
-    POLYNOMIAL_FUNCTION_3(Lt, <)    /// x < y
-    POLYNOMIAL_FUNCTION_3(Le, <=)   /// x <= y
-    POLYNOMIAL_FUNCTION_3(Gt, >)    /// x > y
-    POLYNOMIAL_FUNCTION_3(Ge, >=)   /// x >= y
+    POLYNOMIAL_FUNCTION_01(Add, +)  // x + y   x += y      +x
+    POLYNOMIAL_FUNCTION_01(Sub, -)  // x - y   x -= y      -x
+    POLYNOMIAL_FUNCTION_1(Mul, *)   // x * y   x *= y
+    POLYNOMIAL_FUNCTION_2(Div, /)   // x / y   x /= y
+    POLYNOMIAL_FUNCTION_1(Mod, %)   // x % y   x %= y
+    POLYNOMIAL_FUNCTION_3(Eq, ==)   // x == y
+    POLYNOMIAL_FUNCTION_3(Ne, !=)   // x != y
+    POLYNOMIAL_FUNCTION_3(Lt, <)    // x < y
+    POLYNOMIAL_FUNCTION_3(Le, <=)   // x <= y
+    POLYNOMIAL_FUNCTION_3(Gt, >)    // x > y
+    POLYNOMIAL_FUNCTION_3(Ge, >=)   // x >= y
 
 
-    std::shared_ptr<Value> Polynomial::getDot(std::shared_ptr<Value> property){
+    std::shared_ptr<Value> Polynomial::getDot(std::shared_ptr<Value> property) {
         std::string prop = property -> asString();
         ADD_METHOD_PTR("deg", Deg);
         ADD_METHOD_PTR("+", Add);
@@ -240,7 +244,7 @@ namespace SlavaScript::modules::math_out{
     }
 }
 
-namespace SlavaScript::modules::math_f{
+namespace SlavaScript::modules::math_f {
     #define MATH_FUNCTION(name) \
         CREATE_FUNCTION(name) \
             argsCount(1, values.size()); \
@@ -278,7 +282,7 @@ namespace SlavaScript::modules::math_f{
         if (values[0] -> asDouble() < 0) throw MathException("Bad argument for factorial");
         Bignum result = 1;
         int n = values[0] -> asDouble();
-        for(int i = 2; i <= n; ++i) result *= i;
+        for (int i = 2; i <= n; ++i) result *= i;
         SH_RET(NumberValue, result);
     FE
 
@@ -287,14 +291,14 @@ namespace SlavaScript::modules::math_f{
 
     CREATE_FUNCTION(interpolate)
         math_out::Polynomial result;
-        for(int i = 0; i < values.size(); ++i){
+        for (size_t i = 0; i < values.size(); ++i) {
             argType(Values::ARRAY, values[i]);
             if (CAST(ArrayValue, values[i]) -> size() != 2) throw TypeException("Expected array with len 2.");
         }
-        for(int i = 0; i < values.size(); ++i){
+        for (size_t i = 0; i < values.size(); ++i) {
             math_out::Polynomial t({ CAST(ArrayValue, values[i]) -> get(1) -> asBignum() });
-            for(int j = 0; j < values.size(); ++j){
-                if (i != j){
+            for (size_t j = 0; j < values.size(); ++j) {
+                if (i != j) {
                     Bignum xi = CAST(ArrayValue, values[i]) -> get(0) -> asBignum(), xj = CAST(ArrayValue, values[j]) -> get(0) -> asBignum();
                     if (xi == xj) throw MathException("Cannot used equals x for interpolate");
                     t *= math_out::Polynomial({Bignum(-xj), Bignum(1)});
@@ -339,12 +343,12 @@ namespace SlavaScript::modules::math_f{
 }
 
 
-void Math::initConstants(){
+void Math::initConstants() {
     Variables::set("PI", SHARE(NumberValue, 3.1415926535));
     Variables::set("E", SHARE(NumberValue, 2.7182818284));
 }
 
-void Math::initFunctions(){
+void Math::initFunctions() {
     MFUNC_UNARY(math_f, abs)
     MFUNC_UNARY(math_f, acos)
     MFUNC_UNARY(math_f, asin)
@@ -377,7 +381,7 @@ void Math::initFunctions(){
     MFUNC_UNARY(math_f, to_radians)
 }
 
-void Math::initClasses(){
+void Math::initClasses() {
     MCLASS_SET(math_f, Polynomial)
 }
 

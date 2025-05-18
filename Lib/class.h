@@ -1,12 +1,13 @@
-#ifndef CLASS_H_INCLUDED
-#define CLASS_H_INCLUDED
+#pragma once
 
-#include "function.h"
-#include "../Value/value.h"
 #include <map>
 
-namespace SlavaScript::lang{
-    class Class{
+#include <Lib/function.h>
+#include <Value/value.h>
+
+
+namespace SlavaScript::lang {
+    class Class {
     protected:
         std::string name;
         std::map<std::string, std::shared_ptr<Function>> methods;
@@ -23,5 +24,3 @@ namespace SlavaScript::lang{
         virtual ~Class();
     };
 }
-
-#endif // CLASS_H_INCLUDED

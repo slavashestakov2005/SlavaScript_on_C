@@ -1,12 +1,13 @@
-#ifndef BIGNUM_H_INCLUDED
-#define BIGNUM_H_INCLUDED
+#pragma once
 
-#include <vector>
 #include <string>
-#include "../../Lib/macros.h"
+#include <vector>
 
-namespace SlavaScript::lang{
-    class UnsignedBig{
+#include <Lib/macros.h>
+
+
+namespace SlavaScript::lang {
+    class UnsignedBig {
     private:
         std::vector<int> digits;
         void delete_end_zero();
@@ -60,7 +61,7 @@ namespace SlavaScript::lang{
     DEC_OP_OUT(UnsignedBig, /);
     DEC_OP_OUT(UnsignedBig, %);
 
-    class Bignum{
+    class Bignum {
     private:
         UnsignedBig value;
         bool sign;
@@ -118,7 +119,7 @@ namespace SlavaScript::lang{
     DEC_OP_OUT(Bignum, /);
     DEC_OP_OUT(Bignum, %);
 
-    class RationalBig{
+    class RationalBig {
     private:
         Bignum numerator, denominator;
     public:
@@ -149,5 +150,3 @@ namespace SlavaScript::lang{
     DEC_OP_OUT(RationalBig, /);
     DEC_OP_OUT(RationalBig, %);
 }
-
-#endif // BIGNUM_H_INCLUDED

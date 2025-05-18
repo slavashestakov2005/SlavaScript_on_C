@@ -1,15 +1,16 @@
-// [[not imported module]]
-#include "files.h"
-#include "../Exception/exceptions.h"
-#include "../Lib/classes.h"
-#include "../Lib/classmethod.h"
-#include "../Lib/moduleclass.h"
-#include "../Lib/moduleobject.h"
-#include "../Lib/utils.h"
-#include "../Run/path.h"
-#include "../Value/numbervalue.h"
 #include <fstream>
 #include <sstream>
+
+#include <Exception/exceptions.h>
+#include <Lib/classes.h>
+#include <Lib/classmethod.h>
+#include <Lib/moduleclass.h>
+#include <Lib/moduleobject.h>
+#include <Lib/utils.h>
+#include <Modules/files.h>
+#include <Run/path.h>
+#include <Value/numbervalue.h>
+
 
 using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::files_f;
@@ -18,23 +19,23 @@ using SlavaScript::exceptions::UnknownOperationException;
 using SlavaScript::exceptions::UnknownPropertyException;
 
 
-namespace SlavaScript::modules::files_out{
+namespace SlavaScript::modules::files_out {
     CLASS_IN_MODULE_1(File)
         std::string name;
         std::fstream file;
         bool bad;
 
-        File(std::string name) : name(name){
+        File(std::string name) : name(name) {
             file.open(Path::getPath() + name);
             bad = !file;
         }
 
-        std::shared_ptr<Value> copy() override{
+        std::shared_ptr<Value> copy() override {
             SH_RET(File, name);
         }
-        operator std::string() override{ return "<file=\"" + name + "\">"; }
+        operator std::string() override { return "<file=\"" + name + "\">"; }
         std::shared_ptr<Value> getDot(std::shared_ptr<Value> property) override;
-        ~File(){}
+        ~File() {}
     CLASS_IN_MODULE_2(File)
 
     CLASS_METHOD_PTR(Close, File)
@@ -60,15 +61,14 @@ namespace SlavaScript::modules::files_out{
     CLASS_METHOD_PTR(WriteLine, File)
         argsCount(1, values.size());
         if (instance -> file && instance -> file.tellg() < instance -> file.end) instance -> file << values[0] -> asString();
-        else if (!instance -> bad){
+        else if (!instance -> bad) {
             instance -> file.seekg(0, instance -> file.beg);
             instance -> file << values[0] -> asString();
-        }
-        else return NumberValue::M_ONE;
+        } else return NumberValue::M_ONE;
         return NumberValue::ZERO;
     CME
 
-    std::shared_ptr<Value> File::getDot(std::shared_ptr<Value> property){
+    std::shared_ptr<Value> File::getDot(std::shared_ptr<Value> property) {
         std::string prop = property -> asString();
         if (bad) throw UnknownOperationException(".", shared_from_this());
         ADD_METHOD_PTR("close", Close);
@@ -79,7 +79,7 @@ namespace SlavaScript::modules::files_out{
     }
 }
 
-namespace SlavaScript::modules::files_f{
+namespace SlavaScript::modules::files_f {
     CREATE_FUNCTION(open)
         argsCount(1, values.size());
         std::shared_ptr<files_out::File> file = SHARE(files_out::File, values[0] -> asString());
@@ -90,10 +90,10 @@ namespace SlavaScript::modules::files_f{
     MCLASS_DEF(files_out, File)
 }
 
-void Files::initFunctions(){
+void Files::initFunctions() {
     MFUNC_UNARY(open)
 }
 
-void Files::initClasses(){
+void Files::initClasses() {
     MCLASS_SET(files_f, File)
 }

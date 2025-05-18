@@ -1,10 +1,10 @@
-#ifndef STRINGVALUE_H_INCLUDED
-#define STRINGVALUE_H_INCLUDED
+#pragma once
 
-#include "container.h"
-#include "value.h"
+#include <Value/container.h>
+#include <Value/value.h>
 
-namespace SlavaScript::lang{
+
+namespace SlavaScript::lang {
     class StringValue : public Value, public Container<std::string>{
     private:
         container_type value;
@@ -32,5 +32,3 @@ namespace SlavaScript::lang{
         friend EQ(StringValue);
     };
 }
-
-#endif // STRINGVALUE_H_INCLUDED

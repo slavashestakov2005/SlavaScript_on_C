@@ -1,11 +1,11 @@
-#ifndef COMPILER_H_INCLUDED
-#define COMPILER_H_INCLUDED
+#pragma once
 
-#include <string>
 #include <fstream>
+#include <string>
 
-namespace SlavaScript::compiler{
-    class Compiler{
+
+namespace SlavaScript::compiler {
+    class Compiler {
     private:
         static std::ofstream generated_file;
         static std::string read_file, write_file;
@@ -25,5 +25,3 @@ namespace SlavaScript::compiler{
         static void goOutLoop();
     };
 }
-
-#endif // COMPILER_H_INCLUDED

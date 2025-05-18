@@ -1,12 +1,12 @@
-#ifndef THROWSTATEMENT_H_INCLUDED
-#define THROWSTATEMENT_H_INCLUDED
+#pragma once
 
-#include "../Expression/expression.h"
-#include "statement.h"
-#include "../Value/value.h"
+#include <Expression/expression.h>
+#include <Statement/statement.h>
+#include <Value/value.h>
 
-namespace SlavaScript::lang{
-    class ThrowStatement : public Statement{
+
+namespace SlavaScript::lang {
+    class ThrowStatement : public Statement {
     private:
         Expression* expression;
         std::shared_ptr<Value> result;
@@ -26,5 +26,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // THROWSTATEMENT_H_INCLUDED

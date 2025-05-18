@@ -1,21 +1,22 @@
-#ifndef CALLSTACK_H_INCLUDED
-#define CALLSTACK_H_INCLUDED
+#pragma once
 
-#include "../Lib/function.h"
 #include <string>
 #include <vector>
 
-namespace SlavaScript::lang{
+#include <Lib/function.h>
+
+
+namespace SlavaScript::lang {
     class CallInfo{
     private:
         std::string name;
         std::shared_ptr<Function> function;
     public:
         CallInfo(std::string name, std::shared_ptr<Function> function) : name(name), function(function) { }
-        operator std::string(){ return name; }
+        operator std::string() { return name; }
     };
 
-    class CallStack{
+    class CallStack {
     private:
         static std::vector<std::shared_ptr<CallInfo>> calls;
     public:
@@ -25,5 +26,3 @@ namespace SlavaScript::lang{
         static std::string callsToString();
     };
 }
-
-#endif // CALLSTACK_H_INCLUDED

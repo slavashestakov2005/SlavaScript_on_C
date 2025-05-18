@@ -1,44 +1,45 @@
-#include "nullvalue.h"
-#include "../Exception/exceptions.h"
+#include <Exception/exceptions.h>
+#include <Value/nullvalue.h>
+
 
 using namespace SlavaScript::lang;
 using SlavaScript::exceptions::CastException;
 
 
-std::shared_ptr<NullValue> NullValue::NULL_ = SHARE(NullValue, );
+std::shared_ptr<NullValue> NullValue::NULL_ = SHARE(NullValue);
 
 
-std::shared_ptr<Value> NullValue::copy(){
+std::shared_ptr<Value> NullValue::copy() {
     return NULL_;
 }
 
-double NullValue::asDouble(){
+double NullValue::asDouble() {
     throw CastException(Values::NULL_, Values::NUMBER);
 }
 
-std::string NullValue::asString(){
+std::string NullValue::asString() {
     throw CastException(Values::NULL_, Values::STRING);
 }
 
-bool NullValue::asBool(){
+bool NullValue::asBool() {
     throw CastException(Values::NULL_, Values::BOOL);
 }
 
-Bignum NullValue::asBignum(){
+Bignum NullValue::asBignum() {
     throw CastException(Values::NULL_, Values::NUMBER);
 }
 
-Values NullValue::type() const{
+Values NullValue::type() const {
     return Values::NULL_;
 }
 
-NullValue::operator std::string(){
+NullValue::operator std::string() {
     return "null";
 }
 
 
-namespace SlavaScript::lang{
-    CMP(NullValue){
+namespace SlavaScript::lang {
+    CMP(NullValue) {
         return std::strong_ordering::equal;
     }
 

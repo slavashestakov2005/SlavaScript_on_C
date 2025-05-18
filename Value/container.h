@@ -1,9 +1,9 @@
-#ifndef CONTAINER_H_INCLUDED
-#define CONTAINER_H_INCLUDED
+#pragma once
 
-namespace SlavaScript::lang{
+
+namespace SlavaScript::lang {
     template<typename T>
-    class Container{
+    class Container {
     public:
         using container_type = T;
         virtual int size() const = 0;
@@ -11,5 +11,3 @@ namespace SlavaScript::lang{
         virtual typename T::iterator end() = 0;
     };
 }
-
-#endif // CONTAINER_H_INCLUDED

@@ -1,10 +1,10 @@
-#ifndef INTEGRATIONVALUE_H_INCLUDED
-#define INTEGRATIONVALUE_H_INCLUDED
+#pragma once
 
-#include "value.h"
+#include <Value/value.h>
 
-namespace SlavaScript::lang{
-    class IntegrationValue : public Value{
+
+namespace SlavaScript::lang {
+    class IntegrationValue : public Value {
     private:
         std::string fileNameBegin, fileNameEnd;
     public:
@@ -23,5 +23,3 @@ namespace SlavaScript::lang{
         friend EQ(IntegrationValue);
     };
 }
-
-#endif // INTEGRATIONVALUE_H_INCLUDED

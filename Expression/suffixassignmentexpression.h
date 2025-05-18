@@ -1,13 +1,13 @@
-#ifndef SUFFIXaSSIGNMENTSTATEMENT_H_INCLUDED
-#define SUFFIXASSIGNMENTSTATEMENT_H_INCLUDED
+#pragma once
 
-#include "assignmentoperator.h"
-#include "expression.h"
-#include "suffixexpression.h"
-#include "../Visitor/assignvalidator.h"
+#include <Expression/assignmentoperator.h>
+#include <Expression/expression.h>
+#include <Expression/suffixexpression.h>
+#include <Visitor/assignvalidator.h>
 
-namespace SlavaScript::lang{
-    class SuffixAssignmentExpression : public Expression{
+
+namespace SlavaScript::lang {
+    class SuffixAssignmentExpression : public Expression {
     private:
         AssignmentOperator operation;
         SuffixExpression* containerExpr;
@@ -26,5 +26,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // SUFFIXASSIGNMENTSTATEMENT_H_INCLUDED

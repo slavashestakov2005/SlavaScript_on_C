@@ -1,11 +1,12 @@
-#ifndef BLOCKSTATEMENT_H_INCLUDED
-#define BLOCKSTATEMENT_H_INCLUDED
+#pragma once
 
-#include "statement.h"
 #include <vector>
 
-namespace SlavaScript::lang{
-    class BlockStatement : public Statement{
+#include <Statement/statement.h>
+
+
+namespace SlavaScript::lang {
+    class BlockStatement : public Statement {
     private:
         std::vector<Statement*> statements;
     public:
@@ -23,5 +24,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // BLOCKSTATEMENT_H_INCLUDED

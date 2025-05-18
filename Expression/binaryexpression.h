@@ -1,11 +1,11 @@
-#ifndef BINARYEXPRESSION_H_INCLUDED
-#define BINARYEXPRESSION_H_INCLUDED
+#pragma once
 
-#include "binaryoperator.h"
-#include "expression.h"
+#include <Expression/binaryoperator.h>
+#include <Expression/expression.h>
 
-namespace SlavaScript::lang{
-    class BinaryExpression : public Expression{
+
+namespace SlavaScript::lang {
+    class BinaryExpression : public Expression {
     private:
         Expression* expr1, *expr2;
         BinaryOperator operation;
@@ -26,5 +26,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // BINARYEXPRESSION_H_INCLUDED

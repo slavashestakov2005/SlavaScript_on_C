@@ -1,11 +1,11 @@
-#ifndef UNARYEXPRESSION_H_INCLUDED
-#define UNARYEXPRESSION_H_INCLUDED
+#pragma once
 
-#include "expression.h"
-#include "unaryoperator.h"
+#include <Expression/expression.h>
+#include <Expression/unaryoperator.h>
 
-namespace SlavaScript::lang{
-    class UnaryExpression : public Expression{
+
+namespace SlavaScript::lang {
+    class UnaryExpression : public Expression {
     private:
         Expression* expr;
         UnaryOperator operation;
@@ -25,5 +25,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // UNARYEXPRESSION_H_INCLUDED

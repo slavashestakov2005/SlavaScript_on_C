@@ -1,11 +1,11 @@
-#ifndef DOWHILESTATEMENT_H_INCLUDED
-#define DOWHILESTATEMENT_H_INCLUDED
+#pragma once
 
-#include "../Expression/expression.h"
-#include "statement.h"
+#include <Expression/expression.h>
+#include <Statement/statement.h>
 
-namespace SlavaScript::lang{
-    class DoWhileStatement : public Statement{
+
+namespace SlavaScript::lang {
+    class DoWhileStatement : public Statement {
     private:
         Expression* condition;
         Statement* body;
@@ -22,5 +22,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // DOWHILESTATEMENT_H_INCLUDED

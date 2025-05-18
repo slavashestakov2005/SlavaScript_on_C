@@ -1,10 +1,10 @@
-#ifndef ARGUMENT_H_INCLUDED
-#define ARGUMENT_H_INCLUDED
+#pragma once
 
-#include "../Expression/expression.h"
+#include <Expression/expression.h>
 
-namespace SlavaScript::lang{
-    class Argument{
+
+namespace SlavaScript::lang {
+    class Argument {
     private:
         std::string name;
         Expression* expression = nullptr;
@@ -19,5 +19,3 @@ namespace SlavaScript::lang{
         operator std::string();
     };
 }
-
-#endif // ARGUMENT_H_INCLUDED

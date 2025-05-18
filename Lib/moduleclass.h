@@ -1,11 +1,11 @@
-#ifndef MODULECLASS_H_INCLUDED
-#define MODULECLASS_H_INCLUDED
+#pragma once
 
-#include "../Lib/class.h"
+#include <Lib/class.h>
 
-namespace SlavaScript::lang{
+
+namespace SlavaScript::lang {
     template<typename T>
-    class ModuleClass : public Class{
+    class ModuleClass : public Class {
     private:
         static std::string correct_class_name();
     public:
@@ -15,6 +15,5 @@ namespace SlavaScript::lang{
     };
 }
 
-#include "moduleclass_impl.h"
 
-#endif // MODULECLASS_H_INCLUDED
+#include <Lib/moduleclass_impl.h>

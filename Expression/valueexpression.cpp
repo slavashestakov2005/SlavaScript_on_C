@@ -1,9 +1,10 @@
-#include "valueexpression.h"
+#include <Expression/valueexpression.h>
+
 
 using namespace SlavaScript::lang;
 
 
-ValueExpression::ValueExpression(Value* val){
+ValueExpression::ValueExpression(Value* val) {
     if (val -> type() == Values::ARRAY) value = SHARE(ArrayValue, *(ArrayValue*)val);
     else if (val -> type() == Values::STRING) value = SHARE(StringValue, *(StringValue*)val);
     else if (val -> type() == Values::BOOL) value = BoolValue::fromBool(val -> asBool());
@@ -13,19 +14,19 @@ ValueExpression::ValueExpression(Value* val){
     else if (val -> type() == Values::NULL_) value = NullValue::NULL_;
 }
 
-std::shared_ptr<Value> ValueExpression::eval(){
+std::shared_ptr<Value> ValueExpression::eval() {
     return value;
 }
-Expressions ValueExpression::type() const{
+Expressions ValueExpression::type() const {
     return Expressions::ValueExpression;
 }
 
-ValueExpression::operator std::string(){
+ValueExpression::operator std::string() {
     return std::string(*value);
 }
 
 ValueExpression::~ValueExpression() {}
 
-void ValueExpression::accept(Visitor* visitor){
+void ValueExpression::accept(Visitor* visitor) {
     visitor -> visit(this);
 }

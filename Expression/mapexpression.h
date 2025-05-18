@@ -1,11 +1,12 @@
-#ifndef MAPEXPRESSION_H_INCLUDED
-#define MAPEXPRESSION_H_INCLUDED
+#pragma once
 
-#include "expression.h"
 #include <map>
 
-namespace SlavaScript::lang{
-    class MapExpression : public Expression{
+#include <Expression/expression.h>
+
+
+namespace SlavaScript::lang {
+    class MapExpression : public Expression {
     private:
         std::map<Expression*, Expression*> elements;
     public:
@@ -21,5 +22,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // MAPEXPRESSION_H_INCLUDED

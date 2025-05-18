@@ -1,13 +1,14 @@
-#ifndef MODULEFUNCTION_H_INCLUDED
-#define MODULEFUNCTION_H_INCLUDED
+#pragma once
 
-#include "function.h"
 #include <functional>
 
-namespace SlavaScript::lang{
+#include <Lib/function.h>
+
+
+namespace SlavaScript::lang {
     using function_type = std::function<std::shared_ptr<Value>(std::vector<std::shared_ptr<Value>>)>;
 
-    class ModuleFunction : public Function{
+    class ModuleFunction : public Function {
     private:
         function_type f;
     public:
@@ -17,5 +18,3 @@ namespace SlavaScript::lang{
         operator std::string() override;
     };
 }
-
-#endif // MODULEFUNCTION_H_INCLUDED

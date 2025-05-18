@@ -1,10 +1,10 @@
-#ifndef ASSIGNMENTOPERATOR_H_INCLUDED
-#define ASSIGNMENTOPERATOR_H_INCLUDED
+#pragma once
 
 #include <string>
 
-namespace SlavaScript::lang{
-    enum class AssignmentOperator{
+
+namespace SlavaScript::lang {
+    enum class AssignmentOperator {
         ASSIGN,         /// =
         ADD,            /// +=
         SUBSTRACT,      /// -=
@@ -27,5 +27,3 @@ namespace SlavaScript::lang{
 
     std::string getOperator(AssignmentOperator);
 }
-
-#endif // ASSIGNMENTOPERATOR_H_INCLUDED

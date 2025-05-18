@@ -1,10 +1,10 @@
-// [[not imported module]]
-#include "modules.h"
-#include "all.h"
+#include <Modules/all.h>
+#include <Modules/modules.h>
+
 
 using namespace SlavaScript::modules;
 
-bool SlavaScript::modules::try_import_module(std::string name){
+bool SlavaScript::modules::try_import_module(std::string name) {
 	if (name == "chemistry") Chemistry::init();
 	else if (name == "draw") Draw::init();
 	else if (name == "files") Files::init();

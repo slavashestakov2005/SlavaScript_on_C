@@ -1,12 +1,12 @@
-#ifndef USERDEFINEDFUNCTION_H_INCLUDED
-#define USERDEFINEDFUNCTION_H_INCLUDED
+#pragma once
 
-#include "arguments.h"
-#include "function.h"
-#include "../Statement/statement.h"
+#include <Lib/arguments.h>
+#include <Lib/function.h>
+#include <Statement/statement.h>
 
-namespace SlavaScript::lang{
-    class UserDefinedFunction : public Function{
+
+namespace SlavaScript::lang {
+    class UserDefinedFunction : public Function {
     protected:
         Statement* body;
         Arguments arguments;
@@ -19,5 +19,3 @@ namespace SlavaScript::lang{
         std::shared_ptr<Value> execute(std::vector<std::shared_ptr<Value>> values);
     };
 }
-
-#endif // USERDEFINEDFUNCTION_H_INCLUDED

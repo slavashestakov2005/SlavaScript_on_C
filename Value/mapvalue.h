@@ -1,12 +1,13 @@
-#ifndef MAPVALUE_H_INCLUDED
-#define MAPVALUE_H_INCLUDED
+#pragma once
 
-#include "../Lib/function.h"
-#include "container.h"
-#include "value.h"
 #include <map>
 
-namespace SlavaScript::lang{
+#include <Lib/function.h>
+#include <Value/container.h>
+#include <Value/value.h>
+
+
+namespace SlavaScript::lang {
     class MapValue : public Value, public Container<std::map<std::shared_ptr<Value>, std::shared_ptr<Value>, Comparator>>{
     private:
         container_type map;
@@ -39,5 +40,3 @@ namespace SlavaScript::lang{
         friend EQ(MapValue);
     };
 }
-
-#endif // MAPVALUE_H_INCLUDED

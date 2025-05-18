@@ -1,10 +1,10 @@
-#ifndef BOOLVALUE_H_INCLUDED
-#define BOOLVALUE_H_INCLUDED
+#pragma once
 
-#include "value.h"
+#include <Value/value.h>
 
-namespace SlavaScript::lang{
-    class BoolValue : public Value{
+
+namespace SlavaScript::lang {
+    class BoolValue : public Value {
     private:
         bool value;
     public:
@@ -25,5 +25,3 @@ namespace SlavaScript::lang{
         friend EQ(BoolValue);
     };
 }
-
-#endif // BOOLVALUE_H_INCLUDED

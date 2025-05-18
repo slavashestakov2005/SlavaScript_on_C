@@ -1,10 +1,10 @@
-#ifndef CONTINUESTATEMENT_H_INCLUDED
-#define CONTINUESTATEMENT_H_INCLUDED
+#pragma once
 
-#include "statement.h"
+#include <Statement/statement.h>
 
-namespace SlavaScript::lang{
-    class ContinueStatement : public Statement{
+
+namespace SlavaScript::lang {
+    class ContinueStatement : public Statement {
     public:
         /** @return  throw: ContinueStatement*. */
         void execute() override;
@@ -16,5 +16,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // CONTINUESTATEMENT_H_INCLUDED

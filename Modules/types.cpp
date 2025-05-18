@@ -1,17 +1,18 @@
-#include "types.h"
-#include "../Lib/functions.h"
-#include "../Lib/utils.h"
-#include "../Lib/variables.h"
-#include "../Value/boolvalue.h"
-#include "../Value/classvalue.h"
-#include "../Value/numbervalue.h"
-#include "../Value/objectvalue.h"
+#include <Lib/functions.h>
+#include <Lib/utils.h>
+#include <Lib/variables.h>
+#include <Modules/types.h>
+#include <Value/boolvalue.h>
+#include <Value/classvalue.h>
+#include <Value/numbervalue.h>
+#include <Value/objectvalue.h>
+
 
 using namespace SlavaScript::lang;
 using namespace SlavaScript::modules::types_f;
 using SlavaScript::modules::Types;
 
-namespace SlavaScript::modules::types_f{
+namespace SlavaScript::modules::types_f {
     CREATE_FUNCTION(float_)
         argsCount(1, values.size());
         SH_RET(NumberValue, values[0] -> asBignum());
@@ -20,7 +21,7 @@ namespace SlavaScript::modules::types_f{
     CREATE_FUNCTION(int_)
         argsCount(1, values.size());
         std::string str = std::string(NumberValue(values[0] -> asBignum())), cop;
-        for(int i = 0; i < str.size(); ++i){
+        for (size_t i = 0; i < str.size(); ++i) {
             if (str[i] == '.') break;
             else cop += str[i];
         }
@@ -50,7 +51,7 @@ namespace SlavaScript::modules::types_f{
     FE
 }
 
-void Types::initConstants(){
+void Types::initConstants() {
     Variables::set("BOOL", SHARE(NumberValue, int(Values::BOOL)));
     Variables::set("NUMBER", SHARE(NumberValue, int(Values::NUMBER)));
     Variables::set("STRING", SHARE(NumberValue, int(Values::STRING)));
@@ -63,7 +64,7 @@ void Types::initConstants(){
     Variables::set("INTEGRATION", SHARE(NumberValue, int(Values::INTEGRATION)));
 }
 
-void Types::initFunctions(){
+void Types::initFunctions() {
     MFUNC_RENAME(float_, "float", ArgumentsInfo::unary)
     MFUNC_RENAME(int_, "int", ArgumentsInfo::unary)
     MFUNC_BINARY(isinstance)

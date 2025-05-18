@@ -1,16 +1,13 @@
-#ifndef EXPRESSION_ALL_H_INCLUDED
-#define EXPRESSION_ALL_H_INCLUDED
+#pragma once
 
-#include "arrayexpression.h"
-#include "assignmentexpression.h"
-#include "binaryexpression.h"
-#include "conditionalexpression.h"
-#include "mapexpression.h"
-#include "suffixassignmentexpression.h"
-#include "suffixexpression.h"
-#include "ternaryexpression.h"
-#include "unaryexpression.h"
-#include "valueexpression.h"
-#include "variableexpression.h"
-
-#endif // EXPRESSION_ALL_H_INCLUDED
+#include <Expression/arrayexpression.h>
+#include <Expression/assignmentexpression.h>
+#include <Expression/binaryexpression.h>
+#include <Expression/conditionalexpression.h>
+#include <Expression/mapexpression.h>
+#include <Expression/suffixassignmentexpression.h>
+#include <Expression/suffixexpression.h>
+#include <Expression/ternaryexpression.h>
+#include <Expression/unaryexpression.h>
+#include <Expression/valueexpression.h>
+#include <Expression/variableexpression.h>

@@ -1,11 +1,11 @@
-#ifndef EXPRSTATEMENT_H_INCLUDED
-#define EXPRSTATEMENT_H_INCLUDED
+#pragma once
 
-#include "../Expression/expression.h"
-#include "statement.h"
+#include <Expression/expression.h>
+#include <Statement/statement.h>
 
-namespace SlavaScript::lang{
-    class ExprStatement : public Statement{
+
+namespace SlavaScript::lang {
+    class ExprStatement : public Statement {
         Expression* expression;
     public:
         ExprStatement(Expression* expression);
@@ -20,5 +20,3 @@ namespace SlavaScript::lang{
         friend compiler::CompilerVisitor;
     };
 }
-
-#endif // EXPRSTATEMENT_H_INCLUDED

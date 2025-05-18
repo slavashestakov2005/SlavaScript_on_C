@@ -1,7 +1,7 @@
-#ifndef VISITOR_H_INCLUDED
-#define VISITOR_H_INCLUDED
+#pragma once
 
-namespace SlavaScript::lang{
+
+namespace SlavaScript::lang {
     class ArrayExpression;
     class AssignmentExpression;
     class BinaryExpression;
@@ -34,7 +34,7 @@ namespace SlavaScript::lang{
     class VariableExpression;
     class WhileStatement;
 
-    class Visitor{
+    class Visitor {
     public:
         virtual void visit(ArrayExpression* v);
         virtual void visit(AssignmentExpression* v);
@@ -69,5 +69,3 @@ namespace SlavaScript::lang{
         virtual void visit(WhileStatement* v);
     };
 }
-
-#endif // VISITOR_H_INCLUDED
